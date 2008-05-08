@@ -1,0 +1,75 @@
+Apr-26-03 release 3.0.4.0 Stay on top feature was broken in after version 2.5, fixed it (?)
+
+Apr-22-03 release 3.0.3.0 The focuspoint of the frozen loupe can now dragged around
+
+Apr-06-03 release 3.0.2.0 Bugfixes
+
+Feb-22-03 release 3.0.1.0
+Jan-25-03 Loupe:          Completely rewritten, can now be resized and can zoom in single steps between 1x and 20x.
+                          Added a dot-grid and re-added the outlined crosshairs (on request of Pieter Duyves)
+
+Apr-10-02 Info:           Added a color preview box and HSV display
+
+Apr-06-02 Ruler:          Started experimenting with a full screen trackline. It turned out to be disturbing the screen, so I put it on "Hold"
+
+Jan-16-02 Screengrabber:  Save to file now behaves correctly when no filename extension is specified.
+
+Feb-13-02 released 2.4.3
+
+Feb-13-02 Screengrabber:  Fixed a bug that prevented the snapshot from being saved when the selection was not made from top-left to bottom-right.
+
+Jan-25-02 Ruler:          The ruler now toggles orientation when middle mouse button clicked (provided this event is mapped to 'middle button' in the Mouse settings of the Control Panel).
+
+Jan-07-02 Screengrabber:  Selecting Cancel in the "Save to File" dialog now cancels the entire capture operation.
+
+Jan-06-02 released 2.4.2
+Jan-06-02 TopTools:       Tray icon now gets restored after a crash of Windows Explorer.
+
+Nov-21-01 Info Window:    Pressing Ctrl-C now copies the current pixel color to the clipboard in #RRGGBB webcolor format.
+                          Think I finally managed to get the stay-on-top feature stable...
+                          Need to rethink the trayicon double-click and minimize logic
+
+Aug-08-01 TopTools:       Major implementation changes, all tools are now derived from TToolForm that handles all common functionality.
+                          The Ruler and the Mainwindow still need to be done..
+
+Jul-18-01 Base Converter: Made editing the binary value a bit more practical and intuitive by inhibiting the redelimit action in case of a delete or backspace keypress
+                          Made the decimal display unsigned.
+
+Jul-12-01 Ruler:          Removed the 'Toggle ruler orientation by doubleclicking' feature
+                          Reacting on a doubleclick event to change ruler
+                          orientation turned out to be impossible without resorting to exotic workarounds
+                          Orientation can now be toggled with the numeric '/' key
+
+May-30-01 About:          Revamped the About dialogbox, it now shows the actual
+                          build number and date.
+                          Also added a hyperlink to the TopTools homepage and
+                          changed the logo.
+
+May-16-01 Ruler:          The ruler now toggles orientation when double clicked.
+
+Feb-10-01 TopTools:       Now works correctly with multiple monitors.
+
+Dec-06-00 TopTools:       Now minimizes to system tray.
+                          Moved most event handling to ActionModule.
+                          Completely reimplemented screengrabber, many thanks
+                          to Joe C Hecht, Damon Chandler and the Borland
+                          newsgroups.
+
+Nov-17-00 Info Window:    Now runs in it's own window.
+
+Oct-02-00 Screen Grabber: Fixed bug that made "Save as File" save in BMP-format
+                          regardless of chosen file extension. JPG and GIF are
+                          now saved properly.
+                          Also fixed a bug in the screen update sequence after
+                          a selection is made.
+                          Noted again that the screengrabber code needs some
+                          serious cleanup.
+
+Aug-01-00 Base Converter: Added delimiters in binary representation.
+                          Disabled right-click menu to prevent pasting invalid
+                          input into the edit boxes.
+                          Todo: derive a specific TFilterPasteEdit and override
+                          the WM_PASTE command handler to do specific filtering.
+
+
+

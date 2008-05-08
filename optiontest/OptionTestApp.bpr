@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.05.03"/>
+    <PROJECT value="exe\OptionTestApp.exe"/>
+    <OBJFILES value="obj\OptionTestApp.obj obj\TestWindow.obj obj\AutoSaveDlg.obj 
+      obj\HotkeyInfo.obj obj\AutoSaveOptions.obj obj\OptionDlg.obj 
+      obj\ToolOptions.obj"/>
+    <RESFILES value="OptionTestApp.res"/>
+    <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES) TestWindow.dfm ..\AutoSaveDlg.dfm ..\OptionDlg.dfm"/>
+    <LIBFILES value="&quot;C:\Program Files\Borland\CBuilder5\Lib\Release\vclx50.lib&quot;"/>
+    <LIBRARIES value="TopToolParts.lib TopTools.lib bcbie50.lib vcl50.lib"/>
+    <SPARELIBS value="vcl50.lib bcbie50.lib TopTools.lib TopToolParts.lib"/>
+    <PACKAGES value="vcl50.bpi vclx50.bpi vcljpg50.bpi vclmid50.bpi vcldb50.bpi vclbde50.bpi 
+      bcbsmp50.bpi ibsmp50.bpi vcldbx50.bpi qrpt50.bpi teeui50.bpi teedb50.bpi 
+      tee50.bpi dss50.bpi nmfast50.bpi inetdb50.bpi inet50.bpi dclocx50.bpi"/>
+    <PATHCPP value=".;..;..\hotkey"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="ilink32"/>
+    <USERDEFINES value="NO_WIN32_LEAN_AND_MEAN;_DEBUG"/>
+    <SYSDEFINES value="NO_STRICT;_VIS_NOLIB"/>
+    <MAINSOURCE value="OptionTestApp.cpp"/>
+    <INCLUDEPATH value="..\;..;..\hotkey;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\imports"/>
+    <LIBPATH value="..\;..;..\hotkey;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\imports"/>
+    <WARNINGS value="-w-par -w-8027 -w-8026"/>
+    <WARNOPTSTR value=""/>
+  </MACROS>
+  <OPTIONS>
+    <IDLCFLAGS value="-I..\. -I.. -I..\hotkey -I$(BCB)\include -I$(BCB)\include\vcl 
+      -I$(BCB)\imports -src_suffix cpp -DNO_WIN32_LEAN_AND_MEAN -D_DEBUG -boa"/>
+    <CFLAG1 value="-Od -H=obj/pch.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c -tW -tWM"/>
+    <PFLAGS value="-N2obj -N0obj -$Y+ -$W -$O- -v -JPHNE -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zi"/>
+    <LFLAGS value="-Iobj -D&quot;&quot; -aa -Tpe -x -Gn -v"/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0w32.obj sysinit.obj $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
+  </LINKER>
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=1
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=1
+Special=0
+Private=0
+DLL=0
+Locale=1043
+CodePage=1252
+
+[Version Info Keys]
+CompanyName=Willem &amp; Co
+FileDescription=Design Aid Collection
+FileVersion=1.0.0.0
+InternalName=TopTools
+LegalCopyright=1998-1999   Willem Jongman
+LegalTrademarks=
+OriginalFilename=Toptools.exe
+ProductName=TopTools 1.05b
+ProductVersion=1.0.0.0
+Comments=First major beta release
+
+[Excluded Packages]
+$(BCB)\Projects\Bpl\TopTools.bpl=TopTools custom components
+
+[HistoryLists\hlIncludePath]
+Count=15
+Item0=..\;..\hotkey;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\imports
+Item1=C:\Program Files\Borland\CBuilder5\Projects;..\;..;..\hotkey;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\imports
+Item2=..\;..;..\hotkey;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\imports
+Item3=..\;..;..hotkey;..hotke;..hotk;..hot;..ho;..h;..\hotkey;C:\PROGRAM FILES\BORLAND\CBUILDER5\OBJREPOS\;C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\imports
+Item4=..\;..hotkey;..hotke;..hotk;..hot;..ho;..h;..;..\hotkey;C:\PROGRAM FILES\BORLAND\CBUILDER5\OBJREPOS\;C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\imports
+Item5=..hotkey;..hotke;..hotk;..hot;..ho;..h;..\;..;..\hotkey;C:\PROGRAM FILES\BORLAND\CBUILDER5\OBJREPOS\;C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\imports
+Item6=..\;..\hotkey;..;C:\PROGRAM FILES\BORLAND\CBUILDER5\OBJREPOS\;C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\imports
+Item7=..\hotkey;..\;C:\PROGRAM FILES\BORLAND\CBUILDER5\OBJREPOS\;C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\imports
+Item8=C:\PROGRAM FILES\BORLAND\CBUILDER5\OBJREPOS\;C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\imports
+Item9=C:\PROGRAM FILES\BORLAND\CBUILDER5\OBJREPOS;C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\imports
+Item10=C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\imports
+Item11=C:\Program Files\Borland\CBuilder5\Projects;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\imports
+Item12=$(BCB)\include;$(BCB)\include\vcl;$(BCB)\imports
+Item13=$(BCB)\include;$(BCB)\include\vcl
+Item14=F:\CBuilder4\Bin\;f:\CBuilder4\Imports\;..\Imports;TopTools4;$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=15
+Item0=..\;..\hotkey;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\imports
+Item1=C:\Program Files\Borland\CBuilder5\Projects;..\;..;..\hotkey;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\imports
+Item2=..\;..;..\hotkey;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\imports
+Item3=..\hotkey;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\imports
+Item4=..\;..;..hotkey;..hotke;..hotk;..hot;..ho;..h;..\hotkey;C:\PROGRAM FILES\BORLAND\CBUILDER5\OBJREPOS\;C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\imports
+Item5=..\;..hotkey;..hotke;..hotk;..hot;..ho;..h;..;..\hotkey;C:\PROGRAM FILES\BORLAND\CBUILDER5\OBJREPOS\;C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\imports
+Item6=..hotkey;..hotke;..hotk;..hot;..ho;..h;..\;..;..\hotkey;C:\PROGRAM FILES\BORLAND\CBUILDER5\OBJREPOS\;C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\imports
+Item7=..\;..\hotkey;..;C:\PROGRAM FILES\BORLAND\CBUILDER5\OBJREPOS\;C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\imports
+Item8=..\hotkey;..\;C:\PROGRAM FILES\BORLAND\CBUILDER5\OBJREPOS\;C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\imports
+Item9=C:\PROGRAM FILES\BORLAND\CBUILDER5\OBJREPOS\;C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\imports
+Item10=C:\PROGRAM FILES\BORLAND\CBUILDER5\OBJREPOS;C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\imports
+Item11=C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\imports
+Item12=C:\Program Files\Borland\CBuilder5\Projects;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\imports
+Item13=$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\imports
+Item14=\\Samson\Samson F\CBUILD~1\Projects\Lib;\\Samson\Samson F\CBuilder4\Lib;\\Samson\Samson F\CBUILD~1\lib\release;F:\CBuilder4\Lib;F:\CBuilder4\Bin\;F:\CBuilder4\Lib\;f:\CBuilder4\Imports\;..\Lib;..\Imports;TopTools4;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlConditionals]
+Count=4
+Item0=NO_WIN32_LEAN_AND_MEAN;_DEBUG
+Item1=NO_WIN32_LEAN_AND_MEAN
+Item2=_DEBUG;NO_WIN32_LEAN_AND_MEAN
+Item3=_DEBUG
+
+[HistoryLists\hlIntOutputDir]
+Count=3
+Item0=obj
+Item1=obj\
+Item2=C:\Program Files\Borland\CBuilder5\Projects\obj\
+
+[HistoryLists\hlFinalOutputDir]
+Count=4
+Item0=exe\
+Item1=exe
+Item2=obj\
+Item3=obj
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=0
+LinkDebugVcl=0
+LinkCGLIB=0
+
+[CORBA]
+AddServerUnit=1
+AddClientUnit=1
+PrecompiledHeaders=1
+
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
+  </IDEOPTIONS>
+</PROJECT>

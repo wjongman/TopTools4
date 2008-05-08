@@ -1,0 +1,16 @@
+Keyboard shortcuts
+
+tool     modifiers   key          effect
+           
+ruler               arrows    move ruler  1 pixel
+              ctrl  arrows    move cursor 1 pixel
+        shift       arrows    move ruler  10 pixels
+        shift ctrl  arrows    move cursor 10 pixels
+        ctrl /      numpad /  toggle orientation
+        
+loupe   ctrl +      numpad +  zoom in
+        ctrl -      numpad -  zoom out
+        ctrl                  toggle crosshair
+        ctrl                  toggle grid
+                              toggle centerbox
+                    spacebar  freeze/unfreeze         

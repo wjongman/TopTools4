@@ -1,0 +1,17 @@
+APPICON      ICON   "graphics/toptools.ico"
+TRAYICON     ICON   "graphics/trayicon.ico"
+
+MAINICONS    BITMAP "graphics/mainicons.bmp"
+LOUPEICONS   BITMAP "graphics/loupeicons.bmp"
+
+PNG_RULER    RCDATA "graphics/ruler.png"
+PNG_LOUPE    RCDATA "graphics/loupe.png"
+PNG_INFO     RCDATA "graphics/info.png"
+PNG_BASECONV RCDATA "graphics/baseconv.png"
+PNG_GRAB     RCDATA "graphics/grab.png"
+PNG_OPTIONS  RCDATA "graphics/options.png"
+PNG_ABOUT    RCDATA "graphics/about.png"
+PNG_EXIT     RCDATA "graphics/exit.png"
+PNG_LOGO     RCDATA "graphics/logo.png"
+
+

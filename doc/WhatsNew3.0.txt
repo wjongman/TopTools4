@@ -1,0 +1,91 @@
+
+This version is a
+
+I rewrote large parts of the code, mainly because I had different ideas about maintainability then I have now
+it had become partly because it beca
+
+Version 3 is the result of refactoring of most of the code,
+
+
+Whenever a TopTools window has keyboard focus, the user can press Ctrl-C to copy the webcolor representation of the pointed pixel to the Windows clipboard.
+
+
+
+New in version 3.0
+
+Loupe
+
+I rewrote the loupe from scratch, attempts to make the loupe sizable made clear this was the only sane option.
+
+Well, it is sizable now, it got a toolbar, the view can be frozen (ie. detached from mouse movement) and currently it uses "layered display".
+On machines running Windows 2000 or Windows XP, the loupe window sits on it's own layer, so it doesn't show up in it's own view (it is fully transparent for itself).
+
+Let me extend a bit on this feature:
+After a user asked if it was possible to have a transparent ruler, I experimented a bit with layered windows, a feature offered by the OS since Windows 2000.
+It let me make the ruler transparent and it looked really nice, but it rendered it pretty useless also, because the transparent ruler was not visible for the loupe anymore..
+That was unacceptable, so I dropped attempts to add a transparency feature to the ruler.
+Then I realized the advantage of such a feature when applied to the loupe itself! No more funny feedback effects when the mousepointer is over the loupe, it just shows what is underneath the loupe window!
+
+It turns out that in order to render a window transparent it must first be made layered (in jargon: the WS_EX_LAYERED bit in the extended windows style mask must be set to 1).
+Just setting this bit makes the window invisible, because by default it then is 100% transparent.
+It can be made visible by calling the "SetLayeredWindowAttributes" API function, passing it a transparency value less then 100%
+Setting transparency to 0 makes the window fully opaque, but it still sits on it's own layer, a layer not visible to the loupe..
+
+
+
+Screen grabber
+
+A problem in capturing screenshots with the mouse is that an application only receives mouse messages when the mouse is above one of it's windows. A way to receive all mouse messages in the system is to use a "mouse hook", but this requires the code to be in a separate DLL and this DLL will be attached to every running program with a visible window.
+Another strategy is to make a copy of the entire screen and then display this copy in a full-screen borderless window. Because this windows now covers the entire desktop, it will receive all mouse events.
+In version 2 I used the latter approach because I wanted TopTools to be unintrusive, lean, and without dependencies upon external resources.
+A drawback is that it freezes the screen, everything that changes on the desktop (ie. the clock) will not be visible until the capture session is complete.
+A year ago I read an article by Jeffrey Richter in which he describes a technique to keep receiving mouse messages by using a "journal record hook" (Jeffrey Richter's Win32 Q&A column in Microsoft Systems Journal, April 1995 — Vol 10 No 4), nice thing is that a journal hook doesn't require a separate DLL.
+So that is new in the screen grabber.
+Also new is that it is able to save snapshots in PNG format.
+
+
+Options Dialog
+
+Ruler:
+
+
+Global hotkey:
+In version 2.4 I added functionality to the Info window so that pressing Ctrl-C would copy the selected color in #ABCDEF webcolor format.
+That is neat, but it only workes when one of the TopTools windows has the keyboard focus.
+A global hotkey works regardless of which window (or even what desktop) is active, it acts global for the entire machine.
+The hotkey can be configured in the options dialog, you can also select the color representation there.
+Photoshop for instance doesn't like #ABCDEF, you get #ABCDE, but when typing HTML it is more convenient to have the '#' and have surrounding quotes ("#ABCDEF").
+A leading '#' is annoying in Photoshop, it prefers ABCDEF (or you get #ABCDE), but when typing HTML it is more convenient to have the '#' and have surrounding quotes ("#ABCDEF").
+The format settings apply to both the hotkey action and the classic Ctrl-C action (which still works).
+
+
+General:
+All tool windows now feature a "snap to screen border". You can override this behaviour by holding down the Ctrl key while moving the window.
+
+Keyboard shortcut overview:
+
+tool     modifiers   key          effect
+
+ruler               arrows    move ruler  1 pixel
+              ctrl  arrows    move cursor 1 pixel
+        shift       arrows    move ruler  10 pixels
+        shift ctrl  arrows    move cursor 10 pixels
+        ctrl /      numpad /  toggle orientation
+
+loupe   ctrl +      numpad +  zoom in
+        ctrl -      numpad -  zoom out
+        ctrl                  toggle crosshair
+        ctrl                  toggle grid
+                              toggle centerbox
+                    spacebar  freeze/unfreeze
+
+
+System Notification Area (more commonly referred to as "system-tray"):
+
+When I wrote the original version of TopTools, the tray wasn't as crowded as it is nowadays, and I confess: at that time I thought it was a pretty cool feature.
+Nowadays I try to avoid programs that insist to recide in the notification area while doing no notification at all.
+Programs like ZoneAlarm and Process Explorer use these icons to give feedback, they notify the user of network or cpu activity.
+On the other hand, certain mediaplayers and certain hardware vendors put a lot of effort in poluting this part of the desktop (I am not sure what they try to achieve here, didn't they learn anything from the [Realplayer] debacle?).
+gaining what, except annoyed and confused users?).
+With the collapsable tray area of WinXP (which was a smart move to discourage cluttering it), and my own disenchantment with not having any option to enforce "normal" behaviour on these, otherwise useful programs.
+

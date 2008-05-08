@@ -1,0 +1,40 @@
+object FloatForm: TFloatForm
+  Left = 234
+  Top = 454
+  HorzScrollBar.Visible = False
+  VertScrollBar.Visible = False
+  BorderIcons = []
+  BorderStyle = bsNone
+  Caption = 'FloatForm'
+  ClientHeight = 22
+  ClientWidth = 114
+  Color = clWhite
+  ParentFont = True
+  FormStyle = fsStayOnTop
+  OldCreateOrder = False
+  PopupMenu = RulerForm.RulerMenu
+  Position = poDefault
+  Scaled = False
+  OnPaint = FormPaint
+  PixelsPerInch = 96
+  TextHeight = 13
+  object OffsetLabel: TLabel
+    Left = 0
+    Top = 0
+    Width = 114
+    Height = 22
+    Align = alClient
+    Alignment = taCenter
+    Anchors = []
+    AutoSize = False
+    Caption = 'test'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clRed
+    Font.Height = -9
+    Font.Name = 'Microsoft Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    Transparent = True
+    Layout = tlCenter
+  end
+end
