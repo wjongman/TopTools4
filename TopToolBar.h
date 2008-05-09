@@ -14,7 +14,7 @@
 
 #define TOOLBUTTONWIDTH 30
 
-//class Comctrls::TToolButton;
+class Comctrls::TToolButton;
 //---------------------------------------------------------------------------
 class TTopToolButton : public TToolButton
 {

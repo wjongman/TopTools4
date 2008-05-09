@@ -62,9 +62,13 @@ void __fastcall TScreenForm::OnNCHitTest(TWMNCHitTest &Message)
 
   if (Message.Result == HTCLIENT)
   {
-    // Width of resize area is half the size of a scrollbar
-    int x_margin = GetSystemMetrics(SM_CXHSCROLL) / 2;
-    int y_margin = GetSystemMetrics(SM_CYVSCROLL) / 2;
+    //int scrollbarwidth = GetSystemMetrics(SM_CXHSCROLL);
+    //int scrollbarheight = GetSystemMetrics(SM_CYHSCROLL);
+
+    // Minimum space for showing resize cursors is 4 (by now),
+    // maximum space is proportional to window dimensions
+    int x_margin = 4 + Width / 10; // < 64 ? 5 : scrollbarwidth;
+    int y_margin = 4 + Height/ 10; // < 64 ? 5 : scrollbarheight;
 
     POINT pt = ScreenToClient(Point(Message.XPos, Message.YPos));
 
@@ -200,5 +204,19 @@ void __fastcall TScreenForm::FormPaint(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TScreenForm::FormShow(TObject *Sender)
+{
+  TPoint ptMouse;
+  GetCursorPos(&ptMouse);
 
+  TRect rcClient = GetClientRect();
+  int CenterX = rcClient.Width() / 2;
+  int CenterY = rcClient.Height() / 2;
+
+
+  Left = ptMouse.x - CenterX;
+  Top = ptMouse.y - CenterY;
+    
+}
+//---------------------------------------------------------------------------
 

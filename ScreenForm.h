@@ -37,16 +37,22 @@ protected:
     VCL_MESSAGE_HANDLER(WM_NCHITTEST, TWMNCHitTest, OnNCHitTest)
   END_MESSAGE_MAP(TForm)
 
-  TMouseEvent FOnRightButtonClick;
   void __fastcall OnNCHitTest(TWMNCHitTest &Message);
+
 
 __published:  // IDE-managed Components
     void __fastcall FormPaint(TObject *Sender);
     void __fastcall FormResize(TObject *Sender);
+    void __fastcall FormShow(TObject *Sender);
 
 __published:
   __property TMouseEvent OnRightButtonClick = { read = FOnRightButtonClick, write = FOnRightButtonClick };
 
+protected:
+  TMouseEvent FOnRightButtonClick;
+
+  // Override to show up near mouse pointer
+  virtual void __fastcall OnToolShow(TObject *Sender) { FormShow(Sender); }
 };
 
 //---------------------------------------------------------------------------

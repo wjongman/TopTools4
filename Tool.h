@@ -35,8 +35,6 @@ public:   // User declarations
 private:  // User declarations
   void __fastcall CreateParams(TCreateParams &Params);
   void __fastcall ReadState(Classes::TReader* Reader);
-  void __fastcall OnToolShow(TObject *Sender) { LoadPosition(); }
-  void __fastcall OnToolHide(TObject *Sender) { SavePosition(); }
   void __fastcall SetTopMost(bool topmost);
   void __fastcall SetWindowStyle(TToolWindowStyle style);
 
@@ -48,6 +46,9 @@ protected:
   bool FDraggableForm;
   TToolWindowStyle FWindowStyle;
   TNotifyEvent FOnMinimize;
+
+  virtual void __fastcall OnToolShow(TObject *Sender) { LoadPosition(); }
+  virtual void __fastcall OnToolHide(TObject *Sender) { SavePosition(); }
 
   bool __fastcall TransparencyIsSupported();
   void __fastcall SetTransparency(bool layered, int percent = 0);
