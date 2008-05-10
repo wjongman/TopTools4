@@ -45,7 +45,7 @@ object AboutBox: TAboutBox
     Height = 16
     Alignment = taCenter
     AutoSize = False
-    Caption = '© 1998-2007 Willem Jongman'
+    Caption = '© 1998-2008 Willem Jongman'
     Color = clBlack
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
