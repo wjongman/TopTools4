@@ -14,10 +14,12 @@ __fastcall TScreenForm::TScreenForm(TComponent* Owner)
         : TToolForm(Owner, "grabscreen")
 {
   BorderStyle = bsNone;
-  Color = clInfoBk;//White;
+  Color = clWhite;
   SetTransparency(true, 50);
+  //SetColorKey(true, RGB(255,255, 255));
   DraggableForm = true;
   Cursor = crSizeAll;
+  m_bSticky = false;
 }
 
 //---------------------------------------------------------------------------
@@ -40,12 +42,13 @@ void __fastcall TScreenForm::MouseDown(TMouseButton Button,
   {
     FOnRightButtonClick(this, Button, Shift, X, Y);
   }
+  m_bSticky = false;
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::MouseMove(TShiftState Shift, int X, int Y)
 {
-  if (Shift.Contains(ssLeft))
+  if (Shift.Contains(ssLeft) || m_bSticky)
   // We are dragging, move the form
   {
     Left += X - m_MouseOldX;
@@ -155,10 +158,12 @@ void __fastcall TScreenForm::FormPaint(TObject *Sender)
   TRect rc = GetClientRect();
 
   TColor OldPenColor = Canvas->Pen->Color;
+  TColor OldBrushColor = Canvas->Brush->Color;
   TPenMode OldPenMode = Canvas->Pen->Mode;
 
   Canvas->Pen->Mode = pmCopy;
-  Canvas->Pen->Color = clActiveCaption;
+  Canvas->Pen->Color = clBlack;
+  Canvas->Brush->Color = clInfoBk;
 
   // Borders
   Canvas->MoveTo(rc.Left, rc.Top);
@@ -166,6 +171,11 @@ void __fastcall TScreenForm::FormPaint(TObject *Sender)
   Canvas->LineTo(rc.Right - 1, rc.Bottom - 1);
   Canvas->LineTo(rc.Left, rc.Bottom - 1);
   Canvas->LineTo(rc.Left, rc.Top);
+
+  int x_center = (rc.Right - rc.Left)/ 2;
+  int y_center = (rc.Bottom - rc.Top)/ 2;
+  //Canvas->FillRect(Rect(x_center - 10, y_center - 10, x_center + 10, y_center + 10));
+  //Canvas->FillRect(Rect(rc.Left, rc.Top, rc.Right - 1, rc.Bottom - 1));
 
   int x_incr = GetSystemMetrics(SM_CXVSCROLL) / INC;
   int y_incr = GetSystemMetrics(SM_CXHSCROLL) / INC;
@@ -199,6 +209,7 @@ void __fastcall TScreenForm::FormPaint(TObject *Sender)
   }
 
   // Restore original settings
+  Canvas->Brush->Color = OldBrushColor;
   Canvas->Pen->Color = OldPenColor;
   Canvas->Pen->Mode = OldPenMode;
 }
@@ -206,6 +217,7 @@ void __fastcall TScreenForm::FormPaint(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::FormShow(TObject *Sender)
 {
+  // Show with form center below mouse
   TPoint ptMouse;
   GetCursorPos(&ptMouse);
 
@@ -213,10 +225,14 @@ void __fastcall TScreenForm::FormShow(TObject *Sender)
   int CenterX = rcClient.Width() / 2;
   int CenterY = rcClient.Height() / 2;
 
-
   Left = ptMouse.x - CenterX;
   Top = ptMouse.y - CenterY;
-    
+
+  POINT pt = ScreenToClient(ptMouse);
+  m_MouseOldX = pt.x;
+  m_MouseOldY = pt.y;
+
+  m_bSticky = true;
 }
 //---------------------------------------------------------------------------
 

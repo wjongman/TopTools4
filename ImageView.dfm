@@ -21,7 +21,9 @@ object ImageViewer: TImageViewer
     Top = 0
     Width = 329
     Height = 215
+    Cursor = crSizeAll
     Align = alClient
-    OnMouseDown = FormMouseDown
+    OnMouseDown = ImageMouseDown
+    OnMouseMove = ImageMouseMove
   end
 end

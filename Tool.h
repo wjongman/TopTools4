@@ -47,15 +47,15 @@ protected:
   TToolWindowStyle FWindowStyle;
   TNotifyEvent FOnMinimize;
 
-  virtual void __fastcall OnToolShow(TObject *Sender) { LoadPosition(); }
-  virtual void __fastcall OnToolHide(TObject *Sender) { SavePosition(); }
-
   bool __fastcall TransparencyIsSupported();
   void __fastcall SetTransparency(bool layered, int percent = 0);
   void __fastcall SetColorKey(bool layered, COLORREF colorkey);
 
   int __fastcall GetTaskbarRect(LPRECT lprect);
 
+
+  virtual void __fastcall OnToolShow(TObject *Sender) { LoadPosition(); }
+  virtual void __fastcall OnToolHide(TObject *Sender) { SavePosition(); }
   virtual void __fastcall LoadPosition();
   virtual void __fastcall SavePosition();
   virtual void __fastcall SetDefaultPosition();

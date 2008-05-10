@@ -16,7 +16,7 @@ __fastcall TImageViewer::TImageViewer(TComponent* Owner, int id, const TRect& rc
     OnShow = FormShow;
     //OnClose = FormClose;
     KeyPreview = true;
-    Image->OnMouseDown = FormMouseDown;
+//    Image->OnMouseDown = FormMouseDown;
 }
 
 //---------------------------------------------------------------------------
@@ -148,10 +148,34 @@ void __fastcall TImageViewer::FormClose(TObject *Sender,
 }
 */
 //---------------------------------------------------------------------------
-void __fastcall TImageViewer::FormMouseDown(TObject *Sender, TMouseButton Button,
-        TShiftState Shift, int X, int Y)
+void __fastcall TImageViewer::ImageMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
 {
+  if (Button == mbLeft)
+  // Start a drag-operation
+  {
+    m_MouseOldX = X;
+    m_MouseOldY = Y;
+  }
+  else if (Button == mbRight)// && FOnRightButtonClick)
+  // Signal right-button event
+  {
     ShowViewerMenu(X, Y);
+//    FOnRightButtonClick(this, Button, Shift, X, Y);
+  }
+}
+
+//---------------------------------------------------------------------------
+
+void __fastcall TImageViewer::ImageMouseMove(TObject *Sender,
+      TShiftState Shift, int X, int Y)
+{
+  if (Shift.Contains(ssLeft))
+  // We are dragging, move the form
+  {
+    Left += X - m_MouseOldX;
+    Top  += Y - m_MouseOldY;
+  }
 }
 
 //---------------------------------------------------------------------------

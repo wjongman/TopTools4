@@ -16,10 +16,12 @@ class TImageViewer : public TForm
 {
 __published:  // IDE-managed Components
   TImage *Image;
-  void __fastcall FormMouseDown(TObject *Sender, TMouseButton Button,
-          TShiftState Shift, int X, int Y);
   void __fastcall FormShow(TObject *Sender);
     void __fastcall FormKeyPress(TObject *Sender, char &Key);
+    void __fastcall ImageMouseDown(TObject *Sender, TMouseButton Button,
+          TShiftState Shift, int X, int Y);
+    void __fastcall ImageMouseMove(TObject *Sender, TShiftState Shift,
+          int X, int Y);
 //  void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 
 private:  // User declarations
@@ -41,6 +43,8 @@ private:  // User declarations
 
   int FId;
   RECT m_rcGrab;
+  int m_MouseOldX;
+  int m_MouseOldY;
 
   //TNotifyEvent FOnClose;
   TPopupMenu* m_ViewerMenu;

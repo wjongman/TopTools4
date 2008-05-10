@@ -4,6 +4,7 @@ object ScreenForm: TScreenForm
   Width = 309
   Height = 172
   Cursor = crSizeAll
+  Hint = 'Click Left Mousebutton for Options'
   Caption = 'ScreenForm'
   Color = clBtnFace
   Constraints.MinHeight = 16
@@ -14,6 +15,7 @@ object ScreenForm: TScreenForm
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  ShowHint = True
   OnPaint = FormPaint
   OnResize = FormResize
   OnShow = FormShow

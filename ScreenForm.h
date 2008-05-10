@@ -8,6 +8,7 @@
 #include <StdCtrls.hpp>
 #include <Forms.hpp>
 #include "Tool.h"
+#include <ComCtrls.hpp>
 
 #ifdef _DEBUG
 #define TRACE(s) OutputDebugString(s)
@@ -26,7 +27,8 @@ public:
 private:
   int m_MouseOldX;
   int m_MouseOldY;
-
+  bool m_bSticky;
+  
 protected:
   // This class overrides these two TForm methods
   DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
