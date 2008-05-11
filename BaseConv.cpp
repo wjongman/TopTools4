@@ -425,7 +425,7 @@ void __fastcall TBaseConvForm::miExitClick(TObject *Sender)
 void __fastcall TBaseConvForm::LoadSettings()
 {
 //  TopTools::Options Options("baseconv");
-  ShowBinaryField(m_pOptions->Get("showbinary", true));
+  ShowBinaryField(m_Options.GetBool("baseconv", "showbinary"));
 
   //   TBaseconvOptions options;
 //   ShowBinaryField(options.ShowBinary);
@@ -435,8 +435,8 @@ void __fastcall TBaseConvForm::LoadSettings()
 void __fastcall TBaseConvForm::SaveSettings()
 {
 //  TopTools::Options Options("baseconv");
-  m_pOptions->Set("showbinary", plBinary->Visible);
-  m_pOptions->Save();
+  m_Options.Set("baseconv", "showbinary", plBinary->Visible);
+  m_Options.Save();
 
 //   TBaseconvOptions options;
 //   options.ShowBinary = plBinary->Visible;

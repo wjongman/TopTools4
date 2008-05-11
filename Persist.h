@@ -175,17 +175,17 @@ namespace TopTools
 
   };
 
-const String g_RegBaseKey = "Software\\TopTools 3\\";
+const String g_RegBaseKey = "Software\\TopTools 4\\";
 
 /////////////////////////////////////////////////////////////////////////////
-  class Options
+  class TOptionMap
   {
-    typedef std::map<String, TOption> TOptionMap;
+    typedef std::map<String, TOption> OptionMap;
     typedef std::map<String, TOption>::iterator option_iterator;
 
   private:
     String m_ToolName;
-    TOptionMap m_Options;
+    OptionMap m_Options;
     String m_RegBaseKey;
 
   public:
@@ -203,7 +203,13 @@ const String g_RegBaseKey = "Software\\TopTools 3\\";
 //    }
 
     //-------------------------------------------------------------------------
-    Options(String ToolName)
+    TOptionMap()
+    : m_RegBaseKey(g_RegBaseKey), m_ToolName("")
+    {
+    }
+
+    //-------------------------------------------------------------------------
+    TOptionMap(String ToolName)
     : m_RegBaseKey(g_RegBaseKey), m_ToolName(ToolName)
     {
     }
@@ -300,14 +306,19 @@ const String g_RegBaseKey = "Software\\TopTools 3\\";
     //-------------------------------------------------------------------------
     bool __fastcall EnumIniFile()
     {
-      TStringList *NameList = new TStringList;
-
-      String SectionName = m_ToolName;
       String IniFilename = ChangeFileExt(ParamStr(0), ".ini");
+
+      // If there is no ini file, use defaults
+      if (!FileExists(IniFilename))
+        return false;
+
       TIniFile *Ini = new TIniFile(IniFilename);
       if (!Ini)
         // todo: check why it failed, was it a privilege issue?
         return false;
+
+      String SectionName = m_ToolName;
+      TStringList *NameList = new TStringList;
 
       Ini->ReadSection(SectionName, NameList);
       for (int i = 0; i < NameList->Count; i++)

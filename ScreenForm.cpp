@@ -172,8 +172,8 @@ void __fastcall TScreenForm::FormPaint(TObject *Sender)
   Canvas->LineTo(rc.Left, rc.Bottom - 1);
   Canvas->LineTo(rc.Left, rc.Top);
 
-  int x_center = (rc.Right - rc.Left)/ 2;
-  int y_center = (rc.Bottom - rc.Top)/ 2;
+  //int x_center = (rc.Right - rc.Left)/ 2;
+  //int y_center = (rc.Bottom - rc.Top)/ 2;
   //Canvas->FillRect(Rect(x_center - 10, y_center - 10, x_center + 10, y_center + 10));
   //Canvas->FillRect(Rect(rc.Left, rc.Top, rc.Right - 1, rc.Bottom - 1));
 

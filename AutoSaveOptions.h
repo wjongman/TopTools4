@@ -2,7 +2,7 @@
 #ifndef AutoSaveOptionsH
 #define AutoSaveOptionsH
 
-#include "Persist.h"
+#include "ToolOptions.h"
 
 //----------------------------------------------------------------------------
 class TAutoSaveOptions
@@ -26,8 +26,9 @@ public:
   String GetFullPathName();
 
 private:
-  TopTools::Options* m_pOptions;
+  TPersistToolOptions m_Options;
 
+  String m_sToolName;
   String GetSpecialFolderPath(int FolderSpec);
   String GetFirstFilename(int startvalue);
   String GetNextFilename();

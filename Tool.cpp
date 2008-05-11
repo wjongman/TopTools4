@@ -17,7 +17,8 @@ __fastcall TToolForm::TToolForm(TComponent* Owner, const String& toolname)
 : TForm(Owner), m_ToolName(toolname), FSnapEdge(true), FWindowStyle(twsTool),
   FDraggableForm(false)//, m_Transparent(false)
 {
-  m_pOptions = new TopTools::Options(toolname);
+//  m_pOptions = new TopTools::Options(toolname);
+//  m_Options.Init(toolname);
 
   //  m_RegBaseKey = g_RegBaseKey;
 //  LoadSettings();
@@ -29,7 +30,7 @@ __fastcall TToolForm::TToolForm(TComponent* Owner, const String& toolname)
 //---------------------------------------------------------------------------
 __fastcall TToolForm::~TToolForm()
 {
-  delete m_pOptions;
+  //delete m_pOptions;
 //  SaveSettings();
 }
 

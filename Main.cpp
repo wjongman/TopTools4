@@ -16,6 +16,8 @@ TMainForm *MainForm;
 
 // Global String for registry access
 const String g_RegBaseKey("Software\\TopTools 3\\");
+// Global flag to hold runmode
+TRunMode g_RunMode;
 
 //---------------------------------------------------------------------------
 __fastcall TMainForm::TMainForm(TComponent* Owner)

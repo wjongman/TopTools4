@@ -5,8 +5,13 @@
 
 #include <Registry.hpp>
 
-extern String g_RegBaseKey;
-//#include "ToolSettings.h"
+// Global String for registry access
+//extern String g_RegBaseKey;
+
+// Global flag to hold runmode
+#include "ToolOptions.h"
+//extern TRunMode g_RunMode;
+
 //---------------------------------------------------------------------------
 USE("doc\ChangeLog.txt", File);
 USE("doc\ToDo.txt", File);
@@ -48,6 +53,20 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
   Reg->Access = KEY_READ;
   try
   {
+    // See if the user wants to run us in portable mode
+    if (ParamCount() > 1 && ParamStr(1) == "-p")
+    {
+        g_RunMode = rmPortable;
+    }
+    else if (ParamCount() > 1 && ParamStr(1) == "-i")
+    {
+        g_RunMode = rmIniFile;
+    }
+    else
+    {
+        g_RunMode = rmRegistry;
+    }
+
     if (Reg->OpenKey(g_RegBaseKey + "main", false))
     {
       if (Reg->ValueExists("singleton"))
@@ -67,7 +86,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
   // It is also used by the installer to prevent the user from installing
   // new versions when the application is still running, and to prevent
   // uninstalling a running application.
-  ::CreateMutex(NULL, FALSE, "TopTools_3_Mutex");
+  ::CreateMutex(NULL, FALSE, "TopTools_4_Mutex");
 
   if (IsSingleton)
   {
@@ -99,7 +118,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
      Application->Initialize();
      Application->Title = "TopTools";
      Application->CreateForm(__classid(TMainForm), &MainForm);
-         Application->ShowMainForm = false;
+     Application->ShowMainForm = false;
      Application->Run();
   }
   catch (Exception &exception)

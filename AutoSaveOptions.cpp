@@ -12,70 +12,71 @@ extern const String g_RegBaseKey;
 TAutoSaveOptions::TAutoSaveOptions()
 {
   // Init default options
-  m_pOptions = new TopTools::Options("capture\\autosave");
+//  m_pOptions = new TopTools::Options("capture\\autosave");
+  m_sToolName = "capture\\autosave";
 
-  m_pOptions->Set("directory", GetSpecialFolderPath(CSIDL_DESKTOPDIRECTORY));
-  m_pOptions->Set("filename", "Snapshot");
-  m_pOptions->Set("digits", 2);
-  m_pOptions->Set("nextvalue", 1);
-  m_pOptions->Set("imagetype", 0);
-  m_pOptions->Set("existaction", 0);
-  m_pOptions->Set("bypassmenu", false);
-  m_pOptions->Set("continuous", false);
+  m_Options.Set(m_sToolName, "directory", GetSpecialFolderPath(CSIDL_DESKTOPDIRECTORY));
+  m_Options.Set(m_sToolName, "filename", "Snapshot");
+  m_Options.Set(m_sToolName, "digits", 2);
+  m_Options.Set(m_sToolName, "nextvalue", 1);
+  m_Options.Set(m_sToolName, "imagetype", 0);
+  m_Options.Set(m_sToolName, "existaction", 0);
+  m_Options.Set(m_sToolName, "bypassmenu", false);
+  m_Options.Set(m_sToolName, "continuous", false);
 }
 
 //---------------------------------------------------------------------------
 TAutoSaveOptions::~TAutoSaveOptions()
 {
-  delete m_pOptions;
+//  delete m_pOptions;
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TAutoSaveOptions::Load()
 {
-  m_pOptions->Load();
+  m_Options.Load();
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TAutoSaveOptions::Save()
 {
-  m_pOptions->Save();
+  m_Options.Save();
 }
 
 //---------------------------------------------------------------------------
 int TAutoSaveOptions::GetInt(const String& OptionName)
 {
-  return m_pOptions->Get(OptionName, 1);
+  return m_Options.GetInt(m_sToolName, OptionName);
 }
 
 //---------------------------------------------------------------------------
 String TAutoSaveOptions::GetString(const String& OptionName)
 {
-  return m_pOptions->Get(OptionName, "");
+  return m_Options.GetString(m_sToolName, OptionName);
 }
 
 //---------------------------------------------------------------------------
 bool TAutoSaveOptions::GetBool(const String& OptionName)
 {
-  return m_pOptions->Get(OptionName, false);
+  return m_Options.GetBool(m_sToolName, OptionName);
 }
 
 //---------------------------------------------------------------------------
 void TAutoSaveOptions::Set(const String& OptionName, int Option)
 {
-  m_pOptions->Set(OptionName, Option);
+  m_Options.Set(m_sToolName, OptionName, Option);
 }
 
 //---------------------------------------------------------------------------
 void TAutoSaveOptions::Set(const String& OptionName, String Option)
 {
-  m_pOptions->Set(OptionName, Option);
+  m_Options.Set(m_sToolName, OptionName, Option);
 }
 
 //---------------------------------------------------------------------------
 void TAutoSaveOptions::Set(const String& OptionName, bool Option)
 {
-  m_pOptions->Set(OptionName, Option);
+  m_Options.Set(m_sToolName, OptionName, Option);
 }
 
 //---------------------------------------------------------------------------
@@ -136,6 +137,7 @@ String TAutoSaveOptions::GetSpecialFolderPath(int FolderSpec)
   {
     ITEMIDLIST *pidl;
     HWND hwndOwner = NULL;
+    // todo: Find a way to control where it pops-up
     if (::SHGetSpecialFolderLocation(hwndOwner, FolderSpec, &pidl) == NOERROR)
     {
       char folderpath[MAX_PATH];

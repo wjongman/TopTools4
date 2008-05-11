@@ -10,11 +10,61 @@
 //#include "ToolSettings.h"
 
 //---------------------------------------------------------------------------
-#if 0
+#if 1
 TPersistToolOptions::TPersistToolOptions()
 {
+  Set("capture\\autosave", "bypassmenu", false);
+  Set("capture\\autosave", "continuous", false);
+  Set("capture\\autosave", "digits", 2);
+//  Set("capture\\autosave", "directory", GetSpecialFolderPath(CSIDL_DESKTOPDIRECTORY));
+  Set("capture\\autosave", "existaction", 0);
+  Set("capture\\autosave", "filename", "Snapshot");
+  Set("capture\\autosave", "imagetype", 0);
+  Set("capture\\autosave", "nextvalue", 1);
+
+//   TopTools::Options mainoptions(g_RegBaseKey, "main");
+  Set("main", "autostart", false);
+  Set("main", "doubleclick", dcoControl);
+  Set("main", "istrayapp", false);
+  Set("main", "rememberstate", true);
+  Set("main", "savedstate", dcoControl);
+  Set("main", "singleton", false);
+  Set("main", "stayontop", true);
+//   mainoptions.Load();
+//
+//   // Ruler
+//   TopTools::Options ruleroptions(g_RegBaseKey, "ruler");
+  Set("ruler", "arrownudge", true);
+  Set("ruler", "horizontal", true);
+  Set("ruler", "length", Screen->Width);
+  Set("ruler", "transparency", 50);
+  Set("ruler", "transparent", false);
+//   ruleroptions.Load();
+//
+//   // Base converter
+//   TopTools::Options baseconvoptions(g_RegBaseKey, "baseconv");
+  Set("baseconv", "showbinary", true);
+//   baseconvoptions.Load();
+//
+//   // Loupe
+//   TopTools::Options loupeoptions(g_RegBaseKey, "loupe");
+  Set("loupe", "centerbox", false);
+  Set("loupe", "crosshair", false);
+  Set("loupe", "grid", false);
+  Set("loupe", "height", 200);
+  Set("loupe", "refresh", 250);
+  Set("loupe", "selfmagnify", false);
+  Set("loupe", "width", 200);
+  Set("loupe", "zoom", 4);
+
+  Set("info", "prefix", false);
+  Set("info", "quotes", false);
+
+  Set("capture", "autosave", false);
+  Set("capture", "showloupe", false);
+/*
   // Init default options
-  m_Options.Init(g_RegBaseKey, "capture\\autosave");
+  //m_Options.Init(g_RegBaseKey, "capture\\autosave");
 
   m_Options.Set("capture\\autosave", "bypassmenu", false);
   m_Options.Set("capture\\autosave", "continuous", false);
@@ -65,7 +115,7 @@ TPersistToolOptions::TPersistToolOptions()
 
   m_Options.Set("capture", "autosave", false);
   m_Options.Set("capture", "showloupe", false);
-
+*/
 //   // General
 //   ckOnTop->Checked = mainoptions.GetBool("stayontop");
 //   ckAutoStart->Checked = mainoptions.GetBool("autostart");
@@ -106,49 +156,108 @@ TPersistToolOptions::TPersistToolOptions()
 //---------------------------------------------------------------------------
 void TPersistToolOptions::Load()
 {
-   m_Options.Load();
+  for (option_map_iterator iter = m_OptionMaps.begin(); iter != m_OptionMaps.end(); iter++)
+  {
+    String ToolName = iter->first;
+    (iter->second).Load();
+  }
 }
 
 //---------------------------------------------------------------------------
 void TPersistToolOptions::Save()
 {
-  m_Options.Save();
-}
-
-////---------------------------------------------------------------------------
-//int TPersistToolOptions::GetInt(const String& OptionName)
-//{
-//  return m_Options.GetInt(OptionName);
-//}
-//
-////---------------------------------------------------------------------------
-//String TPersistToolOptions::GetString(const String& OptionName)
-//{
-//  return m_Options.GetString(OptionName);
-//}
-//
-////---------------------------------------------------------------------------
-//bool TPersistToolOptions::GetBool(const String& OptionName)
-//{
-//  return m_Options.GetBool(OptionName);
-//}
-//
-//---------------------------------------------------------------------------
-void TPersistToolOptions::Set(const String& OptionName, int Option)
-{
-  m_Options.Set(OptionName, Option);
+  for (option_map_iterator iter = m_OptionMaps.begin(); iter != m_OptionMaps.end(); iter++)
+  {
+    String ToolName = iter->first;
+    (iter->second).Save();
+  }
 }
 
 //---------------------------------------------------------------------------
-void TPersistToolOptions::Set(const String& OptionName, String Option)
+int TPersistToolOptions::GetInt(const String& ToolName, const String& OptionName)
 {
-  m_Options.Set(OptionName, Option);
+  option_map_iterator iter = m_OptionMaps.find(ToolName);
+  if (iter != m_OptionMaps.end())
+  {
+    TopTools::TOptionMap OptionMap = iter->second;
+    return OptionMap.Get(OptionName, 0);
+  }
+
+  return 0;
 }
 
 //---------------------------------------------------------------------------
-void TPersistToolOptions::Set(const String& OptionName, bool Option)
+String TPersistToolOptions::GetString(const String& ToolName, const String& OptionName)
 {
-  m_Options.Set(OptionName, Option);
+  option_map_iterator iter = m_OptionMaps.find(ToolName);
+  if (iter != m_OptionMaps.end())
+  {
+    TopTools::TOptionMap OptionMap = iter->second;
+    return OptionMap.Get(OptionName, "");
+  }
+
+  return "";
+}
+
+//---------------------------------------------------------------------------
+bool TPersistToolOptions::GetBool(const String& ToolName, const String& OptionName)
+{
+  option_map_iterator iter = m_OptionMaps.find(ToolName);
+  if (iter != m_OptionMaps.end())
+  {
+    TopTools::TOptionMap OptionMap = iter->second;
+    return OptionMap.Get(OptionName, false);
+  }
+
+  return false;
+}
+
+//---------------------------------------------------------------------------
+void TPersistToolOptions::Set(const String& ToolName, const String& OptionName, int Option)
+{
+  option_map_iterator iter = m_OptionMaps.find(ToolName);
+  if (iter == m_OptionMaps.end())
+  {
+    TopTools::TOptionMap OptionMap(ToolName);
+    OptionMap.Set(OptionName, Option);
+    m_OptionMaps[ToolName] = OptionMap;
+  }
+  else
+  {
+    (iter->second).Set(OptionName, Option);
+  }
+}
+
+//---------------------------------------------------------------------------
+void TPersistToolOptions::Set(const String& ToolName, const String& OptionName, String Option)
+{
+  option_map_iterator iter = m_OptionMaps.find(ToolName);
+  if (iter == m_OptionMaps.end())
+  {
+    TopTools::TOptionMap OptionMap(ToolName);
+    OptionMap.Set(OptionName, Option);
+    m_OptionMaps[ToolName] = OptionMap;
+  }
+  else
+  {
+    (iter->second).Set(OptionName, Option);
+  }
+}
+
+//---------------------------------------------------------------------------
+void TPersistToolOptions::Set(const String& ToolName, const String& OptionName, bool Option)
+{
+  option_map_iterator iter = m_OptionMaps.find(ToolName);
+  if (iter == m_OptionMaps.end())
+  {
+    TopTools::TOptionMap OptionMap(ToolName);
+    OptionMap.Set(OptionName, Option);
+    m_OptionMaps[ToolName] = OptionMap;
+  }
+  else
+  {
+    (iter->second).Set(OptionName, Option);
+  }
 }
 
 //---------------------------------------------------------------------------

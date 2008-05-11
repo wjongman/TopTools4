@@ -20,34 +20,11 @@ __fastcall TAutoSaveDialog::TAutoSaveDialog(TComponent* AOwner)
   Initialized = true;
 }
 
-////---------------------------------------------------------------------
-//void TAutoSaveDialog::LoadOptions()
-//{
-//  m_Options.Load();
-//
-//  // Init default options
-////  m_Options.Init(g_RegBaseKey, "capture\\autosave");
-//
-//  edDirectory->Text = m_Options.Get("directory", GetSpecialFolderPath(CSIDL_DESKTOPDIRECTORY));
-//  edPrefix->Text = m_Options.Get("filename", "Snapshot");
-//  udDigits->Position = (short) m_Options.Get("digits", 2);
-//  udOffset->Position = (short) m_Options.Get("nextvalue", 1);
-//  cbType->ItemIndex = m_Options.Get("imagetype", 0);
-//
-//  int existaction = m_Options.Get("existaction", 0);
-//  rbPrompt->Checked = (existaction == 0);
-//  rbOverwrite->Checked = (existaction == 1);
-//  rbRename->Checked = (existaction == 2);
-//
-//  ckByPass->Checked = m_Options.Get("bypassmenu", false);
-//  ckContinuous->Checked = m_Options.Get("continuous", false);
-//}
-
 //---------------------------------------------------------------------
 void TAutoSaveDialog::LoadOptions()
 {
   m_Options.Load();
-/*
+
   edDirectory->Text = m_Options.GetString("directory");
   edPrefix->Text = m_Options.GetString("filename");
   udDigits->Position = (short) m_Options.GetInt("digits");
@@ -61,7 +38,6 @@ void TAutoSaveDialog::LoadOptions()
 
   ckByPass->Checked = m_Options.GetBool("bypassmenu");
   ckContinuous->Checked = m_Options.GetBool("continuous");
-  */
 }
 
 //---------------------------------------------------------------------
@@ -74,17 +50,20 @@ void TAutoSaveDialog::SaveOptions()
 //---------------------------------------------------------------------
 void TAutoSaveDialog::UpdateOptions()
 {
-  m_Options.Set("directory", edDirectory->Text);
-  m_Options.Set("filename", edPrefix->Text);
-  m_Options.Set("digits", udDigits->Position);
-  m_Options.Set("nextvalue", udOffset->Position);
-  m_Options.Set("imagetype", cbType->ItemIndex);
-  m_Options.Set("bypassmenu", ckByPass->Checked);
-  m_Options.Set("continuous", ckContinuous->Checked);
-  int existaction = rbPrompt->Checked * 0 +
-                    rbOverwrite->Checked * 1 +
-                    rbRename->Checked * 2;
-  m_Options.Set("existaction", existaction);
+  if (Initialized)
+  {
+    m_Options.Set("directory", edDirectory->Text);
+    m_Options.Set("filename", edPrefix->Text);
+    m_Options.Set("digits", udDigits->Position);
+    m_Options.Set("nextvalue", udOffset->Position);
+    m_Options.Set("imagetype", cbType->ItemIndex);
+    m_Options.Set("bypassmenu", ckByPass->Checked);
+    m_Options.Set("continuous", ckContinuous->Checked);
+    int existaction = rbPrompt->Checked * 0 +
+                      rbOverwrite->Checked * 1 +
+                      rbRename->Checked * 2;
+    m_Options.Set("existaction", existaction);
+  }
 }
 
 //---------------------------------------------------------------------
