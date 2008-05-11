@@ -2,7 +2,7 @@
 #ifndef ToolOptionsH
 #define ToolOptionsH
 
-#include "Persist.h"
+#include "PersistOptions.h"
 #include <map>
 
 /////////////////////////////////////////////////////////////////////////////
@@ -35,7 +35,7 @@ enum TRunMode
 extern const String g_RegBaseKey;
 // Global flag to hold runmode
 extern TRunMode g_RunMode;
-
+/*
 ///////////////////////////////////////////////////////////////////////////////
 class TPersistToolOptions
 {
@@ -59,7 +59,7 @@ private:
 
   TOptionMaps m_OptionMaps;
 };
-
+*/
 /////////////////////////////////////////////////////////////////////////////
 class TToolOptionBase
 {

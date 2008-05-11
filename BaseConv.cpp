@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "Persist.h"
+#include "PersistOptions.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "Tool"

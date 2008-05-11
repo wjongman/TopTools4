@@ -6,11 +6,42 @@
 #include <registry.hpp>
 #include <map>
 
-const String g_RegBaseKey = "Software\\TopTools 4\\";
-
 //---------------------------------------------------------------------------
 namespace TopTools
 {
+  // Global String for registry access
+//  extern const String g_RegBaseKey;
+  // Global flag to hold runmode
+//  extern TRunMode g_RunMode;
+
+  /////////////////////////////////////////////////////////////////////////////
+  enum TToolId
+  {
+    idMain = 1,
+    idRuler = 2,
+    idLoupe = 4,
+    idInfo = 8,
+    idBaseconv = 16
+  };
+
+  /////////////////////////////////////////////////////////////////////////////
+  enum TDoubleClickOpen
+  {
+    dcoControl = 1,
+    dcoRuler = 2,
+    dcoLoupe = 4,
+    dcoInfo = 8,
+    dcoBaseconv = 16
+  };
+
+  /////////////////////////////////////////////////////////////////////////////
+  enum TRunMode
+  {
+    rmPortable,
+    rmIniFile,
+    rmRegistry
+  };
+
   /////////////////////////////////////////////////////////////////////////////
   enum DataType
   {
@@ -106,13 +137,13 @@ namespace TopTools
 
     //-------------------------------------------------------------------------
     TOptionMap()
-    : m_RegBaseKey(g_RegBaseKey), m_ToolName("")
+    : m_RegBaseKey("Software\\TopTools 4\\"), m_ToolName("")
     {
     }
 
     //-------------------------------------------------------------------------
     TOptionMap(String ToolName)
-    : m_RegBaseKey(g_RegBaseKey), m_ToolName(ToolName)
+    : m_RegBaseKey("Software\\TopTools 4\\"), m_ToolName(ToolName)
     {
     }
 
@@ -329,6 +360,13 @@ namespace TopTools
   /////////////////////////////////////////////////////////////////////////////
   class TPersistToolOptions
   {
+  private:
+    typedef std::map<String, TopTools::TOptionMap> TOptionMaps;
+    typedef std::map<String, TopTools::TOptionMap>::iterator option_map_iterator;
+
+    TOptionMaps m_OptionMaps;
+
+  public:
     TPersistToolOptions()
     {
       // Initialize with default settings

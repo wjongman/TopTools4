@@ -10,7 +10,7 @@
 #include <Registry.hpp>
 
 #include "ToolOptions.h"
-#include "Persist.h"
+#include "PersistOptions.h"
 
 // Identifiers for our custom cursors
 enum { crCrosshair,
@@ -40,7 +40,7 @@ private:  // User declarations
 
 protected:
   String m_ToolName;
-  TPersistToolOptions m_Options;
+  TopTools::TPersistToolOptions m_Options;
 
   bool FSnapEdge;
   bool FDraggableForm;

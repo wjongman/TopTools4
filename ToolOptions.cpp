@@ -10,7 +10,7 @@
 //#include "ToolSettings.h"
 
 //---------------------------------------------------------------------------
-#if 1
+#if 0
 TPersistToolOptions::TPersistToolOptions()
 {
   Set("capture\\autosave", "bypassmenu", false);
