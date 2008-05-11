@@ -1,10 +1,12 @@
 //---------------------------------------------------------------------------
-#ifndef TopToolsPersistH
-#define TopToolsPersistH
+#ifndef TopToolsPersistOptionsH
+#define TopToolsPersistOptionsH
 
 #include <inifiles.hpp>
 #include <registry.hpp>
 #include <map>
+
+// todo: make TPersistToolOptions a singleton
 
 //---------------------------------------------------------------------------
 namespace TopTools
@@ -52,37 +54,44 @@ namespace TopTools
   class TOption
   {
   public:
+    //-------------------------------------------------------------------------
     TOption() : IntVal(0), StringVal("")
     {
     }
 
+    //-------------------------------------------------------------------------
     TOption(int iValue)
     {
       IntVal = iValue;
       StringVal = IntToStr(iValue);
     }
 
+    //-------------------------------------------------------------------------
     TOption(String sValue)
     {
       IntVal = StrToIntDef(sValue, 0);
       StringVal = sValue;
     }
 
+    //-------------------------------------------------------------------------
     int GetIntVal()
     {
       return IntVal;
     }
 
+    //-------------------------------------------------------------------------
     String GetStringVal()
     {
       return StringVal;
     }
 
+    //-------------------------------------------------------------------------
     bool GetBoolVal()
     {
       return IntVal != 0;
     }
 
+    //-------------------------------------------------------------------------
     int GetValue(int iDefault)
     {
       if (GetDataType() == dtInt)
@@ -92,11 +101,13 @@ namespace TopTools
       return iDefault;
     }
 
+    //-------------------------------------------------------------------------
     String GetValue(const String& sDefault)
     {
       return StringVal;
     }
 
+    //-------------------------------------------------------------------------
     DataType GetDataType()
     {
       // Ini files are agostic to data types, all options are strings.
@@ -358,7 +369,7 @@ namespace TopTools
   }; // class TOptionMap
 
   /////////////////////////////////////////////////////////////////////////////
-  class TPersistToolOptions
+  class TPersistOptions
   {
   private:
     typedef std::map<String, TopTools::TOptionMap> TOptionMaps;
@@ -367,7 +378,7 @@ namespace TopTools
     TOptionMaps m_OptionMaps;
 
   public:
-    TPersistToolOptions()
+    TPersistOptions()
     {
       // Initialize with default settings
       Set("capture\\autosave", "bypassmenu", false);
@@ -416,7 +427,6 @@ namespace TopTools
     {
       for (option_map_iterator iter = m_OptionMaps.begin(); iter != m_OptionMaps.end(); iter++)
       {
-        String ToolName = iter->first;
         (iter->second).Load();
       }
     }
@@ -426,7 +436,6 @@ namespace TopTools
     {
       for (option_map_iterator iter = m_OptionMaps.begin(); iter != m_OptionMaps.end(); iter++)
       {
-        String ToolName = iter->first;
         (iter->second).Save();
       }
     }
@@ -437,8 +446,7 @@ namespace TopTools
       option_map_iterator iter = m_OptionMaps.find(ToolName);
       if (iter != m_OptionMaps.end())
       {
-        TopTools::TOptionMap OptionMap = iter->second;
-        return OptionMap.Get(OptionName, 0);
+        return (iter->second).Get(OptionName, 0);
       }
 
       return 0;
@@ -450,8 +458,7 @@ namespace TopTools
       option_map_iterator iter = m_OptionMaps.find(ToolName);
       if (iter != m_OptionMaps.end())
       {
-        TopTools::TOptionMap OptionMap = iter->second;
-        return OptionMap.Get(OptionName, "");
+        return (iter->second).Get(OptionName, "");
       }
 
       return "";
@@ -463,8 +470,7 @@ namespace TopTools
       option_map_iterator iter = m_OptionMaps.find(ToolName);
       if (iter != m_OptionMaps.end())
       {
-        TopTools::TOptionMap OptionMap = iter->second;
-        return OptionMap.Get(OptionName, false);
+        return (iter->second).Get(OptionName, false);
       }
 
       return false;
@@ -474,15 +480,15 @@ namespace TopTools
     void Set(const String& ToolName, const String& OptionName, int Option)
     {
       option_map_iterator iter = m_OptionMaps.find(ToolName);
-      if (iter == m_OptionMaps.end())
+      if (iter != m_OptionMaps.end())
+      {
+        (iter->second).Set(OptionName, Option);
+      }
+      else
       {
         TopTools::TOptionMap OptionMap(ToolName);
         OptionMap.Set(OptionName, Option);
         m_OptionMaps[ToolName] = OptionMap;
-      }
-      else
-      {
-        (iter->second).Set(OptionName, Option);
       }
     }
 
@@ -490,15 +496,15 @@ namespace TopTools
     void Set(const String& ToolName, const String& OptionName, String Option)
     {
       option_map_iterator iter = m_OptionMaps.find(ToolName);
-      if (iter == m_OptionMaps.end())
+      if (iter != m_OptionMaps.end())
+      {
+        (iter->second).Set(OptionName, Option);
+      }
+      else
       {
         TopTools::TOptionMap OptionMap(ToolName);
         OptionMap.Set(OptionName, Option);
         m_OptionMaps[ToolName] = OptionMap;
-      }
-      else
-      {
-        (iter->second).Set(OptionName, Option);
       }
     }
 
@@ -506,15 +512,15 @@ namespace TopTools
     void Set(const String& ToolName, const String& OptionName, bool Option)
     {
       option_map_iterator iter = m_OptionMaps.find(ToolName);
-      if (iter == m_OptionMaps.end())
+      if (iter != m_OptionMaps.end())
+      {
+        (iter->second).Set(OptionName, Option);
+      }
+      else
       {
         TopTools::TOptionMap OptionMap(ToolName);
         OptionMap.Set(OptionName, Option);
         m_OptionMaps[ToolName] = OptionMap;
-      }
-      else
-      {
-        (iter->second).Set(OptionName, Option);
       }
     }
 
@@ -522,6 +528,6 @@ namespace TopTools
 
 } // namespace TopTools
 
-#endif // #ifndef TopToolsPersistH
+#endif // #ifndef TopToolsPersistOptionsH
 
 

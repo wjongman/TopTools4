@@ -35,31 +35,7 @@ enum TRunMode
 extern const String g_RegBaseKey;
 // Global flag to hold runmode
 extern TRunMode g_RunMode;
-/*
-///////////////////////////////////////////////////////////////////////////////
-class TPersistToolOptions
-{
-public:
-  TPersistToolOptions();
 
-  void Load();
-  void Save();
-
-  int GetInt(const String& ToolName, const String& OptionName);
-  String GetString(const String& ToolName, const String& OptionName);
-  bool GetBool(const String& ToolName, const String& OptionName);
-
-  void Set(const String& ToolName, const String& OptionName, int Option);
-  void Set(const String& ToolName, const String& OptionName, String Option);
-  void Set(const String& ToolName, const String& OptionName, bool Option);
-
-private:
-  typedef std::map<String, TopTools::TOptionMap> TOptionMaps;
-  typedef std::map<String, TopTools::TOptionMap>::iterator option_map_iterator;
-
-  TOptionMaps m_OptionMaps;
-};
-*/
 /////////////////////////////////////////////////////////////////////////////
 class TToolOptionBase
 {
