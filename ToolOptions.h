@@ -2,41 +2,6 @@
 #ifndef ToolOptionsH
 #define ToolOptionsH
 
-#include "PersistOptions.h"
-#include <map>
-
-/////////////////////////////////////////////////////////////////////////////
-/*
-enum TToolId
-{
-  idMain = 1,
-  idRuler = 2,
-  idLoupe = 4,
-  idInfo = 8,
-  idBaseconv = 16
-};
-
-enum TDoubleClickOpen
-{
-  dcoControl = 1,
-  dcoRuler = 2,
-  dcoLoupe = 4,
-  dcoInfo = 8,
-  dcoBaseconv = 16
-};
-
-enum TRunMode
-{
-  rmPortable,
-  rmIniFile,
-  rmRegistry
-};
-*/
-// Global String for registry access
-extern const String g_RegBaseKey;
-// Global flag to hold runmode
-extern TRunMode g_RunMode;
-
 /////////////////////////////////////////////////////////////////////////////
 class TToolOptionBase
 {

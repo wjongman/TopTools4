@@ -11,6 +11,7 @@
 
 #include "OptionDlg.h"
 #include "AutoSaveDlg.h"
+#include "PersistOptions.h"
 
 //---------------------------------------------------------------------------
 __fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner)

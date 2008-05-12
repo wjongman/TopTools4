@@ -3,17 +3,12 @@
 #pragma hdrstop
 
 #include "AutoSaveOptions.h"
-
-// Global String for registry access
-extern const String g_RegBaseKey;
-
+#include "PersistOptions.h"
 
 //---------------------------------------------------------------------------
 TAutoSaveOptions::TAutoSaveOptions()
 {
   // Init default options
-//  TPersistOptions& g_ToolOptions = TPersistOptions::Instance();
-//  m_pOptions = new TopTools::Options("capture\\autosave");
   m_sToolName = "capture\\autosave";
 
   g_ToolOptions.Set(m_sToolName, "directory", GetSpecialFolderPath(CSIDL_DESKTOPDIRECTORY));
@@ -29,7 +24,6 @@ TAutoSaveOptions::TAutoSaveOptions()
 //---------------------------------------------------------------------------
 TAutoSaveOptions::~TAutoSaveOptions()
 {
-//  delete m_pOptions;
 }
 
 //---------------------------------------------------------------------------

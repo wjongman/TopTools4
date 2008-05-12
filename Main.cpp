@@ -15,10 +15,12 @@
 TMainForm *MainForm;
 
 // Global String for registry access
-const String g_RegBaseKey("Software\\TopTools 3\\");
+const String g_RegBaseKey("Software\\TopTools 4\\");
+// Global option store
 TPersistOptions g_ToolOptions;
 // Global flag to hold runmode
 TRunMode g_RunMode;
+
 
 //---------------------------------------------------------------------------
 __fastcall TMainForm::TMainForm(TComponent* Owner)
@@ -35,13 +37,12 @@ __fastcall TMainForm::TMainForm(TComponent* Owner)
     Application->OnDeactivate = HandleAppDeactivate;
     Application->OnRestore = HandleAppRestore;
 
+    g_ToolOptions.Load();
     LoadSettings();
 
     m_HotkeyManager = new THotkeyManager(Handle);
 
     Timer->Enabled = TimerNeeded();
-
-//    ScreenForm->Visible = false;
 }
 
 //---------------------------------------------------------------------------

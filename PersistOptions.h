@@ -6,18 +6,6 @@
 #include <registry.hpp>
 #include <map>
 
-// todo: make TPersistToolOptions a singleton
-
-//extern const String g_RegBaseKey;
-//extern TPersistOptions& g_ToolOptions;
-//---------------------------------------------------------------------------
-//namespace TopTools
-//{
-//  extern TopTools::TPersistOptions& g_ToolOptions;
-  // Global String for registry access
-  // Global flag to hold runmode
-//  extern TRunMode g_RunMode;
-
   /////////////////////////////////////////////////////////////////////////////
   enum TToolId
   {
@@ -159,16 +147,6 @@
     : m_RegBaseKey("Software\\TopTools 4\\"), m_ToolName(ToolName)
     {
     }
-
-//     //-------------------------------------------------------------------------
-//     void Init(String RegBaseKey, String ToolName)
-//     {
-//       m_RegBaseKey = RegBaseKey;
-//       m_ToolName = ToolName;
-//
-// //      if (!EnumRegKeys())
-//       EnumIniFile();
-//     }
 
     //-------------------------------------------------------------------------
     void Set(const String& Name, int Value)
@@ -376,19 +354,6 @@
   /////////////////////////////////////////////////////////////////////////////
   class TPersistOptions
   {
-  // todo: make this class a singleton
-  /*
-  public:
-    //-------------------------------------------------------------------------
-    inline static TPersistOptions& Instance()
-    {
-      // All references to this class are through this function
-      // A static object of this class will be instantiated at the
-      // first time this function is called (lazy initialisation).
-      static TPersistOptions instance;
-      return instance;
-    }
-  */
   private:
     typedef std::map<String, TOptionMap> TOptionMaps;
     typedef std::map<String, TOptionMap>::iterator option_map_iterator;
@@ -547,6 +512,10 @@
   }; // TPersistToolOptions
 
 extern TPersistOptions g_ToolOptions;
+// Global String for registry access
+extern const String g_RegBaseKey;
+// Global flag to hold runmode
+extern TRunMode g_RunMode;
 
 #endif // #ifndef TopToolsPersistOptionsH
 

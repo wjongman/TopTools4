@@ -271,6 +271,10 @@ void __fastcall TToolForm::SetColorKey(bool layered, COLORREF colorkey)
 //---------------------------------------------------------------------------
 void __fastcall TToolForm::LoadPosition()
 {
+  int left = g_ToolOptions.GetInt(m_ToolName, "left");
+  int top = g_ToolOptions.GetInt(m_ToolName, "top");
+  SetBounds(left, top, Width, Height);
+/*
   // Retrieve saved settings from the registry
   TRegistry *Reg = new TRegistry();
   Reg->RootKey = HKEY_CURRENT_USER;
@@ -299,7 +303,7 @@ void __fastcall TToolForm::LoadPosition()
   {
     delete Reg;
   }
-
+*/
   // Make sure we don't end up outside the desktop area
 //  ConstrainPosition();
 }
@@ -307,6 +311,10 @@ void __fastcall TToolForm::LoadPosition()
 //---------------------------------------------------------------------------
 void __fastcall TToolForm::SavePosition()
 {
+  g_ToolOptions.Set(m_ToolName, "left", Left);
+  g_ToolOptions.Set(m_ToolName, "top", Top);
+  g_ToolOptions.Save();
+/*
   // Save settings in the registry
   TRegistry *Reg = new TRegistry();
   Reg->RootKey = HKEY_CURRENT_USER;
@@ -323,6 +331,7 @@ void __fastcall TToolForm::SavePosition()
   {
     delete Reg;
   }
+*/
 }
 
 //---------------------------------------------------------------------------

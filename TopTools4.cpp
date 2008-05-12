@@ -11,6 +11,7 @@
 // Global flag to hold runmode
 #include "ToolOptions.h"
 //extern TRunMode g_RunMode;
+#include "PersistOptions.h"
 
 //---------------------------------------------------------------------------
 USE("doc\ChangeLog.txt", File);
