@@ -27,9 +27,9 @@ __fastcall TScreenGrabber::TScreenGrabber(TComponent* Owner)
     m_pBufferBmp = new Graphics::TBitmap;
     m_CaptureMenu = NULL;
 
-    m_CaptureOptions.Load();
+//    m_CaptureOptions.Load();
 //    m_AutoSaveOptions.LoadFromRegistry();
-    m_AutoSaveOptions.Load();
+//    m_AutoSaveOptions.Load();
 
 //    m_GrabberMode = gmOpenViewer;
     m_GrabberMode = gmShowMenu;
@@ -42,9 +42,9 @@ __fastcall TScreenGrabber::~TScreenGrabber()
 {
     TRACE("TScreenGrabber::~TScreenGrabber");
 
-    m_CaptureOptions.Save();
+//    m_CaptureOptions.Save();
 //    m_AutoSaveOptions.SaveToRegistry();
-    m_AutoSaveOptions.Save();
+//    m_AutoSaveOptions.Save();
 
     if (m_CaptureMenu)
         delete m_CaptureMenu;
@@ -57,9 +57,9 @@ void __fastcall TScreenGrabber::UpdateSettings()
 {
     TRACE("TScreenGrabber::UpdateSettings()");
 
-    m_CaptureOptions.Load();
+//    m_CaptureOptions.Load();
 //    m_AutoSaveOptions.LoadFromRegistry();
-    m_AutoSaveOptions.Load();
+//    m_AutoSaveOptions.Load();
 //  PopulateCaptureMenu();
 }
 /*
@@ -150,16 +150,17 @@ void __fastcall TScreenGrabber::HandleCapture(int X, int Y)
 {
     TRACE("TScreenGrabber::HandleCapture()");
 
-//    if (m_AutoSaveOptions.Bypass())
-    if (m_AutoSaveOptions.GetBool("bypassmenu"))
+//    if (m_AutoSaveOptions.GetBool("bypassmenu"))
+    if (g_ToolOptions.GetBool("capture\\autosave", "bypassmenu"))
     {
         AutoSaveToFile();
-        if (m_AutoSaveOptions.GetBool("continuous"))
+        if (g_ToolOptions.GetBool("capture\\autosave", "continuous"))
         {
             CaptureNext();
         }
     }
-    else if (m_GrabberMode == gmOpenViewer)
+    //else if (m_GrabberMode == gmOpenViewer)
+    else if (g_ToolOptions.GetBool("capture\\autosave", "openviewer"))
     {
         EndCapture();
         ViewImage(m_pBufferBmp);

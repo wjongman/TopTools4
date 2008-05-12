@@ -15,7 +15,7 @@
 
 //---------------------------------------------------------------------------
 __fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner)
-  : TForm(Owner)
+: TForm(Owner)
 {
   // Set Form dimensions relative to plMarker so we scale properly
   // independent of display settings (ie. "Large fonts")
@@ -29,7 +29,7 @@ __fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner)
 //---------------------------------------------------------------------------
 __fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner,
                                                   const String& PageName)
-  : TForm(Owner)
+: TForm(Owner)
 {
   // Set Form dimensions relative to plMarker so we scale properly
   // independent of display settings (ie. "Large fonts")
@@ -124,216 +124,81 @@ void __fastcall TToolOptionsDialog::FormShow(TObject *Sender)
 
 //---------------------------------------------------------------------------
 void __fastcall TToolOptionsDialog::lvSelectOptionChange(TObject *Sender,
-      TListItem *Item, TItemChange Change)
+                                                         TListItem *Item, TItemChange Change)
 {
   if (lvSelectOption->ItemFocused)
     ActivatePage(lvSelectOption->ItemFocused->Caption);
 }
 
-////---------------------------------------------------------------------------
-//void TToolOptionsDialog::InitOptions()
-//{
-//  // General
-//  TopTools::Options mainoptions(g_RegBaseKey, "main");
-//
-//  ckOnTop->Checked = mainoptions.Get("stayontop", true);
-//  ckAutoStart->Checked = mainoptions.Get("autostart", false);
-//  ckSaveToolstate->Checked = mainoptions.Get("rememberstate", true);
-//  ckSingleton->Checked = mainoptions.Get("singleton", false);
-//  ckTrayApp->Checked = mainoptions.Get("istrayapp", false);
-//  // Tray icon doubleclick action
-//  int doubleclickaction = mainoptions.Get("doubleclick", dcoControl);
-//  ckOpenToolbar->Checked = doubleclickaction & dcoControl;
-//  ckOpenRuler->Checked = doubleclickaction & dcoRuler;
-//  ckOpenLoupe->Checked = doubleclickaction & dcoLoupe;
-//  ckOpenInfo->Checked = doubleclickaction & dcoInfo;
-//  ckOpenBaseconv->Checked = doubleclickaction & dcoBaseconv;
-//
-////  mainoptions.Set("savedstate", dcoControl);
-////  mainoptions.Load();
-//
-//  // Ruler
-//  TopTools::Options ruleroptions(g_RegBaseKey, "ruler");
-//  udLength->Position = (short) ruleroptions.Get("length", Screen->Width);
-//  ckNudgeRuler->Checked = ruleroptions.Get("arrownudge", true);
-//  cbTransparent->Checked = ruleroptions.Get("transparent", false);
-//  udTransparency->Position = ruleroptions.Get("transparency", 50);
-////  ruleroptions.Set("horizontal", true);
-////  ruleroptions.Load();
-//
-//  // Base converter
-//  TopTools::Options baseconvoptions(g_RegBaseKey, "baseconv");
-//  ckBinary->Checked = baseconvoptions.Get("showbinary", true);
-////  baseconvoptions.Load();
-//
-//  // Loupe
-//  TopTools::Options loupeoptions(g_RegBaseKey, "loupe");
-//  udRefresh->Position = (short) loupeoptions.Get("refreshrate", 250);
-////  loupeoptions.Set("centerbox", false);
-////  loupeoptions.Set("crosshair", false);
-////  loupeoptions.Set("grid", false);
-////  loupeoptions.Set("height", 200);
-////  loupeoptions.Set("selfmagnify", false);
-////  loupeoptions.Set("width", 200);
-////  loupeoptions.Set("zoom", 4);
-////  loupeoptions.Load();
-//
-//  // Info
-//  TopTools::Options infooptions(g_RegBaseKey, "info");
-//  ckPrefix->Checked = infooptions.Get("prefix", false);
-//  ckQuotes->Checked = infooptions.Get("quotes", false);
-//
-//
-//  // Grabber
-//  TopTools::Options captureoptions(g_RegBaseKey, "capture");
-//
-//  ckAutosave->Checked = captureoptions.Get("autosave", false);
-//  ckShowLoupeOnGrab->Checked = captureoptions.Get("showloupe", false);
-//
-//}
-
 //---------------------------------------------------------------------------
 void TToolOptionsDialog::InitOptions()
 {
-  TTopToolOptions options;
-  options.LoadFromRegistry();
-
   // General
-  ckOnTop->Checked = options.MainOptions.StayOnTop;
-  ckAutoStart->Checked = options.MainOptions.AutoStart;
-  ckSaveToolstate->Checked = options.MainOptions.RememberState;
-  ckSingleton->Checked = options.MainOptions.IsSingleton;
-  ckTrayApp->Checked = options.MainOptions.IsTrayApp;
+  ckAutoStart->Checked = g_ToolOptions.GetBool("main", "autostart");
+  ckTrayApp->Checked = g_ToolOptions.GetBool("main", "istrayapp");
+  ckSaveToolstate->Checked = g_ToolOptions.GetBool("main", "rememberstate");
+  ckSingleton->Checked = g_ToolOptions.GetBool("main", "singleton");
+  ckOnTop->Checked = g_ToolOptions.GetBool("main", "stayontop");
+  int doubleclickaction = g_ToolOptions.GetInt("main", "doubleclick");
+  ckOpenToolbar->Checked = doubleclickaction & dcoControl;
+  ckOpenRuler->Checked = doubleclickaction & dcoRuler;
+  ckOpenLoupe->Checked = doubleclickaction & dcoLoupe;
+  ckOpenInfo->Checked = doubleclickaction & dcoInfo;
+  ckOpenBaseconv->Checked = doubleclickaction & dcoBaseconv;
 
   // Ruler
-  udLength->Position = (short) options.RulerOptions.Length;
-  ckNudgeRuler->Checked = options.RulerOptions.ArrowNudge;
-  cbTransparent->Checked = options.RulerOptions.Transparent;
-  udTransparency->Position = (short) options.RulerOptions.Transparency;
+  udLength->Position = (short) g_ToolOptions.GetInt("ruler", "length");
+  ckNudgeRuler->Checked = g_ToolOptions.GetBool("ruler", "arrownudge");
+  udTransparency->Position = (short) g_ToolOptions.GetInt("ruler", "transparency");
+  cbTransparent->Checked = g_ToolOptions.GetBool("ruler", "transparent");
 
   // Base converter
-  ckBinary->Checked = options.BaseconvOptions.ShowBinary;
+  ckBinary->Checked = g_ToolOptions.GetBool("baseconv", "showbinary");
 
   // Loupe
-  udRefresh->Position = (short) options.LoupeOptions.RefreshRate;
+  udRefresh->Position = (short) g_ToolOptions.GetInt("loupe", "refresh");
 
   // Info
-  ckPrefix->Checked = options.ColorCopyOptions.Prefix;
-  ckQuotes->Checked = options.ColorCopyOptions.Quotes;
+  ckPrefix->Checked = g_ToolOptions.GetBool("info", "prefix");
+  ckQuotes->Checked = g_ToolOptions.GetBool("info", "quotes");
 
   // Grabber
-  ckAutosave->Checked = options.CaptureOptions.AutoSave;
-  ckShowLoupeOnGrab->Checked = options.CaptureOptions.ShowLoupe;
-
-  // Tray icon
-  ckOpenToolbar->Checked = options.MainOptions.DoubleClick & dcoControl;
-  ckOpenRuler->Checked = options.MainOptions.DoubleClick & dcoRuler;
-  ckOpenLoupe->Checked = options.MainOptions.DoubleClick & dcoLoupe;
-  ckOpenInfo->Checked = options.MainOptions.DoubleClick & dcoInfo;
-  ckOpenBaseconv->Checked = options.MainOptions.DoubleClick & dcoBaseconv;
+  ckAutosave->Checked = g_ToolOptions.GetBool("capture", "autosave");
+  ckShowLoupeOnGrab->Checked = g_ToolOptions.GetBool("capture", "showloupe");
 }
 
 //---------------------------------------------------------------------------
 void TToolOptionsDialog::SaveOptions()
 {
-  TTopToolOptions options;
+  g_ToolOptions.Set("ruler", "length", udLength->Position);
+  g_ToolOptions.Set("ruler", "arrownudge", ckNudgeRuler->Checked);
+  g_ToolOptions.Set("ruler", "transparency", udTransparency->Position);
+  g_ToolOptions.Set("ruler", "transparent", cbTransparent->Checked);
 
-  options.RulerOptions.Length = udLength->Position;
-  options.RulerOptions.ArrowNudge = ckNudgeRuler->Checked;
-  options.RulerOptions.Transparent = cbTransparent->Checked;
-  options.RulerOptions.Transparency = udTransparency->Position;
+  int doubleclickopen = ckOpenToolbar->Checked * dcoControl +
+                        ckOpenRuler->Checked * dcoRuler +
+                        ckOpenLoupe->Checked * dcoLoupe +
+                        ckOpenInfo->Checked * dcoInfo +
+                        ckOpenBaseconv->Checked * dcoBaseconv;
 
-  options.MainOptions.IsSingleton = ckSingleton->Checked;
-  options.MainOptions.IsTrayApp = ckTrayApp->Checked;
-  options.MainOptions.StayOnTop = ckOnTop->Checked;
-  options.MainOptions.AutoStart = ckAutoStart->Checked;
-  options.MainOptions.RememberState = ckSaveToolstate->Checked;
-  options.MainOptions.DoubleClick = ckOpenToolbar->Checked * dcoControl +
-                             ckOpenRuler->Checked * dcoRuler +
-                             ckOpenLoupe->Checked * dcoLoupe +
-                             ckOpenInfo->Checked * dcoInfo +
-                             ckOpenBaseconv->Checked * dcoBaseconv;
+  g_ToolOptions.Set("main", "doubleclick", doubleclickopen);
+  g_ToolOptions.Set("main", "autostart", ckAutoStart->Checked);
+  g_ToolOptions.Set("main", "istrayapp", ckTrayApp->Checked);
+  g_ToolOptions.Set("main", "rememberstate", ckSaveToolstate->Checked);
+  g_ToolOptions.Set("main", "singleton", ckSingleton->Checked);
+  g_ToolOptions.Set("main", "stayontop", ckOnTop->Checked);
 
-  options.BaseconvOptions.ShowBinary = ckBinary->Checked;
+  g_ToolOptions.Set("baseconv", "showbinary", ckBinary->Checked);
 
-  options.ColorCopyOptions.Prefix = ckPrefix->Checked;
-  options.ColorCopyOptions.Quotes = ckQuotes->Checked;
+  g_ToolOptions.Set("info", "prefix", ckPrefix->Checked);
+  g_ToolOptions.Set("info", "quotes", ckQuotes->Checked);
 
-  options.LoupeOptions.RefreshRate = udRefresh->Position;
+  g_ToolOptions.Set("loupe", "refresh", udRefresh->Position);
 
-  options.CaptureOptions.AutoSave = ckAutosave->Checked;
-  options.CaptureOptions.ShowLoupe = ckShowLoupeOnGrab->Checked;
+  g_ToolOptions.Set("capture", "autosave", ckAutosave->Checked);
+  g_ToolOptions.Set("capture", "showloupe", ckShowLoupeOnGrab->Checked);
 
-  options.SaveToRegistry();
-}
-
-//---------------------------------------------------------------------------
-void TToolOptionsDialog::InitOptions0()
-{
-  TTopToolOptions options;
-  options.LoadFromRegistry();
-
-  // General
-  ckOnTop->Checked = options.MainOptions.StayOnTop;
-  ckAutoStart->Checked = options.MainOptions.AutoStart;
-  ckSaveToolstate->Checked = options.MainOptions.RememberState;
-  ckSingleton->Checked = options.MainOptions.IsSingleton;
-  ckTrayApp->Checked = options.MainOptions.IsTrayApp;
-  // Ruler
-  udLength->Position = (short) options.RulerOptions.Length;
-  ckNudgeRuler->Checked = options.RulerOptions.ArrowNudge;
-  cbTransparent->Checked = options.RulerOptions.Transparent;
-  udTransparency->Position = (short) options.RulerOptions.Transparency;
-  // Base converter
-  ckBinary->Checked = options.BaseconvOptions.ShowBinary;
-  // Loupe
-  udRefresh->Position = (short) options.LoupeOptions.RefreshRate;
-  // Info
-  ckPrefix->Checked = options.ColorCopyOptions.Prefix;
-  ckQuotes->Checked = options.ColorCopyOptions.Quotes;
-  // Grabber
-  ckAutosave->Checked = options.CaptureOptions.AutoSave;
-  ckShowLoupeOnGrab->Checked = options.CaptureOptions.ShowLoupe;
-  // Tray icon
-  ckOpenToolbar->Checked = options.MainOptions.DoubleClick & dcoControl;
-  ckOpenRuler->Checked = options.MainOptions.DoubleClick & dcoRuler;
-  ckOpenLoupe->Checked = options.MainOptions.DoubleClick & dcoLoupe;
-  ckOpenInfo->Checked = options.MainOptions.DoubleClick & dcoInfo;
-  ckOpenBaseconv->Checked = options.MainOptions.DoubleClick & dcoBaseconv;
-}
-
-//---------------------------------------------------------------------------
-void TToolOptionsDialog::SaveOptions0()
-{
-  TTopToolOptions options;
-
-  options.RulerOptions.Length = udLength->Position;
-  options.RulerOptions.ArrowNudge = ckNudgeRuler->Checked;
-  options.RulerOptions.Transparent = cbTransparent->Checked;
-  options.RulerOptions.Transparency = udTransparency->Position;
-
-  options.MainOptions.IsSingleton = ckSingleton->Checked;
-  options.MainOptions.IsTrayApp = ckTrayApp->Checked;
-  options.MainOptions.StayOnTop = ckOnTop->Checked;
-  options.MainOptions.AutoStart = ckAutoStart->Checked;
-  options.MainOptions.RememberState = ckSaveToolstate->Checked;
-  options.MainOptions.DoubleClick = ckOpenToolbar->Checked * dcoControl +
-                             ckOpenRuler->Checked * dcoRuler +
-                             ckOpenLoupe->Checked * dcoLoupe +
-                             ckOpenInfo->Checked * dcoInfo +
-                             ckOpenBaseconv->Checked * dcoBaseconv;
-
-  options.BaseconvOptions.ShowBinary = ckBinary->Checked;
-
-  options.ColorCopyOptions.Prefix = ckPrefix->Checked;
-  options.ColorCopyOptions.Quotes = ckQuotes->Checked;
-
-  options.LoupeOptions.RefreshRate = udRefresh->Position;
-
-  options.CaptureOptions.AutoSave = ckAutosave->Checked;
-  options.CaptureOptions.ShowLoupe = ckShowLoupeOnGrab->Checked;
-
-  options.SaveToRegistry();
+  g_ToolOptions.Save();
 }
 
 //---------------------------------------------------------------------------

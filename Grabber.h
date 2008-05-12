@@ -6,7 +6,7 @@
 #include "ScreenForm.h"
 //#include "MouseTracker.h"
 #include "AutoSaveOptions.h"
-#include "ToolOptions.h"
+//#include "ToolOptions.h"
 #include "ImageView.h"
 #include <vector>
 
@@ -31,8 +31,8 @@ private:
   TGrabberMode m_GrabberMode;
   Graphics::TBitmap* m_pBufferBmp;
   TPopupMenu* m_CaptureMenu;
-  TAutoSaveOptions m_AutoSaveOptions;
-  TCaptureOptions m_CaptureOptions;
+//  TAutoSaveOptions m_AutoSaveOptions;
+//  TCaptureOptions m_CaptureOptions;
   TImageViewerList m_Viewers;
   //std::auto_ptr< TRegistry > _registry( new TRegistry );
 //  std::vector< std::auto_ptr< TImageViewer> > m_ViewerVector;

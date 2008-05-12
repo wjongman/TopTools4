@@ -9,7 +9,7 @@
 //extern String g_RegBaseKey;
 
 // Global flag to hold runmode
-#include "ToolOptions.h"
+//#include "ToolOptions.h"
 //extern TRunMode g_RunMode;
 #include "PersistOptions.h"
 
@@ -39,7 +39,6 @@ USEUNIT("TrayIcon.cpp");
 USEUNIT("hotkey\HotkeyInfo.cpp");
 USEFORM("OptionDlg.cpp", ToolOptionsDialog);
 USEUNIT("hotkey\HotkeyManager.cpp");
-USEUNIT("ToolOptions.cpp");
 USEFORM("AutoSaveDlg.cpp", AutoSaveDialog);
 USEUNIT("AutoSaveOptions.cpp");
 USEFORM("ImageView.cpp", ImageViewer);

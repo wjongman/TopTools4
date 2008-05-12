@@ -12,7 +12,7 @@
 
 #include "HotkeyInfo.h"
 #include "HotkeyPanel.h"
-#include "ToolOptions.h"
+//#include "ToolOptions.h"
 //#include "Persist.h"
 
 /////////////////////////////////////////////////////////////////////////////

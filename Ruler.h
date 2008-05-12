@@ -58,7 +58,7 @@ private:
 
   int m_breadth;
   int m_center;
-  TRulerOptions m_Options;
+//  TRulerOptions m_Options;
 
   TColor m_RulerColor;
   TFloatForm* FloatForm;

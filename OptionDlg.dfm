@@ -1,6 +1,6 @@
 object ToolOptionsDialog: TToolOptionsDialog
-  Left = 903
-  Top = 157
+  Left = 648
+  Top = 135
   BorderStyle = bsDialog
   Caption = 'TopTools Options'
   ClientHeight = 761

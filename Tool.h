@@ -9,7 +9,7 @@
 #include <Forms.hpp>
 #include <Registry.hpp>
 
-#include "ToolOptions.h"
+//#include "ToolOptions.h"
 #include "PersistOptions.h"
 
 // Identifiers for our custom cursors
@@ -40,7 +40,6 @@ private:  // User declarations
 
 protected:
   String m_ToolName;
-  //TopTools::TPersistOptions& m_ToolOptions;
 
   bool FSnapEdge;
   bool FDraggableForm;

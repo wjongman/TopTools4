@@ -263,19 +263,17 @@ void __fastcall TLoupeForm::FormMouseWheelDown(TObject *Sender,
 //---------------------------------------------------------------------------
 void __fastcall TLoupeForm::LoadSettings()
 {
-//  TToolOptions options("loupe");
-//
-//  m_pLoupe->Zoom = options.Get("zoom", 4);
-//  m_pLoupe->CrosshairVisible = options.Get("crosshair", false);
-//  m_pLoupe->CenterboxVisible = options.Get("centerbox", false);
-//  m_pLoupe->GridVisible = options.Get("grid", false);
-//  m_bMagnifySelf = options.Get("selfmagnify", false);
-//  m_pLoupe->RefreshRate = options.Get("refresh", 250);
-//  Width = options.Get("width", 200);
-//  Height = options.Get("height", 200);
-//
-//  UpdateUI();
+  m_pLoupe->Zoom = g_ToolOptions.Get(m_ToolName, "zoom", 4);
+  m_pLoupe->CrosshairVisible = g_ToolOptions.Get(m_ToolName, "crosshair", false);
+  m_pLoupe->CenterboxVisible = g_ToolOptions.Get(m_ToolName, "centerbox", false);
+  m_pLoupe->GridVisible = g_ToolOptions.Get(m_ToolName, "grid", false);
+  m_bMagnifySelf = g_ToolOptions.Get(m_ToolName, "selfmagnify", false);
+  m_pLoupe->RefreshRate = g_ToolOptions.Get(m_ToolName, "refresh", 250);
+  Width = g_ToolOptions.Get(m_ToolName, "width", 200);
+  Height = g_ToolOptions.Get(m_ToolName, "height", 200);
 
+  UpdateUI();
+/*
   TLoupeOptions options;
 
   m_pLoupe->Zoom = options.Zoom;
@@ -288,28 +286,21 @@ void __fastcall TLoupeForm::LoadSettings()
   Height = options.Height;
 
   UpdateUI();
+*/
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TLoupeForm::SaveSettings()
 {
-//  TToolOptions options("loupe");
-//
-//  options.Set("centerbox", false);
-//  options.Set("crosshair", false);
-//  options.Set("grid", false);
-//  options.Set("height", 200);
-//  options.Set("refresh", 250);
-//  options.Set("selfmagnify", false);
-//  options.Set("width", 200);
-//  options.Set("zoom", 4);
-////  options.Set("info", "prefix", false);
-////  options.Set("info", "quotes", false);
-////  options.Set("capture", "autosave", false);
-////  options.Set("capture", "showloupe", false);
-//
-//  options.Save();
-
+  g_ToolOptions.Set(m_ToolName, "zoom", m_pLoupe->Zoom);
+  g_ToolOptions.Set(m_ToolName, "centerbox", m_pLoupe->CenterboxVisible);
+  g_ToolOptions.Set(m_ToolName, "crosshair", m_pLoupe->CrosshairVisible);
+  g_ToolOptions.Set(m_ToolName, "grid", m_pLoupe->GridVisible);
+  g_ToolOptions.Set(m_ToolName, "refresh", m_pLoupe->RefreshRate);
+  g_ToolOptions.Set(m_ToolName, "selfmagnify", m_bMagnifySelf);
+  g_ToolOptions.Set(m_ToolName, "width", Width);
+  g_ToolOptions.Set(m_ToolName, "height", Height);
+/*
   TLoupeOptions options;
 
   options.Zoom = m_pLoupe->Zoom;
@@ -322,13 +313,15 @@ void __fastcall TLoupeForm::SaveSettings()
   options.Height = Height;
 
   options.Save();
+*/
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TLoupeForm::UpdateSettings()
 {
-  TLoupeOptions options;
-  m_pLoupe->RefreshRate = options.RefreshRate;
+  m_pLoupe->RefreshRate = g_ToolOptions.Get(m_ToolName, "refresh", 250);
+//  TLoupeOptions options;
+//  m_pLoupe->RefreshRate = options.RefreshRate;
 }
 
 //---------------------------------------------------------------------------

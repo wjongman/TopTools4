@@ -2,7 +2,7 @@
 #ifndef AutoSaveOptionsH
 #define AutoSaveOptionsH
 
-#include "ToolOptions.h"
+//#include "ToolOptions.h"
 
 //----------------------------------------------------------------------------
 class TAutoSaveOptions

@@ -20,7 +20,7 @@
 #include "Ruler.h"
 #include "Grabber.h"
 #include "HotkeyManager.h"
-#include "ToolOptions.h"
+//#include "ToolOptions.h"
 #include "TopToolBar.h"
 #include "Tool.h"
 
@@ -80,8 +80,8 @@ protected:
   void __fastcall LoadSettings();
   void __fastcall UpdateSettings();
   void __fastcall SaveSettings();
-  void __fastcall LoadPosition();
-  void __fastcall SavePosition();
+//  void __fastcall LoadPosition();
+//  void __fastcall SavePosition();
 
 protected:
   void __fastcall HandleAppDeactivate(TObject *Sender);
@@ -100,10 +100,11 @@ private:  // User declarations
   void __fastcall ShowTrayIcon(bool show);
   void __fastcall ShowTaskbarIcon(bool show);
   void __fastcall SetDefaultPosition();
+  String GetColorFormatString();
 
   bool TimerNeeded();
 
-  TMainOptions m_Options;
+//  TMainOptions m_Options;
   THotkeyManager* m_HotkeyManager;
 
   enum UIMode { uiNormal, uiTrayApp };

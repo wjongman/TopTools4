@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include "Ruler.h"
 #include "Transparency.h"
+
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "Tool"
@@ -31,7 +32,7 @@ __fastcall TRulerForm::TRulerForm(TComponent* Owner)
   m_RulerColor = clWhite; //  m_RulerColor = clInfoBk;
   Color = m_RulerColor;
 
-  // Initialise the offsetindicator window
+  // Initialize the offsetindicator window
   FloatForm = new TFloatForm(this);
   FloatForm->OffsetLabel->OnMouseDown = FloatMouseDown;
   FloatForm->OffsetLabel->OnMouseMove = FloatMouseMove;
@@ -56,22 +57,24 @@ __fastcall TRulerForm::~TRulerForm()
 //---------------------------------------------------------------------------
 void __fastcall TRulerForm::UpdateUI()
 {
-  m_Options.Load();
+  bool isTransparent = g_ToolOptions.Get(m_ToolName, "transparent", false);
+  int Transparency = g_ToolOptions.Get(m_ToolName, "transparency", 50);
+  SetTransparency(isTransparent, Transparency);
 
-  if (m_Options.Horizontal)
+  bool isHorizontal = g_ToolOptions.Get(m_ToolName, "horizontal", true);
+  if (isHorizontal)
   {
-    Width = m_Options.Length;
+    Width = g_ToolOptions.Get(m_ToolName, "length", 1280);
     Height = m_breadth;
   }
   else
   {
     Width = m_breadth;
-    Height = m_Options.Length;
+    Height = g_ToolOptions.Get(m_ToolName, "length", 1280);
   }
+
   RenderHorizontalRuler();
   RenderVerticalRuler();
-
-  SetTransparency(m_Options.Transparent, m_Options.Transparency);
 
   Invalidate();
 }
@@ -201,7 +204,7 @@ void __fastcall TRulerForm::FormMouseMove(TObject *Sender, TShiftState Shift,
     SetCursorShape(X, Y);
 
     // Adjust position of floating offset-window
-    FloatForm->MoveAbsolute(ptMouse, TPoint(Left, Top), m_Options.Horizontal);
+    FloatForm->MoveAbsolute(ptMouse, TPoint(Left, Top), g_ToolOptions.GetBool(m_ToolName, "horizontal"));
     // Show offset-window
     FloatForm->Visible = true;
   }
@@ -212,7 +215,7 @@ void __fastcall TRulerForm::SetCursorShape(int x, int y)
 // get the proper cursor for both the ruler
 // and the floating offset window
 {
-  if (m_Options.Horizontal)
+  if (g_ToolOptions.GetBool(m_ToolName, "horizontal"))
   {
     if (y < m_center)
     {
@@ -267,7 +270,7 @@ void __fastcall TRulerForm::HandleArrowKeys(WORD &Key, TShiftState Shift)
   // Plain arrow keys move the cursor
   bool nudgeruler = Shift.Contains(ssCtrl);
   // Unless these functions are inverted
-  if (m_Options.ArrowNudge)
+  if (g_ToolOptions.GetBool(m_ToolName, "arrownudge"))
     nudgeruler = !nudgeruler;
 
   switch (Key)
@@ -308,22 +311,20 @@ void __fastcall TRulerForm::ToggleOrientation()
 
   FloatForm->Visible = false;
 
-  if (m_Options.Horizontal)
+  if (g_ToolOptions.GetBool(m_ToolName, "horizontal"))
   {
     int newleft = pt.x - m_center;
     int newtop = pt.y - (pt.x - Left);
-    m_Options.Horizontal = false;
-    SetBounds(newleft, newtop, m_breadth, m_Options.Length);
+    g_ToolOptions.Set(m_ToolName, "horizontal", false);
+    SetBounds(newleft, newtop, m_breadth, g_ToolOptions.GetInt(m_ToolName, "length"));
   }
   else
   {
     int newleft = pt.x - (pt.y - Top);
     int newtop = pt.y - m_center;
-    m_Options.Horizontal = true;
-    SetBounds(newleft, newtop, m_Options.Length, m_breadth);
+    g_ToolOptions.Set(m_ToolName, "horizontal", true);
+    SetBounds(newleft, newtop, g_ToolOptions.GetInt(m_ToolName, "length"), m_breadth);
   }
-
-  m_Options.Save();
 
   // Force a redraw
   Invalidate();
@@ -332,15 +333,18 @@ void __fastcall TRulerForm::ToggleOrientation()
 //---------------------------------------------------------------------------
 void __fastcall TRulerForm::ToggleTransparency()
 {
-  m_Options.Transparent = !m_Options.Transparent;
-  SetTransparency(m_Options.Transparent, m_Options.Transparency);
-  m_Options.Save();
+  bool isTransparent = g_ToolOptions.GetBool(m_ToolName, "transparent");
+  g_ToolOptions.Set(m_ToolName, "transparent", !isTransparent);
+
+  int Transparency = g_ToolOptions.GetInt(m_ToolName, "transparency");
+
+  SetTransparency(isTransparent, Transparency);
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TRulerForm::FormPaint(TObject *Sender)
 {
-  if (m_Options.Horizontal)
+  if (g_ToolOptions.GetBool(m_ToolName, "horizontal"))
     Canvas->CopyRect(ClientRect, m_HorRulerBmp->Canvas, ClientRect);
   else
     Canvas->CopyRect(ClientRect, m_VertRulerBmp->Canvas, ClientRect);
@@ -365,14 +369,16 @@ void __fastcall TRulerForm::RenderVerticalRuler()
     InitCanvasAttribs(m_VertRulerBmp->Canvas);
   }
 
+  int rulerlength = g_ToolOptions.GetInt(m_ToolName, "length");
+
   m_VertRulerBmp->Width = m_breadth;
-  m_VertRulerBmp->Height = m_Options.Length;
+  m_VertRulerBmp->Height = rulerlength;
 
   TCanvas* canvas = m_VertRulerBmp->Canvas;
   SetTextAlign(canvas->Handle, TA_CENTER);
 
   // draw the left ruler
-  for (int i = 0; i < m_Options.Length; i += 2)
+  for (int i = 0; i < rulerlength; i += 2)
   {
     canvas->MoveTo(0, i);
     if (i % 20 == 0)
@@ -383,7 +389,7 @@ void __fastcall TRulerForm::RenderVerticalRuler()
       canvas->LineTo(8, i);
   }
   // draw the right ruler
-  for (int i = 0; i < m_Options.Length; i += 2)
+  for (int i = 0; i < rulerlength; i += 2)
   {
     canvas->MoveTo(m_breadth, i);
     if (i % 20 == 0)
@@ -395,7 +401,7 @@ void __fastcall TRulerForm::RenderVerticalRuler()
   }
   // set the ruler text
   char szVal[6];
-  for (int i = 0; i < m_Options.Length; i += 20)
+  for (int i = 0; i < rulerlength; i += 20)
     canvas->TextOut(m_center + 1, i - 6, itoa(i, szVal, 10));
 }
 
@@ -409,17 +415,19 @@ void __fastcall TRulerForm::RenderHorizontalRuler()
     InitCanvasAttribs(m_HorRulerBmp->Canvas);
   }
 
+  int rulerlength = g_ToolOptions.GetInt(m_ToolName, "length");
+
   m_HorRulerBmp->Height = m_breadth;
-  m_HorRulerBmp->Width = m_Options.Length;
+  m_HorRulerBmp->Width = rulerlength;
 
   TCanvas* canvas = m_HorRulerBmp->Canvas;
   SetTextAlign(canvas->Handle, TA_CENTER);
 
   // Draw the background
-  canvas->FillRect(TRect(0, 0, m_Options.Length, m_breadth));
+  canvas->FillRect(TRect(0, 0, rulerlength, m_breadth));
 
   // Draw the top ruler
-  for (int i = 0; i < m_Options.Length; i += 2)
+  for (int i = 0; i < rulerlength; i += 2)
   {
     canvas->MoveTo(i, 0);
     if (i % 20 == 0)
@@ -430,7 +438,7 @@ void __fastcall TRulerForm::RenderHorizontalRuler()
       canvas->LineTo(i, 8);
   }
   // Draw the bottom ruler
-  for (int i = 0; i < m_Options.Length; i += 2)
+  for (int i = 0; i < rulerlength; i += 2)
   {
     canvas->MoveTo(i, m_breadth);
     if (i % 20 == 0)
@@ -442,14 +450,14 @@ void __fastcall TRulerForm::RenderHorizontalRuler()
   }
   // Set the ruler text
   char szVal[6];
-  for (int i = 0; i < m_Options.Length; i += 20)
+  for (int i = 0; i < rulerlength; i += 20)
     canvas->TextOut(i+1, (m_breadth - abs(Font->Height)) / 2, itoa(i, szVal, 10));
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TRulerForm::miSlidetoZeroClick(TObject *Sender)
 {
-  if (m_Options.Horizontal)
+  if (g_ToolOptions.GetBool(m_ToolName, "horizontal"))
     Left = 0;
   else
     Top = 0;
@@ -458,8 +466,8 @@ void __fastcall TRulerForm::miSlidetoZeroClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TRulerForm::RulerMenuPopup(TObject *Sender)
 {
-  miOrientation->Caption = m_Options.Horizontal ? "Vertical" : "Horizontal";
-  miTransparent->Checked = m_Options.Transparent;
+  miOrientation->Caption = g_ToolOptions.GetBool(m_ToolName, "horizontal") ? "Vertical" : "Horizontal";
+  miTransparent->Checked = g_ToolOptions.GetBool(m_ToolName, "transparent");
 }
 
 //---------------------------------------------------------------------------

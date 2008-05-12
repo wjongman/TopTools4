@@ -390,32 +390,40 @@ void __fastcall TMainForm::HandleTimerEvent(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::LoadSettings()
 {
-    m_Options.Load();
-
-    SetUI(m_Options.IsTrayApp);
-    RestoreToolState(m_Options.SavedState);
-    SetTopMost(m_Options.StayOnTop);
+  SetUI(g_ToolOptions.GetBool("main", "istrayapp"));
+  RestoreToolState(g_ToolOptions.GetInt("main", "savedstate"));
+  SetTopMost(g_ToolOptions.GetBool("main", "stayontop"));
+//     m_Options.Load();
+//
+//     SetUI(m_Options.IsTrayApp);
+//     RestoreToolState(m_Options.SavedState);
+//     SetTopMost(m_Options.StayOnTop);
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::UpdateSettings()
 {
-    m_Options.Load();
-
-    SetUI(m_Options.IsTrayApp);
-    SetTopMost(m_Options.StayOnTop);
+  SetUI(g_ToolOptions.GetBool("main", "istrayapp"));
+  SetTopMost(g_ToolOptions.GetBool("main", "stayontop"));
+//     m_Options.Load();
+//
+//     SetUI(m_Options.IsTrayApp);
+//     SetTopMost(m_Options.StayOnTop);
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::SaveSettings()
 {
-    if (m_Options.RememberState)
-        m_Options.SavedState = GetToolState();
+    if (g_ToolOptions.GetBool("main", "rememberstate"))
+      g_ToolOptions.Set("main", "savedstate", GetToolState());
+//      m_Options.SavedState = GetToolState();
     else
-        m_Options.SavedState = 0;
+      g_ToolOptions.Set("main", "savedstate", 0);
+//        m_Options.SavedState = 0;
 
-    m_Options.IsTrayApp = (m_UIMode == uiTrayApp);
-    m_Options.Save();
+    g_ToolOptions.Set("main", "istrayapp", (m_UIMode == uiTrayApp));
+//    m_Options.IsTrayApp = (m_UIMode == uiTrayApp);
+//    m_Options.Save();
 }
 
 //---------------------------------------------------------------------------
@@ -451,7 +459,7 @@ void TMainForm::ToggleOpenTools()
     }
     else
     {
-        RestoreToolState(m_Options.DoubleClick);
+        RestoreToolState(g_ToolOptions.GetInt("main", "doubleclick"));
     }
 }
 
@@ -527,11 +535,30 @@ void TMainForm::HideAll()
 }
 
 //---------------------------------------------------------------------------
+String TMainForm::GetColorFormatString()
+{
+  String Format = "";
+
+  if (g_ToolOptions.GetBool("info", "quotes"))
+    Format += "\"";
+
+  if (g_ToolOptions.GetBool("info", "prefix"))
+    Format += "#";
+
+  Format += "%02X%02X%02X";
+
+  if (g_ToolOptions.GetBool("info", "quotes"))
+    Format += "\"";
+
+  return Format;
+}
+
+//---------------------------------------------------------------------------
 void TMainForm::CopyWebColorToClipboard()
 {
-    TColorCopyOptions cc_options;
-    cc_options.Load();
-    String Format = cc_options.GetFormatString();
+//    TColorCopyOptions cc_options;
+//    cc_options.Load();
+    String Format = GetColorFormatString();
 
     // Probe the color under the mouse
     TPoint ptMouse;
@@ -625,7 +652,7 @@ TToolForm* TMainForm::GetControlBar()
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::actCommandExecute(TObject *Sender)
 {
-    SetTopMost(m_Options.StayOnTop);
+    SetTopMost(g_ToolOptions.GetBool("main", "stayontop"));
 
     TAction* pAction = reinterpret_cast<TAction*>(Sender);
     if (pAction)
@@ -742,9 +769,7 @@ void __fastcall TMainForm::HandleCaptureNext(TObject *Sender)
 
     //m_pCapture->StartTracking();
 
-    TCaptureOptions options;
-    options.Load();
-    if (options.ShowLoupe)
+    if (g_ToolOptions.GetBool("capture", "showloupe"))
     {
         TToolForm* pLoupe = GetLoupeForm();
         pLoupe->Show();
@@ -810,59 +835,59 @@ void __fastcall TMainForm::actExitExecute(TObject *Sender)
     Application->Terminate();
 }
 
-//---------------------------------------------------------------------------
-void __fastcall TMainForm::LoadPosition()
-{
-    // Retrieve saved settings from the registry
-    TRegistry *Reg = new TRegistry();
-    Reg->RootKey = HKEY_CURRENT_USER;
-    try
-    {
-        if (Reg->OpenKey(g_RegBaseKey + "control", false))
-        {
-            int left = 0;
-            int top = 0;
-
-            if (Reg->ValueExists("left"))
-                left = Reg->ReadInteger("left");
-            if (Reg->ValueExists("top"))
-                top = Reg->ReadInteger("top");
-
-            Reg->CloseKey();
-            SetBounds(left, top, Width, Height);
-        }
-        else
-        {
-            SetDefaultPosition();
-            return;
-        }
-    }
-    __finally
-    {
-        delete Reg;
-    }
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TMainForm::SavePosition()
-{
-    // Save settings in the registry
-    TRegistry *Reg = new TRegistry();
-    Reg->RootKey = HKEY_CURRENT_USER;
-    try
-    {
-        if (Reg->OpenKey(g_RegBaseKey + "control", true))
-        {
-            Reg->WriteInteger("left", Left);
-            Reg->WriteInteger("top", Top);
-            Reg->CloseKey();
-        }
-    }
-    __finally
-    {
-        delete Reg;
-    }
-}
+// //---------------------------------------------------------------------------
+// void __fastcall TMainForm::LoadPosition()
+// {
+//     // Retrieve saved settings from the registry
+//     TRegistry *Reg = new TRegistry();
+//     Reg->RootKey = HKEY_CURRENT_USER;
+//     try
+//     {
+//         if (Reg->OpenKey(g_RegBaseKey + "control", false))
+//         {
+//             int left = 0;
+//             int top = 0;
+//
+//             if (Reg->ValueExists("left"))
+//                 left = Reg->ReadInteger("left");
+//             if (Reg->ValueExists("top"))
+//                 top = Reg->ReadInteger("top");
+//
+//             Reg->CloseKey();
+//             SetBounds(left, top, Width, Height);
+//         }
+//         else
+//         {
+//             SetDefaultPosition();
+//             return;
+//         }
+//     }
+//     __finally
+//     {
+//         delete Reg;
+//     }
+// }
+//
+// //---------------------------------------------------------------------------
+// void __fastcall TMainForm::SavePosition()
+// {
+//     // Save settings in the registry
+//     TRegistry *Reg = new TRegistry();
+//     Reg->RootKey = HKEY_CURRENT_USER;
+//     try
+//     {
+//         if (Reg->OpenKey(g_RegBaseKey + "control", true))
+//         {
+//             Reg->WriteInteger("left", Left);
+//             Reg->WriteInteger("top", Top);
+//             Reg->CloseKey();
+//         }
+//     }
+//     __finally
+//     {
+//         delete Reg;
+//     }
+// }
 
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::SetDefaultPosition()
