@@ -10,7 +10,8 @@
       obj\MouseTracker.obj obj\TopToolBar.obj obj\TrayIcon.obj 
       obj\HotkeyInfo.obj obj\OptionDlg.obj obj\HotkeyManager.obj 
       obj\ToolOptions.obj obj\AutoSaveDlg.obj obj\AutoSaveOptions.obj 
-      obj\ImageView.obj obj\ScreenForm.obj obj\GrabbedImage.obj"/>
+      obj\ImageView.obj obj\ScreenForm.obj obj\GrabbedImage.obj 
+      obj\PersistOptions.obj"/>
     <RESFILES value="obj\Graphics.res Cursors.res TopTools4.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>

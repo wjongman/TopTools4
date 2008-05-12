@@ -16,6 +16,7 @@ TMainForm *MainForm;
 
 // Global String for registry access
 const String g_RegBaseKey("Software\\TopTools 3\\");
+TPersistOptions g_ToolOptions;
 // Global flag to hold runmode
 TRunMode g_RunMode;
 

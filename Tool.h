@@ -40,7 +40,7 @@ private:  // User declarations
 
 protected:
   String m_ToolName;
-  TopTools::TPersistOptions m_ToolOptions;
+  //TopTools::TPersistOptions& m_ToolOptions;
 
   bool FSnapEdge;
   bool FDraggableForm;

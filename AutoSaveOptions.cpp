@@ -12,17 +12,18 @@ extern const String g_RegBaseKey;
 TAutoSaveOptions::TAutoSaveOptions()
 {
   // Init default options
+//  TPersistOptions& g_ToolOptions = TPersistOptions::Instance();
 //  m_pOptions = new TopTools::Options("capture\\autosave");
   m_sToolName = "capture\\autosave";
 
-  m_Options.Set(m_sToolName, "directory", GetSpecialFolderPath(CSIDL_DESKTOPDIRECTORY));
-  m_Options.Set(m_sToolName, "filename", "Snapshot");
-  m_Options.Set(m_sToolName, "digits", 2);
-  m_Options.Set(m_sToolName, "nextvalue", 1);
-  m_Options.Set(m_sToolName, "imagetype", 0);
-  m_Options.Set(m_sToolName, "existaction", 0);
-  m_Options.Set(m_sToolName, "bypassmenu", false);
-  m_Options.Set(m_sToolName, "continuous", false);
+  g_ToolOptions.Set(m_sToolName, "directory", GetSpecialFolderPath(CSIDL_DESKTOPDIRECTORY));
+  g_ToolOptions.Set(m_sToolName, "filename", "Snapshot");
+  g_ToolOptions.Set(m_sToolName, "digits", 2);
+  g_ToolOptions.Set(m_sToolName, "nextvalue", 1);
+  g_ToolOptions.Set(m_sToolName, "imagetype", 0);
+  g_ToolOptions.Set(m_sToolName, "existaction", 0);
+  g_ToolOptions.Set(m_sToolName, "bypassmenu", false);
+  g_ToolOptions.Set(m_sToolName, "continuous", false);
 }
 
 //---------------------------------------------------------------------------
@@ -34,49 +35,49 @@ TAutoSaveOptions::~TAutoSaveOptions()
 //---------------------------------------------------------------------------
 void __fastcall TAutoSaveOptions::Load()
 {
-  m_Options.Load();
+  g_ToolOptions.Load();
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TAutoSaveOptions::Save()
 {
-  m_Options.Save();
+  g_ToolOptions.Save();
 }
 
 //---------------------------------------------------------------------------
 int TAutoSaveOptions::GetInt(const String& OptionName)
 {
-  return m_Options.GetInt(m_sToolName, OptionName);
+  return g_ToolOptions.GetInt(m_sToolName, OptionName);
 }
 
 //---------------------------------------------------------------------------
 String TAutoSaveOptions::GetString(const String& OptionName)
 {
-  return m_Options.GetString(m_sToolName, OptionName);
+  return g_ToolOptions.GetString(m_sToolName, OptionName);
 }
 
 //---------------------------------------------------------------------------
 bool TAutoSaveOptions::GetBool(const String& OptionName)
 {
-  return m_Options.GetBool(m_sToolName, OptionName);
+  return g_ToolOptions.GetBool(m_sToolName, OptionName);
 }
 
 //---------------------------------------------------------------------------
 void TAutoSaveOptions::Set(const String& OptionName, int Option)
 {
-  m_Options.Set(m_sToolName, OptionName, Option);
+  g_ToolOptions.Set(m_sToolName, OptionName, Option);
 }
 
 //---------------------------------------------------------------------------
 void TAutoSaveOptions::Set(const String& OptionName, String Option)
 {
-  m_Options.Set(m_sToolName, OptionName, Option);
+  g_ToolOptions.Set(m_sToolName, OptionName, Option);
 }
 
 //---------------------------------------------------------------------------
 void TAutoSaveOptions::Set(const String& OptionName, bool Option)
 {
-  m_Options.Set(m_sToolName, OptionName, Option);
+  g_ToolOptions.Set(m_sToolName, OptionName, Option);
 }
 
 //---------------------------------------------------------------------------

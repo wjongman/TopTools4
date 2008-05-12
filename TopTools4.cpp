@@ -44,6 +44,7 @@ USEUNIT("AutoSaveOptions.cpp");
 USEFORM("ImageView.cpp", ImageViewer);
 USEFORM("ScreenForm.cpp", ScreenForm);
 USEUNIT("GrabbedImage.cpp");
+USEUNIT("PersistOptions.cpp");
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
@@ -118,7 +119,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
      Application->Initialize();
      Application->Title = "TopTools";
      Application->CreateForm(__classid(TMainForm), &MainForm);
-     Application->ShowMainForm = false;
+         Application->ShowMainForm = false;
      Application->Run();
   }
   catch (Exception &exception)

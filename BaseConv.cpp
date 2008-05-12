@@ -426,7 +426,9 @@ void __fastcall TBaseConvForm::LoadSettings()
 {
 //  TopTools::Options Options("baseconv");
 //  bool bTest = m_ToolOptions.GetBool("baseconv", "showbinary");
-  ShowBinaryField(m_ToolOptions.GetBool("baseconv", "showbinary"));
+//  TPersistOptions& m_ToolOptions = TPersistOptions::Instance();
+  g_ToolOptions.Load();
+  ShowBinaryField(g_ToolOptions.GetBool("baseconv", "showbinary"));
 
   //   TBaseconvOptions options;
 //   ShowBinaryField(options.ShowBinary);
@@ -436,8 +438,10 @@ void __fastcall TBaseConvForm::LoadSettings()
 void __fastcall TBaseConvForm::SaveSettings()
 {
 //  TopTools::Options Options("baseconv");
-  m_ToolOptions.Set("baseconv", "showbinary", plBinary->Visible);
-  m_ToolOptions.Save();
+//  TPersistOptions& m_ToolOptions = TPersistOptions::Instance();
+
+  g_ToolOptions.Set("baseconv", "showbinary", plBinary->Visible);
+  g_ToolOptions.Save();
 
 //   TBaseconvOptions options;
 //   options.ShowBinary = plBinary->Visible;

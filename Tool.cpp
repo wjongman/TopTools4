@@ -17,7 +17,7 @@ __fastcall TToolForm::TToolForm(TComponent* Owner, const String& toolname)
 : TForm(Owner), m_ToolName(toolname), FSnapEdge(true), FWindowStyle(twsTool),
   FDraggableForm(false)//, m_Transparent(false)
 {
-//  m_pOptions = new TopTools::Options(toolname);
+////  m_pOptions = new TopTools::Options(toolname);
 //  m_Options.Init(toolname);
 
   //  m_RegBaseKey = g_RegBaseKey;
@@ -447,4 +447,33 @@ void __fastcall TToolForm::SetWindowStyle(TToolWindowStyle style)
   DWORD dwFlags = SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOZORDER | SWP_NOSIZE;
   ::SetWindowPos(Handle, 0, 0, 0, 0, 0, dwFlags);
 }
+
+/*
+//---------------------------------------------------------------------------
+void __fastcall TBaseConvForm::GetSetting()
+{
+//  TopTools::Options Options("baseconv");
+//  bool bTest = m_ToolOptions.GetBool("baseconv", "showbinary");
+  TopTools::TPersistOptions& m_ToolOptions = TopTools::TPersistOptions::Instance();
+  m_ToolOptions.Load();
+  ShowBinaryField(m_ToolOptions.GetBool("baseconv", "showbinary"));
+
+  //   TBaseconvOptions options;
+//   ShowBinaryField(options.ShowBinary);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TBaseConvForm::SetSetting()
+{
+//  TopTools::Options Options("baseconv");
+  TopTools::TPersistOptions& m_ToolOptions = TopTools::TPersistOptions::Instance();
+
+  m_ToolOptions.Set("baseconv", "showbinary", plBinary->Visible);
+  m_ToolOptions.Save();
+
+//   TBaseconvOptions options;
+//   options.ShowBinary = plBinary->Visible;
+//   options.Save();
+}
+*/
 

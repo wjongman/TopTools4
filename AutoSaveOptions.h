@@ -26,7 +26,6 @@ public:
   String GetFullPathName();
 
 private:
-  TopTools::TPersistOptions m_Options;
 
   String m_sToolName;
   String GetSpecialFolderPath(int FolderSpec);

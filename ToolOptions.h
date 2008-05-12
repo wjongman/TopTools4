@@ -6,6 +6,7 @@
 #include <map>
 
 /////////////////////////////////////////////////////////////////////////////
+/*
 enum TToolId
 {
   idMain = 1,
@@ -30,7 +31,7 @@ enum TRunMode
   rmIniFile,
   rmRegistry
 };
-
+*/
 // Global String for registry access
 extern const String g_RegBaseKey;
 // Global flag to hold runmode

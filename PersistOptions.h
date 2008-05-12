@@ -8,11 +8,13 @@
 
 // todo: make TPersistToolOptions a singleton
 
+//extern const String g_RegBaseKey;
+//extern TPersistOptions& g_ToolOptions;
 //---------------------------------------------------------------------------
-namespace TopTools
-{
+//namespace TopTools
+//{
+//  extern TopTools::TPersistOptions& g_ToolOptions;
   // Global String for registry access
-//  extern const String g_RegBaseKey;
   // Global flag to hold runmode
 //  extern TRunMode g_RunMode;
 
@@ -368,16 +370,33 @@ namespace TopTools
 
   }; // class TOptionMap
 
+//} // namespace TopTools
+
+
   /////////////////////////////////////////////////////////////////////////////
   class TPersistOptions
   {
+  // todo: make this class a singleton
+  /*
+  public:
+    //-------------------------------------------------------------------------
+    inline static TPersistOptions& Instance()
+    {
+      // All references to this class are through this function
+      // A static object of this class will be instantiated at the
+      // first time this function is called (lazy initialisation).
+      static TPersistOptions instance;
+      return instance;
+    }
+  */
   private:
-    typedef std::map<String, TopTools::TOptionMap> TOptionMaps;
-    typedef std::map<String, TopTools::TOptionMap>::iterator option_map_iterator;
+    typedef std::map<String, TOptionMap> TOptionMaps;
+    typedef std::map<String, TOptionMap>::iterator option_map_iterator;
 
     TOptionMaps m_OptionMaps;
 
   public:
+    //-------------------------------------------------------------------------
     TPersistOptions()
     {
       // Initialize with default settings
@@ -400,7 +419,7 @@ namespace TopTools
 
       Set("ruler", "arrownudge", true);
       Set("ruler", "horizontal", true);
-      Set("ruler", "length", Screen->Width);
+      Set("ruler", "length", 1024);
       Set("ruler", "transparency", 50);
       Set("ruler", "transparent", false);
 
@@ -422,6 +441,7 @@ namespace TopTools
       Set("capture", "showloupe", false);
     }
 
+  public:
     //-------------------------------------------------------------------------
     void Load()
     {
@@ -486,7 +506,7 @@ namespace TopTools
       }
       else
       {
-        TopTools::TOptionMap OptionMap(ToolName);
+        TOptionMap OptionMap(ToolName);
         OptionMap.Set(OptionName, Option);
         m_OptionMaps[ToolName] = OptionMap;
       }
@@ -502,7 +522,7 @@ namespace TopTools
       }
       else
       {
-        TopTools::TOptionMap OptionMap(ToolName);
+        TOptionMap OptionMap(ToolName);
         OptionMap.Set(OptionName, Option);
         m_OptionMaps[ToolName] = OptionMap;
       }
@@ -518,7 +538,7 @@ namespace TopTools
       }
       else
       {
-        TopTools::TOptionMap OptionMap(ToolName);
+        TOptionMap OptionMap(ToolName);
         OptionMap.Set(OptionName, Option);
         m_OptionMaps[ToolName] = OptionMap;
       }
@@ -526,7 +546,7 @@ namespace TopTools
 
   }; // TPersistToolOptions
 
-} // namespace TopTools
+extern TPersistOptions g_ToolOptions;
 
 #endif // #ifndef TopToolsPersistOptionsH
 
