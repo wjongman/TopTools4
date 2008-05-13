@@ -356,14 +356,14 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Auto Save";
     NewItem->Hint = "AutoSave";
-    NewItem->Enabled = m_CaptureOptions.AutoSave;
+    NewItem->Enabled = g_ToolOptions.GetBool("capture", "autosave");//m_CaptureOptions.AutoSave;
     m_CaptureMenu->Items->Add(NewItem);
 
     NewItem = new TMenuItem(m_CaptureMenu);
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Auto Save && Grab More";
     NewItem->Hint = "AutoSaveOn";
-    NewItem->Enabled = m_CaptureOptions.AutoSave;
+    NewItem->Enabled = g_ToolOptions.GetBool("capture", "autosave");//m_CaptureOptions.AutoSave;
     m_CaptureMenu->Items->Add(NewItem);
 #ifdef _DEBUG
     // Separator ------------------------
@@ -520,12 +520,11 @@ void __fastcall TScreenGrabber::AutoSaveToFile()
     TRACE("TScreenGrabber::AutoSaveToFile()");
 
     // First check if the target directory exists
-    if (!DirectoryExists(m_AutoSaveOptions.GetString("directory")))
+    if (!DirectoryExists(g_ToolOptions.GetString("capture\autosave", "directory")))
     {
         // We should offer to change or create directory here..
-        char* msg = "Your autosave settings refer to a directory that doesn't exist: \n\n";
-//    ShowMessage(m_AutoSaveOptions.Directory + " doesn't exist.");
-        ShowMessage(msg + m_AutoSaveOptions.GetString("directory"));
+        String sMsg = "Your autosave settings refer to a directory that doesn't exist: \n\n";
+        ShowMessage(sMsg + g_ToolOptions.GetString("capture\autosave", "directory"));//m_AutoSaveOptions.GetString("directory"));
         return;
     }
 
@@ -558,9 +557,10 @@ void __fastcall TScreenGrabber::DoSaveToFile(const String& PathName)
         String extension = ExtractFileExt(sFileName).LowerCase();
         if (extension == "")
         {
+            int FilterIndex = g_ToolOptions.GetInt("capture", "filterindex");
             // If no extension is present, we use
             // the most recently selected image type
-            switch (m_CaptureOptions.FilterIndex)
+            switch (FilterIndex)
             {
             case 1:
                 extension = ".bmp";
@@ -576,7 +576,7 @@ void __fastcall TScreenGrabber::DoSaveToFile(const String& PathName)
                 break;
 
             default:
-                extension = ".bmp";
+                extension = ".png";
             }
             sFileName += extension;
         }
@@ -652,7 +652,7 @@ void __fastcall TScreenGrabber::SaveToFile()
 
     TSavePictureDialog *SavePicDlg = new TSavePictureDialog(this);
     SavePicDlg->Options << ofOverwritePrompt << ofEnableSizing;
-    SavePicDlg->InitialDir = m_CaptureOptions.LastDir;
+    SavePicDlg->InitialDir = g_ToolOptions.GetString("capture", "lastdir");//m_CaptureOptions.LastDir;
 
     bool haspalette = DisplayIsPaletted();
     if (haspalette)
@@ -662,7 +662,7 @@ void __fastcall TScreenGrabber::SaveToFile()
     }
     else
     {
-        SavePicDlg->FilterIndex = m_CaptureOptions.FilterIndex;
+        SavePicDlg->FilterIndex = g_ToolOptions.GetInt("capture", "filterindex"); //m_CaptureOptions.FilterIndex;
         SavePicDlg->Filter = "Windows Bitmap (*.bmp)|*.bmp|"
                              "PNG Image (*.png)|*.png|"
                              "GIF Image (*.gif)|*.gif|"
@@ -671,9 +671,12 @@ void __fastcall TScreenGrabber::SaveToFile()
     // Display the Save File Dialog
     if (SavePicDlg->Execute())
     {
-        m_CaptureOptions.LastDir = ExtractFilePath(SavePicDlg->FileName);
-        m_CaptureOptions.FilterIndex = SavePicDlg->FilterIndex;
-        m_CaptureOptions.Save();
+//        m_CaptureOptions.LastDir = ExtractFilePath(SavePicDlg->FileName);
+        g_ToolOptions.Set("capture", "lastdir", ExtractFilePath(SavePicDlg->FileName));
+//        m_CaptureOptions.FilterIndex = SavePicDlg->FilterIndex;
+        g_ToolOptions.Set("capture", "filterindex", SavePicDlg->FilterIndex);
+
+//        m_CaptureOptions.Save();
 
         DoSaveToFile(SavePicDlg->FileName);
     }

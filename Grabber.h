@@ -31,7 +31,7 @@ private:
   TGrabberMode m_GrabberMode;
   Graphics::TBitmap* m_pBufferBmp;
   TPopupMenu* m_CaptureMenu;
-//  TAutoSaveOptions m_AutoSaveOptions;
+  TAutoSaveOptions m_AutoSaveOptions;
 //  TCaptureOptions m_CaptureOptions;
   TImageViewerList m_Viewers;
   //std::auto_ptr< TRegistry > _registry( new TRegistry );
