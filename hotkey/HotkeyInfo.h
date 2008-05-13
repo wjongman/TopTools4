@@ -56,8 +56,10 @@ public:
 
   String GetHotkeyText();
 
-  void LoadFromRegistry(const String& regkeypath);
-  void SaveToRegistry(const String& regkeypath);
+//  void LoadFromRegistry(const String& regkeypath);
+//  void SaveToRegistry(const String& regkeypath);
+  void Load(const String& hotkeyname);
+  void Save(const String& hotkeyname);
 
   bool enabled;
   int virtkey;
@@ -79,10 +81,11 @@ public:
     Enable();
   }
 
-  THotkey(HWND hWnd, int id, const String& regkeyname)
-    : m_hWnd(hWnd), m_id(id), m_regkeyname(regkeyname)
+  THotkey(HWND hWnd, int id, const String& hotkeyname)
+    : m_hWnd(hWnd), m_id(id), m_hotkeyname(hotkeyname)
   {
-    m_keyinfo.LoadFromRegistry(m_regkeyname);
+//    m_keyinfo.LoadFromRegistry(m_hotkeyname);
+    m_keyinfo.Load(m_hotkeyname);
     Enable();
   }
 
@@ -119,7 +122,7 @@ private:
   HWND m_hWnd;  // Handle of window that will receive WM_HOTKEY messages
   int m_id;     // id of this particular hotkey
   THotkeyInfo m_keyinfo;
-  String m_regkeyname;
+  String m_hotkeyname;
 };
 
 #endif

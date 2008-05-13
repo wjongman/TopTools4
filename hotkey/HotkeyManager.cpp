@@ -49,22 +49,22 @@ void THotkeyManager::AssignHotkeys()
 {
   THotkeyInfo HotkeyInfo;
 
-  HotkeyInfo.LoadFromRegistry(g_RegBaseKey + "hotkeys\\colorcopy");
+  HotkeyInfo.Load("hotkeys\\colorcopy");
   m_CopyColorHotkey->Assign(HotkeyInfo);
 
-  HotkeyInfo.LoadFromRegistry(g_RegBaseKey + "hotkeys\\doubleclick");
+  HotkeyInfo.Load("hotkeys\\doubleclick");
   m_ShowHideHotkey->Assign(HotkeyInfo);
 
-  HotkeyInfo.LoadFromRegistry(g_RegBaseKey + "hotkeys\\capturestart");
+  HotkeyInfo.Load("hotkeys\\capturestart");
   m_GrabScreenHotkey->Assign(HotkeyInfo);
 
-  HotkeyInfo.LoadFromRegistry(g_RegBaseKey + "hotkeys\\rulertoggle");
+  HotkeyInfo.Load("hotkeys\\rulertoggle");
   m_RulerToggleHotkey->Assign(HotkeyInfo);
 
-  HotkeyInfo.LoadFromRegistry(g_RegBaseKey + "hotkeys\\zoomin");
+  HotkeyInfo.Load("hotkeys\\zoomin");
   m_ZoomInHotkey->Assign(HotkeyInfo);
 
-  HotkeyInfo.LoadFromRegistry(g_RegBaseKey + "hotkeys\\zoomout");
+  HotkeyInfo.Load("hotkeys\\zoomout");
   m_ZoomOutHotkey->Assign(HotkeyInfo);
 }
 
