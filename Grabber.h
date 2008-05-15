@@ -4,9 +4,7 @@
 //---------------------------------------------------------------------------
 #include <ExtDlgs.hpp>
 #include "ScreenForm.h"
-//#include "MouseTracker.h"
 #include "AutoSaveOptions.h"
-//#include "ToolOptions.h"
 #include "ImageView.h"
 #include <vector>
 
@@ -20,11 +18,7 @@ public:
   void __fastcall UpdateSettings();
 
 private:
-//  bool m_bDrawing;
-//  bool m_bFirstRect;
-//  bool m_bContinue;
   RECT m_rcSelect;
-//  int m_viewercount;
 
   enum TGrabberMode { gmOpenViewer, gmShowMenu, gmBypassMenu, gmContinuous };
 
@@ -32,12 +26,8 @@ private:
   Graphics::TBitmap* m_pBufferBmp;
   TPopupMenu* m_CaptureMenu;
   TAutoSaveOptions m_AutoSaveOptions;
-//  TCaptureOptions m_CaptureOptions;
   TImageViewerList m_Viewers;
-  //std::auto_ptr< TRegistry > _registry( new TRegistry );
-//  std::vector< std::auto_ptr< TImageViewer> > m_ViewerVector;
 
-//  std::vector<TImageViewer*> m_Viewers;
   void __fastcall ViewerKeyPress(TObject *Sender, char &Key);
   void __fastcall ViewerClosed(TObject *Sender, TCloseAction &Action);
 
@@ -51,7 +41,6 @@ private:
   void __fastcall CaptureMenuClick(TObject *Sender);
 
   void __fastcall HandleCapture(int X, int Y);
-//  void __fastcall ViewImage();
   void __fastcall ViewImage(Graphics::TBitmap* pBufferBmp);
   void __fastcall AutosaveOptions();
   void __fastcall SaveToFile();

@@ -364,6 +364,11 @@ public:
   //-------------------------------------------------------------------------
   TPersistOptions()
   {
+    // For now only sections that appear in this list
+    // will be read by this class, we'll need a way to
+    // enumerate the storage medium to retrieve all sections
+    // contains and create an entry in the OptionMap
+
     // Initialize with default settings
     Set("capture\\autosave", "bypassmenu", false);
     Set("capture\\autosave", "continuous", false);
@@ -404,12 +409,24 @@ public:
 
     Set("capture", "autosave", false);
     Set("capture", "showloupe", false);
+
+    Set("hotkeys\\capturestart", "enabled", false);
+    Set("hotkeys\\colorcopy", "enabled", false);
+    Set("hotkeys\\doubleclick", "enabled", false);
+    Set("hotkeys\\zoomin", "enabled", false);
+    Set("hotkeys\\zoomout", "enabled", false);
+
+    Set("control", "top", 0);
   }
 
 public:
   //-------------------------------------------------------------------------
   void Load()
   {
+    // Load persisted options,
+    // todo: we need to enumerate the sections held by the storage medium,
+    // we now find only initialized sections in the map
+
     for (option_map_iterator iter = m_OptionMaps.begin(); iter != m_OptionMaps.end(); iter++)
     {
       (iter->second).Load();

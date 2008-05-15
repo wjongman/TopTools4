@@ -26,27 +26,21 @@ private:
   TEdit* m_pEdit;
 
   THotkeyInfo m_KeyInfo;
-  String m_RegKeyPath;
 
 protected:
   String FCheckboxText;
-//  void __fastcall SetCheckboxText(const String& caption)
-  void __fastcall SetCheckboxText(String caption)
-  {
-    FCheckboxText = caption;
-    m_pCheckbox->Caption = caption;
-  }
+  void __fastcall SetCheckboxText(String caption);
 
 public:
   __fastcall THotkeyPanel(TComponent* Owner);
   __fastcall ~THotkeyPanel();
 
-  void __fastcall Load(const String& RegKeyPath);
-  void __fastcall Save();
+  void SetKeyInfo(const THotkeyInfo& KeyInfo);
+  THotkeyInfo GetKeyInfo();
 
 __published:
   __property String Caption = {};
-	__property String CheckboxText = { read = FCheckboxText, write = SetCheckboxText };
+  __property String CheckboxText = { read = FCheckboxText, write = SetCheckboxText };
 };
 //---------------------------------------------------------------------------
 #endif

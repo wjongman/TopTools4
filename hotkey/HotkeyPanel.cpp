@@ -8,7 +8,7 @@
 
 //---------------------------------------------------------------------------
 __fastcall THotkeyPanel::THotkeyPanel(TComponent* Owner)
-: TPanel(Owner), m_RegKeyPath("") //, FCheckboxText("")
+: TPanel(Owner)
 {
   TPanel::Caption = "";
 
@@ -86,25 +86,27 @@ void __fastcall THotkeyPanel::CheckboxMouseUp(TObject *Sender, TMouseButton Butt
 }
 
 //---------------------------------------------------------------------------
-void __fastcall THotkeyPanel::Load(const String& RegKeyPath)
+void __fastcall THotkeyPanel::SetCheckboxText(String caption)
 {
-  m_RegKeyPath = RegKeyPath;
-  m_KeyInfo.LoadFromRegistry(m_RegKeyPath);
+  FCheckboxText = caption;
+  m_pCheckbox->Caption = caption;
+}
+
+//---------------------------------------------------------------------------
+void THotkeyPanel::SetKeyInfo(const THotkeyInfo& KeyInfo)
+{
+  m_KeyInfo = KeyInfo;
 
   m_pEdit->Text = m_KeyInfo.GetHotkeyText();
-
   m_pCheckbox->Checked = m_KeyInfo.enabled;
   m_pEdit->Enabled = m_KeyInfo.enabled;
   m_pLabel->Enabled = m_KeyInfo.enabled;
 }
 
 //---------------------------------------------------------------------------
-void __fastcall THotkeyPanel::Save()
+THotkeyInfo THotkeyPanel::GetKeyInfo()
 {
-  if (m_RegKeyPath == "")
-    return;
-
-  m_KeyInfo.SaveToRegistry(m_RegKeyPath);
+  return m_KeyInfo;
 }
 
 //---------------------------------------------------------------------------

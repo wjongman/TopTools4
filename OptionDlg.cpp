@@ -12,6 +12,7 @@
 #include "OptionDlg.h"
 #include "AutoSaveDlg.h"
 #include "PersistOptions.h"
+#include "HotkeyManager.h"
 
 //---------------------------------------------------------------------------
 __fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner)
@@ -202,25 +203,65 @@ void TToolOptionsDialog::SaveOptions()
 }
 
 //---------------------------------------------------------------------------
+// void TToolOptionsDialog::InitHotkeyPanels()
+// {
+//   String RegBase = g_RegBaseKey + "hotkeys\\";
+//
+//   hkpDoubleClick->Load(RegBase + "doubleclick");
+//   hkpZoomIn->Load(RegBase + "zoomin");
+//   hkpZoomOut->Load(RegBase + "zoomout");
+//   hkpColorCopy->Load(RegBase + "colorcopy");
+//   hkpGrabScreen->Load(RegBase + "capturestart");
+// }
+//
+// //---------------------------------------------------------------------------
+// void TToolOptionsDialog::SaveHotkeyPanels()
+// {
+//   hkpDoubleClick->Save();
+//   hkpZoomIn->Save();
+//   hkpZoomOut->Save();
+//   hkpColorCopy->Save();
+//   hkpGrabScreen->Save();
+// }
+
+//---------------------------------------------------------------------------
+THotkeyInfo TToolOptionsDialog::LoadHotkeyInfo(const String& sHotKeyName)
+{
+  THotkeyInfo HotkeyInfo;
+  HotkeyInfo.enabled = g_ToolOptions.Get("hotkeys\\" + sHotKeyName, "enabled", false);
+  HotkeyInfo.virtkey = g_ToolOptions.Get("hotkeys\\" + sHotKeyName, "keycode", 0);
+  HotkeyInfo.modifiers = g_ToolOptions.Get("hotkeys\\" + sHotKeyName, "modifiers", 0);
+
+  return HotkeyInfo;
+}
+
+//---------------------------------------------------------------------------
+void TToolOptionsDialog::SaveHotkeyInfo(const String& sHotKeyName, const THotkeyInfo& HotkeyInfo)
+{
+  g_ToolOptions.Set("hotkeys\\" + sHotKeyName, "enabled", HotkeyInfo.enabled);
+  g_ToolOptions.Set("hotkeys\\" + sHotKeyName, "keycode", HotkeyInfo.virtkey);
+  g_ToolOptions.Set("hotkeys\\" + sHotKeyName, "modifiers", HotkeyInfo.modifiers);
+}
+
+//---------------------------------------------------------------------------
 void TToolOptionsDialog::InitHotkeyPanels()
 {
-  String RegBase = g_RegBaseKey + "hotkeys\\";
-
-  hkpDoubleClick->Load(RegBase + "doubleclick");
-  hkpZoomIn->Load(RegBase + "zoomin");
-  hkpZoomOut->Load(RegBase + "zoomout");
-  hkpColorCopy->Load(RegBase + "colorcopy");
-  hkpGrabScreen->Load(RegBase + "capturestart");
+  hkpDoubleClick->SetKeyInfo(LoadHotkeyInfo("doubleclick"));
+  hkpZoomIn->SetKeyInfo(LoadHotkeyInfo("zoomin"));
+  hkpZoomOut->SetKeyInfo(LoadHotkeyInfo("zoomout"));
+  hkpColorCopy->SetKeyInfo(LoadHotkeyInfo("colorcopy"));
+  hkpGrabScreen->SetKeyInfo(LoadHotkeyInfo("capturestart"));
 }
 
 //---------------------------------------------------------------------------
 void TToolOptionsDialog::SaveHotkeyPanels()
 {
-  hkpDoubleClick->Save();
-  hkpZoomIn->Save();
-  hkpZoomOut->Save();
-  hkpColorCopy->Save();
-  hkpGrabScreen->Save();
+  SaveHotkeyInfo("doubleclick", hkpDoubleClick->GetKeyInfo());
+  SaveHotkeyInfo("zoomin", hkpZoomIn->GetKeyInfo());
+  SaveHotkeyInfo("zoomout", hkpZoomOut->GetKeyInfo());
+  SaveHotkeyInfo("colorcopy", hkpColorCopy->GetKeyInfo());
+  SaveHotkeyInfo("capturestart", hkpGrabScreen->GetKeyInfo());
+  g_ToolOptions.Save();
 }
 
 //---------------------------------------------------------------------------

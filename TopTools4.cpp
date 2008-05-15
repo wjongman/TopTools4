@@ -38,13 +38,13 @@ USEUNIT("TopToolBar.cpp");
 USEUNIT("TrayIcon.cpp");
 USEUNIT("hotkey\HotkeyInfo.cpp");
 USEFORM("OptionDlg.cpp", ToolOptionsDialog);
-USEUNIT("hotkey\HotkeyManager.cpp");
 USEFORM("AutoSaveDlg.cpp", AutoSaveDialog);
 USEUNIT("AutoSaveOptions.cpp");
 USEFORM("ImageView.cpp", ImageViewer);
 USEFORM("ScreenForm.cpp", ScreenForm);
 USEUNIT("GrabbedImage.cpp");
 USEUNIT("PersistOptions.cpp");
+USEUNIT("HotkeyManager.cpp");
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {

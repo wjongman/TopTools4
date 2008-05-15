@@ -8,13 +8,14 @@
 #include <Classes.hpp>
 #include <Forms.hpp>
 #include <Buttons.hpp>
+#include <Comctrls.hpp>
 
 #include "png/pngimage.hpp"
 #include <vector>
 
 #define TOOLBUTTONWIDTH 30
 
-class Comctrls::TToolButton;
+//class Comctrls::TToolButton;
 //---------------------------------------------------------------------------
 class TTopToolButton : public TToolButton
 {

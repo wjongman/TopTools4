@@ -185,7 +185,7 @@ void __fastcall TMainForm::HandleAppDeactivate(TObject *Sender)
 void __fastcall TMainForm::HandleAppRestore(TObject *Sender)
 {
     // Restore Toolbar
-    GetControlBar()->Show();//ShowWindow(m_pControlBar->Handle, SW_RESTORE);
+    GetControlBar()->Show();
 }
 
 //---------------------------------------------------------------------------
@@ -393,11 +393,6 @@ void __fastcall TMainForm::LoadSettings()
   SetUI(g_ToolOptions.GetBool("main", "istrayapp"));
   RestoreToolState(g_ToolOptions.GetInt("main", "savedstate"));
   SetTopMost(g_ToolOptions.GetBool("main", "stayontop"));
-//     m_Options.Load();
-//
-//     SetUI(m_Options.IsTrayApp);
-//     RestoreToolState(m_Options.SavedState);
-//     SetTopMost(m_Options.StayOnTop);
 }
 
 //---------------------------------------------------------------------------
@@ -405,10 +400,6 @@ void __fastcall TMainForm::UpdateSettings()
 {
   SetUI(g_ToolOptions.GetBool("main", "istrayapp"));
   SetTopMost(g_ToolOptions.GetBool("main", "stayontop"));
-//     m_Options.Load();
-//
-//     SetUI(m_Options.IsTrayApp);
-//     SetTopMost(m_Options.StayOnTop);
 }
 
 //---------------------------------------------------------------------------
@@ -416,14 +407,10 @@ void __fastcall TMainForm::SaveSettings()
 {
     if (g_ToolOptions.GetBool("main", "rememberstate"))
       g_ToolOptions.Set("main", "savedstate", GetToolState());
-//      m_Options.SavedState = GetToolState();
     else
       g_ToolOptions.Set("main", "savedstate", 0);
-//        m_Options.SavedState = 0;
 
     g_ToolOptions.Set("main", "istrayapp", (m_UIMode == uiTrayApp));
-//    m_Options.IsTrayApp = (m_UIMode == uiTrayApp);
-//    m_Options.Save();
 }
 
 //---------------------------------------------------------------------------
@@ -556,8 +543,6 @@ String TMainForm::GetColorFormatString()
 //---------------------------------------------------------------------------
 void TMainForm::CopyWebColorToClipboard()
 {
-//    TColorCopyOptions cc_options;
-//    cc_options.Load();
     String Format = GetColorFormatString();
 
     // Probe the color under the mouse
@@ -629,7 +614,7 @@ TToolForm* TMainForm::GetCaptureForm()
 {
     if (!m_pCapture)
     {
-        m_pCapture = new TScreenGrabber(this); //TScreenForm(this);
+        m_pCapture = new TScreenGrabber(this);
         m_pCapture->OnClose = HandleToolWindowClose;
         m_pCapture->OnKeyDown = HandleKeyDown;
     }
@@ -712,39 +697,10 @@ void __fastcall TMainForm::actCommandExecute(TObject *Sender)
     Timer->Enabled = TimerNeeded();
 }
 
-#if RUNNING_ON_VISTA
-//---------------------------------------------------------------------------
-void __fastcall TMainForm::actCaptureExecute(TObject *Sender)
-{
-/*
-  TCaptureForm* CaptureForm = new TCaptureForm(this);
-  CaptureForm->ShowModal();
-  //actCapture->Checked = false;
-  CaptureForm->Hide();
-  delete CaptureForm;
-*/
-    m_SavedLoupeState = m_pLoupe && m_pLoupe->Visible;
-
-    if (!m_pCapture)
-    {
-        m_pCapture = new TCaptureForm(this);
-        m_pCapture->OnCaptureNext = HandleCaptureNext;
-        m_pCapture->OnCaptureComplete = HandleCaptureComplete;
-        m_pCapture->OnCancel = HandleCaptureComplete;
-        m_pCapture->OnCaptureLost = HandleCaptureComplete;
-        m_pCapture->ShowModal();
-    }
-
-    HandleCaptureNext(this);
-
-}
-#else
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::actCaptureExecute(TObject *Sender)
 {
     m_SavedLoupeState = m_pLoupe && m_pLoupe->Visible;
-
-    //ScreenForm->Visible = true;
 
     if (!m_pCapture)
     {
@@ -760,7 +716,6 @@ void __fastcall TMainForm::actCaptureExecute(TObject *Sender)
     //HandleCaptureNext(this);
 
 }
-#endif
 
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::HandleCaptureNext(TObject *Sender)
@@ -795,8 +750,7 @@ void __fastcall TMainForm::actOptionsExecute(TObject *Sender)
     TToolOptionsDialog *OptionForm = new TToolOptionsDialog(this);
     if (OptionForm->ShowModal() == mrOk)
     {
-        // Changes are communicated through the registry
-//        LoadSettings();
+        // Changes are communicated through g_ToolOptions
         UpdateSettings();
 
         m_HotkeyManager->AssignHotkeys();
@@ -834,60 +788,6 @@ void __fastcall TMainForm::actExitExecute(TObject *Sender)
 {
     Application->Terminate();
 }
-
-// //---------------------------------------------------------------------------
-// void __fastcall TMainForm::LoadPosition()
-// {
-//     // Retrieve saved settings from the registry
-//     TRegistry *Reg = new TRegistry();
-//     Reg->RootKey = HKEY_CURRENT_USER;
-//     try
-//     {
-//         if (Reg->OpenKey(g_RegBaseKey + "control", false))
-//         {
-//             int left = 0;
-//             int top = 0;
-//
-//             if (Reg->ValueExists("left"))
-//                 left = Reg->ReadInteger("left");
-//             if (Reg->ValueExists("top"))
-//                 top = Reg->ReadInteger("top");
-//
-//             Reg->CloseKey();
-//             SetBounds(left, top, Width, Height);
-//         }
-//         else
-//         {
-//             SetDefaultPosition();
-//             return;
-//         }
-//     }
-//     __finally
-//     {
-//         delete Reg;
-//     }
-// }
-//
-// //---------------------------------------------------------------------------
-// void __fastcall TMainForm::SavePosition()
-// {
-//     // Save settings in the registry
-//     TRegistry *Reg = new TRegistry();
-//     Reg->RootKey = HKEY_CURRENT_USER;
-//     try
-//     {
-//         if (Reg->OpenKey(g_RegBaseKey + "control", true))
-//         {
-//             Reg->WriteInteger("left", Left);
-//             Reg->WriteInteger("top", Top);
-//             Reg->CloseKey();
-//         }
-//     }
-//     __finally
-//     {
-//         delete Reg;
-//     }
-// }
 
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::SetDefaultPosition()

@@ -2,7 +2,6 @@
 #pragma hdrstop
 
 #include "HotkeyInfo.h"
-#include "PersistOptions.h"
 /////////////////////////////////////////////////////////////////////////////
 //
 // class THotkeyInfo
@@ -85,7 +84,8 @@ String THotkeyInfo::GetHotkeyText()
   return modstr + keystr;
 }
 
-/*/---------------------------------------------------------------------------
+/*
+//---------------------------------------------------------------------------
 void THotkeyInfo::LoadFromRegistry(const String& regkeypath)
 {
   TRegistry *Reg = new TRegistry();
@@ -129,23 +129,7 @@ void THotkeyInfo::SaveToRegistry(const String& regkeypath)
   {
     delete Reg;
   }
-}*/
-
-//---------------------------------------------------------------------------
-void THotkeyInfo::Load(const String& hotkeyname)
-{
-  enabled = g_ToolOptions.GetBool(hotkeyname, "enabled");
-  virtkey = g_ToolOptions.GetInt(hotkeyname, "keycode");
-  modifiers = g_ToolOptions.GetInt(hotkeyname, "modifiers");
 }
-
-//---------------------------------------------------------------------------
-void THotkeyInfo::Save(const String& hotkeyname)
-{
-  g_ToolOptions.Set(hotkeyname, "enabled", enabled && virtkey != 0);
-  g_ToolOptions.Set(hotkeyname, "keycode", virtkey);
-  g_ToolOptions.Set(hotkeyname, "modifiers", modifiers);
-}
-
+*/
 //---------------------------------------------------------------------------
 

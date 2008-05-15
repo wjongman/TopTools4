@@ -64,7 +64,6 @@ protected:
   virtual void __fastcall OnLoseFocus() {}
 
 protected:
-  virtual void __fastcall WndProc0(TMessage &Msg);
   virtual void __fastcall WndProc(TMessage &Msg);
 
 __published:  // IDE-managed Components

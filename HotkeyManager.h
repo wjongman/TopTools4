@@ -20,12 +20,17 @@ public:
   THotkeyManager(HWND listener);
   ~THotkeyManager();
 
+  void LoadHotkeys();
   void AssignHotkeys();
+  void SaveHotkeys();
   void EnableHotkeys();
   void DisableHotkeys();
 
 private:
   void InitHotkeys();
+
+  THotkeyInfo LoadHotkeyInfo(const String& sHotKeyName);
+  void SaveHotkeyInfo(const String& sHotKeyName, const THotkeyInfo& HotkeyInfo);
 
   // Handle of window that is to receive hotkey events
   HWND m_hwndListener;

@@ -3,6 +3,7 @@
 #include <vcl.h>
 #pragma hdrstop
 
+#include <printers.hpp>
 #include "ImageView.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)

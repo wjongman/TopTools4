@@ -23,8 +23,8 @@ __fastcall TToolForm::TToolForm(TComponent* Owner, const String& toolname)
   //  m_RegBaseKey = g_RegBaseKey;
 //  LoadSettings();
 
-  OnShow = OnToolShow;   // OnToolShow calls LoadPosition()
-  OnHide = OnToolHide;   // OnToolHide calls SavePosition()
+  OnShow = OnToolShow;   // OnToolShow calls LoadPosition() by default
+  OnHide = OnToolHide;   // OnToolHide calls SavePosition() by default
 }
 
 //---------------------------------------------------------------------------
@@ -49,94 +49,6 @@ void __fastcall TToolForm::ReadState(Classes::TReader* Reader)
 {
   TForm::ReadState(Reader);
   OldCreateOrder = false;
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TToolForm::WndProc0(Messages::TMessage &Message)
-{
-  if (Message.Msg == WM_DISPLAYCHANGE || Message.Msg == WM_SETTINGCHANGE)
-  {
-    // Adapt our position to the new settings
-    ConstrainPosition();
-  }
-
-  else if (Message.Msg == WM_WINDOWPOSCHANGING)
-  {
-    WINDOWPOS *wndPos = reinterpret_cast<WINDOWPOS*>(Message.LParam);
-    // If it is actually our window that moved
-    if (wndPos->hwnd == Handle)
-    {
-      bool controlkeydown = GetKeyState(VK_CONTROL) & 0x8000;
-      // If FSnap = true we snap to desktop edges unless Ctrl key is down
-      // If FSnap = false we snap to desktop edges only when Ctrl key is down
-      bool snap = controlkeydown ^ FSnapEdge;
-      if (snap)
-      {
-        // Get the bounds of our window
-        RECT rcWin;
-        GetWindowRect(Handle, &rcWin);
-
-        // Get the monitor nearest to the window rect.
-        HMONITOR hMonitor;
-        hMonitor = MonitorFromRect(&rcWin, MONITOR_DEFAULTTONEAREST);
-
-        // Get the work area or entire monitor rect.
-        MONITORINFO mi;
-        mi.cbSize = sizeof(mi);
-        GetMonitorInfo(hMonitor, &mi);
-        RECT rcWorkArea = mi.rcWork;
-
-        // Snap to edges of work area
-        int EdgeSnapGap = 15;
-        TSnapRect sr(wndPos);
-        sr.SnapToInsideOf(rcWorkArea, EdgeSnapGap);
-
-        wndPos->x = sr.left;
-        wndPos->y = sr.top;
-      }
-    }
-  }
-  else if (Message.Msg == WM_SETFOCUS)
-  {
-    OnGetFocus();
-  }
-  else if (Message.Msg == WM_NCACTIVATE)
-  {
-    OnLoseFocus();
-  }
-  else if (Message.Msg == WM_SYSCOMMAND)
-  {
-    switch (Message.WParam & 0xFFF0) // Lowest byte is reserved..
-    {
-    case SC_MINIMIZE:
-      // Someone clicked the minimize button of our window or
-      // selected "Minimize" in the system menu.
-      if (FOnMinimize)
-      {
-        OnMinimize(this);
-        // Prevent further message processing
-        Message.Result = 0;
-        return;
-      }
-      break;
-/*
-      case SC_CLOSE:
-        // Someone clicked the close button of our window or
-        // selected "Close" in the system menu.
-        if (FOnSysClose)
-        {
-          OnOnSysClose(this);
-          // No further message processing
-          Message.Result = 0;
-          return;
-        }
-        break;
-*/
-    }
-  }
-
-  // Resume normal processing
-  TForm::WndProc(Message);
 }
 
 //---------------------------------------------------------------------------
@@ -274,38 +186,9 @@ void __fastcall TToolForm::LoadPosition()
   int left = g_ToolOptions.GetInt(m_ToolName, "left");
   int top = g_ToolOptions.GetInt(m_ToolName, "top");
   SetBounds(left, top, Width, Height);
-/*
-  // Retrieve saved settings from the registry
-  TRegistry *Reg = new TRegistry();
-  Reg->RootKey = HKEY_CURRENT_USER;
-  try
-  {
-    if (Reg->OpenKey(g_RegBaseKey + m_ToolName, false))
-    {
-      int left = 0;
-      int top = 0;
 
-      if (Reg->ValueExists("left"))
-        left = Reg->ReadInteger("left");
-      if (Reg->ValueExists("top"))
-        top = Reg->ReadInteger("top");
-
-      Reg->CloseKey();
-      SetBounds(left, top, Width, Height);
-    }
-    else
-    {
-      SetDefaultPosition();
-      return;
-    }
-  }
-  __finally
-  {
-    delete Reg;
-  }
-*/
   // Make sure we don't end up outside the desktop area
-//  ConstrainPosition();
+  ConstrainPosition();
 }
 
 //---------------------------------------------------------------------------
@@ -314,24 +197,6 @@ void __fastcall TToolForm::SavePosition()
   g_ToolOptions.Set(m_ToolName, "left", Left);
   g_ToolOptions.Set(m_ToolName, "top", Top);
   g_ToolOptions.Save();
-/*
-  // Save settings in the registry
-  TRegistry *Reg = new TRegistry();
-  Reg->RootKey = HKEY_CURRENT_USER;
-  try
-  {
-    if (Reg->OpenKey(g_RegBaseKey + m_ToolName, true))
-    {
-      Reg->WriteInteger("left", Left);
-      Reg->WriteInteger("top", Top);
-      Reg->CloseKey();
-    }
-  }
-  __finally
-  {
-    delete Reg;
-  }
-*/
 }
 
 //---------------------------------------------------------------------------
@@ -457,32 +322,4 @@ void __fastcall TToolForm::SetWindowStyle(TToolWindowStyle style)
   ::SetWindowPos(Handle, 0, 0, 0, 0, 0, dwFlags);
 }
 
-/*
-//---------------------------------------------------------------------------
-void __fastcall TBaseConvForm::GetSetting()
-{
-//  TopTools::Options Options("baseconv");
-//  bool bTest = m_ToolOptions.GetBool("baseconv", "showbinary");
-  TopTools::TPersistOptions& m_ToolOptions = TopTools::TPersistOptions::Instance();
-  m_ToolOptions.Load();
-  ShowBinaryField(m_ToolOptions.GetBool("baseconv", "showbinary"));
-
-  //   TBaseconvOptions options;
-//   ShowBinaryField(options.ShowBinary);
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TBaseConvForm::SetSetting()
-{
-//  TopTools::Options Options("baseconv");
-  TopTools::TPersistOptions& m_ToolOptions = TopTools::TPersistOptions::Instance();
-
-  m_ToolOptions.Set("baseconv", "showbinary", plBinary->Visible);
-  m_ToolOptions.Save();
-
-//   TBaseconvOptions options;
-//   options.ShowBinary = plBinary->Visible;
-//   options.Save();
-}
-*/
 

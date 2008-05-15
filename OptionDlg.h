@@ -102,6 +102,8 @@ private:  // User declarations
 
   void InitHotkeyPanels();
   void SaveHotkeyPanels();
+  THotkeyInfo LoadHotkeyInfo(const String& sHotKeyName);
+  void SaveHotkeyInfo(const String& sHotKeyName, const THotkeyInfo& HotkeyInfo);
 
 public:   // User declarations
   __fastcall TToolOptionsDialog(TComponent* Owner);

@@ -2,7 +2,7 @@
 #ifndef HotkeyInfoH
 #define HotkeyInfoH
 
-#include <Registry.hpp>
+//#include <Registry.hpp>
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -15,6 +15,10 @@
 // combination using the MapVirtualKey and GetKeyNameText API functions.
 //
 // LoadFromRegistry and SaveToRegistry add persistence
+// NOTE: May 14 2008: This turns out to be not a good idea!
+// although it simplifies code, it also forces us to use the registry.
+// So now, while making the app "portable", I have to rip it out
+// and have to fix dependencies all over the place..
 //
 /////////////////////////////////////////////////////////////////////////////
 
@@ -81,20 +85,21 @@ public:
     Enable();
   }
 
+/*
   THotkey(HWND hWnd, int id, const String& hotkeyname)
     : m_hWnd(hWnd), m_id(id), m_hotkeyname(hotkeyname)
   {
-//    m_keyinfo.LoadFromRegistry(m_hotkeyname);
+    m_keyinfo.LoadFromRegistry(m_hotkeyname);
     m_keyinfo.Load(m_hotkeyname);
     Enable();
   }
-
+*/
   ~THotkey()
   {
     Disable();
   }
 
-  void Assign(THotkeyInfo& keyinfo)
+  void Assign(THotkeyInfo keyinfo)
   {
     Disable();
     m_keyinfo = keyinfo;
