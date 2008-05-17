@@ -7,10 +7,9 @@
     <OBJFILES value="obj\TopTools4.obj obj\About.obj obj\BaseConv.obj obj\Control.obj 
       obj\Float.obj obj\Info.obj obj\Loupe.obj obj\Main.obj obj\Ruler.obj 
       obj\Tool.obj obj\Grabber.obj obj\LoupePanel.obj obj\Monitor.obj 
-      obj\MouseTracker.obj obj\TopToolBar.obj obj\TrayIcon.obj 
-      obj\HotkeyInfo.obj obj\OptionDlg.obj obj\AutoSaveDlg.obj 
-      obj\AutoSaveOptions.obj obj\ImageView.obj obj\ScreenForm.obj 
-      obj\GrabbedImage.obj obj\PersistOptions.obj obj\HotkeyManager.obj"/>
+      obj\TopToolBar.obj obj\TrayIcon.obj obj\HotkeyInfo.obj obj\OptionDlg.obj 
+      obj\AutoSaveDlg.obj obj\AutoSaveOptions.obj obj\ImageView.obj 
+      obj\ScreenForm.obj obj\HotkeyManager.obj"/>
     <RESFILES value="obj\Graphics.res Cursors.res TopTools4.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>

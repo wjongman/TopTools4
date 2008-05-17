@@ -338,7 +338,7 @@ void __fastcall TRulerForm::ToggleTransparency()
 
   int Transparency = g_ToolOptions.GetInt(m_ToolName, "transparency");
 
-  SetTransparency(isTransparent, Transparency);
+  SetTransparency(!isTransparent, Transparency);
 }
 
 //---------------------------------------------------------------------------

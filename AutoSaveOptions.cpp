@@ -29,13 +29,13 @@ TAutoSaveOptions::~TAutoSaveOptions()
 //---------------------------------------------------------------------------
 void __fastcall TAutoSaveOptions::Load()
 {
-  g_ToolOptions.Load();
+  g_ToolOptions.Load(g_RunMode);
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TAutoSaveOptions::Save()
 {
-  g_ToolOptions.Save();
+  g_ToolOptions.Save(g_RunMode);
 }
 
 //---------------------------------------------------------------------------

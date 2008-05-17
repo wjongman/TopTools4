@@ -188,17 +188,27 @@ public:
   }
 
   //-------------------------------------------------------------------------
-  bool Save()
+  bool Save(TRunMode RunMode)
   {
-    //    if (!SaveToRegistry())
-    return SaveToIniFile();
+    if (RunMode == rmPortable)
+      return false;
+
+    else if (RunMode == rmIniFile)
+      return SaveToIniFile();
+
+    return SaveToRegistry();
   }
 
   //-------------------------------------------------------------------------
-  bool Load()
+  bool Load(TRunMode RunMode)
   {
-    //    if (!LoadFromRegistry())
-    return LoadFromIniFile();
+    if (RunMode == rmPortable)
+      return false;
+
+    else if (RunMode == rmIniFile)
+      return LoadFromIniFile();
+
+    return LoadFromRegistry();
   }
 
   //-------------------------------------------------------------------------
@@ -359,15 +369,21 @@ private:
   typedef std::map<String, TOptionMap>::iterator option_map_iterator;
 
   TOptionMaps m_OptionMaps;
+  TRunMode m_RunMode;
 
 public:
   //-------------------------------------------------------------------------
   TPersistOptions()
   {
+    InitOptions();
+  }
+
+  void InitOptions()
+  {
     // For now only sections that appear in this list
     // will be read by this class, we'll need a way to
     // enumerate the storage medium to retrieve all sections
-    // contains and create an entry in the OptionMap
+    // it contains and create an entry in the OptionMap for each
 
     // Initialize with default settings
     Set("capture\\autosave", "bypassmenu", false);
@@ -421,24 +437,31 @@ public:
 
 public:
   //-------------------------------------------------------------------------
-  void Load()
+  void Load(TRunMode RunMode)
   {
-    // Load persisted options,
+    // Load persisted options
+
     // todo: we need to enumerate the sections held by the storage medium,
     // we now find only initialized sections in the map
-
+    m_RunMode = RunMode;
     for (option_map_iterator iter = m_OptionMaps.begin(); iter != m_OptionMaps.end(); iter++)
     {
-      (iter->second).Load();
+      (iter->second).Load(RunMode);
     }
   }
 
   //-------------------------------------------------------------------------
-  void Save()
+  void Save() // Save using last known RunMode
+  {
+    Save(m_RunMode);
+  }
+
+  //-------------------------------------------------------------------------
+  void Save(TRunMode RunMode)
   {
     for (option_map_iterator iter = m_OptionMaps.begin(); iter != m_OptionMaps.end(); iter++)
     {
-      (iter->second).Save();
+      (iter->second).Save(RunMode);
     }
   }
 

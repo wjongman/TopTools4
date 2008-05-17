@@ -33,7 +33,6 @@ USERES("TopTools4.res");
 USEUNIT("Grabber.cpp");
 USEUNIT("LoupePanel.cpp");
 USEUNIT("Monitor.cpp");
-USEUNIT("MouseTracker.cpp");
 USEUNIT("TopToolBar.cpp");
 USEUNIT("TrayIcon.cpp");
 USEUNIT("hotkey\HotkeyInfo.cpp");
@@ -42,32 +41,37 @@ USEFORM("AutoSaveDlg.cpp", AutoSaveDialog);
 USEUNIT("AutoSaveOptions.cpp");
 USEFORM("ImageView.cpp", ImageViewer);
 USEFORM("ScreenForm.cpp", ScreenForm);
-USEUNIT("GrabbedImage.cpp");
-USEUNIT("PersistOptions.cpp");
 USEUNIT("HotkeyManager.cpp");
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
-  bool IsSingleton = false;
+  // See how the user wants to run the app
+  TRunMode RunMode;
+  if (ParamCount() > 1 && ParamStr(1) == "-p")
+  {
+      RunMode = rmPortable;
+  }
+  else if (ParamCount() > 1 && ParamStr(1) == "-i")
+  {
+      RunMode = rmIniFile;
+  }
+  else
+  {
+      // todo: see if ini-file or reg-entry exists, offer dialog if not
+      RunMode = rmRegistry;
+  }
+
+//  g_ToolOptions.Load(rmIniFile);
+  g_ToolOptions.Load(RunMode);
+
+//  bool IsSingleton = g_ToolOptions.Get("main", "singleton", false);
+  bool IsSingleton = g_ToolOptions.GetBool("main", "singleton");
+/*
   TRegistry *Reg = new TRegistry();
   Reg->RootKey = HKEY_CURRENT_USER;
   Reg->Access = KEY_READ;
   try
   {
-    // See if the user wants to run us in portable mode
-    if (ParamCount() > 1 && ParamStr(1) == "-p")
-    {
-        g_RunMode = rmPortable;
-    }
-    else if (ParamCount() > 1 && ParamStr(1) == "-i")
-    {
-        g_RunMode = rmIniFile;
-    }
-    else
-    {
-        g_RunMode = rmRegistry;
-    }
-
     if (Reg->OpenKey(g_RegBaseKey + "main", false))
     {
       if (Reg->ValueExists("singleton"))
@@ -80,7 +84,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
   {
     delete Reg;
   }
-
+*/
   // This mutex provides the means to determine if a TopTools instance is
   // already running.
   // It is used by the "allow only a single instance per desktop" option
@@ -117,7 +121,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
   try
   {
      Application->Initialize();
-     Application->Title = "TopTools";
+     Application->Title = "TopTools 4";
      Application->CreateForm(__classid(TMainForm), &MainForm);
          Application->ShowMainForm = false;
      Application->Run();
@@ -129,4 +133,6 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
   return 0;
 }
+
 //---------------------------------------------------------------------------
+

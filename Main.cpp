@@ -37,7 +37,7 @@ __fastcall TMainForm::TMainForm(TComponent* Owner)
     Application->OnDeactivate = HandleAppDeactivate;
     Application->OnRestore = HandleAppRestore;
 
-    g_ToolOptions.Load();
+//    g_ToolOptions.Load();
     LoadSettings();
 
     m_HotkeyManager = new THotkeyManager(Handle);
@@ -411,6 +411,8 @@ void __fastcall TMainForm::SaveSettings()
       g_ToolOptions.Set("main", "savedstate", 0);
 
     g_ToolOptions.Set("main", "istrayapp", (m_UIMode == uiTrayApp));
+
+    g_ToolOptions.Save();
 }
 
 //---------------------------------------------------------------------------
