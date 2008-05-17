@@ -199,7 +199,7 @@ void TToolOptionsDialog::SaveOptions()
   g_ToolOptions.Set("capture", "autosave", ckAutosave->Checked);
   g_ToolOptions.Set("capture", "showloupe", ckShowLoupeOnGrab->Checked);
 
-  g_ToolOptions.Save();
+  //g_ToolOptions.Save();
 }
 
 //---------------------------------------------------------------------------
@@ -261,7 +261,7 @@ void TToolOptionsDialog::SaveHotkeyPanels()
   SaveHotkeyInfo("zoomout", hkpZoomOut->GetKeyInfo());
   SaveHotkeyInfo("colorcopy", hkpColorCopy->GetKeyInfo());
   SaveHotkeyInfo("capturestart", hkpGrabScreen->GetKeyInfo());
-  g_ToolOptions.Save();
+  //g_ToolOptions.Save();
 }
 
 //---------------------------------------------------------------------------

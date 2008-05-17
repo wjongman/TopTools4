@@ -35,7 +35,7 @@ void __fastcall TAutoSaveOptions::Load()
 //---------------------------------------------------------------------------
 void __fastcall TAutoSaveOptions::Save()
 {
-  g_ToolOptions.Save(g_RunMode);
+  //g_ToolOptions.Save();
 }
 
 //---------------------------------------------------------------------------

@@ -38,9 +38,9 @@
     <WARNOPTSTR value=""/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I&quot;C:\Program Files\Borland\CBuilder5\Projects\.&quot; -Ipng -Igif -Ihotkey 
-      -I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp 
-      -DNO_WIN32_LEAN_AND_MEAN -D_DEBUG -boa"/>
+    <IDLCFLAGS value="-src_suffix cpp -DNO_WIN32_LEAN_AND_MEAN -D_DEBUG 
+      -I&quot;C:\Program Files\Borland\CBuilder5\Projects\.&quot; -Ipng -Igif -Ihotkey 
+      -I$(BCB)\include -I$(BCB)\include\vcl -boa"/>
     <CFLAG1 value="-Od -H=obj/pch.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c -tW -tWM"/>
     <PFLAGS value="-N2obj -N0obj -$Y+ -$W -$O- -v -JPHNE -M"/>
     <RFLAGS value=""/>
@@ -59,7 +59,7 @@ AutoIncBuild=1
 MajorVer=4
 MinorVer=0
 Release=0
-Build=1
+Build=7
 Debug=0
 PreRelease=1
 Special=0
@@ -71,7 +71,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Willem &amp; Co
 FileDescription=Screen Design Toolbox
-FileVersion=4.0.0.1
+FileVersion=4.0.0.7
 InternalName=TopTools
 LegalCopyright=Copyright © 1998-2008 Willem Jongman
 LegalTrademarks=
@@ -150,7 +150,7 @@ Item1=exe
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=
+RunParams=-i
 HostApplication=
 RemoteHost=
 RemotePath=

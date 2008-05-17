@@ -13,14 +13,13 @@
 #include "AutoSaveDlg.h"
 
 //---------------------------------------------------------------------------
-//__fastcall TScreenGrabber::TScreenGrabber(TComponent* Owner)
-//        : TMouseTracker(Owner), m_bDrawing(false), m_bFirstRect(false),
-//        FOnCaptureNext(NULL), FOnCaptureComplete(NULL)
 __fastcall TScreenGrabber::TScreenGrabber(TComponent* Owner)
       : TScreenForm(Owner),
-        //m_bDrawing(false), m_bFirstRect(false),
         FOnCaptureNext(NULL), FOnCaptureComplete(NULL)
 {
+
+// todo: make sure grabber is always top-most window
+
     TRACE("TScreenGrabber::TScreenGrabber");
 
     // Have a bitmap to store the grabbed stuff

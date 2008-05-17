@@ -196,7 +196,7 @@ void __fastcall TToolForm::SavePosition()
 {
   g_ToolOptions.Set(m_ToolName, "left", Left);
   g_ToolOptions.Set(m_ToolName, "top", Top);
-  g_ToolOptions.Save();
+  //g_ToolOptions.Save();
 }
 
 //---------------------------------------------------------------------------

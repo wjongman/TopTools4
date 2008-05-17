@@ -247,6 +247,7 @@ void __fastcall TMainForm::HandleTrayMessage(TMessage &Message)
         }
     case WM_LBUTTONDOWN:
         {
+            // Toggle stay-on-top
             break;
         }
     }
@@ -412,7 +413,7 @@ void __fastcall TMainForm::SaveSettings()
 
     g_ToolOptions.Set("main", "istrayapp", (m_UIMode == uiTrayApp));
 
-    g_ToolOptions.Save();
+    //g_ToolOptions.Save();
 }
 
 //---------------------------------------------------------------------------

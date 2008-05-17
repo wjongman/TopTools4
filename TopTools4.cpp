@@ -45,13 +45,24 @@ USEUNIT("HotkeyManager.cpp");
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
+/*
+  int i = 0;
+  int count = ParamCount();
+  String ParStr;
+  while ( i < ParamCount() )
+  {
+    ParStr = ParamStr(i);
+    ParStr = ParStr;
+    i++;
+  }
+*/
   // See how the user wants to run the app
   TRunMode RunMode;
-  if (ParamCount() > 1 && ParamStr(1) == "-p")
+  if (ParamCount() > 0 && ParamStr(1) == "-p")
   {
       RunMode = rmPortable;
   }
-  else if (ParamCount() > 1 && ParamStr(1) == "-i")
+  else if (ParamCount() > 0 && ParamStr(1) == "-i")
   {
       RunMode = rmIniFile;
   }
