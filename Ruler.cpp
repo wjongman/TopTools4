@@ -57,20 +57,20 @@ __fastcall TRulerForm::~TRulerForm()
 //---------------------------------------------------------------------------
 void __fastcall TRulerForm::UpdateUI()
 {
-  bool isTransparent = g_ToolOptions.Get(m_ToolName, "transparent", false);
-  int Transparency = g_ToolOptions.Get(m_ToolName, "transparency", 50);
+  bool isTransparent = g_ToolOptions.GetBool(m_ToolName, "transparent");
+  int Transparency = g_ToolOptions.GetInt(m_ToolName, "transparency");
   SetTransparency(isTransparent, Transparency);
 
-  bool isHorizontal = g_ToolOptions.Get(m_ToolName, "horizontal", true);
+  bool isHorizontal = g_ToolOptions.GetBool(m_ToolName, "horizontal");
   if (isHorizontal)
   {
-    Width = g_ToolOptions.Get(m_ToolName, "length", 1280);
+    Width = g_ToolOptions.GetInt(m_ToolName, "length");
     Height = m_breadth;
   }
   else
   {
     Width = m_breadth;
-    Height = g_ToolOptions.Get(m_ToolName, "length", 1280);
+    Height = g_ToolOptions.GetInt(m_ToolName, "length");
   }
 
   RenderHorizontalRuler();

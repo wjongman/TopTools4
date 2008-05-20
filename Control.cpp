@@ -73,6 +73,7 @@ void __fastcall TControlForm::SetDefaultPosition()
       Top = rcTaskbar.top - Height;
       break;
   }
+  SavePosition();
 }
 
 //---------------------------------------------------------------------------

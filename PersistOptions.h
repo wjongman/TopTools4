@@ -155,21 +155,21 @@ public:
     void Set(const String& OptionName, int Value)
     {
         m_Options[OptionName] = TOption(Value);
-        Save();
+//        Save();
     }
 
     //-------------------------------------------------------------------------
     void Set(const String& OptionName, String Value)
     {
         m_Options[OptionName] = TOption(Value);
-        Save();
+//        Save();
     }
 
     //-------------------------------------------------------------------------
     void Set(const String& OptionName, bool Value)
     {
         m_Options[OptionName] = TOption(Value);
-        Save();
+//        Save();
     }
 
     //-------------------------------------------------------------------------
@@ -325,7 +325,7 @@ public:
         Reg->RootKey = HKEY_CURRENT_USER;
         try
         {
-            if (Reg->OpenKey(m_RegBaseKey + m_ToolName, false))
+            if (Reg->OpenKey(m_RegBaseKey + m_ToolName, true))
             {
                 for (option_iterator iter = m_Options.begin(); iter != m_Options.end(); iter++)
                 {
@@ -459,13 +459,13 @@ public:
     }
 
     //-------------------------------------------------------------------------
-//     void Save()
-//     {
-//         for (option_map_iterator iter = m_OptionMaps.begin(); iter != m_OptionMaps.end(); iter++)
-//         {
-//             (iter->second).Save();
-//         }
-//     }
+    void Save()
+    {
+        for (option_map_iterator iter = m_OptionMaps.begin(); iter != m_OptionMaps.end(); iter++)
+        {
+            (iter->second).Save();
+        }
+    }
 
     //-------------------------------------------------------------------------
     int Get(const String& ToolName, const String& OptionName, int iDefault)

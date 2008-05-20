@@ -183,8 +183,9 @@ void __fastcall TToolForm::SetColorKey(bool layered, COLORREF colorkey)
 //---------------------------------------------------------------------------
 void __fastcall TToolForm::LoadPosition()
 {
-  int left = g_ToolOptions.GetInt(m_ToolName, "left");
-  int top = g_ToolOptions.GetInt(m_ToolName, "top");
+  SetDefaultPosition();
+  int left = g_ToolOptions.Get(m_ToolName, "left", Left);
+  int top = g_ToolOptions.Get(m_ToolName, "top", Top);
   SetBounds(left, top, Width, Height);
 
   // Make sure we don't end up outside the desktop area

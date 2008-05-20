@@ -138,9 +138,9 @@ void __fastcall TScreenGrabber::HandleRightButtonClick(TObject *Sender,
 {
      // Copy selected area to the bitmap
      GetWindowRect(Handle, &m_rcSelect);
-     Hide();
+//     Hide();  (we are tranparent!
      GetDesktopArea(&m_rcSelect);
-     Show();
+//     Show();
      HandleCapture(X, Y);
 }
 
