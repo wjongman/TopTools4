@@ -301,9 +301,9 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
 
     NewItem = new TMenuItem(m_CaptureMenu);
     NewItem->OnClick = CaptureMenuClick;
-    NewItem->Caption = "Hide Grabber";
+    NewItem->Caption = "Snapshot";
     NewItem->Default = true;
-    NewItem->Hint = "Hide";
+    NewItem->Hint = "View";
     m_CaptureMenu->Items->Add(NewItem);
 
     // Separator ------------------------
@@ -329,23 +329,23 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
     NewItem->Hint = "SaveOn";
     m_CaptureMenu->Items->Add(NewItem);
 
-    // Separator ------------------------
-    NewItem = new TMenuItem(m_CaptureMenu);
-    NewItem->Caption = "-";
-    m_CaptureMenu->Items->Add(NewItem);
-
-    NewItem = new TMenuItem(m_CaptureMenu);
-    NewItem->OnClick = CaptureMenuClick;
-    NewItem->Caption = "View...";
-    NewItem->Hint = "View";
-    m_CaptureMenu->Items->Add(NewItem);
-
-    NewItem = new TMenuItem(m_CaptureMenu);
-    NewItem->OnClick = CaptureMenuClick;
-    NewItem->Caption = "Print...";
-    NewItem->Hint = "Print";
-    m_CaptureMenu->Items->Add(NewItem);
-
+//     // Separator ------------------------
+//     NewItem = new TMenuItem(m_CaptureMenu);
+//     NewItem->Caption = "-";
+//     m_CaptureMenu->Items->Add(NewItem);
+//
+// //     NewItem = new TMenuItem(m_CaptureMenu);
+// //     NewItem->OnClick = CaptureMenuClick;
+// //     NewItem->Caption = "View...";
+// //     NewItem->Hint = "View";
+// //     m_CaptureMenu->Items->Add(NewItem);
+//
+//     NewItem = new TMenuItem(m_CaptureMenu);
+//     NewItem->OnClick = CaptureMenuClick;
+//     NewItem->Caption = "Print...";
+//     NewItem->Hint = "Print";
+//     m_CaptureMenu->Items->Add(NewItem);
+//
     // Separator ------------------------
     NewItem = new TMenuItem(m_CaptureMenu);
     NewItem->Caption = "-";
@@ -364,11 +364,6 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
     NewItem->Hint = "AutoSaveOn";
     NewItem->Enabled = g_ToolOptions.GetBool("capture", "autosave");//m_CaptureOptions.AutoSave;
     m_CaptureMenu->Items->Add(NewItem);
-#ifdef _DEBUG
-    // Separator ------------------------
-    NewItem = new TMenuItem(m_CaptureMenu);
-    NewItem->Caption = "-";
-    m_CaptureMenu->Items->Add(NewItem);
 
     NewItem = new TMenuItem(m_CaptureMenu);
     NewItem->OnClick = CaptureMenuClick;
@@ -376,6 +371,26 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
     NewItem->Hint = "AutoSaveOptions";
 //    NewItem->Enabled = m_CaptureOptions.AutoSave;
     m_CaptureMenu->Items->Add(NewItem);
+
+    // Separator ------------------------
+    NewItem = new TMenuItem(m_CaptureMenu);
+    NewItem->Caption = "-";
+    m_CaptureMenu->Items->Add(NewItem);
+
+    NewItem = new TMenuItem(m_CaptureMenu);
+    NewItem->OnClick = CaptureMenuClick;
+    NewItem->Caption = "Cancel";
+    //NewItem->Default = true;
+    NewItem->Hint = "Hide";
+    m_CaptureMenu->Items->Add(NewItem);
+
+
+#ifdef _DEBUG
+    // Separator ------------------------
+    NewItem = new TMenuItem(m_CaptureMenu);
+    NewItem->Caption = "-";
+    m_CaptureMenu->Items->Add(NewItem);
+
 #endif
 }
 

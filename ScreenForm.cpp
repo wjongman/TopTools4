@@ -31,6 +31,8 @@ __fastcall TScreenForm::~TScreenForm()
 void __fastcall TScreenForm::MouseDown(TMouseButton Button,
                                        TShiftState Shift, int X, int Y)
 {
+  m_bSticky = false;
+
   if (Button == mbLeft)
   // Start a drag-operation
   {
@@ -42,7 +44,6 @@ void __fastcall TScreenForm::MouseDown(TMouseButton Button,
   {
     FOnRightButtonClick(this, Button, Shift, X, Y);
   }
-  m_bSticky = false;
 }
 
 //---------------------------------------------------------------------------

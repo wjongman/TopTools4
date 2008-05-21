@@ -26,4 +26,8 @@ object ImageViewer: TImageViewer
     OnMouseDown = ImageMouseDown
     OnMouseMove = ImageMouseMove
   end
+  object PrintDialog1: TPrintDialog
+    Left = 72
+    Top = 64
+  end
 end

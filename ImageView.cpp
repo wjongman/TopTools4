@@ -121,7 +121,7 @@ void __fastcall TImageViewer::PopulateViewerMenu()
 
     NewItem = new TMenuItem(m_ViewerMenu);
     NewItem->OnClick = ViewerMenuClick;
-    NewItem->Caption = "Close Viewer";
+    NewItem->Caption = "Close Snapshot";
     NewItem->Hint = "Close";
     m_ViewerMenu->Items->Add(NewItem);
     /*#ifdef _DEBUG
@@ -348,9 +348,8 @@ void __fastcall TImageViewer::CopyToClipboard()
 //---------------------------------------------------------------------------
 void __fastcall TImageViewer::PrintImage(Graphics::TBitmap* pBitmap)
 {
-//    if ( PrintDialog1->Execute() )
+    if ( PrintDialog1->Execute() )
     {
-        //Graphics::TBitmap* pBitmap = Image->Picture->Bitmap;
         Printer()->BeginDoc();
 
         double fPrinterVert = (double) GetDeviceCaps(Printer()->Canvas->Handle, LOGPIXELSY);
@@ -361,7 +360,7 @@ void __fastcall TImageViewer::PrintImage(Graphics::TBitmap* pBitmap)
         int iHeight = (int) ((double)pBitmap->Height * (fPrinterVert / fScreenVert));
         int iWidth  = (int) ((double)pBitmap->Width  * (fPrinterHorz / fScreenHorz));
 
-//        StretchBltBitmap(Printer()->Canvas, 0, 0, iWidth, iHeight, pBitmap);
+        //DoPrintImage(Printer()->Canvas, 0, 0int pX,int pY, Graphics::TBitmap *pBitmap)
         StretchToPrintCanvas(Printer()->Canvas, 0, 0, iWidth, iHeight, pBitmap);
 
         Printer()->EndDoc();
@@ -373,22 +372,6 @@ void __fastcall TImageViewer::StretchToPrintCanvas(TCanvas *pPrintCanvas, int iX
         int iWidth, int iHeight,
         Graphics::TBitmap *pBitmap)
 {
-    /*
-    Here's the core routine:
-
-          // Change bitmap info so we're Bottom-up (safer)
-          with ABitmap.BitmapInfo.bmiHeader do
-            biHeight := -ABitmap.Height;
-
-          SetStretchBltMode(Canvas.Handle, HALFTONE);
-          StretchDIBits(Canvas.Handle,
-            ALeft, ATop, AWidth, AHeight,
-            0, 0, ABitmap.Width, ABitmap.Height,
-            ABitmap.Bits,
-            ABitmap.BitmapInfo,
-            DIB_RGB_COLORS,
-            SRCCOPY);
-    */
     unsigned int HeaderSize = 0;
     unsigned int ImageSize = 0;
     GetDIBSizes(pBitmap->Handle, HeaderSize, ImageSize);
@@ -401,10 +384,6 @@ void __fastcall TImageViewer::StretchToPrintCanvas(TCanvas *pPrintCanvas, int iX
 
     if (GetDIB(pBitmap->Handle, pBitmap->Palette, pBmi, pImage))
     {
-        // Change bitmap info so we're Bottom-up (safer)
-        //pBmi->bmiHeader.biHeight = -pBitmap->Height;
-        //pBmi->bmiHeader.biWidth = -pBitmap->Width;
-        // hmm, not sure, it prints a mirror copy..
         SetStretchBltMode(pPrintCanvas->Handle, HALFTONE);
         StretchDIBits(pPrintCanvas->Handle,
                       iX, iY, iWidth, iHeight,
@@ -455,4 +434,151 @@ void __fastcall TImageViewer::StretchBltBitmap(TCanvas *pCanvas, int iX, int iY,
 }
 
 //---------------------------------------------------------------------------
+#if 1
 
+/********************************************************************************************
+*  NAME:
+*           PrintImage
+*  PURPOSE:
+*           Print a bitmap with  StretchDIBits
+*  NOTES:
+*           The image must contain a Bitmap. This particular function will only
+*            work if it is a Bitmap, icons and cursors will not work.
+*
+*  PARAMS:   PrinterCanvas : printer canvas (TPrinter->Canvas)
+*          pX : bitmap X position on printer page
+*          pY : bitmap Y position on printer page
+*          pBitmap: TBitmap to be printed
+*  RETURNS:
+*               void
+**********************************************************************************************/
+//void __fastcall TImageViewer::PrintImage(Graphics::TBitmap* pBitmap)
+void __fastcall TImageViewer::DoPrintImage(TCanvas *PrinterCanvas,int pX,int pY,
+                                           Graphics::TBitmap *pBitmap)
+{
+
+    // create a memory dc for the image
+    HDC h_dc = pBitmap->Canvas->Handle;
+    int bmp_w = pBitmap->Width, bmp_h = pBitmap->Height;
+
+    HDC h_mem_dc = ::CreateCompatibleDC (h_dc);
+    HBITMAP h_mem_bmp = ::CreateCompatibleBitmap (h_dc, bmp_w, bmp_h);
+    HBITMAP h_old_bmp = ::SelectObject (h_mem_dc, h_mem_bmp);
+
+    // fix up bad video drivers
+    bool is_pal_dev = false;
+    LOGPALETTE *pal;
+    HPALETTE h_pal, h_old_pal;
+
+    if ( ::GetDeviceCaps (pBitmap->Canvas->Handle, RASTERCAPS) & RC_PALETTE)
+    {
+        pal = static_cast<LOGPALETTE*>(malloc (sizeof (LOGPALETTE) + (sizeof (PALETTEENTRY) * 256)));
+        memset (pal, 0, sizeof (LOGPALETTE) + (sizeof (PALETTEENTRY) * 256));
+        pal->palVersion = 0x300;
+        pal->palNumEntries = ::GetSystemPaletteEntries(pBitmap->Canvas->Handle, 0, 256, pal->palPalEntry);
+        if (pal->palNumEntries != 0)
+        {
+            h_pal = ::CreatePalette (pal);
+            h_old_pal = ::SelectPalette (h_mem_dc, h_pal, false);
+            is_pal_dev = true;
+        }
+        else
+        {
+            free (pal);
+        }
+    }
+
+    // copy the image on to the memory dc
+    ::BitBlt (h_mem_dc, 0, 0, bmp_w, bmp_h, h_dc, 0, 0, SRCCOPY);
+
+    if (is_pal_dev)
+    {
+        ::SelectPalette (h_mem_dc, h_old_pal, false);
+        ::DeleteObject (h_pal);
+    }
+
+    // delete the mem dc
+    ::SelectObject (h_mem_dc, h_old_bmp);
+    ::DeleteDC (h_mem_dc);
+
+    // get memory for a BITMAPIFO Structure
+    HANDLE h_bmp_info = ::GlobalAlloc (GHND, sizeof (BITMAPINFO) + (sizeof (RGBQUAD) * 256));
+    BITMAPINFO* bmp_info = static_cast<BITMAPINFO*>(::GlobalLock (h_bmp_info));
+    //Set up the structure
+
+    memset (bmp_info, NULL, sizeof (BITMAPINFO) + (sizeof (RGBQUAD) * 255));
+    bmp_info->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    bmp_info->bmiHeader.biPlanes = 1;
+    bmp_info->bmiHeader.biBitCount = 16;//or 8
+    bmp_info->bmiHeader.biWidth = bmp_w;
+    bmp_info->bmiHeader.biHeight = bmp_h;
+    bmp_info->bmiHeader.biCompression = BI_RGB;
+
+    // find out how much memory for the bits
+    ::GetDIBits (h_dc, h_mem_bmp, 0, bmp_h, NULL, bmp_info, DIB_RGB_COLORS);
+
+    // Allocate memory for the bits
+    HANDLE h_bits = GlobalAlloc (GHND, bmp_info->bmiHeader.biSizeImage);
+    void *bits = ::GlobalLock (h_bits);
+
+    // this time get the bits
+    ::GetDIBits (h_dc, h_mem_bmp, 0, bmp_h, bits, bmp_info, DIB_RGB_COLORS);
+
+    // fix up for bad video driver
+    if (is_pal_dev)
+    {
+        for (int i = 0; i <pal->palNumEntries; i++)
+        {
+            bmp_info->bmiColors[i].rgbRed = pal->palPalEntry[i].peRed;
+            bmp_info->bmiColors[i].rgbGreen = pal->palPalEntry[i].peGreen;
+            bmp_info->bmiColors[i].rgbBlue = pal->palPalEntry[i].peBlue;
+        }
+        free (pal);
+    }
+
+
+    // fix up for print with palette
+    is_pal_dev = false;
+    if ( ::GetDeviceCaps (h_dc, RASTERCAPS) & RC_PALETTE)
+    {
+        pal = static_cast<LOGPALETTE*>(malloc (sizeof (LOGPALETTE) + (sizeof (PALETTEENTRY) * 256)));
+        memset (pal, 0, sizeof (LOGPALETTE) + (sizeof (PALETTEENTRY) * 256));
+        pal->palVersion = 0x300;
+        pal->palNumEntries = 256;
+        for (int i = 0; pal->palNumEntries; i++)
+        {
+            pal->palPalEntry[i].peRed = bmp_info->bmiColors[i].rgbRed;
+            pal->palPalEntry[i].peGreen = bmp_info->bmiColors[i].rgbGreen;
+            pal->palPalEntry[i].peBlue = bmp_info->bmiColors[i].rgbBlue;
+        }
+        h_pal = CreatePalette(pal);
+        free (pal);
+        h_old_pal = SelectPalette(PrinterCanvas->Handle, h_pal, false);
+        is_pal_dev = true;
+    }
+
+
+    //  adjust bitmap dimensions for the printer device:
+    int PrnXRes= GetDeviceCaps(PrinterCanvas->Handle, LOGPIXELSX); //Get dpi of printer along width
+    int PrnYRes= GetDeviceCaps(PrinterCanvas->Handle, LOGPIXELSY); //Get dpi of printer along height
+    bmp_w= floor(((double)pBitmap->Width / (double)Screen->PixelsPerInch) * (double)PrnXRes);
+    bmp_h= floor(((double)pBitmap->Height / (double)Screen->PixelsPerInch) * (double)PrnYRes);
+
+    // send the bits to the printer
+    StretchDIBits(PrinterCanvas->Handle, pX,pY, bmp_w, bmp_h,
+        0, 0, pBitmap->Width, pBitmap->Height, bits, bmp_info, DIB_RGB_COLORS, SRCCOPY);
+
+    // clean up
+    ::DeleteObject (h_mem_bmp);
+    if (is_pal_dev)
+    {
+        ::SelectObject (PrinterCanvas->Handle, h_old_pal);
+        ::DeleteObject (h_pal);
+    }
+    ::GlobalUnlock (bits);
+    ::GlobalFree (h_bits);
+    ::GlobalUnlock (bmp_info);
+    ::GlobalFree (h_bmp_info);
+}
+
+#endif
