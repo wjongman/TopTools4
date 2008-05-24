@@ -6,6 +6,9 @@
 #include <registry.hpp>
 #include <map>
 
+// Global String for registry access
+extern const String g_RegBaseKey;
+
 /////////////////////////////////////////////////////////////////////////////
 enum TToolId
 {
@@ -141,13 +144,13 @@ public:
 
     //-------------------------------------------------------------------------
     TOptionMap()
-    : m_RegBaseKey("Software\\TopTools 4\\"), m_ToolName(""), m_RunMode(rmPortable)
+    : m_RegBaseKey(""), m_ToolName(""), m_RunMode(rmPortable)
     {
     }
 
     //-------------------------------------------------------------------------
-    TOptionMap(String ToolName)
-    : m_RegBaseKey("Software\\TopTools 4\\"), m_ToolName(ToolName), m_RunMode(rmPortable)
+    TOptionMap(const String& sRegBaseKey, const String& sToolName)
+    : m_RegBaseKey(sRegBaseKey), m_ToolName(sToolName), m_RunMode(rmPortable)
     {
     }
 
@@ -377,21 +380,54 @@ private:
     typedef std::map<String, TOptionMap>::iterator option_map_iterator;
 
     TOptionMaps m_OptionMaps;
+    String m_RegBaseKey;
 
 public:
     //-------------------------------------------------------------------------
     TPersistOptions()
     {
         InitOptions();
+        m_RegBaseKey = g_RegBaseKey;//"Software\\TopTools 4\\";
+
+    }
+
+    //-------------------------------------------------------------------------
+    bool RegKeyExists()
+    {
+        bool bSuccess = false;
+        TRegistry *Reg = new TRegistry();
+        Reg->RootKey = HKEY_CURRENT_USER;
+        try
+        {
+            bSuccess = Reg->KeyExists(m_RegBaseKey);
+        }
+        __finally
+        {
+            delete Reg;
+        }
+        return bSuccess;
+    }
+
+    //-------------------------------------------------------------------------
+    bool IniFileExists()
+    {
+        // See if default ini-file exists
+        String IniFileName = ChangeFileExt(ParamStr(0), ".ini");
+        String IniFilePath = "%APPDATA%\\TopTools 4\\" + IniFileName;
+        //String IniFilePath = "%USERPROFILE%\\Local Settings\\Application Data\\TopTools 4\\" + IniFileName;
+        if (FileExists(IniFileName) || FileExists(IniFilePath))
+        {
+            return true;
+        }
+        return false;
     }
 
     //-------------------------------------------------------------------------
     void InitOptions()
     {
-        // For now only sections that appear in this list will be
-        // read by this class, we'll need a way to enumerate the
-        // storage medium to retrieve all sections it contains and
-        // create an entry in the OptionMap for each of them
+        // For now only sections that appear in this list will be read by
+        // this class, in the future we will enumerate the storage medium
+        // and populate the OptionMap for each entry in there..
 
         // Initialize with default settings
         Set("capture\\autosave", "bypassmenu", false);
@@ -440,7 +476,7 @@ public:
         Set("hotkeys\\zoomin", "enabled", false);
         Set("hotkeys\\zoomout", "enabled", false);
 
-        Set("control", "top", 0);
+        //Set("control", "top", 0);
     }
 
 public:
@@ -451,12 +487,63 @@ public:
         //m_OptionMaps.Load(RunMode);
 
         // todo: we need to enumerate the sections held by the storage medium,
-        // we now find only initialized sections in the map
+        // at the moment we only find initialized sections in the map
         for (option_map_iterator iter = m_OptionMaps.begin(); iter != m_OptionMaps.end(); iter++)
         {
             (iter->second).Load(RunMode);
         }
     }
+
+    //-------------------------------------------------------------------------
+    void Load()
+    {
+        // See how the user wants to run the app
+        TRunMode RunMode;
+        if (ParamCount() > 0 && ParamStr(1) == "-p")
+        {
+            RunMode = rmPortable;
+        }
+        else if (ParamCount() > 0 && ParamStr(1) == "-i")
+        {
+            RunMode = rmIniFile;
+            // todo: allow optional ParamStr(2) to indicate target inifile
+            if (ParamCount() > 1)
+            {
+                String IniFileName = ParamStr(2);
+                if (FileExists(IniFileName))
+                {
+                    Load(IniFileName);
+                    return;
+                }
+            }
+        }
+        else
+        {
+            if (RegKeyExists())
+                RunMode = rmRegistry;
+            else if (IniFileExists())
+                RunMode = rmIniFile;
+            else
+                // todo: offer dialog at this point?
+                RunMode = rmPortable;
+        }
+
+        Load(RunMode);
+    }
+
+    //-------------------------------------------------------------------------
+     void Load(const String& IniFileName)
+     {
+//         // Load persisted options
+//         //m_OptionMaps.Load(RunMode);
+//
+//         // todo: we need to enumerate the sections held by the storage medium,
+//         // at the moment we only find initialized sections in the map
+//         for (option_map_iterator iter = m_OptionMaps.begin(); iter != m_OptionMaps.end(); iter++)
+//         {
+//             (iter->second).Load(IniFileName);
+//         }
+     }
 
     //-------------------------------------------------------------------------
     void Save()
@@ -531,7 +618,7 @@ public:
         }
         else
         {
-            TOptionMap OptionMap(ToolName);
+            TOptionMap OptionMap(m_RegBaseKey, ToolName);
             OptionMap.Set(OptionName, Option);
             m_OptionMaps[ToolName] = OptionMap;
         }
@@ -547,7 +634,7 @@ public:
         }
         else
         {
-            TOptionMap OptionMap(ToolName);
+            TOptionMap OptionMap(m_RegBaseKey, ToolName);
             OptionMap.Set(OptionName, Option);
             m_OptionMaps[ToolName] = OptionMap;
         }
@@ -563,7 +650,7 @@ public:
         }
         else
         {
-            TOptionMap OptionMap(ToolName);
+            TOptionMap OptionMap(m_RegBaseKey, ToolName);
             OptionMap.Set(OptionName, Option);
             m_OptionMaps[ToolName] = OptionMap;
         }
@@ -572,8 +659,6 @@ public:
 }; // TPersistToolOptions
 
 extern TPersistOptions g_ToolOptions;
-// Global String for registry access
-extern const String g_RegBaseKey;
 // Global flag to hold runmode
 extern TRunMode g_RunMode;
 

@@ -56,46 +56,40 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     i++;
   }
 */
-  // See how the user wants to run the app
-  TRunMode RunMode;
-  if (ParamCount() > 0 && ParamStr(1) == "-p")
-  {
-      RunMode = rmPortable;
-  }
-  else if (ParamCount() > 0 && ParamStr(1) == "-i")
-  {
-      RunMode = rmIniFile;
-  }
-  else
-  {
-      // todo: see if ini-file or reg-entry exists, offer dialog if not
-      RunMode = rmRegistry;
-  }
+//   // See how the user wants to run the app
+//   TRunMode RunMode;
+//   if (ParamCount() > 0 && ParamStr(1) == "-p")
+//   {
+//       RunMode = rmPortable;
+//   }
+//   else if (ParamCount() > 0 && ParamStr(1) == "-i")
+//   {
+//       // todo: allow optional ParamStr(2) to indicate target inifile
+//       if (ParamCount() > 1)
+//       {
+//           String IniFileName = ParamStr(2);
+//           if (FileExists(IniFileName))
+//           {
+//           }
+//       }
+//       RunMode = rmIniFile;
+//   }
+//   else
+//   {
+//       if (g_ToolOptions.RegKeyExists())
+//           RunMode = rmRegistry;
+//       else if (g_ToolOptions.IniFileExists())
+//           RunMode = rmIniFile;
+//       else
+//           // todo: offer dialog at this point?
+//           RunMode = rmPortable;
+//   }
+//
+//   g_ToolOptions.Load(RunMode);
 
-//  g_ToolOptions.Load(rmIniFile);
-  g_ToolOptions.Load(RunMode);
-
-//  bool IsSingleton = g_ToolOptions.Get("main", "singleton", false);
+  g_ToolOptions.Load();
   bool IsSingleton = g_ToolOptions.GetBool("main", "singleton");
-/*
-  TRegistry *Reg = new TRegistry();
-  Reg->RootKey = HKEY_CURRENT_USER;
-  Reg->Access = KEY_READ;
-  try
-  {
-    if (Reg->OpenKey(g_RegBaseKey + "main", false))
-    {
-      if (Reg->ValueExists("singleton"))
-        IsSingleton = Reg->ReadBool("singleton");
 
-      Reg->CloseKey();
-    }
-  }
-  __finally
-  {
-    delete Reg;
-  }
-*/
   // This mutex provides the means to determine if a TopTools instance is
   // already running.
   // It is used by the "allow only a single instance per desktop" option
