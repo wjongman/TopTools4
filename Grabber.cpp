@@ -136,12 +136,10 @@ void __fastcall TScreenGrabber::MouseUp(TMouseButton Button,
 void __fastcall TScreenGrabber::HandleRightButtonClick(TObject *Sender,
                         TMouseButton Button, TShiftState Shift, int X, int Y)
 {
-     // Copy selected area to the bitmap
-     GetWindowRect(Handle, &m_rcSelect);
-//     Hide();  (we are tranparent!
-     GetDesktopArea(&m_rcSelect);
-//     Show();
-     HandleCapture(X, Y);
+     GetDesktopArea();
+     ViewImage(m_pBufferBmp);
+     EndCapture();
+// Left Click to drag or resize, Right Click to grab area.
 }
 
 //---------------------------------------------------------------------------
@@ -149,16 +147,19 @@ void __fastcall TScreenGrabber::HandleCapture(int X, int Y)
 {
     TRACE("TScreenGrabber::HandleCapture()");
 
-//    if (m_AutoSaveOptions.GetBool("bypassmenu"))
     if (g_ToolOptions.GetBool("capture\\autosave", "bypassmenu"))
     {
+//        GetDesktopArea();
         AutoSaveToFile();
         if (g_ToolOptions.GetBool("capture\\autosave", "continuous"))
         {
             CaptureNext();
         }
+        else
+        {
+            EndCapture();
+        }
     }
-    //else if (m_GrabberMode == gmOpenViewer)
     else if (g_ToolOptions.GetBool("capture\\autosave", "openviewer"))
     {
         EndCapture();
@@ -223,8 +224,8 @@ void __fastcall TScreenGrabber::CaptureMenuClick(TObject *Sender)
         }
         else if (menuItem->Hint == "View")
         {
-            EndCapture();
             ViewImage(m_pBufferBmp);
+            EndCapture();
         }
         else if (menuItem->Hint == "AutoSaveOptions")
         {
@@ -492,6 +493,8 @@ void __fastcall TScreenGrabber::ViewImage(Graphics::TBitmap* pBufferBmp)
 {
     TRACE("TScreenGrabber::ViewImage()");
 
+//    GetDesktopArea();
+
     TImageViewer* pImageViewer = m_Viewers.NewViewer(this, m_rcSelect);
     pImageViewer->Bitmap = pBufferBmp;
     pImageViewer->KeyPreview = true;
@@ -558,6 +561,8 @@ void __fastcall TScreenGrabber::AutoSaveToFile()
 void __fastcall TScreenGrabber::DoSaveToFile(const String& PathName)
 {
     TRACE("TScreenGrabber::DoSaveToFile()");
+
+//    GetDesktopArea();
 
     String sFileName = PathName;
     if (DisplayIsPaletted())
@@ -666,7 +671,7 @@ void __fastcall TScreenGrabber::SaveToFile()
 
     TSavePictureDialog *SavePicDlg = new TSavePictureDialog(this);
     SavePicDlg->Options << ofOverwritePrompt << ofEnableSizing;
-    SavePicDlg->InitialDir = g_ToolOptions.GetString("capture", "lastdir");//m_CaptureOptions.LastDir;
+    SavePicDlg->InitialDir = g_ToolOptions.GetString("capture", "lastdir");
 
     bool haspalette = DisplayIsPaletted();
     if (haspalette)
@@ -676,7 +681,7 @@ void __fastcall TScreenGrabber::SaveToFile()
     }
     else
     {
-        SavePicDlg->FilterIndex = g_ToolOptions.GetInt("capture", "filterindex"); //m_CaptureOptions.FilterIndex;
+        SavePicDlg->FilterIndex = g_ToolOptions.GetInt("capture", "filterindex");
         SavePicDlg->Filter = "Windows Bitmap (*.bmp)|*.bmp|"
                              "PNG Image (*.png)|*.png|"
                              "GIF Image (*.gif)|*.gif|"
@@ -685,12 +690,8 @@ void __fastcall TScreenGrabber::SaveToFile()
     // Display the Save File Dialog
     if (SavePicDlg->Execute())
     {
-//        m_CaptureOptions.LastDir = ExtractFilePath(SavePicDlg->FileName);
         g_ToolOptions.Set("capture", "lastdir", ExtractFilePath(SavePicDlg->FileName));
-//        m_CaptureOptions.FilterIndex = SavePicDlg->FilterIndex;
         g_ToolOptions.Set("capture", "filterindex", SavePicDlg->FilterIndex);
-
-//        m_CaptureOptions.Save();
 
         DoSaveToFile(SavePicDlg->FileName);
     }
@@ -704,8 +705,20 @@ void __fastcall TScreenGrabber::CopyToClipboard()
 {
     TRACE("TScreenGrabber::CopyToClipboard()");
 
+//    GetDesktopArea();
+
     Clipboard()->Assign(m_pBufferBmp);
     m_pBufferBmp->Assign(NULL);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TScreenGrabber::GetDesktopArea()
+{
+    TRACE("TScreenGrabber::GetDesktopArea()");
+    GetWindowRect(Handle, &m_rcSelect);
+    Hide();  // we are tranparent but under Aero we are visible
+    GetDesktopArea(&m_rcSelect);
+    Show();
 }
 
 //---------------------------------------------------------------------------

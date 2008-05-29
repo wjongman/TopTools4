@@ -5,6 +5,14 @@
 
 #include <printers.hpp>
 #include "ImageView.h"
+#include "PersistOptions.h"
+#include <Clipbrd.hpp>
+
+#include <jpeg.hpp>
+#include "gif\gifimage.hpp"
+#include "png\pngimage.hpp"
+#include "ExtDlgs.hpp"
+//#include "AutoSaveDlg.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -59,12 +67,11 @@ void __fastcall TImageViewer::ViewerMenuClick(TObject *Sender)
     {
         if (menuItem->Hint == "Save")
         {
-//      SaveToFile();
-//      EndCapture();
+            SaveToFile();
         }
         else if (menuItem->Hint == "Copy")
         {
-//      CopyToClipboard();
+            CopyToClipboard();
         }
         else if (menuItem->Hint == "Print")
         {
@@ -196,16 +203,16 @@ void __fastcall TImageViewer::FormShow(TObject *Sender)
     }
 }
 
-#if 0
 //---------------------------------------------------------------------------
 void __fastcall TImageViewer::DoSaveToFile(const String& PathName)
 {
+    Graphics::TBitmap* pBitmap = Image->Picture->Bitmap;
     String sFileName = PathName;
     if (DisplayIsPaletted())
     {
         // On paletted displays we only support Windows .bmp bitmaps
         sFileName = ChangeFileExt(sFileName, ".bmp");
-        m_pBufferBmp->SaveToFile(sFileName);
+        pBitmap->SaveToFile(sFileName);
     }
     else
     {
@@ -214,7 +221,8 @@ void __fastcall TImageViewer::DoSaveToFile(const String& PathName)
         {
             // If no extension is present, we use
             // the most recently selected image type
-            switch (m_CaptureOptions.FilterIndex)
+            int FilterIndex = g_ToolOptions.GetInt("capture", "filterindex");
+            switch (FilterIndex)
             {
             case 1:
                 extension = ".bmp";
@@ -239,7 +247,7 @@ void __fastcall TImageViewer::DoSaveToFile(const String& PathName)
         {
             __try
             {
-                m_pBufferBmp->SaveToFile(sFileName);
+                pBitmap->SaveToFile(sFileName);
             }
             catch (const Exception &E)
             {
@@ -249,7 +257,7 @@ void __fastcall TImageViewer::DoSaveToFile(const String& PathName)
         else if (extension == ".jpg")
         {
             TJPEGImage* Image = new TJPEGImage();
-            Image->Assign(m_pBufferBmp);
+            Image->Assign(pBitmap);
             __try
             {
                 Image->SaveToFile(sFileName);
@@ -264,7 +272,7 @@ void __fastcall TImageViewer::DoSaveToFile(const String& PathName)
         {
             TGIFImage* Image = new TGIFImage();
             Image->ColorReduction = rmQuantizeWindows;
-            Image->Assign(m_pBufferBmp);
+            Image->Assign(pBitmap);
             __try
             {
                 Image->SaveToFile(sFileName);
@@ -278,7 +286,7 @@ void __fastcall TImageViewer::DoSaveToFile(const String& PathName)
         else if (extension == ".png")
         {
             TPNGObject* Image = new TPNGObject();
-            Image->Assign(m_pBufferBmp);
+            Image->Assign(pBitmap);
             __try
             {
                 Image->SaveToFile(sFileName);
@@ -302,11 +310,9 @@ void __fastcall TImageViewer::DoSaveToFile(const String& PathName)
 //---------------------------------------------------------------------------
 void __fastcall TImageViewer::SaveToFile()
 {
-    TRACE("TScreenGrabber::SaveToFile()");
-
     TSavePictureDialog *SavePicDlg = new TSavePictureDialog(this);
     SavePicDlg->Options << ofOverwritePrompt << ofEnableSizing;
-    SavePicDlg->InitialDir = m_CaptureOptions.LastDir;
+    SavePicDlg->InitialDir = g_ToolOptions.GetString("capture", "lastdir");
 
     bool haspalette = DisplayIsPaletted();
     if (haspalette)
@@ -316,7 +322,7 @@ void __fastcall TImageViewer::SaveToFile()
     }
     else
     {
-        SavePicDlg->FilterIndex = m_CaptureOptions.FilterIndex;
+        SavePicDlg->FilterIndex = g_ToolOptions.GetInt("capture", "filterindex");
         SavePicDlg->Filter = "Windows Bitmap (*.bmp)|*.bmp|"
                              "PNG Image (*.png)|*.png|"
                              "GIF Image (*.gif)|*.gif|"
@@ -325,26 +331,32 @@ void __fastcall TImageViewer::SaveToFile()
     // Display the Save File Dialog
     if (SavePicDlg->Execute())
     {
-        m_CaptureOptions.LastDir = ExtractFilePath(SavePicDlg->FileName);
-        m_CaptureOptions.FilterIndex = SavePicDlg->FilterIndex;
-        m_CaptureOptions.Save();
+        g_ToolOptions.Set("capture", "lastdir", ExtractFilePath(SavePicDlg->FileName));
+        g_ToolOptions.Set("capture", "filterindex", SavePicDlg->FilterIndex);
 
         DoSaveToFile(SavePicDlg->FileName);
     }
 
     delete SavePicDlg;
-    m_pBufferBmp->Assign(NULL);
+//    m_pBufferBmp->Assign(NULL);
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TImageViewer::CopyToClipboard()
 {
-    TRACE("TScreenGrabber::CopyToClipboard()");
-
-    Clipboard()->Assign(m_pBufferBmp);
-    m_pBufferBmp->Assign(NULL);
+    Clipboard()->Assign(Image->Picture->Bitmap);
+//    m_pBufferBmp->Assign(NULL);
 }
-#endif
+
+//---------------------------------------------------------------------------
+bool __fastcall TImageViewer::DisplayIsPaletted()
+{
+    HDC dcDesktop = GetDC(NULL);
+    int result = GetDeviceCaps(dcDesktop, RASTERCAPS);
+    ReleaseDC(NULL, dcDesktop);
+    return (result & RC_PALETTE);
+}
+
 //---------------------------------------------------------------------------
 void __fastcall TImageViewer::PrintImage(Graphics::TBitmap* pBitmap)
 {
@@ -434,7 +446,7 @@ void __fastcall TImageViewer::StretchBltBitmap(TCanvas *pCanvas, int iX, int iY,
 }
 
 //---------------------------------------------------------------------------
-#if 1
+#if 0
 
 /********************************************************************************************
 *  NAME:

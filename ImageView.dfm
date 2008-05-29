@@ -1,6 +1,7 @@
 object ImageViewer: TImageViewer
   Left = 1024
   Top = 726
+  Hint = 'Right Click for options'
   BorderStyle = bsToolWindow
   Caption = 'TopTools Snapshot'
   ClientHeight = 215
@@ -13,6 +14,7 @@ object ImageViewer: TImageViewer
   Font.Style = []
   OldCreateOrder = False
   Position = poDefault
+  ShowHint = True
   OnKeyPress = FormKeyPress
   PixelsPerInch = 96
   TextHeight = 13

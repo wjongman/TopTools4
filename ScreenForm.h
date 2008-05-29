@@ -27,8 +27,8 @@ public:
 private:
   int m_MouseOldX;
   int m_MouseOldY;
-  bool m_bSticky;
-  
+//  bool m_bSticky;
+
 protected:
   // This class overrides these two TForm methods
   DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
@@ -49,11 +49,13 @@ __published:  // IDE-managed Components
 
 __published:
   __property TMouseEvent OnRightButtonClick = { read = FOnRightButtonClick, write = FOnRightButtonClick };
+  __property bool Sticky = { read = FSticky, write = FSticky };
 
 protected:
   TMouseEvent FOnRightButtonClick;
+  bool FSticky;
 
-  // Override to show up near mouse pointer
+  // Override TToolWindow to show up near mouse pointer
   virtual void __fastcall OnToolShow(TObject *Sender) { FormShow(Sender); }
 };
 

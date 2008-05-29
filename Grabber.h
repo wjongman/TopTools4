@@ -33,7 +33,8 @@ private:
 
   bool __fastcall DisplayIsPaletted();
 
-  void __fastcall DrawSelectRect(const TRect& rect);
+//  void __fastcall DrawSelectRect(const TRect& rect);
+  void __fastcall GetDesktopArea();
   void __fastcall GetDesktopArea(LPRECT lpRect);
 
   void __fastcall PopulateCaptureMenu();

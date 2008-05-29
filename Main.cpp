@@ -621,6 +621,7 @@ TToolForm* TMainForm::GetCaptureForm()
         m_pCapture->OnClose = HandleToolWindowClose;
         m_pCapture->OnKeyDown = HandleKeyDown;
     }
+    m_pCapture->Sticky = true;
     return m_pCapture;
 }
 
@@ -715,6 +716,7 @@ void __fastcall TMainForm::actCaptureExecute(TObject *Sender)
         //m_pCapture->OnCaptureLost = HandleCaptureComplete;
     }
 
+    m_pCapture->Sticky = true;
     m_pCapture->Show();
     //HandleCaptureNext(this);
 

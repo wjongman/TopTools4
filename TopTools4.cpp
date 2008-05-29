@@ -45,48 +45,6 @@ USEUNIT("HotkeyManager.cpp");
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
-/*
-  int i = 0;
-  int count = ParamCount();
-  String ParStr;
-  while ( i < ParamCount() )
-  {
-    ParStr = ParamStr(i);
-    ParStr = ParStr;
-    i++;
-  }
-*/
-//   // See how the user wants to run the app
-//   TRunMode RunMode;
-//   if (ParamCount() > 0 && ParamStr(1) == "-p")
-//   {
-//       RunMode = rmPortable;
-//   }
-//   else if (ParamCount() > 0 && ParamStr(1) == "-i")
-//   {
-//       // todo: allow optional ParamStr(2) to indicate target inifile
-//       if (ParamCount() > 1)
-//       {
-//           String IniFileName = ParamStr(2);
-//           if (FileExists(IniFileName))
-//           {
-//           }
-//       }
-//       RunMode = rmIniFile;
-//   }
-//   else
-//   {
-//       if (g_ToolOptions.RegKeyExists())
-//           RunMode = rmRegistry;
-//       else if (g_ToolOptions.IniFileExists())
-//           RunMode = rmIniFile;
-//       else
-//           // todo: offer dialog at this point?
-//           RunMode = rmPortable;
-//   }
-//
-//   g_ToolOptions.Load(RunMode);
-
   g_ToolOptions.Load();
   bool IsSingleton = g_ToolOptions.GetBool("main", "singleton");
 

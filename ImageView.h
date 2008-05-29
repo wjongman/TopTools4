@@ -29,6 +29,7 @@ __published:  // IDE-managed Components
 private:  // User declarations
   void __fastcall SetBitmap(Graphics::TBitmap* pBitmap);
 
+  bool __fastcall DisplayIsPaletted();
   void __fastcall SaveToFile();
   void __fastcall DoSaveToFile(const String& PathName);
   void __fastcall CopyToClipboard();

@@ -19,7 +19,7 @@ __fastcall TScreenForm::TScreenForm(TComponent* Owner)
   //SetColorKey(true, RGB(255,255, 255));
   DraggableForm = true;
   Cursor = crSizeAll;
-  m_bSticky = false;
+  FSticky = false;
 }
 
 //---------------------------------------------------------------------------
@@ -31,10 +31,11 @@ __fastcall TScreenForm::~TScreenForm()
 void __fastcall TScreenForm::MouseDown(TMouseButton Button,
                                        TShiftState Shift, int X, int Y)
 {
-  m_bSticky = false;
+  FSticky = false;
 
   if (Button == mbLeft)
   // Start a drag-operation
+  // todo: allow for moving and sizing with the arrow keys
   {
     m_MouseOldX = X;
     m_MouseOldY = Y;
@@ -49,7 +50,7 @@ void __fastcall TScreenForm::MouseDown(TMouseButton Button,
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::MouseMove(TShiftState Shift, int X, int Y)
 {
-  if (Shift.Contains(ssLeft) || m_bSticky)
+  if (Shift.Contains(ssLeft) || FSticky)
   // We are dragging, move the form
   {
     Left += X - m_MouseOldX;
@@ -218,22 +219,38 @@ void __fastcall TScreenForm::FormPaint(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::FormShow(TObject *Sender)
 {
-  // Show with form center below mouse
-  TPoint ptMouse;
-  GetCursorPos(&ptMouse);
+  if (FSticky)
+  {
+      // Show with form center below mouse
+      TPoint ptMouse;
+      GetCursorPos(&ptMouse);
 
-  TRect rcClient = GetClientRect();
-  int CenterX = rcClient.Width() / 2;
-  int CenterY = rcClient.Height() / 2;
+      TRect rcClient = GetClientRect();
+      int CenterX = rcClient.Width() / 2;
+      int CenterY = rcClient.Height() / 2;
 
-  Left = ptMouse.x - CenterX;
-  Top = ptMouse.y - CenterY;
+      Left = ptMouse.x - CenterX;
+      Top = ptMouse.y - CenterY;
 
-  POINT pt = ScreenToClient(ptMouse);
-  m_MouseOldX = pt.x;
-  m_MouseOldY = pt.y;
-
-  m_bSticky = true;
+      POINT pt = ScreenToClient(ptMouse);
+      m_MouseOldX = pt.x;
+      m_MouseOldY = pt.y;
+  }
 }
 //---------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

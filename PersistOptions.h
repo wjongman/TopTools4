@@ -381,6 +381,7 @@ private:
 
     TOptionMaps m_OptionMaps;
     String m_RegBaseKey;
+    String m_IniFileName0;
 
 public:
     //-------------------------------------------------------------------------
