@@ -2,13 +2,14 @@
 #include <vcl.h>
 #pragma hdrstop
 
-#include <vcl\Clipbrd.hpp>
-#include <Registry.hpp>
-#include <Filectrl.hpp>
-#include <jpeg.hpp>
-
+//#include <vcl\Clipbrd.hpp>
+//#include <Registry.hpp>
+//#include <Filectrl.hpp>
+//#include <jpeg.hpp>
+/*
 #include "gif\gifimage.hpp"
 #include "png\pngimage.hpp"
+*/
 #include "Grabber.h"
 #include "AutoSaveDlg.h"
 #include "PersistImage.h"
@@ -381,85 +382,6 @@ void __fastcall TScreenGrabber::AutosaveOptions()
 }
 
 //---------------------------------------------------------------------------
-// bool __fastcall TScreenGrabber::DisplayIsPaletted()
-// {
-//     HDC dcDesktop = GetDC(NULL);
-//     int result = GetDeviceCaps(dcDesktop, RASTERCAPS);
-//     ReleaseDC(NULL, dcDesktop);
-//     return (result & RC_PALETTE);
-// }
-
-/*
-static int g_viewercount = 0;
-//---------------------------------------------------------------------------
-void ViewerThread (void* threadparam)
-{
-  TRACE("ViewerThread");
-
-  Graphics::TBitmap* pBufferBmp;
-  pBufferBmp = reinterpret_cast<Graphics::TBitmap*>(threadparam);
-
-  TForm* pViewForm = NULL;
-  TPanel* pPanel = NULL;
-  TImage* pImage = NULL;
-
-  String sFormName; // = "ViewForm" + sCount;
-  sFormName.sprintf("%s%d", "ViewForm", g_viewercount);
-
-  try
-  {
-    pViewForm = new TForm(Application, 1);
-
-    pViewForm->Name = sFormName;
-    pViewForm->Caption = "Snapshot Viewer";
-    pViewForm->BorderStyle = bsSizeToolWin;
-    pViewForm->KeyPreview = true;
-    pViewForm->Position = poScreenCenter;
-    //pViewForm->OnKeyPress = PreviewKeyPress;
-
-    pPanel = new TPanel(pViewForm);
-    pPanel->Name = "Panel";
-    pPanel->Caption = "";
-    pPanel->Align = alClient;
-    pPanel->BevelOuter = bvNone;
-    pPanel->BorderStyle = bsSingle;
-    pPanel->BorderWidth = 5;
-    pPanel->Color = clWindow;
-    pPanel->Parent = pViewForm;
-
-    pImage = new TImage(pViewForm);
-    pImage->Name = "Image";
-    pImage->Align = alClient;
-    pImage->Stretch = true;
-    pImage->Picture->Assign(pBufferBmp);
-    pImage->Parent = pPanel;
-
-    if (pBufferBmp && pBufferBmp->Width > 0)
-    {
-      pViewForm->ClientWidth = pBufferBmp->Width + (pViewForm->ClientWidth - pPanel->ClientWidth) + 10;
-      pViewForm->ClientHeight = pBufferBmp->Height + (pViewForm->ClientHeight - pPanel->ClientHeight) + 10;
-    }
-    pViewForm->ShowModal();
-  }
-  __finally
-  {
-    delete pImage;
-    delete pPanel;
-    delete pViewForm;
-  }
-}
-
-// #include <process.h>
-// //---------------------------------------------------------------------------
-// void __fastcall TScreenGrabber::ViewImage()
-// {
-//   TRACE("TScreenGrabber::ViewImage()");
-//   _beginthread(ViewerThread, 0, (void*)m_pBufferBmp);
-// }
-//
-*/
-
-//---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::ViewImage(Graphics::TBitmap* pBufferBmp)
 {
     TRACE("TScreenGrabber::ViewImage()");
@@ -531,111 +453,6 @@ void __fastcall TScreenGrabber::AutoSaveToFile()
 }
 
 //---------------------------------------------------------------------------
-// void __fastcall TScreenGrabber::DoSaveToFile(const String& PathName)
-// {
-//     TPersistImage image(m_pBufferBmp);
-//     image.
-//     String sFileName = PathName;
-//     if (DisplayIsPaletted())
-//     {
-//         // On paletted displays we only support Windows .bmp bitmaps
-//         sFileName = ChangeFileExt(sFileName, ".bmp");
-//         m_pBufferBmp->SaveToFile(sFileName);
-//     }
-//     else
-//     {
-//         String extension = ExtractFileExt(sFileName).LowerCase();
-//         if (extension == "")
-//         {
-//             int FilterIndex = g_ToolOptions.GetInt("capture", "filterindex");
-//             // If no extension is present, we use
-//             // the most recently selected image type
-//             switch (FilterIndex)
-//             {
-//             case 1:
-//                 extension = ".bmp";
-//                 break;
-//             case 2:
-//                 extension = ".png";
-//                 break;
-//             case 3:
-//                 extension = ".gif";
-//                 break;
-//             case 4:
-//                 extension = ".jpg";
-//                 break;
-//
-//             default:
-//                 extension = ".png";
-//             }
-//             sFileName += extension;
-//         }
-//
-//         if (extension == ".bmp")
-//         {
-//             __try
-//             {
-//                 m_pBufferBmp->SaveToFile(sFileName);
-//             }
-//             catch (const Exception &E)
-//             {
-//                 ShowMessage(String(E.Message));
-//             }
-//         }
-//         else if (extension == ".jpg")
-//         {
-//             TJPEGImage* Image = new TJPEGImage();
-//             Image->Assign(m_pBufferBmp);
-//             __try
-//             {
-//                 Image->SaveToFile(sFileName);
-//             }
-//             catch (const Exception &E)
-//             {
-//                 ShowMessage(String(E.Message));
-//             }
-//             delete Image;
-//         }
-//         else if (extension == ".gif")
-//         {
-//             TGIFImage* Image = new TGIFImage();
-//             Image->ColorReduction = rmQuantizeWindows;
-//             Image->Assign(m_pBufferBmp);
-//             __try
-//             {
-//                 Image->SaveToFile(sFileName);
-//             }
-//             catch (const Exception &E)
-//             {
-//                 ShowMessage(String(E.Message));
-//             }
-//             delete Image;
-//         }
-//         else if (extension == ".png")
-//         {
-//             TPNGObject* Image = new TPNGObject();
-//             Image->Assign(m_pBufferBmp);
-//             __try
-//             {
-//                 Image->SaveToFile(sFileName);
-//             }
-//             catch (const Exception &E)
-//             {
-//                 ShowMessage(String(E.Message));
-//             }
-//             delete Image;
-//         }
-//         else
-//         {
-//             // We have an unsupported extension here, should we change
-//             // the extension to reflect the filter-index settings?
-//             // Or should we popup a messagebox to notify the user?
-//             // For now we just do nothing...
-//         }
-//     }
-// }
-
-//---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::GetDesktopArea()
 {
     TRACE("TScreenGrabber::GetDesktopArea()");
@@ -662,15 +479,10 @@ void __fastcall TScreenGrabber::GetDesktopArea(LPRECT lpRect)
     HDC dcDesktop = GetDC(NULL);
     m_pBufferBmp->Handle = CreateCompatibleBitmap(dcDesktop, width, height);
 
-    // If the screen is a paletted device, we have to
-    // copy the palette info into the bitmap
-//     int result = GetDeviceCaps(dcDesktop, RASTERCAPS);
-//     ReleaseDC(NULL, dcDesktop);
-//     return (result & RC_PALETTE);
-//    if (DisplayIsPaletted())
-
     if (GetDeviceCaps(dcDesktop, RASTERCAPS) & RC_PALETTE)
     {
+        // If the screen is a paletted device, we have to
+        // copy the palette info into the bitmap
         int palette_size = GetDeviceCaps(dcDesktop, SIZEPALETTE);
         if (palette_size == 256)
         {
