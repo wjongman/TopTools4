@@ -11,25 +11,17 @@
 #include "png\pngimage.hpp"
 #include "Grabber.h"
 #include "AutoSaveDlg.h"
+#include "PersistImage.h"
 
 //---------------------------------------------------------------------------
 __fastcall TScreenGrabber::TScreenGrabber(TComponent* Owner)
       : TScreenForm(Owner),
-        FOnCaptureNext(NULL), FOnCaptureComplete(NULL)
+        FOnCaptureNext(NULL),
+        FOnCaptureComplete(NULL),
+        m_CaptureMenu(NULL)
 {
-
-// todo: make sure grabber is always top-most window
-
-    TRACE("TScreenGrabber::TScreenGrabber");
-
     // Have a bitmap to store the grabbed stuff
     m_pBufferBmp = new Graphics::TBitmap;
-    m_CaptureMenu = NULL;
-
-//    m_CaptureOptions.Load();
-//    m_AutoSaveOptions.LoadFromRegistry();
-//    m_AutoSaveOptions.Load();
-
 //    m_GrabberMode = gmOpenViewer;
     m_GrabberMode = gmShowMenu;
 
@@ -39,12 +31,6 @@ __fastcall TScreenGrabber::TScreenGrabber(TComponent* Owner)
 //---------------------------------------------------------------------------
 __fastcall TScreenGrabber::~TScreenGrabber()
 {
-    TRACE("TScreenGrabber::~TScreenGrabber");
-
-//    m_CaptureOptions.Save();
-//    m_AutoSaveOptions.SaveToRegistry();
-//    m_AutoSaveOptions.Save();
-
     if (m_CaptureMenu)
         delete m_CaptureMenu;
 
@@ -145,11 +131,8 @@ void __fastcall TScreenGrabber::HandleRightButtonClick(TObject *Sender,
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::HandleCapture(int X, int Y)
 {
-    TRACE("TScreenGrabber::HandleCapture()");
-
     if (g_ToolOptions.GetBool("capture\\autosave", "bypassmenu"))
     {
-//        GetDesktopArea();
         AutoSaveToFile();
         if (g_ToolOptions.GetBool("capture\\autosave", "continuous"))
         {
@@ -176,8 +159,6 @@ void __fastcall TScreenGrabber::HandleCapture(int X, int Y)
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::ShowCaptureMenu(int X, int Y)
 {
-    TRACE("TScreenGrabber::ShowCaptureMenu()");
-
     PopulateCaptureMenu();
 
     m_CaptureMenu->Popup(X, Y);
@@ -186,8 +167,6 @@ void __fastcall TScreenGrabber::ShowCaptureMenu(int X, int Y)
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::CaptureMenuClick(TObject *Sender)
 {
-    TRACE("TScreenGrabber::CaptureMenuClick()");
-
     TMenuItem* menuItem = dynamic_cast<TMenuItem*>(Sender);
 
     if (menuItem)
@@ -239,8 +218,6 @@ void __fastcall TScreenGrabber::CaptureMenuClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::CaptureNext()
 {
-    TRACE("TScreenGrabber::CaptureNext()");
-
     if (FOnCaptureNext)
         FOnCaptureNext(this);
 }
@@ -248,43 +225,11 @@ void __fastcall TScreenGrabber::CaptureNext()
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::EndCapture()
 {
-    TRACE("TScreenGrabber::EndCapture()");
-
     Close();
     // We are done
     //if (FOnCaptureComplete)
     //    FOnCaptureComplete(this);
 }
-
-/*/---------------------------------------------------------------------------
-void __fastcall TScreenGrabber::DrawSelectRect(const TRect& rect)
-{
-    HDC dcDesktop = GetDC(NULL);
-    if (!m_bFirstRect)
-    {
-        LOGBRUSH lb;
-        lb.lbStyle = BS_SOLID;
-        lb.lbColor = RGB(0, 0, 0);
-        lb.lbHatch = 0;
-
-        HPEN hPen = ExtCreatePen(PS_COSMETIC | PS_DOT, 1, &lb, 0, NULL);
-        HPEN hPenOld = SelectObject(dcDesktop, hPen);
-        int ropOld = SetROP2(dcDesktop, R2_NOT);
-
-        MoveToEx(dcDesktop, rect.left,  rect.top, NULL);
-        LineTo(dcDesktop, rect.right, rect.top);
-        LineTo(dcDesktop, rect.right, rect.bottom);
-        LineTo(dcDesktop, rect.left,  rect.bottom);
-        LineTo(dcDesktop, rect.left,  rect.top);
-
-        SetROP2(dcDesktop, ropOld);
-        SelectObject(dcDesktop, hPenOld);
-        DeleteObject(hPen);
-    }
-
-    m_bFirstRect = false;
-    ReleaseDC(NULL, dcDesktop);
-} */
 
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::PopulateCaptureMenu()
@@ -396,6 +341,32 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TScreenGrabber::SaveToFile()
+{
+    TPersistImage image(m_pBufferBmp);
+
+    String InitialDir = g_ToolOptions.GetString("capture", "lastdir");
+    int filterindex = g_ToolOptions.GetInt("capture", "filterindex");
+
+    image.SaveFileDialog(filterindex, InitialDir);
+
+    g_ToolOptions.Set("capture", "lastdir", InitialDir);
+    g_ToolOptions.Set("capture", "filterindex", filterindex);
+
+    m_pBufferBmp->Assign(NULL);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TScreenGrabber::CopyToClipboard()
+{
+    TPersistImage image(m_pBufferBmp);
+
+    image.Copy();
+
+    m_pBufferBmp->Assign(NULL);
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::AutosaveOptions()
 {
     TAutoSaveDialog *AutoSaveDialog = new TAutoSaveDialog(this);
@@ -410,13 +381,13 @@ void __fastcall TScreenGrabber::AutosaveOptions()
 }
 
 //---------------------------------------------------------------------------
-bool __fastcall TScreenGrabber::DisplayIsPaletted()
-{
-    HDC dcDesktop = GetDC(NULL);
-    int result = GetDeviceCaps(dcDesktop, RASTERCAPS);
-    ReleaseDC(NULL, dcDesktop);
-    return (result & RC_PALETTE);
-}
+// bool __fastcall TScreenGrabber::DisplayIsPaletted()
+// {
+//     HDC dcDesktop = GetDC(NULL);
+//     int result = GetDeviceCaps(dcDesktop, RASTERCAPS);
+//     ReleaseDC(NULL, dcDesktop);
+//     return (result & RC_PALETTE);
+// }
 
 /*
 static int g_viewercount = 0;
@@ -551,172 +522,125 @@ void __fastcall TScreenGrabber::AutoSaveToFile()
         m_AutoSaveOptions.IncrementNextValue();
     }
 
-    DoSaveToFile(m_AutoSaveOptions.GetFullPathName());
+    TPersistImage image(m_pBufferBmp);
+
+    image.Save(m_AutoSaveOptions.GetFullPathName());
     m_AutoSaveOptions.IncrementNextValue();
 //    m_AutoSaveOptions.SaveToRegistry();
     m_AutoSaveOptions.Save();
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TScreenGrabber::DoSaveToFile(const String& PathName)
-{
-    TRACE("TScreenGrabber::DoSaveToFile()");
-
-//    GetDesktopArea();
-
-    String sFileName = PathName;
-    if (DisplayIsPaletted())
-    {
-        // On paletted displays we only support Windows .bmp bitmaps
-        sFileName = ChangeFileExt(sFileName, ".bmp");
-        m_pBufferBmp->SaveToFile(sFileName);
-    }
-    else
-    {
-        String extension = ExtractFileExt(sFileName).LowerCase();
-        if (extension == "")
-        {
-            int FilterIndex = g_ToolOptions.GetInt("capture", "filterindex");
-            // If no extension is present, we use
-            // the most recently selected image type
-            switch (FilterIndex)
-            {
-            case 1:
-                extension = ".bmp";
-                break;
-            case 2:
-                extension = ".png";
-                break;
-            case 3:
-                extension = ".gif";
-                break;
-            case 4:
-                extension = ".jpg";
-                break;
-
-            default:
-                extension = ".png";
-            }
-            sFileName += extension;
-        }
-
-        if (extension == ".bmp")
-        {
-            __try
-            {
-                m_pBufferBmp->SaveToFile(sFileName);
-            }
-            catch (const Exception &E)
-            {
-                ShowMessage(String(E.Message));
-            }
-        }
-        else if (extension == ".jpg")
-        {
-            TJPEGImage* Image = new TJPEGImage();
-            Image->Assign(m_pBufferBmp);
-            __try
-            {
-                Image->SaveToFile(sFileName);
-            }
-            catch (const Exception &E)
-            {
-                ShowMessage(String(E.Message));
-            }
-            delete Image;
-        }
-        else if (extension == ".gif")
-        {
-            TGIFImage* Image = new TGIFImage();
-            Image->ColorReduction = rmQuantizeWindows;
-            Image->Assign(m_pBufferBmp);
-            __try
-            {
-                Image->SaveToFile(sFileName);
-            }
-            catch (const Exception &E)
-            {
-                ShowMessage(String(E.Message));
-            }
-            delete Image;
-        }
-        else if (extension == ".png")
-        {
-            TPNGObject* Image = new TPNGObject();
-            Image->Assign(m_pBufferBmp);
-            __try
-            {
-                Image->SaveToFile(sFileName);
-            }
-            catch (const Exception &E)
-            {
-                ShowMessage(String(E.Message));
-            }
-            delete Image;
-        }
-        else
-        {
-            // We have an unsupported extension here, should we change
-            // the extension to reflect the filter-index settings?
-            // Or should we popup a messagebox to notify the user?
-            // For now we just do nothing...
-        }
-    }
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TScreenGrabber::SaveToFile()
-{
-    TRACE("TScreenGrabber::SaveToFile()");
-
-    TSavePictureDialog *SavePicDlg = new TSavePictureDialog(this);
-    SavePicDlg->Options << ofOverwritePrompt << ofEnableSizing;
-    SavePicDlg->InitialDir = g_ToolOptions.GetString("capture", "lastdir");
-
-    bool haspalette = DisplayIsPaletted();
-    if (haspalette)
-    {
-        SavePicDlg->FilterIndex = 1;
-        SavePicDlg->Filter = "Windows Bitmap (*.bmp)|*.bmp";
-    }
-    else
-    {
-        SavePicDlg->FilterIndex = g_ToolOptions.GetInt("capture", "filterindex");
-        SavePicDlg->Filter = "Windows Bitmap (*.bmp)|*.bmp|"
-                             "PNG Image (*.png)|*.png|"
-                             "GIF Image (*.gif)|*.gif|"
-                             "JPEG Image (*.jpg)|*.jpg";
-    }
-    // Display the Save File Dialog
-    if (SavePicDlg->Execute())
-    {
-        g_ToolOptions.Set("capture", "lastdir", ExtractFilePath(SavePicDlg->FileName));
-        g_ToolOptions.Set("capture", "filterindex", SavePicDlg->FilterIndex);
-
-        DoSaveToFile(SavePicDlg->FileName);
-    }
-
-    delete SavePicDlg;
-    m_pBufferBmp->Assign(NULL);
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TScreenGrabber::CopyToClipboard()
-{
-    TRACE("TScreenGrabber::CopyToClipboard()");
-
-//    GetDesktopArea();
-
-    Clipboard()->Assign(m_pBufferBmp);
-    m_pBufferBmp->Assign(NULL);
-}
+// void __fastcall TScreenGrabber::DoSaveToFile(const String& PathName)
+// {
+//     TPersistImage image(m_pBufferBmp);
+//     image.
+//     String sFileName = PathName;
+//     if (DisplayIsPaletted())
+//     {
+//         // On paletted displays we only support Windows .bmp bitmaps
+//         sFileName = ChangeFileExt(sFileName, ".bmp");
+//         m_pBufferBmp->SaveToFile(sFileName);
+//     }
+//     else
+//     {
+//         String extension = ExtractFileExt(sFileName).LowerCase();
+//         if (extension == "")
+//         {
+//             int FilterIndex = g_ToolOptions.GetInt("capture", "filterindex");
+//             // If no extension is present, we use
+//             // the most recently selected image type
+//             switch (FilterIndex)
+//             {
+//             case 1:
+//                 extension = ".bmp";
+//                 break;
+//             case 2:
+//                 extension = ".png";
+//                 break;
+//             case 3:
+//                 extension = ".gif";
+//                 break;
+//             case 4:
+//                 extension = ".jpg";
+//                 break;
+//
+//             default:
+//                 extension = ".png";
+//             }
+//             sFileName += extension;
+//         }
+//
+//         if (extension == ".bmp")
+//         {
+//             __try
+//             {
+//                 m_pBufferBmp->SaveToFile(sFileName);
+//             }
+//             catch (const Exception &E)
+//             {
+//                 ShowMessage(String(E.Message));
+//             }
+//         }
+//         else if (extension == ".jpg")
+//         {
+//             TJPEGImage* Image = new TJPEGImage();
+//             Image->Assign(m_pBufferBmp);
+//             __try
+//             {
+//                 Image->SaveToFile(sFileName);
+//             }
+//             catch (const Exception &E)
+//             {
+//                 ShowMessage(String(E.Message));
+//             }
+//             delete Image;
+//         }
+//         else if (extension == ".gif")
+//         {
+//             TGIFImage* Image = new TGIFImage();
+//             Image->ColorReduction = rmQuantizeWindows;
+//             Image->Assign(m_pBufferBmp);
+//             __try
+//             {
+//                 Image->SaveToFile(sFileName);
+//             }
+//             catch (const Exception &E)
+//             {
+//                 ShowMessage(String(E.Message));
+//             }
+//             delete Image;
+//         }
+//         else if (extension == ".png")
+//         {
+//             TPNGObject* Image = new TPNGObject();
+//             Image->Assign(m_pBufferBmp);
+//             __try
+//             {
+//                 Image->SaveToFile(sFileName);
+//             }
+//             catch (const Exception &E)
+//             {
+//                 ShowMessage(String(E.Message));
+//             }
+//             delete Image;
+//         }
+//         else
+//         {
+//             // We have an unsupported extension here, should we change
+//             // the extension to reflect the filter-index settings?
+//             // Or should we popup a messagebox to notify the user?
+//             // For now we just do nothing...
+//         }
+//     }
+// }
 
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::GetDesktopArea()
 {
     TRACE("TScreenGrabber::GetDesktopArea()");
     GetWindowRect(Handle, &m_rcSelect);
-    Hide();  // we are tranparent but under Aero we are visible
+    Hide();  // we are transparent but under Aero we are visible
     GetDesktopArea(&m_rcSelect);
     Show();
 }
@@ -740,7 +664,12 @@ void __fastcall TScreenGrabber::GetDesktopArea(LPRECT lpRect)
 
     // If the screen is a paletted device, we have to
     // copy the palette info into the bitmap
-    if (DisplayIsPaletted())
+//     int result = GetDeviceCaps(dcDesktop, RASTERCAPS);
+//     ReleaseDC(NULL, dcDesktop);
+//     return (result & RC_PALETTE);
+//    if (DisplayIsPaletted())
+
+    if (GetDeviceCaps(dcDesktop, RASTERCAPS) & RC_PALETTE)
     {
         int palette_size = GetDeviceCaps(dcDesktop, SIZEPALETTE);
         if (palette_size == 256)

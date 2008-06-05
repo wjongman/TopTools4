@@ -1,258 +1,91 @@
 //---------------------------------------------------------------------------
-
 #include <vcl.h>
 #pragma hdrstop
 
-#include <printers.hpp>
-#include "ImageView.h"
-#include "PersistOptions.h"
+#include <vcl\Clipbrd.hpp>
+#include <ExtDlgs.hpp>
+#include <Filectrl.hpp>
+#include <jpeg.hpp>
+#include <vector>
+
+#include "gif\gifimage.hpp"
+#include "png\pngimage.hpp"
 #include "PersistImage.h"
 
-// #include <Clipbrd.hpp>
-//
-// #include <jpeg.hpp>
-// #include "gif\gifimage.hpp"
-// #include "png\pngimage.hpp"
-// #include "ExtDlgs.hpp"
-//#include "AutoSaveDlg.h"
 //---------------------------------------------------------------------------
-#pragma package(smart_init)
-#pragma resource "*.dfm"
-TImageViewer *ImageViewer;
-//---------------------------------------------------------------------------
-__fastcall TImageViewer::TImageViewer(TComponent* Owner, int id, const TRect& rcGrab)
-        : TForm(Owner), FId(id), m_rcGrab(rcGrab)
+__fastcall TPersistImage::TPersistImage(Graphics::TBitmap* pBitmap)
+  : m_pBitmap(pBitmap)
 {
-    m_ViewerMenu = NULL;
-    OnShow = FormShow;
-    //OnClose = FormClose;
-    KeyPreview = true;
-//    Image->OnMouseDown = FormMouseDown;
 }
 
 //---------------------------------------------------------------------------
-__fastcall TImageViewer::~TImageViewer()
+__fastcall TPersistImage::~TPersistImage()
 {
-    if (m_ViewerMenu)
+}
+
+//---------------------------------------------------------------------------
+bool __fastcall TPersistImage::DisplayIsPaletted()
+{
+    HDC dcDesktop = GetDC(NULL);
+    int result = GetDeviceCaps(dcDesktop, RASTERCAPS);
+    ReleaseDC(NULL, dcDesktop);
+    return (result & RC_PALETTE);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPersistImage::SaveFileDialog(int &filterindex, String& InitialDir)
+{
+    TSavePictureDialog *SavePicDlg = new TSavePictureDialog(Application);
+    SavePicDlg->Options << ofOverwritePrompt << ofEnableSizing;
+    //SavePicDlg->InitialDir = g_ToolOptions.GetString("capture", "lastdir");
+    SavePicDlg->InitialDir = InitialDir;
+
+    bool haspalette = DisplayIsPaletted();
+    if (haspalette)
     {
-        delete m_ViewerMenu;
+        SavePicDlg->FilterIndex = 1;
+        SavePicDlg->Filter = "Windows Bitmap (*.bmp)|*.bmp";
     }
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TImageViewer::SetBitmap(Graphics::TBitmap* pBitmap)
-{
-    if (pBitmap && pBitmap->Width > 0)
+    else
     {
-        Image->Picture->Assign(pBitmap);
+        //SavePicDlg->FilterIndex = g_ToolOptions.GetInt("capture", "filterindex");
+        SavePicDlg->FilterIndex = filterindex; //g_ToolOptions.GetInt("capture", "filterindex");
+        SavePicDlg->Filter = "Windows Bitmap (*.bmp)|*.bmp|"
+                             "PNG Image (*.png)|*.png|"
+                             "GIF Image (*.gif)|*.gif|"
+                             "JPEG Image (*.jpg)|*.jpg";
     }
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TImageViewer::ShowViewerMenu(int X, int Y)
-{
-    if (!m_ViewerMenu)
+    // Display the Save File Dialog
+    if (SavePicDlg->Execute())
     {
-        m_ViewerMenu = new TPopupMenu(this);
+        //g_ToolOptions.Set("capture", "lastdir", ExtractFilePath(SavePicDlg->FileName));
+        //g_ToolOptions.Set("capture", "filterindex", SavePicDlg->FilterIndex);
+        InitialDir = ExtractFilePath(SavePicDlg->FileName);
+        filterindex = SavePicDlg->FilterIndex;
+
+        DoSaveToFile(SavePicDlg->FileName);
     }
 
-    PopulateViewerMenu();
-
-    POINT ptAbs = ClientToScreen(Point(X, Y));
-    m_ViewerMenu->Popup(ptAbs.x, ptAbs.y);
+    delete SavePicDlg;
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TImageViewer::ViewerMenuClick(TObject *Sender)
+void __fastcall TPersistImage::DoSaveToFile(const String& PathName)
 {
-    TMenuItem* menuItem = dynamic_cast<TMenuItem*>(Sender);
-
-    if (menuItem)
-    {
-        TPersistImage image(Image->Picture->Bitmap);
-
-        if (menuItem->Hint == "Save")
-        {
-            SaveToFile();
-
-        }
-        else if (menuItem->Hint == "Copy")
-        {
-            image.Copy();
-        }
-        else if (menuItem->Hint == "Print")
-        {
-            image.Print();
-        }
-        else if (menuItem->Hint == "Close")
-        {
-            Close();
-        }
-    }
-}
-
-//-------------------------------------------------------------
-void __fastcall TImageViewer::FormKeyPress(TObject *Sender, char &Key)
-{
-    if (Key == VK_ESCAPE)
-    {
-        // todo: find out why this crashes the app
-        //Close();
-    }
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TImageViewer::PopulateViewerMenu()
-{
-    // Start with an empty menu
-    m_ViewerMenu->Items->Clear();
-
-    // Populate the menu
-    TMenuItem *NewItem;
-
-    NewItem = new TMenuItem(m_ViewerMenu);
-    NewItem->OnClick = ViewerMenuClick;
-    NewItem->Caption = "Copy To Clipboard";
-    NewItem->Hint = "Copy";
-    m_ViewerMenu->Items->Add(NewItem);
-
-    NewItem = new TMenuItem(m_ViewerMenu);
-    NewItem->OnClick = ViewerMenuClick;
-    NewItem->Caption = "Save To File...";
-    NewItem->Hint = "Save";
-    m_ViewerMenu->Items->Add(NewItem);
-
-    NewItem = new TMenuItem(m_ViewerMenu);
-    NewItem->OnClick = ViewerMenuClick;
-    NewItem->Caption = "Print...";
-    NewItem->Hint = "Print";
-    m_ViewerMenu->Items->Add(NewItem);
-
-    // Separator ------------------------
-    NewItem = new TMenuItem(m_ViewerMenu);
-    NewItem->Caption = "-";
-    m_ViewerMenu->Items->Add(NewItem);
-
-    NewItem = new TMenuItem(m_ViewerMenu);
-    NewItem->OnClick = ViewerMenuClick;
-    NewItem->Caption = "Close Snapshot";
-    NewItem->Hint = "Close";
-    m_ViewerMenu->Items->Add(NewItem);
-    /*#ifdef _DEBUG
-      // Separator ------------------------
-      NewItem = new TMenuItem(m_ViewerMenu);
-      NewItem->Caption = "-";
-      m_ViewerMenu->Items->Add(NewItem);
-
-      NewItem = new TMenuItem(m_ViewerMenu);
-      NewItem->OnClick = ViewerMenuClick;
-      NewItem->Caption = "Auto Save Options...";
-      NewItem->Hint = "AutoSaveOptions";
-      NewItem->Enabled = m_CaptureOptions.AutoSave;
-      m_ViewerMenu->Items->Add(NewItem);
-    #endif*/
-}
-
-
-/*
-void __fastcall TImageViewer::FormClose(TObject *Sender,
-      TCloseAction &Action)
-{
-  if (FOnClose)
-    FOnClose(this);
-}
-*/
-//---------------------------------------------------------------------------
-void __fastcall TImageViewer::ImageMouseDown(TObject *Sender,
-      TMouseButton Button, TShiftState Shift, int X, int Y)
-{
-  if (Button == mbLeft)
-  // Start a drag-operation
-  {
-    m_MouseOldX = X;
-    m_MouseOldY = Y;
-  }
-  else if (Button == mbRight)// && FOnRightButtonClick)
-  // Signal right-button event
-  {
-    ShowViewerMenu(X, Y);
-//    FOnRightButtonClick(this, Button, Shift, X, Y);
-  }
-}
-
-//---------------------------------------------------------------------------
-
-void __fastcall TImageViewer::ImageMouseMove(TObject *Sender,
-      TShiftState Shift, int X, int Y)
-{
-  if (Shift.Contains(ssLeft))
-  // We are dragging, move the form
-  {
-    Left += X - m_MouseOldX;
-    Top  += Y - m_MouseOldY;
-  }
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TImageViewer::FormShow(TObject *Sender)
-{
-    Graphics::TBitmap* pBitmap = Image->Picture->Bitmap;
-    if (pBitmap && pBitmap->Width > 0)
-    {
-        // Calculate position needed to show exactly above the
-        // selected area, as if just a border was drawn.
-
-        ClientWidth = pBitmap->Width;
-        ClientHeight = pBitmap->Height;
-
-        Left += m_rcGrab.left - ClientOrigin.x;
-        Top += m_rcGrab.top - ClientOrigin.y;
-    }
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TImageViewer::SaveToFile()
-{
-    TPersistImage image(Image->Picture->Bitmap);
-
-    String InitialDir = g_ToolOptions.GetString("capture", "lastdir");
-    int filterindex = g_ToolOptions.GetInt("capture", "filterindex");
-
-    image.SaveFileDialog(filterindex, InitialDir);
-
-    g_ToolOptions.Set("capture", "lastdir", InitialDir);
-    g_ToolOptions.Set("capture", "filterindex", filterindex);
-}
-
-/*/---------------------------------------------------------------------------
-void __fastcall TImageViewer::CopyToClipboard()
-{
-    TPersistImage image(Image->Picture->Bitmap);
-
-    image.Copy();
-
-    m_pBufferBmp->Assign(NULL);
-} */
-
-/*/---------------------------------------------------------------------------
-void __fastcall TImageViewer::DoSaveToFile(const String& PathName)
-{
-    Graphics::TBitmap* pBitmap = Image->Picture->Bitmap;
     String sFileName = PathName;
     if (DisplayIsPaletted())
     {
         // On paletted displays we only support Windows .bmp bitmaps
         sFileName = ChangeFileExt(sFileName, ".bmp");
-        pBitmap->SaveToFile(sFileName);
+        m_pBitmap->SaveToFile(sFileName);
     }
     else
     {
         String extension = ExtractFileExt(sFileName).LowerCase();
         if (extension == "")
         {
-            // If no extension is present, we use
-            // the most recently selected image type
-            int FilterIndex = g_ToolOptions.GetInt("capture", "filterindex");
+            // Default extension is .png (as of now, May 29 2008)
+            int FilterIndex = 2;
             switch (FilterIndex)
             {
             case 1:
@@ -269,7 +102,7 @@ void __fastcall TImageViewer::DoSaveToFile(const String& PathName)
                 break;
 
             default:
-                extension = ".bmp";
+                extension = ".png";
             }
             sFileName += extension;
         }
@@ -278,7 +111,7 @@ void __fastcall TImageViewer::DoSaveToFile(const String& PathName)
         {
             __try
             {
-                pBitmap->SaveToFile(sFileName);
+                m_pBitmap->SaveToFile(sFileName);
             }
             catch (const Exception &E)
             {
@@ -288,7 +121,7 @@ void __fastcall TImageViewer::DoSaveToFile(const String& PathName)
         else if (extension == ".jpg")
         {
             TJPEGImage* Image = new TJPEGImage();
-            Image->Assign(pBitmap);
+            Image->Assign(m_pBitmap);
             __try
             {
                 Image->SaveToFile(sFileName);
@@ -303,7 +136,7 @@ void __fastcall TImageViewer::DoSaveToFile(const String& PathName)
         {
             TGIFImage* Image = new TGIFImage();
             Image->ColorReduction = rmQuantizeWindows;
-            Image->Assign(pBitmap);
+            Image->Assign(m_pBitmap);
             __try
             {
                 Image->SaveToFile(sFileName);
@@ -317,7 +150,7 @@ void __fastcall TImageViewer::DoSaveToFile(const String& PathName)
         else if (extension == ".png")
         {
             TPNGObject* Image = new TPNGObject();
-            Image->Assign(pBitmap);
+            Image->Assign(m_pBitmap);
             __try
             {
                 Image->SaveToFile(sFileName);
@@ -339,79 +172,30 @@ void __fastcall TImageViewer::DoSaveToFile(const String& PathName)
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TImageViewer::SaveToFile()
+void __fastcall TPersistImage::DoCopyToClipboard()
 {
-    TSavePictureDialog *SavePicDlg = new TSavePictureDialog(this);
-    SavePicDlg->Options << ofOverwritePrompt << ofEnableSizing;
-    SavePicDlg->InitialDir = g_ToolOptions.GetString("capture", "lastdir");
-
-    bool haspalette = DisplayIsPaletted();
-    if (haspalette)
-    {
-        SavePicDlg->FilterIndex = 1;
-        SavePicDlg->Filter = "Windows Bitmap (*.bmp)|*.bmp";
-    }
-    else
-    {
-        SavePicDlg->FilterIndex = g_ToolOptions.GetInt("capture", "filterindex");
-        SavePicDlg->Filter = "Windows Bitmap (*.bmp)|*.bmp|"
-                             "PNG Image (*.png)|*.png|"
-                             "GIF Image (*.gif)|*.gif|"
-                             "JPEG Image (*.jpg)|*.jpg";
-    }
-    // Display the Save File Dialog
-    if (SavePicDlg->Execute())
-    {
-        g_ToolOptions.Set("capture", "lastdir", ExtractFilePath(SavePicDlg->FileName));
-        g_ToolOptions.Set("capture", "filterindex", SavePicDlg->FilterIndex);
-
-        DoSaveToFile(SavePicDlg->FileName);
-    }
-
-    delete SavePicDlg;
-//    m_pBufferBmp->Assign(NULL);
+    Clipboard()->Assign(m_pBitmap);
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TImageViewer::CopyToClipboard()
+void __fastcall TPersistImage::DoPrintImage()
 {
-    Clipboard()->Assign(Image->Picture->Bitmap);
-//    m_pBufferBmp->Assign(NULL);
+    Printer()->BeginDoc();
+
+    double fPrinterVert = (double) GetDeviceCaps(Printer()->Canvas->Handle, LOGPIXELSY);
+    double fPrinterHorz = (double) GetDeviceCaps(Printer()->Canvas->Handle, LOGPIXELSX);
+
+    int iHeight = (int) ((double)m_pBitmap->Height * (fPrinterVert / Screen->PixelsPerInch));
+    int iWidth  = (int) ((double)m_pBitmap->Width  * (fPrinterHorz / Screen->PixelsPerInch));
+
+    //DoPrintImage(Printer()->Canvas, 0, 0int pX,int pY, Graphics::TBitmap *pBitmap)
+    StretchToPrintCanvas(Printer()->Canvas, 0, 0, iWidth, iHeight, m_pBitmap);
+
+    Printer()->EndDoc();
 }
 
 //---------------------------------------------------------------------------
-bool __fastcall TImageViewer::DisplayIsPaletted()
-{
-    HDC dcDesktop = GetDC(NULL);
-    int result = GetDeviceCaps(dcDesktop, RASTERCAPS);
-    ReleaseDC(NULL, dcDesktop);
-    return (result & RC_PALETTE);
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TImageViewer::PrintImage(Graphics::TBitmap* pBitmap)
-{
-    if ( PrintDialog1->Execute() )
-    {
-        Printer()->BeginDoc();
-
-        double fPrinterVert = (double) GetDeviceCaps(Printer()->Canvas->Handle, LOGPIXELSY);
-        double fPrinterHorz = (double) GetDeviceCaps(Printer()->Canvas->Handle, LOGPIXELSX);
-        double fScreenVert  = (double) GetDeviceCaps(Canvas->Handle, LOGPIXELSY);
-        double fScreenHorz  = (double) GetDeviceCaps(Canvas->Handle, LOGPIXELSX);
-
-        int iHeight = (int) ((double)pBitmap->Height * (fPrinterVert / fScreenVert));
-        int iWidth  = (int) ((double)pBitmap->Width  * (fPrinterHorz / fScreenHorz));
-
-        //DoPrintImage(Printer()->Canvas, 0, 0int pX,int pY, Graphics::TBitmap *pBitmap)
-        StretchToPrintCanvas(Printer()->Canvas, 0, 0, iWidth, iHeight, pBitmap);
-
-        Printer()->EndDoc();
-    }
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TImageViewer::StretchToPrintCanvas(TCanvas *pPrintCanvas, int iX, int iY,
+void __fastcall TPersistImage::StretchToPrintCanvas(TCanvas *pPrintCanvas, int iX, int iY,
         int iWidth, int iHeight,
         Graphics::TBitmap *pBitmap)
 {
@@ -438,10 +222,9 @@ void __fastcall TImageViewer::StretchToPrintCanvas(TCanvas *pPrintCanvas, int iX
         ShowMessage("Printing failed!\nError copying the DIB.");
     }
 }
-        */
 
-/*/---------------------------------------------------------------------------
-void __fastcall TImageViewer::StretchBltBitmap(TCanvas *pCanvas, int iX, int iY,
+//---------------------------------------------------------------------------
+void __fastcall TPersistImage::StretchBltBitmap(TCanvas *pCanvas, int iX, int iY,
         int iWidth, int iHeight,
         Graphics::TBitmap *pBitmap)
 {
@@ -475,7 +258,7 @@ void __fastcall TImageViewer::StretchBltBitmap(TCanvas *pCanvas, int iX, int iY,
                    TMsgDlgButtons() << mbOK, 0);
     }
     delete[] Buffer;
-}*/
+}
 
 //---------------------------------------------------------------------------
 #if 0
@@ -496,8 +279,8 @@ void __fastcall TImageViewer::StretchBltBitmap(TCanvas *pCanvas, int iX, int iY,
 *  RETURNS:
 *               void
 **********************************************************************************************/
-//void __fastcall TImageViewer::PrintImage(Graphics::TBitmap* pBitmap)
-void __fastcall TImageViewer::DoPrintImage(TCanvas *PrinterCanvas,int pX,int pY,
+//void __fastcall TPersistImage::PrintImage(Graphics::TBitmap* pBitmap)
+void __fastcall TPersistImage::DoPrintImage(TCanvas *PrinterCanvas,int pX,int pY,
                                            Graphics::TBitmap *pBitmap)
 {
 
@@ -624,5 +407,6 @@ void __fastcall TImageViewer::DoPrintImage(TCanvas *PrinterCanvas,int pX,int pY,
     ::GlobalUnlock (bmp_info);
     ::GlobalFree (h_bmp_info);
 }
-
 #endif
+//---------------------------------------------------------------------------
+

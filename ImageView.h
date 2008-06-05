@@ -19,35 +19,35 @@ __published:  // IDE-managed Components
   TImage *Image;
     TPrintDialog *PrintDialog1;
   void __fastcall FormShow(TObject *Sender);
-    void __fastcall FormKeyPress(TObject *Sender, char &Key);
-    void __fastcall ImageMouseDown(TObject *Sender, TMouseButton Button,
+  void __fastcall FormKeyPress(TObject *Sender, char &Key);
+  void __fastcall ImageMouseDown(TObject *Sender, TMouseButton Button,
           TShiftState Shift, int X, int Y);
-    void __fastcall ImageMouseMove(TObject *Sender, TShiftState Shift,
+  void __fastcall ImageMouseMove(TObject *Sender, TShiftState Shift,
           int X, int Y);
 //  void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 
 private:  // User declarations
   void __fastcall SetBitmap(Graphics::TBitmap* pBitmap);
 
-  bool __fastcall DisplayIsPaletted();
-  void __fastcall SaveToFile();
-  void __fastcall DoSaveToFile(const String& PathName);
-  void __fastcall CopyToClipboard();
   void __fastcall PopulateViewerMenu();
   void __fastcall ShowViewerMenu(int X, int Y);
   void __fastcall ViewerMenuClick(TObject *Sender);
-  void __fastcall PrintImage(Graphics::TBitmap* pBitmap);
-  void __fastcall DoPrintImage(TCanvas *PrinterCanvas,int pX,int pY,
-                               Graphics::TBitmap *pBitmap);
-  void __fastcall StretchBltBitmap(TCanvas *pCanvas, int iX, int iY,
-                                   int iWidth, int iHeight,
-                                   Graphics::TBitmap *pBitmap);
-  void __fastcall StretchToPrintCanvas(TCanvas *pCanvas, int iX, int iY,
-                                       int iWidth, int iHeight,
-                                       Graphics::TBitmap *pBitmap);
+//   void __fastcall CopyToClipboard();
+//   bool __fastcall DisplayIsPaletted();
+  void __fastcall SaveToFile();
+//   void __fastcall DoSaveToFile(const String& PathName);
+//   void __fastcall PrintImage(Graphics::TBitmap* pBitmap);
+//   void __fastcall DoPrintImage(TCanvas *PrinterCanvas,int pX,int pY,
+//                                Graphics::TBitmap *pBitmap);
+//   void __fastcall StretchBltBitmap(TCanvas *pCanvas, int iX, int iY,
+//                                    int iWidth, int iHeight,
+//                                    Graphics::TBitmap *pBitmap);
+//   void __fastcall StretchToPrintCanvas(TCanvas *pCanvas, int iX, int iY,
+//                                        int iWidth, int iHeight,
+//                                        Graphics::TBitmap *pBitmap);
+  RECT m_rcGrab;
 
   int FId;
-  RECT m_rcGrab;
   int m_MouseOldX;
   int m_MouseOldY;
 

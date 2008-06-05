@@ -42,6 +42,7 @@ USEUNIT("AutoSaveOptions.cpp");
 USEFORM("ImageView.cpp", ImageViewer);
 USEFORM("ScreenForm.cpp", ScreenForm);
 USEUNIT("HotkeyManager.cpp");
+USEUNIT("PersistImage.cpp");
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {

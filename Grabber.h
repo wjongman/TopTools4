@@ -31,7 +31,7 @@ private:
   void __fastcall ViewerKeyPress(TObject *Sender, char &Key);
   void __fastcall ViewerClosed(TObject *Sender, TCloseAction &Action);
 
-  bool __fastcall DisplayIsPaletted();
+  //bool __fastcall DisplayIsPaletted();
 
 //  void __fastcall DrawSelectRect(const TRect& rect);
   void __fastcall GetDesktopArea();
@@ -46,8 +46,8 @@ private:
   void __fastcall AutosaveOptions();
   void __fastcall SaveToFile();
   void __fastcall AutoSaveToFile();
-  void __fastcall DoSaveToFile(const String& PathName);
-  void __fastcall CopyToClipboard();
+//   void __fastcall DoSaveToFile(const String& PathName);
+   void __fastcall CopyToClipboard();
   void __fastcall CaptureNext();
   void __fastcall EndCapture();
   void __fastcall HandleRightButtonClick(TObject *Sender, TMouseButton Button,
