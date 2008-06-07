@@ -45,6 +45,7 @@ private:
   void __fastcall ViewImage(Graphics::TBitmap* pBufferBmp);
   void __fastcall AutosaveOptions();
   void __fastcall SaveToFile();
+  void __fastcall Print();
   void __fastcall AutoSaveToFile();
 //   void __fastcall DoSaveToFile(const String& PathName);
    void __fastcall CopyToClipboard();
@@ -102,15 +103,15 @@ public:
     }
   }
 
-  void Move(HDC hdc, int X1, int Y1, int X2, int Y2)
+  void Move(HDC hdc, int x1, int y1, int x2, int y2)
   {
     if (hdc && bVisible)
     {
       Invert(hdc);  // Remove previous rectangle
-      left   = X1;
-      top    = Y1;
-      right  = X2;
-      bottom = Y2;
+      left   = x1;
+      top    = y1;
+      right  = x2;
+      bottom = y2;
       Invert(hdc);  // Draw new rectangle
     }
   }

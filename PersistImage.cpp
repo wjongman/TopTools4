@@ -55,7 +55,7 @@ void __fastcall TPersistImage::SaveFileDialog(int &filterindex, String& InitialD
                              "GIF Image (*.gif)|*.gif|"
                              "JPEG Image (*.jpg)|*.jpg";
     }
-    // Display the Save File Dialog
+
     if (SavePicDlg->Execute())
     {
         //g_ToolOptions.Set("capture", "lastdir", ExtractFilePath(SavePicDlg->FileName));

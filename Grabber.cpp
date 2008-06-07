@@ -2,14 +2,6 @@
 #include <vcl.h>
 #pragma hdrstop
 
-//#include <vcl\Clipbrd.hpp>
-//#include <Registry.hpp>
-//#include <Filectrl.hpp>
-//#include <jpeg.hpp>
-/*
-#include "gif\gifimage.hpp"
-#include "png\pngimage.hpp"
-*/
 #include "Grabber.h"
 #include "AutoSaveDlg.h"
 #include "PersistImage.h"
@@ -23,7 +15,8 @@ __fastcall TScreenGrabber::TScreenGrabber(TComponent* Owner)
 {
     // Have a bitmap to store the grabbed stuff
     m_pBufferBmp = new Graphics::TBitmap;
-//    m_GrabberMode = gmOpenViewer;
+
+    // enum TGrabberMode { gmOpenViewer, gmShowMenu, gmBypassMenu, gmCopy, gmContinuous };
     m_GrabberMode = gmShowMenu;
 
     OnRightButtonClick = HandleRightButtonClick;
@@ -41,92 +34,6 @@ __fastcall TScreenGrabber::~TScreenGrabber()
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::UpdateSettings()
 {
-    TRACE("TScreenGrabber::UpdateSettings()");
-
-//    m_CaptureOptions.Load();
-//    m_AutoSaveOptions.LoadFromRegistry();
-//    m_AutoSaveOptions.Load();
-//  PopulateCaptureMenu();
-}
-/*
-//---------------------------------------------------------------------------
-void __fastcall TScreenGrabber::MouseDown(TMouseButton Button,
-        TShiftState Shift, int X, int Y)
-{
-    TRACE("TScreenGrabber::MouseDown()");
-    if (Button == mbLeft && !m_bDrawing)
-    {
-        // Mark start of selection rectangle
-        TPoint ptLeftTop = ClientToScreen(Point(X, Y));
-
-        m_rcSelect.left = m_rcSelect.right = ptLeftTop.x;
-        m_rcSelect.top = m_rcSelect.bottom = ptLeftTop.y;
-        m_rcSelect.right = m_rcSelect.right = ptLeftTop.x;
-        m_rcSelect.bottom = m_rcSelect.bottom = ptLeftTop.y;
-
-        m_bFirstRect = true;
-        m_bDrawing = true;
-    }
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TScreenGrabber::MouseMove(TShiftState Shift, int X, int Y)
-{
-    if (m_bDrawing)
-    {
-        DrawSelectRect(m_rcSelect);
-
-        TPoint ptRightBottom = ClientToScreen(Point(X, Y));
-        m_rcSelect.right = ptRightBottom.x;
-        m_rcSelect.bottom = ptRightBottom.y;
-
-        DrawSelectRect(m_rcSelect);
-    }
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TScreenGrabber::MouseUp(TMouseButton Button,
-                                        TShiftState Shift, int X, int Y)
-{
-    TRACE("TScreenGrabber::MouseUp()");
-
-    // Right button cancels the operation
-    if (Button == mbRight)
-    {
-        if (m_bDrawing)
-        {
-            DrawSelectRect(m_rcSelect);
-            m_bDrawing = false;
-        }
-        // Release mouse-hook
-        StopTracking();
-    }
-
-    // Left button triggers capture
-    else if (Button == mbLeft && m_bDrawing)
-    {
-        DrawSelectRect(m_rcSelect);
-        m_bDrawing = false;
-
-        // Release mouse-hook
-        StopTracking();
-
-        // Copy selected area to the bitmap
-        GetDesktopArea(&m_rcSelect);
-
-        // Determine what to do with the bitmap
-        HandleCapture(X, Y);
-    }
-}
-*/
-//---------------------------------------------------------------------------
-void __fastcall TScreenGrabber::HandleRightButtonClick(TObject *Sender,
-                        TMouseButton Button, TShiftState Shift, int X, int Y)
-{
-     GetDesktopArea();
-     ViewImage(m_pBufferBmp);
-     EndCapture();
-// Left Click to drag or resize, Right Click to grab area.
 }
 
 //---------------------------------------------------------------------------
@@ -158,11 +65,39 @@ void __fastcall TScreenGrabber::HandleCapture(int X, int Y)
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TScreenGrabber::HandleRightButtonClick(TObject *Sender,
+                        TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+     GetDesktopArea();
+
+     switch (m_GrabberMode)
+     {
+     case gmOpenViewer:
+         ViewImage(m_pBufferBmp);
+         break;
+     case gmShowMenu:
+         ShowCaptureMenu(X, Y);
+         break;
+     case gmBypassMenu:
+         AutoSaveToFile();
+         break;
+     case gmContinuous:
+         break;
+
+     default:
+         break;
+     }
+     EndCapture();
+// Left Click to drag or resize, Right Click to grab area.
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::ShowCaptureMenu(int X, int Y)
 {
     PopulateCaptureMenu();
 
-    m_CaptureMenu->Popup(X, Y);
+    POINT ptAbs = ClientToScreen(Point(X, Y));
+    m_CaptureMenu->Popup(ptAbs.x, ptAbs.y);
 }
 
 //---------------------------------------------------------------------------
@@ -205,6 +140,11 @@ void __fastcall TScreenGrabber::CaptureMenuClick(TObject *Sender)
         else if (menuItem->Hint == "View")
         {
             ViewImage(m_pBufferBmp);
+            EndCapture();
+        }
+        else if (menuItem->Hint == "Print")
+        {
+            Print();
             EndCapture();
         }
         else if (menuItem->Hint == "AutoSaveOptions")
@@ -276,23 +216,23 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
     NewItem->Hint = "SaveOn";
     m_CaptureMenu->Items->Add(NewItem);
 
-//     // Separator ------------------------
-//     NewItem = new TMenuItem(m_CaptureMenu);
-//     NewItem->Caption = "-";
-//     m_CaptureMenu->Items->Add(NewItem);
-//
-// //     NewItem = new TMenuItem(m_CaptureMenu);
-// //     NewItem->OnClick = CaptureMenuClick;
-// //     NewItem->Caption = "View...";
-// //     NewItem->Hint = "View";
-// //     m_CaptureMenu->Items->Add(NewItem);
-//
-//     NewItem = new TMenuItem(m_CaptureMenu);
-//     NewItem->OnClick = CaptureMenuClick;
-//     NewItem->Caption = "Print...";
-//     NewItem->Hint = "Print";
-//     m_CaptureMenu->Items->Add(NewItem);
-//
+    // Separator ------------------------
+    NewItem = new TMenuItem(m_CaptureMenu);
+    NewItem->Caption = "-";
+    m_CaptureMenu->Items->Add(NewItem);
+
+    NewItem = new TMenuItem(m_CaptureMenu);
+    NewItem->OnClick = CaptureMenuClick;
+    NewItem->Caption = "View...";
+    NewItem->Hint = "View";
+    m_CaptureMenu->Items->Add(NewItem);
+
+    NewItem = new TMenuItem(m_CaptureMenu);
+    NewItem->OnClick = CaptureMenuClick;
+    NewItem->Caption = "Print...";
+    NewItem->Hint = "Print";
+    m_CaptureMenu->Items->Add(NewItem);
+
     // Separator ------------------------
     NewItem = new TMenuItem(m_CaptureMenu);
     NewItem->Caption = "-";
@@ -302,14 +242,14 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Auto Save";
     NewItem->Hint = "AutoSave";
-    NewItem->Enabled = g_ToolOptions.GetBool("capture", "autosave");//m_CaptureOptions.AutoSave;
+    NewItem->Enabled = g_ToolOptions.GetBool("capture", "autosave");
     m_CaptureMenu->Items->Add(NewItem);
 
     NewItem = new TMenuItem(m_CaptureMenu);
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Auto Save && Grab More";
     NewItem->Hint = "AutoSaveOn";
-    NewItem->Enabled = g_ToolOptions.GetBool("capture", "autosave");//m_CaptureOptions.AutoSave;
+    NewItem->Enabled = g_ToolOptions.GetBool("capture", "autosave");
     m_CaptureMenu->Items->Add(NewItem);
 
     NewItem = new TMenuItem(m_CaptureMenu);
@@ -358,6 +298,16 @@ void __fastcall TScreenGrabber::SaveToFile()
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TScreenGrabber::Print()
+{
+    TPersistImage image(m_pBufferBmp);
+
+    image.Print();
+
+    m_pBufferBmp->Assign(NULL);
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::CopyToClipboard()
 {
     TPersistImage image(m_pBufferBmp);
@@ -384,15 +334,12 @@ void __fastcall TScreenGrabber::AutosaveOptions()
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::ViewImage(Graphics::TBitmap* pBufferBmp)
 {
-    TRACE("TScreenGrabber::ViewImage()");
-
-//    GetDesktopArea();
-
     TImageViewer* pImageViewer = m_Viewers.NewViewer(this, m_rcSelect);
     pImageViewer->Bitmap = pBufferBmp;
     pImageViewer->KeyPreview = true;
     //pImageViewer->OnKeyPress = ViewerKeyPress;
     pImageViewer->OnClose = ViewerClosed;
+
     pImageViewer->Show();
 }
 
@@ -427,8 +374,6 @@ void __fastcall TScreenGrabber::ViewerKeyPress(TObject *Sender, char &Key)
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::AutoSaveToFile()
 {
-    TRACE("TScreenGrabber::AutoSaveToFile()");
-
     // First check if the target directory exists
     if (!DirectoryExists(g_ToolOptions.GetString("capture\autosave", "directory")))
     {
@@ -455,7 +400,6 @@ void __fastcall TScreenGrabber::AutoSaveToFile()
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::GetDesktopArea()
 {
-    TRACE("TScreenGrabber::GetDesktopArea()");
     GetWindowRect(Handle, &m_rcSelect);
     Hide();  // we are transparent but under Aero we are visible
     GetDesktopArea(&m_rcSelect);
@@ -465,8 +409,6 @@ void __fastcall TScreenGrabber::GetDesktopArea()
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::GetDesktopArea(LPRECT lpRect)
 {
-    TRACE("TScreenGrabber::GetDesktopArea()");
-
     // Make sure that left < right and top < bottom
     int left = min(lpRect->left, lpRect->right);
     int top = min(lpRect->top, lpRect->bottom);

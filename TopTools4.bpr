@@ -31,14 +31,14 @@
     <USERDEFINES value="NO_WIN32_LEAN_AND_MEAN;_DEBUG"/>
     <SYSDEFINES value="NO_STRICT;_VIS_NOLIB"/>
     <MAINSOURCE value="TopTools4.cpp"/>
-    <INCLUDEPATH value="&quot;C:\Program Files\Borland\CBuilder5\Projects&quot;;png;gif;hotkey;$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="&quot;C:\Program Files\Borland\CBuilder5\Projects&quot;;$(BCB)\Projects\Lib;png;gif;hotkey;$(BCB)\lib\obj;$(BCB)\lib;obj"/>
+    <INCLUDEPATH value="&quot;C:\Program Files\Borland\CBuilder5\Projects\&quot;;png;gif;hotkey;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="&quot;C:\Program Files\Borland\CBuilder5\Projects\&quot;;$(BCB)\Projects\Lib;png;gif;hotkey;$(BCB)\lib\obj;$(BCB)\lib;obj"/>
     <WARNINGS value="-w8092 -w8091 -w8090 -w8089 -w8087 -wprc -wuse -wucp -wstv -wstu -wsig 
       -wpin -w-par -wnod -wnak -wdef -wcln -wbbf -wasm -wamp -wamb"/>
     <WARNOPTSTR value=""/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I&quot;C:\Program Files\Borland\CBuilder5\Projects&quot; -Ipng -Igif -Ihotkey 
+    <IDLCFLAGS value="-I&quot;C:\Program Files\Borland\CBuilder5\Projects\.&quot; -Ipng -Igif -Ihotkey 
       -I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp 
       -DNO_WIN32_LEAN_AND_MEAN -D_DEBUG -boa"/>
     <CFLAG1 value="-Od -H=obj/pch.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c -tW -tWM"/>
@@ -59,7 +59,7 @@ AutoIncBuild=1
 MajorVer=4
 MinorVer=0
 Release=0
-Build=9
+Build=15
 Debug=0
 PreRelease=1
 Special=0
@@ -71,7 +71,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Willem &amp; Co
 FileDescription=Screen Design Toolbox
-FileVersion=4.0.0.9
+FileVersion=4.0.0.15
 InternalName=TopTools
 LegalCopyright=Copyright © 1998-2008 Willem Jongman
 LegalTrademarks=
@@ -82,9 +82,9 @@ Comments=www.toptools.org
 
 [HistoryLists\hlIncludePath]
 Count=18
-Item0=png;gif;hotkey;$(BCB)\include;$(BCB)\include\vcl
-Item1=C:\Program Files\Borland\CBuilder5\Projects\;png;gif;hotkey;$(BCB)\include;$(BCB)\include\vcl
-Item2=C:\Program Files\Borland\CBuilder5\Projects;png;gif;hotkey;$(BCB)\include;$(BCB)\include\vcl
+Item0=C:\Program Files\Borland\CBuilder5\Projects\;png;gif;hotkey;$(BCB)\include;$(BCB)\include\vcl
+Item1=C:\Program Files\Borland\CBuilder5\Projects;png;gif;hotkey;$(BCB)\include;$(BCB)\include\vcl
+Item2=png;gif;hotkey;$(BCB)\include;$(BCB)\include\vcl
 Item3=;png;gif;hotkey;$(BCB)\include;$(BCB)\include\vcl
 Item4=png;C:\Program Files\Borland\CBuilder5\Projects\;hotkey;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files\Borland\CBuilder5\Components\GifImage\;C:\Program Files\Borland\CBuilder5\Components\PngImage\
 Item5=C:\Program Files\Borland\CBuilder5\Projects\;hotkey;$(BCB)\include;$(BCB)\include\vcl;C:\Program Files\Borland\CBuilder5\Components\GifImage\;C:\Program Files\Borland\CBuilder5\Components\PngImage
@@ -103,9 +103,9 @@ Item17=TopTools4;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
 Count=20
-Item0=$(BCB)\Projects\Lib;png;gif;hotkey;$(BCB)\lib\obj;$(BCB)\lib;obj
-Item1=C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\Projects\Lib;png;gif;hotkey;$(BCB)\lib\obj;$(BCB)\lib;obj
-Item2=C:\Program Files\Borland\CBuilder5\Projects;$(BCB)\Projects\Lib;png;gif;hotkey;$(BCB)\lib\obj;$(BCB)\lib;obj
+Item0=C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\Projects\Lib;png;gif;hotkey;$(BCB)\lib\obj;$(BCB)\lib;obj
+Item1=C:\Program Files\Borland\CBuilder5\Projects;$(BCB)\Projects\Lib;png;gif;hotkey;$(BCB)\lib\obj;$(BCB)\lib;obj
+Item2=$(BCB)\Projects\Lib;png;gif;hotkey;$(BCB)\lib\obj;$(BCB)\lib;obj
 Item3=;$(BCB)\Projects\Lib;png;gif;hotkey;$(BCB)\lib\obj;$(BCB)\lib;obj
 Item4=$(BCB)\Projects\Lib;png;gif;hotkey;$(BCB)\lib\obj;$(BCB)\lib
 Item5=$(BCB)\Projects\Lib;png;C:\Program Files\Borland\CBuilder5\Projects\;hotkey;$(BCB)\lib\obj;$(BCB)\lib;C:\Program Files\Borland\CBuilder5\Components\GifImage\;C:\Program Files\Borland\CBuilder5\Components\PngImage\
