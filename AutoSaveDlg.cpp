@@ -23,47 +23,41 @@ __fastcall TAutoSaveDialog::TAutoSaveDialog(TComponent* AOwner)
 //---------------------------------------------------------------------
 void TAutoSaveDialog::LoadOptions()
 {
-  m_Options.Load();
+  options.Load();
 
-  edDirectory->Text = m_Options.GetString("directory");
-  edPrefix->Text = m_Options.GetString("filename");
-  udDigits->Position = (short) m_Options.GetInt("digits");
-  udOffset->Position = (short) m_Options.GetInt("nextvalue");
-  cbType->ItemIndex = m_Options.GetInt("imagetype");
-
-  int existaction = m_Options.GetInt("existaction");
-  rbPrompt->Checked = (existaction == 0);
-  rbOverwrite->Checked = (existaction == 1);
-  rbRename->Checked = (existaction == 2);
-
-  ckByPass->Checked = m_Options.GetBool("bypassmenu");
-  ckContinuous->Checked = m_Options.GetBool("continuous");
+  ckByPass->Checked = options.Bypass;
+  ckContinuous->Checked = options.Continuous;
+  cbType->ItemIndex = options.ImageType;
+  edDirectory->Text = options.Directory;
+  edPrefix->Text = options.Prefix;
+  udDigits->Position = (short) options.Digits;
+  udOffset->Position = (short) options.NextValue;
+  rbPrompt->Checked = options.ExistAction == 0;
+  rbOverwrite->Checked = options.ExistAction == 1;
+  rbRename->Checked = options.ExistAction == 2;
 }
 
 //---------------------------------------------------------------------
 void TAutoSaveDialog::SaveOptions()
 {
-  UpdateOptions();
-  m_Options.Save();
+  RefreshOptions();
+
+  options.Save();
 }
 
 //---------------------------------------------------------------------
-void TAutoSaveDialog::UpdateOptions()
+void TAutoSaveDialog::RefreshOptions()
 {
-  if (Initialized)
-  {
-    m_Options.Set("directory", edDirectory->Text);
-    m_Options.Set("filename", edPrefix->Text);
-    m_Options.Set("digits", udDigits->Position);
-    m_Options.Set("nextvalue", udOffset->Position);
-    m_Options.Set("imagetype", cbType->ItemIndex);
-    m_Options.Set("bypassmenu", ckByPass->Checked);
-    m_Options.Set("continuous", ckContinuous->Checked);
-    int existaction = rbPrompt->Checked * 0 +
-                      rbOverwrite->Checked * 1 +
-                      rbRename->Checked * 2;
-    m_Options.Set("existaction", existaction);
-  }
+  options.Bypass = ckByPass->Checked;
+  options.Continuous = ckContinuous->Checked;
+  options.ImageType = cbType->ItemIndex;
+  options.Directory = edDirectory->Text;
+  options.Prefix = edPrefix->Text;
+  options.Digits = udDigits->Position;
+  options.NextValue = udOffset->Position;
+  options.ExistAction = rbPrompt->Checked * 0 +
+                        rbOverwrite->Checked * 1 +
+                        rbRename->Checked * 2;
 }
 
 //---------------------------------------------------------------------
@@ -82,8 +76,8 @@ void __fastcall TAutoSaveDialog::InputChange(TObject *Sender)
 {
   if (Initialized)
   {
-    UpdateOptions();
-    elbPreview->Caption = m_Options.GetFullPathName();
+    RefreshOptions();
+    elbPreview->Caption = options.GetFullPathName();
   }
 }
 
@@ -109,58 +103,6 @@ void __fastcall TAutoSaveDialog::bnOkClick(TObject *Sender)
   SaveOptions();
 }
 
-/*/---------------------------------------------------------------------
-function BrowseDialog
- (const Title: string; const Flag: integer): string;
-
-  String sResult = "";
-
-  // Get the shell's IMalloc interface, we must use this
-  // interface to free the memory that is allocated by
-  // the shell when it passes us an ITEMIDLIST in *pidl
-  LPMALLOC Allocator;
-  if (::SHGetMalloc(&Allocator) == NOERROR)
-  {
-    BROWSEINFO bi = { 0 };
-    ITEMIDLIST *pidl;
-    HWND hwndOwner = NULL;
-    if (::SHGetSpecialFolderLocation(hwndOwner, FolderSpec, &pidl) == NOERROR)
-    {
-      char folderpath[MAX_PATH];
-      if (::SHGetPathFromIDList(pidl, folderpath))
-      {
-        sResult = folderpath;
-        sResult += "\\";
-      }
-      Allocator->Free(pidl);
-    }
-    Allocator->Release();
-  }
-  return sResult;
-
- var
-  lpItemID : PItemIDList;
-  BrowseInfo : TBrowseInfo;
-  DisplayName : array[0..MAX_PATH] of char;
-  TempPath : array[0..MAX_PATH] of char;
-begin
-  Result:='';
-  FillChar(BrowseInfo, sizeof(TBrowseInfo), #0);
-  with BrowseInfo do begin
-    hwndOwner := Application.Handle;
-    pszDisplayName := @DisplayName;
-    lpszTitle := PChar(Title);
-    ulFlags := Flag;
-    lpfn := BrowseDialogCallBack;
-  end;
-  lpItemID := SHBrowseForFolder(BrowseInfo);
-  if lpItemId <> nil then begin
-    SHGetPathFromIDList(lpItemID, TempPath);
-    Result := TempPath;
-    GlobalFreePtr(lpItemID);
-  end;
-end;
-*/
 //---------------------------------------------------------------------
 int BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
 {
@@ -174,12 +116,10 @@ int BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
     int dialogTop = (Screen->Height - rcDialog.Height()) / 2;
 
     MoveWindow(hwnd, dialogLeft, dialogTop,
-      rcDialog.Width(), rcDialog.Height(), true);
+    rcDialog.Width(), rcDialog.Height(), true);
   }
   return 0;
 }
 
 //---------------------------------------------------------------------------
-
-
 

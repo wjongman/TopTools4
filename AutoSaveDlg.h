@@ -16,7 +16,6 @@
 #include "PathEllipsisLabel.h"
 
 #include "AutoSaveOptions.h"
-//#include "Persist.h"
 //----------------------------------------------------------------------------
 class TAutoSaveDialog : public TForm
 {
@@ -52,12 +51,11 @@ __published:
   void __fastcall ckByPassClick(TObject *Sender);
   void __fastcall bnOkClick(TObject *Sender);
 private:
-  TAutoSaveOptions m_Options;
-//  TopTools::Options m_Options;
+  TAutoSaveOptions options;
   bool Initialized;
 
   void LoadOptions();
-  void UpdateOptions();
+  void RefreshOptions();
   void SaveOptions();
 
   static int BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData);

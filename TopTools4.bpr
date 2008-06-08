@@ -8,8 +8,8 @@
       obj\Float.obj obj\Info.obj obj\Loupe.obj obj\Main.obj obj\Ruler.obj 
       obj\Tool.obj obj\Grabber.obj obj\LoupePanel.obj obj\Monitor.obj 
       obj\TopToolBar.obj obj\TrayIcon.obj obj\HotkeyInfo.obj obj\OptionDlg.obj 
-      obj\AutoSaveDlg.obj obj\AutoSaveOptions.obj obj\ImageView.obj 
-      obj\ScreenForm.obj obj\HotkeyManager.obj obj\PersistImage.obj"/>
+      obj\AutoSaveDlg.obj obj\ImageView.obj obj\ScreenForm.obj 
+      obj\HotkeyManager.obj obj\PersistImage.obj obj\AutoSaveOptions.obj"/>
     <RESFILES value="obj\Graphics.res Cursors.res TopTools4.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>

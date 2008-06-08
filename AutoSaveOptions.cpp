@@ -2,97 +2,44 @@
 #include <vcl.h>
 #pragma hdrstop
 
+#include <Registry.hpp>
+#include <shlobj.h> // Make sure NO_WIN32_LEAN_AND_MEAN is defined..
+
 #include "AutoSaveOptions.h"
 #include "PersistOptions.h"
 
 //---------------------------------------------------------------------------
 TAutoSaveOptions::TAutoSaveOptions()
 {
-  // Init default options
-  m_sToolName = "capture\\autosave";
-
-  g_ToolOptions.Set(m_sToolName, "directory", GetSpecialFolderPath(CSIDL_DESKTOPDIRECTORY));
-  g_ToolOptions.Set(m_sToolName, "filename", "Snapshot");
-  g_ToolOptions.Set(m_sToolName, "digits", 2);
-  g_ToolOptions.Set(m_sToolName, "nextvalue", 1);
-  g_ToolOptions.Set(m_sToolName, "imagetype", 0);
-  g_ToolOptions.Set(m_sToolName, "existaction", 0);
-  g_ToolOptions.Set(m_sToolName, "bypassmenu", false);
-  g_ToolOptions.Set(m_sToolName, "continuous", false);
-}
-
-//---------------------------------------------------------------------------
-TAutoSaveOptions::~TAutoSaveOptions()
-{
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TAutoSaveOptions::Load()
-{
-  g_ToolOptions.Load(g_RunMode);
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TAutoSaveOptions::Save()
-{
-  //g_ToolOptions.Save();
-}
-
-//---------------------------------------------------------------------------
-int TAutoSaveOptions::GetInt(const String& OptionName)
-{
-  return g_ToolOptions.GetInt(m_sToolName, OptionName);
-}
-
-//---------------------------------------------------------------------------
-String TAutoSaveOptions::GetString(const String& OptionName)
-{
-  return g_ToolOptions.GetString(m_sToolName, OptionName);
-}
-
-//---------------------------------------------------------------------------
-bool TAutoSaveOptions::GetBool(const String& OptionName)
-{
-  return g_ToolOptions.GetBool(m_sToolName, OptionName);
-}
-
-//---------------------------------------------------------------------------
-void TAutoSaveOptions::Set(const String& OptionName, int Option)
-{
-  g_ToolOptions.Set(m_sToolName, OptionName, Option);
-}
-
-//---------------------------------------------------------------------------
-void TAutoSaveOptions::Set(const String& OptionName, String Option)
-{
-  g_ToolOptions.Set(m_sToolName, OptionName, Option);
-}
-
-//---------------------------------------------------------------------------
-void TAutoSaveOptions::Set(const String& OptionName, bool Option)
-{
-  g_ToolOptions.Set(m_sToolName, OptionName, Option);
+  // Init with default values
+  Directory = GetSpecialFolderPath(CSIDL_DESKTOPDIRECTORY);
+  Prefix = "Snapshot";
+  Digits = 2;
+  NextValue = 1;
+  ImageType = 0;
+  ExistAction = 0;
+  Bypass = false;
+  Continuous = false;
 }
 
 //---------------------------------------------------------------------------
 String TAutoSaveOptions::GetFirstFilename(int startvalue)
 {
-  Set("nextvalue", startvalue);
+  NextValue = startvalue;
   return GetFullPathName();
 }
 
 //---------------------------------------------------------------------------
 String TAutoSaveOptions::GetNextFilename()
 {
-  IncrementNextValue();
+  NextValue++;
   return GetFullPathName();
 }
 
 //---------------------------------------------------------------------------
 String TAutoSaveOptions::GetFullPathName()
 {
-  return GetString("directory") + GetString("filename") + GetSequenceString()
-    + GetExtension(GetInt("imagetype"));
+  return Directory + Prefix + GetSequenceString() + GetExtension(ImageType);
 }
 
 //---------------------------------------------------------------------------
@@ -100,8 +47,8 @@ String TAutoSaveOptions::GetSequenceString()
 {
   String SeqNum = "";
 
-  if (GetInt("digits") != 0)
-    SeqNum.sprintf("%0*d", GetInt("digits"), GetInt("nextvalue"));
+  if (Digits != 0)
+    SeqNum.sprintf("%0*d", Digits, NextValue);
 
   return SeqNum;
 }
@@ -109,19 +56,50 @@ String TAutoSaveOptions::GetSequenceString()
 //---------------------------------------------------------------------------
 String TAutoSaveOptions::GetExtension(int index)
 {
-  if (index < 0 || index > 4)
-    index = 0;
+  if (index < 0 || index > 3)
+    return 0;
 
-  char* Extension[] = { ".bmp", ".png", ".gif", ".jpg"};
+  char* Extension[] = { ".bmp", ".png", ".gif", ".jpg" };
   return Extension[index];
 }
 
-#include <shlobj.h> // Make sure NO_WIN32_LEAN_AND_MEAN is defined..
+//---------------------------------------------------------------------------
+void __fastcall TAutoSaveOptions::Load()
+{
+    String ToolName = "grabber\\autosave";
+
+    Directory = g_ToolOptions.Get(ToolName, "savedir", Directory);
+    Prefix = g_ToolOptions.Get(ToolName, "filename", Prefix);
+    Digits = g_ToolOptions.Get(ToolName, "digits", Digits);
+    NextValue = g_ToolOptions.Get(ToolName, "nextvalue", NextValue);
+    ImageType = g_ToolOptions.Get(ToolName, "imagetype", ImageType);
+    ExistAction = g_ToolOptions.Get(ToolName, "existaction", ExistAction);
+    Bypass = g_ToolOptions.Get(ToolName, "bypassmenu", Bypass);
+    Continuous = g_ToolOptions.Get(ToolName, "continuous", Continuous);
+    LastDir = g_ToolOptions.Get(ToolName, "lastdir", LastDir);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TAutoSaveOptions::Save()
+{
+    String ToolName = "grabber\\autosave";
+
+    g_ToolOptions.Set(ToolName, "savedir", Directory);
+    g_ToolOptions.Set(ToolName, "filename", Prefix);
+    g_ToolOptions.Set(ToolName, "digits", Digits);
+    g_ToolOptions.Set(ToolName, "nextvalue", NextValue);
+    g_ToolOptions.Set(ToolName, "imagetype", ImageType);
+    g_ToolOptions.Set(ToolName, "existaction", ExistAction);
+    g_ToolOptions.Set(ToolName, "bypassmenu", Bypass);
+    g_ToolOptions.Set(ToolName, "continuous", Continuous);
+    g_ToolOptions.Set(ToolName, "lastdir", LastDir);
+}
+
 //---------------------------------------------------------------------------
 String TAutoSaveOptions::GetSpecialFolderPath(int FolderSpec)
+// Wrapper function around the SHGetSpecialFolderLocation +
+// SHGetPathFromIDList API pair, handling allocation intrinsics.
 {
-  // Wrapper function around the SHGetSpecialFolderLocation +
-  // SHGetPathFromIDList API pair, handling allocation intrinsics.
   String sResult = "";
 
   // Get the shell's IMalloc interface, we must use this
@@ -132,7 +110,6 @@ String TAutoSaveOptions::GetSpecialFolderPath(int FolderSpec)
   {
     ITEMIDLIST *pidl;
     HWND hwndOwner = NULL;
-    // todo: Find a way to control where it pops-up
     if (::SHGetSpecialFolderLocation(hwndOwner, FolderSpec, &pidl) == NOERROR)
     {
       char folderpath[MAX_PATH];

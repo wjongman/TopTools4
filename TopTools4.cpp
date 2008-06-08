@@ -38,11 +38,11 @@ USEUNIT("TrayIcon.cpp");
 USEUNIT("hotkey\HotkeyInfo.cpp");
 USEFORM("OptionDlg.cpp", ToolOptionsDialog);
 USEFORM("AutoSaveDlg.cpp", AutoSaveDialog);
-USEUNIT("AutoSaveOptions.cpp");
 USEFORM("ImageView.cpp", ImageViewer);
 USEFORM("ScreenForm.cpp", ScreenForm);
 USEUNIT("HotkeyManager.cpp");
 USEUNIT("PersistImage.cpp");
+USEUNIT("AutoSaveOptions.cpp");
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {

@@ -20,6 +20,8 @@ __fastcall TScreenGrabber::TScreenGrabber(TComponent* Owner)
     m_GrabberMode = gmShowMenu;
 
     OnRightButtonClick = HandleRightButtonClick;
+
+    m_AutoSaveOptions.Load();
 }
 
 //---------------------------------------------------------------------------
@@ -29,20 +31,23 @@ __fastcall TScreenGrabber::~TScreenGrabber()
         delete m_CaptureMenu;
 
     delete m_pBufferBmp;
+
+    m_AutoSaveOptions.Save();
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::UpdateSettings()
 {
+    m_AutoSaveOptions.Load();
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::HandleCapture(int X, int Y)
 {
-    if (g_ToolOptions.GetBool("capture\\autosave", "bypassmenu"))
+    if (m_AutoSaveOptions.Bypass)
     {
         AutoSaveToFile();
-        if (g_ToolOptions.GetBool("capture\\autosave", "continuous"))
+        if (m_AutoSaveOptions.Continuous)
         {
             CaptureNext();
         }
@@ -51,11 +56,12 @@ void __fastcall TScreenGrabber::HandleCapture(int X, int Y)
             EndCapture();
         }
     }
-    else if (g_ToolOptions.GetBool("capture\\autosave", "openviewer"))
-    {
-        EndCapture();
-        ViewImage(m_pBufferBmp);
-    }
+//     else if (m_AutoSaveOptions.Openviewer)
+// //    else if (g_ToolOptions.GetBool("capture\\autosave", "openviewer"))
+//     {
+//         EndCapture();
+//         ViewImage(m_pBufferBmp);
+//     }
     else
     {
         // Ask user what to do with this grabbed bitmap
@@ -188,7 +194,7 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
 
     NewItem = new TMenuItem(m_CaptureMenu);
     NewItem->OnClick = CaptureMenuClick;
-    NewItem->Caption = "Snapshot";
+    NewItem->Caption = "Take Snapshot";
     NewItem->Default = true;
     NewItem->Hint = "View";
     m_CaptureMenu->Items->Add(NewItem);
@@ -242,14 +248,14 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Auto Save";
     NewItem->Hint = "AutoSave";
-    NewItem->Enabled = g_ToolOptions.GetBool("capture", "autosave");
+    NewItem->Enabled = m_AutoSaveOptions.AutoSave;
     m_CaptureMenu->Items->Add(NewItem);
 
     NewItem = new TMenuItem(m_CaptureMenu);
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Auto Save && Grab More";
     NewItem->Hint = "AutoSaveOn";
-    NewItem->Enabled = g_ToolOptions.GetBool("capture", "autosave");
+    NewItem->Enabled = m_AutoSaveOptions.AutoSave;
     m_CaptureMenu->Items->Add(NewItem);
 
     NewItem = new TMenuItem(m_CaptureMenu);
@@ -284,15 +290,16 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::SaveToFile()
 {
+    m_AutoSaveOptions.Load();
+    String InitialDir = m_AutoSaveOptions.LastDir;
+    int filterindex = m_AutoSaveOptions.ImageType;
+
     TPersistImage image(m_pBufferBmp);
-
-    String InitialDir = g_ToolOptions.GetString("capture", "lastdir");
-    int filterindex = g_ToolOptions.GetInt("capture", "filterindex");
-
     image.SaveFileDialog(filterindex, InitialDir);
 
-    g_ToolOptions.Set("capture", "lastdir", InitialDir);
-    g_ToolOptions.Set("capture", "filterindex", filterindex);
+    m_AutoSaveOptions.ImageType = filterindex;
+    m_AutoSaveOptions.LastDir = InitialDir;
+    m_AutoSaveOptions.Save();
 
     m_pBufferBmp->Assign(NULL);
 }
@@ -374,12 +381,15 @@ void __fastcall TScreenGrabber::ViewerKeyPress(TObject *Sender, char &Key)
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::AutoSaveToFile()
 {
+    m_AutoSaveOptions.Load();
+
     // First check if the target directory exists
-    if (!DirectoryExists(g_ToolOptions.GetString("capture\autosave", "directory")))
+    if (!DirectoryExists(m_AutoSaveOptions.Directory))
     {
-        // We should offer to change or create directory here..
+        // todo: offer to change or create directory here..
+        // todo: stuff all static strings in a resource file
         String sMsg = "Your autosave settings refer to a directory that doesn't exist: \n\n";
-        ShowMessage(sMsg + g_ToolOptions.GetString("capture\autosave", "directory"));//m_AutoSaveOptions.GetString("directory"));
+        ShowMessage(sMsg + m_AutoSaveOptions.Directory);
         return;
     }
 
@@ -390,10 +400,9 @@ void __fastcall TScreenGrabber::AutoSaveToFile()
     }
 
     TPersistImage image(m_pBufferBmp);
-
     image.Save(m_AutoSaveOptions.GetFullPathName());
+
     m_AutoSaveOptions.IncrementNextValue();
-//    m_AutoSaveOptions.SaveToRegistry();
     m_AutoSaveOptions.Save();
 }
 

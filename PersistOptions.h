@@ -439,6 +439,7 @@ public:
         Set("capture\\autosave", "filename", "Snapshot");
         Set("capture\\autosave", "imagetype", 0);
         Set("capture\\autosave", "nextvalue", 1);
+        Set("capture\\autosave", "lastdir", "");
 
         Set("main", "autostart", false);
         Set("main", "doubleclick", dcoControl);
