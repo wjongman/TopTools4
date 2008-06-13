@@ -4,19 +4,19 @@
   <MACROS>
     <VERSION value="BCB.05.03"/>
     <PROJECT value="exe\TopTools4.exe"/>
-    <OBJFILES value="obj\TopTools4.obj obj\About.obj obj\BaseConv.obj obj\Control.obj 
-      obj\Float.obj obj\Info.obj obj\Loupe.obj obj\Main.obj obj\Ruler.obj 
-      obj\Tool.obj obj\Grabber.obj obj\LoupePanel.obj obj\Monitor.obj 
-      obj\TopToolBar.obj obj\TrayIcon.obj obj\HotkeyInfo.obj obj\OptionDlg.obj 
-      obj\AutoSaveDlg.obj obj\ImageView.obj obj\ScreenForm.obj 
-      obj\HotkeyManager.obj obj\PersistImage.obj obj\AutoSaveOptions.obj"/>
+    <OBJFILES value="obj\TopTools4.obj obj\About.obj obj\AutoSaveDlg.obj obj\BaseConv.obj 
+      obj\Control.obj obj\Float.obj obj\ImageView.obj obj\Info.obj obj\Loupe.obj 
+      obj\Main.obj obj\OptionDlg.obj obj\Ruler.obj obj\ScreenForm.obj 
+      obj\Tool.obj obj\AutoSaveOptions.obj obj\Grabber.obj obj\HotkeyInfo.obj 
+      obj\HotkeyManager.obj obj\LoupePanel.obj obj\Monitor.obj 
+      obj\PersistImage.obj obj\TopToolBar.obj obj\TrayIcon.obj"/>
     <RESFILES value="obj\Graphics.res Cursors.res TopTools4.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
-    <RESDEPEN value="$(RESFILES) About.dfm BaseConv.dfm Control.dfm Float.dfm Info.dfm 
-      Loupe.dfm Main.dfm Ruler.dfm Tool.dfm OptionDlg.dfm AutoSaveDlg.dfm 
-      ImageView.dfm ScreenForm.dfm"/>
+    <RESDEPEN value="$(RESFILES) About.dfm AutoSaveDlg.dfm BaseConv.dfm Control.dfm Float.dfm 
+      ImageView.dfm Info.dfm Loupe.dfm Main.dfm OptionDlg.dfm Ruler.dfm 
+      ScreenForm.dfm Tool.dfm"/>
     <LIBFILES value="gif\gif.lib png\png.lib"/>
     <LIBRARIES value="TopToolParts.lib VCLX50.lib bcbsmp50.lib vcl50.lib"/>
     <SPARELIBS value="vcl50.lib bcbsmp50.lib VCLX50.lib TopToolParts.lib"/>
@@ -38,9 +38,9 @@
     <WARNOPTSTR value=""/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I&quot;C:\Program Files\Borland\CBuilder5\Projects\.&quot; -Ipng -Igif -Ihotkey 
-      -I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp 
-      -DNO_WIN32_LEAN_AND_MEAN -D_DEBUG -boa"/>
+    <IDLCFLAGS value="-src_suffix cpp -DNO_WIN32_LEAN_AND_MEAN -D_DEBUG 
+      -I&quot;C:\Program Files\Borland\CBuilder5\Projects\.&quot; -Ipng -Igif -Ihotkey 
+      -I$(BCB)\include -I$(BCB)\include\vcl -boa"/>
     <CFLAG1 value="-Od -H=obj/pch.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c -tW -tWM"/>
     <PFLAGS value="-N2obj -N0obj -$Y+ -$W -$O- -v -JPHNE -M"/>
     <RFLAGS value=""/>
@@ -59,7 +59,7 @@ AutoIncBuild=1
 MajorVer=4
 MinorVer=0
 Release=0
-Build=15
+Build=17
 Debug=0
 PreRelease=1
 Special=0
@@ -71,7 +71,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Willem &amp; Co
 FileDescription=Screen Design Toolbox
-FileVersion=4.0.0.15
+FileVersion=4.0.0.17
 InternalName=TopTools
 LegalCopyright=Copyright © 1998-2008 Willem Jongman
 LegalTrademarks=
@@ -150,7 +150,7 @@ Item1=exe
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=
+RunParams=-i
 HostApplication=
 RemoteHost=
 RemotePath=

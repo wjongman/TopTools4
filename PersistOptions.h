@@ -106,7 +106,7 @@ public:
     DataType GetDataType()
     {
         // Ini files are agostic to data types; all options are strings.
-        // The registry however, requires us to specify a data type
+        // However, he registry requires us to specify a data type
         // (REG_SZ, REG_DWORD etc.)
         // Unless we decide to store all our options as string, we need a
         // way to communicate the datatype when interacting with the registry
@@ -128,6 +128,10 @@ private:
 
 }; // class TOption
 
+/////////////////////////////////////////////////////////////////////////////
+//
+// Encapsulation of map that holds optionname-TOption pairs
+//
 /////////////////////////////////////////////////////////////////////////////
 class TOptionMap
 {
@@ -158,21 +162,18 @@ public:
     void Set(const String& OptionName, int Value)
     {
         m_Options[OptionName] = TOption(Value);
-//        Save();
     }
 
     //-------------------------------------------------------------------------
     void Set(const String& OptionName, String Value)
     {
         m_Options[OptionName] = TOption(Value);
-//        Save();
     }
 
     //-------------------------------------------------------------------------
     void Set(const String& OptionName, bool Value)
     {
         m_Options[OptionName] = TOption(Value);
-//        Save();
     }
 
     //-------------------------------------------------------------------------
@@ -373,6 +374,10 @@ public:
 
 
 /////////////////////////////////////////////////////////////////////////////
+//
+// Encapsulation of map that holds toolname-TOptionMap pairs
+//
+/////////////////////////////////////////////////////////////////////////////
 class TPersistOptions
 {
 private:
@@ -381,7 +386,7 @@ private:
 
     TOptionMaps m_OptionMaps;
     String m_RegBaseKey;
-    String m_IniFileName0;
+    String m_IniFilePathName;
 
 public:
     //-------------------------------------------------------------------------
@@ -389,6 +394,7 @@ public:
     {
         InitOptions();
         m_RegBaseKey = g_RegBaseKey;//"Software\\TopTools 4\\";
+        m_IniFilePathName = "";
 
     }
 
@@ -416,7 +422,7 @@ public:
         String IniFileName = ChangeFileExt(ParamStr(0), ".ini");
         String IniFilePath = "%APPDATA%\\TopTools 4\\" + IniFileName;
         //String IniFilePath = "%USERPROFILE%\\Local Settings\\Application Data\\TopTools 4\\" + IniFileName;
-        if (FileExists(IniFileName) || FileExists(IniFilePath))
+        if (FileExists(IniFileName))// || FileExists(IniFilePath))
         {
             return true;
         }
@@ -483,20 +489,6 @@ public:
 
 public:
     //-------------------------------------------------------------------------
-    void Load(TRunMode RunMode)
-    {
-        // Load persisted options
-        //m_OptionMaps.Load(RunMode);
-
-        // todo: we need to enumerate the sections held by the storage medium,
-        // at the moment we only find initialized sections in the map
-        for (option_map_iterator iter = m_OptionMaps.begin(); iter != m_OptionMaps.end(); iter++)
-        {
-            (iter->second).Load(RunMode);
-        }
-    }
-
-    //-------------------------------------------------------------------------
     void Load()
     {
         // See how the user wants to run the app
@@ -514,6 +506,7 @@ public:
                 String IniFileName = ParamStr(2);
                 if (FileExists(IniFileName))
                 {
+                    m_IniFilePathName = IniFileName;
                     Load(IniFileName);
                     return;
                 }
@@ -531,6 +524,20 @@ public:
         }
 
         Load(RunMode);
+    }
+
+    //-------------------------------------------------------------------------
+    void Load(TRunMode RunMode)
+    {
+        // Load persisted options
+        //m_OptionMaps.Load(RunMode);
+
+        // todo: we need to enumerate the sections held by the storage medium,
+        // at the moment we only find initialized sections in the map
+        for (option_map_iterator iter = m_OptionMaps.begin(); iter != m_OptionMaps.end(); iter++)
+        {
+            (iter->second).Load(RunMode);
+        }
     }
 
     //-------------------------------------------------------------------------

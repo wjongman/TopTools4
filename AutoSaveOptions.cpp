@@ -66,7 +66,7 @@ String TAutoSaveOptions::GetExtension(int index)
 //---------------------------------------------------------------------------
 void __fastcall TAutoSaveOptions::Load()
 {
-    String ToolName = "grabber\\autosave";
+    String ToolName = "capture\\autosave";
 
     Directory = g_ToolOptions.Get(ToolName, "savedir", Directory);
     Prefix = g_ToolOptions.Get(ToolName, "filename", Prefix);
@@ -82,7 +82,7 @@ void __fastcall TAutoSaveOptions::Load()
 //---------------------------------------------------------------------------
 void __fastcall TAutoSaveOptions::Save()
 {
-    String ToolName = "grabber\\autosave";
+    String ToolName = "capture\\autosave";
 
     g_ToolOptions.Set(ToolName, "savedir", Directory);
     g_ToolOptions.Set(ToolName, "filename", Prefix);
