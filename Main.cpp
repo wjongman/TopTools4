@@ -391,29 +391,27 @@ void __fastcall TMainForm::HandleTimerEvent(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::LoadSettings()
 {
-  SetUI(g_ToolOptions.GetBool("main", "istrayapp"));
-  RestoreToolState(g_ToolOptions.GetInt("main", "savedstate"));
-  SetTopMost(g_ToolOptions.GetBool("main", "stayontop"));
+  SetUI(g_ToolOptions.Get("main", "istrayapp", false));
+  RestoreToolState(g_ToolOptions.Get("main", "savedstate", dcoControl));
+  SetTopMost(g_ToolOptions.Get("main", "stayontop", true));
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::UpdateSettings()
 {
-  SetUI(g_ToolOptions.GetBool("main", "istrayapp"));
-  SetTopMost(g_ToolOptions.GetBool("main", "stayontop"));
+  SetUI(g_ToolOptions.Get("main", "istrayapp", false));
+  SetTopMost(g_ToolOptions.Get("main", "stayontop", true));
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::SaveSettings()
 {
-    if (g_ToolOptions.GetBool("main", "rememberstate"))
+    if (g_ToolOptions.Get("main", "rememberstate", true))
       g_ToolOptions.Set("main", "savedstate", GetToolState());
     else
       g_ToolOptions.Set("main", "savedstate", 0);
 
     g_ToolOptions.Set("main", "istrayapp", (m_UIMode == uiTrayApp));
-
-    //g_ToolOptions.Save();
 }
 
 //---------------------------------------------------------------------------
@@ -449,7 +447,7 @@ void TMainForm::ToggleOpenTools()
     }
     else
     {
-        RestoreToolState(g_ToolOptions.GetInt("main", "doubleclick"));
+        RestoreToolState(g_ToolOptions.Get("main", "doubleclick", dcoControl));
     }
 }
 
@@ -529,15 +527,15 @@ String TMainForm::GetColorFormatString()
 {
   String Format = "";
 
-  if (g_ToolOptions.GetBool("info", "quotes"))
+  if (g_ToolOptions.Get("info", "quotes", false))
     Format += "\"";
 
-  if (g_ToolOptions.GetBool("info", "prefix"))
+  if (g_ToolOptions.Get("info", "prefix", false))
     Format += "#";
 
   Format += "%02X%02X%02X";
 
-  if (g_ToolOptions.GetBool("info", "quotes"))
+  if (g_ToolOptions.Get("info", "quotes", false))
     Format += "\"";
 
   return Format;
@@ -641,7 +639,7 @@ TToolForm* TMainForm::GetControlBar()
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::actCommandExecute(TObject *Sender)
 {
-    SetTopMost(g_ToolOptions.GetBool("main", "stayontop"));
+    SetTopMost(g_ToolOptions.Get("main", "stayontop", true));
 
     TAction* pAction = reinterpret_cast<TAction*>(Sender);
     if (pAction)
@@ -729,7 +727,7 @@ void __fastcall TMainForm::HandleCaptureNext(TObject *Sender)
 
     //m_pCapture->StartTracking();
 
-    if (g_ToolOptions.GetBool("capture", "showloupe"))
+    if (g_ToolOptions.Get("capture", "showloupe", false))
     {
         TToolForm* pLoupe = GetLoupeForm();
         pLoupe->Show();

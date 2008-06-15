@@ -424,7 +424,7 @@ void __fastcall TBaseConvForm::miExitClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TBaseConvForm::LoadSettings()
 {
-  ShowBinaryField(g_ToolOptions.GetBool("baseconv", "showbinary"));
+  ShowBinaryField(g_ToolOptions.Get("baseconv", "showbinary", true));
 }
 
 //---------------------------------------------------------------------------

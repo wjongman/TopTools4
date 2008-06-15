@@ -80,9 +80,9 @@ void THotkeyManager::SaveHotkeys()
 THotkeyInfo THotkeyManager::LoadHotkeyInfo(const String& sHotKeyName)
 {
   THotkeyInfo HotkeyInfo;
-  HotkeyInfo.enabled = g_ToolOptions.GetBool("hotkeys\\" + sHotKeyName, "enabled");
-  HotkeyInfo.virtkey = g_ToolOptions.GetInt("hotkeys\\" + sHotKeyName, "keycode");
-  HotkeyInfo.modifiers = g_ToolOptions.GetInt("hotkeys\\" + sHotKeyName, "modifiers");
+  HotkeyInfo.enabled = g_ToolOptions.Get("hotkeys\\" + sHotKeyName, "enabled", false);
+  HotkeyInfo.virtkey = g_ToolOptions.Get("hotkeys\\" + sHotKeyName, "keycode", 0);
+  HotkeyInfo.modifiers = g_ToolOptions.Get("hotkeys\\" + sHotKeyName, "modifiers", 0);
 
   return HotkeyInfo;
 }

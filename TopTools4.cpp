@@ -40,7 +40,7 @@ USEUNIT("TrayIcon.cpp");
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
     g_ToolOptions.Load();
-    bool IsSingleton = g_ToolOptions.GetBool("main", "singleton");
+    bool IsSingleton = g_ToolOptions.Get("main", "singleton", false);
 
     // This mutex provides the means to determine if a TopTools instance is
     // already running.

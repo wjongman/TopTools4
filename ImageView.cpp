@@ -206,8 +206,8 @@ void __fastcall TImageViewer::SaveToFile()
 {
     TPersistImage image(Image->Picture->Bitmap);
 
-    String InitialDir = g_ToolOptions.GetString("capture", "lastdir");
-    int filterindex = g_ToolOptions.GetInt("capture", "filterindex");
+    String InitialDir = g_ToolOptions.Get("capture", "lastdir", "%USERPROFILE%\\Desktop");
+    int filterindex = g_ToolOptions.Get("capture", "filterindex", 1);
 
     image.SaveFileDialog(filterindex, InitialDir);
 

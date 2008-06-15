@@ -20,6 +20,7 @@ TAutoSaveOptions::TAutoSaveOptions()
   ExistAction = 0;
   Bypass = false;
   Continuous = false;
+  LastDir = "%USERPROFILE%\\Desktop";
 }
 
 //---------------------------------------------------------------------------

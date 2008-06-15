@@ -17,7 +17,7 @@
 //---------------------------------------------------------------------------
 class TRulerForm : public TToolForm
 {
-__published:	// IDE-managed Components
+__published:  // IDE-managed Components
   TPopupMenu *RulerMenu;
   TMenuItem *miHide;
   TMenuItem *N1;
@@ -57,9 +57,12 @@ private:
   int m_MouseOldY;
 
   int m_breadth;
+  int m_length;
   int m_center;
-//  TRulerOptions m_Options;
-
+  int m_transparency;
+  bool m_isTransparent;
+  bool m_isHorizontal;
+  bool m_useArrowNudge;
   TColor m_RulerColor;
   TFloatForm* FloatForm;
   Graphics::TBitmap* m_HorRulerBmp;

@@ -135,12 +135,12 @@ void __fastcall TToolOptionsDialog::lvSelectOptionChange(TObject *Sender,
 void TToolOptionsDialog::InitOptions()
 {
   // General
-  ckAutoStart->Checked = g_ToolOptions.GetBool("main", "autostart");
-  ckTrayApp->Checked = g_ToolOptions.GetBool("main", "istrayapp");
-  ckSaveToolstate->Checked = g_ToolOptions.GetBool("main", "rememberstate");
-  ckSingleton->Checked = g_ToolOptions.GetBool("main", "singleton");
-  ckOnTop->Checked = g_ToolOptions.GetBool("main", "stayontop");
-  int doubleclickaction = g_ToolOptions.GetInt("main", "doubleclick");
+  ckAutoStart->Checked = g_ToolOptions.Get("main", "autostart", false);
+  ckTrayApp->Checked = g_ToolOptions.Get("main", "istrayapp", false);
+  ckSaveToolstate->Checked = g_ToolOptions.Get("main", "rememberstate", true);
+  ckSingleton->Checked = g_ToolOptions.Get("main", "singleton", false);
+  ckOnTop->Checked = g_ToolOptions.Get("main", "stayontop", true);
+  int doubleclickaction = g_ToolOptions.Get("main", "doubleclick", dcoControl);
   ckOpenToolbar->Checked = doubleclickaction & dcoControl;
   ckOpenRuler->Checked = doubleclickaction & dcoRuler;
   ckOpenLoupe->Checked = doubleclickaction & dcoLoupe;
@@ -148,24 +148,24 @@ void TToolOptionsDialog::InitOptions()
   ckOpenBaseconv->Checked = doubleclickaction & dcoBaseconv;
 
   // Ruler
-  udLength->Position = (short) g_ToolOptions.GetInt("ruler", "length");
-  ckNudgeRuler->Checked = g_ToolOptions.GetBool("ruler", "arrownudge");
-  udTransparency->Position = (short) g_ToolOptions.GetInt("ruler", "transparency");
-  cbTransparent->Checked = g_ToolOptions.GetBool("ruler", "transparent");
+  udLength->Position = (short) g_ToolOptions.Get("ruler", "length", 1024);
+  ckNudgeRuler->Checked = g_ToolOptions.Get("ruler", "arrownudge", true);
+  udTransparency->Position = (short) g_ToolOptions.Get("ruler", "transparency", 50);
+  cbTransparent->Checked = g_ToolOptions.Get("ruler", "transparent", false);
 
   // Base converter
-  ckBinary->Checked = g_ToolOptions.GetBool("baseconv", "showbinary");
+  ckBinary->Checked = g_ToolOptions.Get("baseconv", "showbinary", true);
 
   // Loupe
-  udRefresh->Position = (short) g_ToolOptions.GetInt("loupe", "refresh");
+  udRefresh->Position = (short) g_ToolOptions.Get("loupe", "refresh", 250);
 
   // Info
-  ckPrefix->Checked = g_ToolOptions.GetBool("info", "prefix");
-  ckQuotes->Checked = g_ToolOptions.GetBool("info", "quotes");
+  ckPrefix->Checked = g_ToolOptions.Get("info", "prefix", false);
+  ckQuotes->Checked = g_ToolOptions.Get("info", "quotes", false);
 
   // Grabber
-  ckAutosave->Checked = g_ToolOptions.GetBool("capture", "autosave");
-  ckShowLoupeOnGrab->Checked = g_ToolOptions.GetBool("capture", "showloupe");
+  ckAutosave->Checked = g_ToolOptions.Get("capture", "autosave", false);
+  ckShowLoupeOnGrab->Checked = g_ToolOptions.Get("capture", "showloupe", false);
 }
 
 //---------------------------------------------------------------------------

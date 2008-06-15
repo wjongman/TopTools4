@@ -9,16 +9,6 @@
 
 // Global String for registry access
 extern const String g_RegBaseKey;
-/*
-/////////////////////////////////////////////////////////////////////////////
-enum TToolId
-{
-    idMain = 1,
-    idRuler = 2,
-    idLoupe = 4,
-    idInfo = 8,
-    idBaseconv = 16
-};*/
 
 /////////////////////////////////////////////////////////////////////////////
 enum TDoubleClickOpen
@@ -44,12 +34,15 @@ enum TDoubleClickOpen
 class TPersistOptions
 {
 private:
+    typedef std::map<String, TOption> TOptionMap;
+    typedef std::map<String, TOption>::iterator option_iterator;
     typedef std::map<String, TOptionMap> TOptionMaps;
     typedef std::map<String, TOptionMap>::iterator option_map_iterator;
 
     TOptionMaps m_OptionMaps;
     String m_RegBaseKey;
-    String m_IniFilePathName;
+    String m_IniFilePath;
+    TRunMode m_RunMode;
 
 public:
     //-------------------------------------------------------------------------
@@ -57,123 +50,275 @@ public:
     {
         InitOptions();
         m_RegBaseKey = g_RegBaseKey;
-        m_IniFilePathName = "";
+        m_IniFilePath = ChangeFileExt(ParamStr(0), ".ini");
     }
 
     //-------------------------------------------------------------------------
     void Load()
     {
         // See how the user wants to run the app
-        TRunMode RunMode;
         if (ParamCount() > 0 && ParamStr(1) == "-p")
         {
-            RunMode = rmPortable;
+            m_RunMode = rmPortable;
+        }
+        else if (ParamCount() > 0 && ParamStr(1) == "-r")
+        {
+            m_RunMode = rmRegistry;
         }
         else if (ParamCount() > 0 && ParamStr(1) == "-i")
         {
-            RunMode = rmIniFile;
-            // todo: allow optional ParamStr(2) to indicate target inifile
+            m_RunMode = rmIniFile;
+            // Optional ParamStr(2) to indicate target inifile
             if (ParamCount() > 1)
             {
-                String IniFileName = ParamStr(2);
-                if (FileExists(IniFileName))
+                String IniFilePath = ParamStr(2);
+                if (FileExists(IniFilePath))
                 {
-                    m_IniFilePathName = IniFileName;
-                    Load(IniFileName);
-                    return;
+                    m_IniFilePath = IniFilePath;
                 }
             }
         }
+        else if (RegKeyExists())
+        {
+            m_RunMode = rmRegistry;
+        }
+        else if (IniFileExists())
+        {
+            m_RunMode = rmIniFile;
+        }
         else
         {
-            if (RegKeyExists())
-                RunMode = rmRegistry;
-            else if (IniFileExists())
-                RunMode = rmIniFile;
-            else
-                // todo: offer dialog at this point?
-                RunMode = rmPortable;
+            // todo: offer dialog at this point?
+            m_RunMode = rmPortable;
         }
 
-        Load(RunMode);
-    }
-
-    //-------------------------------------------------------------------------
-    void EnumIniSections(TStringList *pSectionList)
-    {
-        TIniFile *Ini = new TIniFile(m_IniFilePathName);
-        try
+        switch (m_RunMode)
         {
-	        Ini->ReadSections(pSectionList);
-        }
-        __finally
-        {
-	        delete Ini;
+        case rmIniFile:
+            LoadFromIniFile();
+            break;
+        case rmRegistry:
+            LoadFromRegistry();
+            break;
         }
     }
 
     //-------------------------------------------------------------------------
-    void EnumRegKeySections(TStringList *pKeyList)
+    bool Save()  // Save using last known RunMode
     {
+        if (m_RunMode == rmPortable)
+            return false;
+
+        else if (m_RunMode == rmIniFile)
+            return SaveToIniFile();
+
+        return SaveToRegistry();
+    }
+
+    //-------------------------------------------------------------------------
+    int Get(const String& ToolName, const String& OptionName, int iDefault)
+    {
+        TOption Default(iDefault);
+        return GetOrCreateOption(ToolName, OptionName, Default).GetIntVal();
+    }
+
+    //-------------------------------------------------------------------------
+    String Get(const String& ToolName, const String& OptionName, const String& sDefault)
+    {
+        TOption Default(sDefault);
+        return GetOrCreateOption(ToolName, OptionName, Default).GetStringVal();
+    }
+
+    //-------------------------------------------------------------------------
+    bool Get(const String& ToolName, const String& OptionName, bool bDefault)
+    {
+        TOption Default(bDefault);
+        return GetOrCreateOption(ToolName, OptionName, Default).GetBoolVal();
+    }
+
+    //-------------------------------------------------------------------------
+    void Set(const String& ToolName, const String& OptionName, int iOption)
+    {
+        TOption Option(iOption);
+        SetOption(ToolName, OptionName, Option);
+    }
+
+    //-------------------------------------------------------------------------
+    void Set(const String& ToolName, const String& OptionName, String sOption)
+    {
+        TOption Option(sOption);
+        SetOption(ToolName, OptionName, Option);
+    }
+
+    //-------------------------------------------------------------------------
+    void Set(const String& ToolName, const String& OptionName, bool bOption)
+    {
+        TOption Option(bOption);
+        SetOption(ToolName, OptionName, Option);
+    }
+
+private:
+    //-------------------------------------------------------------------------
+    bool __fastcall LoadFromIniFile()
+    {
+        TIniFile *Ini = new TIniFile(m_IniFilePath);
+        if (!Ini)
+            // todo: check why it failed, was it a privilege issue?
+            return false;
+
+        TStringList *SectionList = new TStringList;
+        Ini->ReadSections(SectionList);
+
+        for (int section = 0; section < SectionList->Count; section++)
+        {
+            String SectionName = SectionList->Strings[section];
+
+            TStringList *NameList = new TStringList;
+
+            Ini->ReadSection(SectionName, NameList);
+            for (int i = 0; i < NameList->Count; i++)
+            {
+                String OptionName = NameList->Strings[i];
+                String OptionValue = Ini->ReadString(SectionName, OptionName, "");
+
+                Set(SectionName, OptionName, OptionValue);
+            }
+            delete NameList;
+        }
+
+        delete Ini;
+        return true;
+    }
+
+    //-------------------------------------------------------------------------
+    bool __fastcall LoadFromRegistry()
+    {
+        bool bSuccess = false;
+        TStringList *NameList = new TStringList;
+
         TRegistry *Reg = new TRegistry();
         Reg->RootKey = HKEY_CURRENT_USER;
         try
         {
             if (Reg->OpenKey(m_RegBaseKey, false))
             {
-                Reg->GetKeyNames(pKeyList);
+                TStringList *KeyList = new TStringList;
+                Reg->GetKeyNames(KeyList);
+
+                for (int key = 0; key < KeyList->Count; key++)
+                {
+                    String KeyName = KeyList->Strings[key];
+
+                    TStringList *NameList = new TStringList;
+
+                    Reg->GetValueNames(NameList);
+                    for (int i = 0; i < NameList->Count; i++)
+                    {
+                        String OptionName = NameList->Strings[i];
+                        TRegDataType DataType = Reg->GetDataType(OptionName);
+                        switch (DataType)
+                        {
+                        case rdInteger:
+                            {
+                                int OptionValue = Reg->ReadInteger(OptionName);
+                                Set(KeyName, OptionName, OptionValue);
+                            }
+                            break;
+
+                        case rdString:
+                            {
+                                String OptionValue = Reg->ReadString(OptionName);
+                                Set(KeyName, OptionName, OptionValue);
+                            }
+                            break;
+                        }
+                    }
+                    delete NameList;
+                }
+                delete KeyList;
+                Reg->CloseKey();
+                bSuccess = true;
             }
         }
         __finally
         {
             delete Reg;
         }
+        return bSuccess;
     }
 
     //-------------------------------------------------------------------------
-    void Load(const TRunMode& RunMode)
+    bool __fastcall SaveToIniFile()
     {
-        TStringList *pSectionList = new TStringList;
-
-        switch (RunMode)
+        TIniFile *Ini = new TIniFile(m_IniFilePath);
+        for (option_map_iterator map_iter = m_OptionMaps.begin(); map_iter != m_OptionMaps.end(); map_iter++)
         {
-        case rmIniFile:
-            EnumIniSections(pSectionList);
-            break;
-        case rmRegistry:
-            EnumRegKeySections(pSectionList);
-            break;
+            String SectionName = map_iter->first;
+            TOptionMap OptionMap = map_iter->second;
+            for (option_iterator option_iter = OptionMap.begin(); option_iter != OptionMap.end(); option_iter++)
+            {
+                String OptionName = option_iter->first;
+                TOption Option = option_iter->second;
+                Ini->WriteString(SectionName, OptionName, Option.GetStringVal());
+            }
         }
-        // bug: when m_OptionMaps is empty no options are loaded and
-        // RunMode degrades to rmPortable
-        for (option_map_iterator iter = m_OptionMaps.begin(); iter != m_OptionMaps.end(); iter++)
-        {
-            (iter->second).Load(RunMode);
-        }
-        delete pSectionList;
+        delete Ini;
+        return true;
     }
 
     //-------------------------------------------------------------------------
-     void Load(const String& IniFileName)
-     {
-//         // Load persisted options
-//         //m_OptionMaps.Load(RunMode);
-//
-//         // todo: we need to enumerate the sections held by the storage medium,
-//         // at the moment we only find initialized sections in the map
-//         for (option_map_iterator iter = m_OptionMaps.begin(); iter != m_OptionMaps.end(); iter++)
-//         {
-//             (iter->second).Load(IniFileName);
-//         }
-     }
+    bool __fastcall SaveToRegistry()
+    {
+        bool bSuccess = false;
+        TRegistry *Reg = new TRegistry();
+        Reg->RootKey = HKEY_CURRENT_USER;
+        try
+        {
+            for (option_map_iterator map_iter = m_OptionMaps.begin(); map_iter != m_OptionMaps.end(); map_iter++)
+            {
+                String KeyName = map_iter->first;
+                TOptionMap OptionMap = map_iter->second;
+
+                if (Reg->OpenKey(m_RegBaseKey + KeyName, true))
+                {
+                    for (option_iterator iter = OptionMap.begin(); iter != OptionMap.end(); iter++)
+                    {
+                        String OptionName = iter->first;
+                        TOption Option = iter->second;
+                        switch (Option.GetDataType())
+                        {
+                        case dtInt:
+                            Reg->WriteInteger(OptionName, Option.GetIntVal());
+                            break;
+                        case dtString:
+                            Reg->WriteString(OptionName, Option.GetStringVal());
+                            break;
+                        }
+                    }
+                }
+                Reg->CloseKey();
+                bSuccess = true;
+            }
+        }
+        __finally
+        {
+            delete Reg;
+        }
+        return bSuccess;
+    }
 
     //-------------------------------------------------------------------------
-    void Save()
+    bool IniFileExists()
     {
-        for (option_map_iterator iter = m_OptionMaps.begin(); iter != m_OptionMaps.end(); iter++)
+        // See if default ini-file exists
+        String IniFileName = ChangeFileExt(ParamStr(0), ".ini");
+        //String IniFilePath = "%APPDATA%\\TopTools 4\\" + IniFileName;
+        //String IniFilePath = "%USERPROFILE%\\Local Settings\\Application Data\\TopTools 4\\" + IniFileName;
+        if (FileExists(IniFileName))// || FileExists(IniFilePath))
         {
-            (iter->second).Save();
+            return true;
         }
+        return false;
     }
 
     //-------------------------------------------------------------------------
@@ -191,20 +336,6 @@ public:
             delete Reg;
         }
         return bSuccess;
-    }
-
-    //-------------------------------------------------------------------------
-    bool IniFileExists()
-    {
-        // See if default ini-file exists
-        String IniFileName = ChangeFileExt(ParamStr(0), ".ini");
-        String IniFilePath = "%APPDATA%\\TopTools 4\\" + IniFileName;
-        //String IniFilePath = "%USERPROFILE%\\Local Settings\\Application Data\\TopTools 4\\" + IniFileName;
-        if (FileExists(IniFileName))// || FileExists(IniFilePath))
-        {
-            return true;
-        }
-        return false;
     }
 
     //-------------------------------------------------------------------------
@@ -265,105 +396,48 @@ public:
         //Set("control", "top", 0);
     }
 
-public:
+
     //-------------------------------------------------------------------------
-    int Get(const String& ToolName, const String& OptionName, int iDefault)
+    TOption GetOrCreateOption(const String& ToolName, const String& OptionName, const TOption& Default)
     {
-        option_map_iterator iter = m_OptionMaps.find(ToolName);
-        if (iter != m_OptionMaps.end())
+        option_map_iterator map_iter = m_OptionMaps.find(ToolName);
+        if (map_iter == m_OptionMaps.end())
         {
-            return(iter->second).Get(OptionName, iDefault);
-        }
-
-        return iDefault;
-    }
-
-    //-------------------------------------------------------------------------
-    String Get(const String& ToolName, const String& OptionName, const String& sDefault)
-    {
-        option_map_iterator iter = m_OptionMaps.find(ToolName);
-        if (iter != m_OptionMaps.end())
-        {
-            return(iter->second).Get(OptionName, sDefault);
-        }
-
-        return sDefault;
-    }
-
-    //-------------------------------------------------------------------------
-    bool Get(const String& ToolName, const String& OptionName, bool bDefault)
-    {
-        option_map_iterator iter = m_OptionMaps.find(ToolName);
-        if (iter != m_OptionMaps.end())
-        {
-            return(iter->second).Get(OptionName, bDefault);
-        }
-
-        return bDefault;
-    }
-
-    //-------------------------------------------------------------------------
-    int GetInt(const String& ToolName, const String& OptionName)
-    {
-        return Get(ToolName, OptionName, 0);
-    }
-
-    //-------------------------------------------------------------------------
-    String GetString(const String& ToolName, const String& OptionName)
-    {
-        return Get(ToolName, OptionName, "");
-    }
-
-    //-------------------------------------------------------------------------
-    bool GetBool(const String& ToolName, const String& OptionName)
-    {
-        return Get(ToolName, OptionName, false);
-    }
-
-    //-------------------------------------------------------------------------
-    void Set(const String& ToolName, const String& OptionName, int Option)
-    {
-        option_map_iterator iter = m_OptionMaps.find(ToolName);
-        if (iter != m_OptionMaps.end())
-        {
-            (iter->second).Set(OptionName, Option);
-        }
-        else
-        {
-            TOptionMap OptionMap(m_RegBaseKey, ToolName);
-            OptionMap.Set(OptionName, Option);
+            // No map-entry for this tool yet, add one
+            TOptionMap OptionMap;
+            OptionMap[OptionName] = Default;
             m_OptionMaps[ToolName] = OptionMap;
+            return Default;
+        }
+        else
+        {
+            // Map-entry found, find option
+            option_iterator option_iter = (map_iter->second).find(OptionName);
+            if (option_iter == (map_iter->second).end())
+            {
+                // Option not in map yet, add it
+                (map_iter->second)[OptionName] = Default;
+                return Default;
+            }
+            else
+            {
+                return (option_iter->second);
+            }
         }
     }
 
     //-------------------------------------------------------------------------
-    void Set(const String& ToolName, const String& OptionName, String Option)
+    void SetOption(const String& ToolName, const String& OptionName, TOption Option)
     {
         option_map_iterator iter = m_OptionMaps.find(ToolName);
         if (iter != m_OptionMaps.end())
         {
-            (iter->second).Set(OptionName, Option);
+            (iter->second)[OptionName] = Option;
         }
         else
         {
-            TOptionMap OptionMap(m_RegBaseKey, ToolName);
-            OptionMap.Set(OptionName, Option);
-            m_OptionMaps[ToolName] = OptionMap;
-        }
-    }
-
-    //-------------------------------------------------------------------------
-    void Set(const String& ToolName, const String& OptionName, bool Option)
-    {
-        option_map_iterator iter = m_OptionMaps.find(ToolName);
-        if (iter != m_OptionMaps.end())
-        {
-            (iter->second).Set(OptionName, Option);
-        }
-        else
-        {
-            TOptionMap OptionMap(m_RegBaseKey, ToolName);
-            OptionMap.Set(OptionName, Option);
+            TOptionMap OptionMap;
+            OptionMap[OptionName] = Option;
             m_OptionMaps[ToolName] = OptionMap;
         }
     }
