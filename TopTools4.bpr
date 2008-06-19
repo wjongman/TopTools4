@@ -150,7 +150,7 @@ Item1=exe
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=-i
+RunParams=-r
 HostApplication=
 RemoteHost=
 RemotePath=

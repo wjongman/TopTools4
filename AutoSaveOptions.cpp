@@ -20,7 +20,8 @@ TAutoSaveOptions::TAutoSaveOptions()
   ExistAction = 0;
   Bypass = false;
   Continuous = false;
-  LastDir = "%USERPROFILE%\\Desktop";
+  LastDir = GetSpecialFolderPath(CSIDL_DESKTOPDIRECTORY);
+  //LastDir = "%USERPROFILE%\\Desktop";
 }
 
 //---------------------------------------------------------------------------

@@ -15,7 +15,7 @@
 TMainForm *MainForm;
 
 // Global String for registry access
-const String g_RegBaseKey("Software\\TopTools 4\\");
+//const String g_RegBaseKey("Software\\TopTools 4");
 // Global option store
 TPersistOptions g_ToolOptions;
 // Global flag to hold runmode

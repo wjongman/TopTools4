@@ -8,8 +8,8 @@
 #include "ToolOptions.h"
 
 // Global String for registry access
-extern const String g_RegBaseKey;
-
+//extern const String g_RegBaseKey;
+const String g_RegBaseKey("Software\\TopTools 4\\");
 /////////////////////////////////////////////////////////////////////////////
 enum TDoubleClickOpen
 {
@@ -48,48 +48,64 @@ public:
     //-------------------------------------------------------------------------
     TPersistOptions()
     {
-        InitOptions();
-        m_RegBaseKey = g_RegBaseKey;
-        m_IniFilePath = ChangeFileExt(ParamStr(0), ".ini");
+        //m_RegBaseKey = g_RegBaseKey;
+        //m_IniFilePath = ChangeFileExt(ParamStr(0), ".ini");
     }
 
     //-------------------------------------------------------------------------
-    void Load()
+    void Load(const String& RegBaseKey)
     {
+        m_RegBaseKey = RegBaseKey;
+        m_IniFilePath = ChangeFileExt(ParamStr(0), ".ini");
+
         // See how the user wants to run the app
-        if (ParamCount() > 0 && ParamStr(1) == "-p")
+        if (ParamCount() > 0)
         {
-            m_RunMode = rmPortable;
-        }
-        else if (ParamCount() > 0 && ParamStr(1) == "-r")
-        {
-            m_RunMode = rmRegistry;
-        }
-        else if (ParamCount() > 0 && ParamStr(1) == "-i")
-        {
-            m_RunMode = rmIniFile;
-            // Optional ParamStr(2) to indicate target inifile
-            if (ParamCount() > 1)
+            // Run-mode can be forced by commandline arguments
+            if (ParamStr(1) == "-p")
             {
-                String IniFilePath = ParamStr(2);
-                if (FileExists(IniFilePath))
+                m_RunMode = rmPortable;
+            }
+            else if (ParamStr(1) == "-r")
+            {
+                m_RunMode = rmRegistry;
+            }
+            else if (ParamStr(1) == "-i")
+            {
+                m_RunMode = rmIniFile;
+                // Optional ParamStr(2) to indicate target inifile
+                if (ParamCount() > 1)
                 {
-                    m_IniFilePath = IniFilePath;
+                    String IniFilePath = ParamStr(2);
+                    if (FileExists(IniFilePath))
+                    {
+                        m_IniFilePath = IniFilePath;
+                    }
                 }
             }
         }
-        else if (RegKeyExists())
-        {
-            m_RunMode = rmRegistry;
-        }
-        else if (IniFileExists())
-        {
-            m_RunMode = rmIniFile;
-        }
         else
         {
-            // todo: offer dialog at this point?
-            m_RunMode = rmPortable;
+            // No commandline arguments, heuristcly determine run-mode
+            if (RegKeyExists())
+            {
+                // If a Registry key exists, TopTools was either installed
+                // using the setup program or the user chose to save settings
+                // in the registry at the end of a previous session.
+                // In this case we'll run in rmRegistry mode
+                m_RunMode = rmRegistry;
+            }
+            else if (IniFileExists())
+            {
+                // If an Ini file exists we'll run in rmIniFile mode
+                m_RunMode = rmIniFile;
+            }
+            else
+            {
+                // If neither exists we run rmPortable and offer a dialog to
+                // choose what to do with the settings before TopTools exits.
+                m_RunMode = rmPortable;
+            }
         }
 
         switch (m_RunMode)
@@ -107,6 +123,7 @@ public:
     bool Save()  // Save using last known RunMode
     {
         if (m_RunMode == rmPortable)
+            // Offer a dialog and ask what to do with the settings
             return false;
 
         else if (m_RunMode == rmIniFile)
@@ -159,6 +176,52 @@ public:
 
 private:
     //-------------------------------------------------------------------------
+    TOption GetOrCreateOption(const String& ToolName, const String& OptionName, const TOption& Default)
+    {
+        // m_OptionMaps is a map of maps of name-value pairs ;-)
+        option_map_iterator map_iter = m_OptionMaps.find(ToolName);
+        if (map_iter == m_OptionMaps.end())
+        {
+            // No map-entry for this tool yet, add one
+            TOptionMap OptionMap;
+            OptionMap[OptionName] = Default;
+            m_OptionMaps[ToolName] = OptionMap;
+            return Default;
+        }
+        else
+        {
+            // Map-entry found, find option
+            option_iterator option_iter = (map_iter->second).find(OptionName);
+            if (option_iter == (map_iter->second).end())
+            {
+                // Option not in map yet, add it
+                (map_iter->second)[OptionName] = Default;
+                return Default;
+            }
+            else
+            {
+                return(option_iter->second);
+            }
+        }
+    }
+
+    //-------------------------------------------------------------------------
+    void SetOption(const String& ToolName, const String& OptionName, TOption Option)
+    {
+        option_map_iterator iter = m_OptionMaps.find(ToolName);
+        if (iter != m_OptionMaps.end())
+        {
+            (iter->second)[OptionName] = Option;
+        }
+        else
+        {
+            TOptionMap OptionMap;
+            OptionMap[OptionName] = Option;
+            m_OptionMaps[ToolName] = OptionMap;
+        }
+    }
+
+    //-------------------------------------------------------------------------
     bool __fastcall LoadFromIniFile()
     {
         TIniFile *Ini = new TIniFile(m_IniFilePath);
@@ -193,52 +256,75 @@ private:
     //-------------------------------------------------------------------------
     bool __fastcall LoadFromRegistry()
     {
+        return EnumRegKeys(HKEY_CURRENT_USER, m_RegBaseKey, "");
+
+    }
+
+
+    //-------------------------------------------------------------------------
+    bool __fastcall EnumRegKeys(HKEY RootKey, const String& ParentKeyName, const String& KeyName)
+    {
         bool bSuccess = false;
-        TStringList *NameList = new TStringList;
 
         TRegistry *Reg = new TRegistry();
-        Reg->RootKey = HKEY_CURRENT_USER;
+        Reg->RootKey = RootKey;
         try
         {
-            if (Reg->OpenKey(m_RegBaseKey, false))
+            if (Reg->OpenKey(ParentKeyName, false))
             {
-                TStringList *KeyList = new TStringList;
-                Reg->GetKeyNames(KeyList);
+                TStringList *NameList = new TStringList;
+                Reg->GetValueNames(NameList);
 
-                for (int key = 0; key < KeyList->Count; key++)
+                for (int i = 0; i < NameList->Count; i++)
                 {
-                    String KeyName = KeyList->Strings[key];
-
-                    TStringList *NameList = new TStringList;
-
-                    Reg->GetValueNames(NameList);
-                    for (int i = 0; i < NameList->Count; i++)
+                    String OptionName = NameList->Strings[i];
+                    TRegDataType DataType = Reg->GetDataType(OptionName);
+                    switch (DataType)
                     {
-                        String OptionName = NameList->Strings[i];
-                        TRegDataType DataType = Reg->GetDataType(OptionName);
-                        switch (DataType)
+                    case rdInteger:
                         {
-                        case rdInteger:
-                            {
-                                int OptionValue = Reg->ReadInteger(OptionName);
-                                Set(KeyName, OptionName, OptionValue);
-                            }
-                            break;
-
-                        case rdString:
-                            {
-                                String OptionValue = Reg->ReadString(OptionName);
-                                Set(KeyName, OptionName, OptionValue);
-                            }
-                            break;
+                            int OptionValue = Reg->ReadInteger(OptionName);
+                            Set(KeyName, OptionName, OptionValue);
                         }
+                        break;
+
+                    case rdString:
+                        {
+                            String OptionValue = Reg->ReadString(OptionName);
+                            Set(KeyName, OptionName, OptionValue);
+                        }
+                        break;
                     }
-                    delete NameList;
                 }
-                delete KeyList;
-                Reg->CloseKey();
-                bSuccess = true;
+                delete NameList;
+
+                if (Reg->HasSubKeys())
+                {
+                    TStringList *KeyList = new TStringList;
+                    Reg->GetKeyNames(KeyList);
+
+                    for (int key = 0; key < KeyList->Count; key++)
+                    {
+                        String SubKeyName = KeyList->Strings[key];
+                        // Quick hack to avoid pending backslashes
+                        String ToolName;
+                        if (KeyName == "")
+                        {
+                            ToolName = SubKeyName;
+                        }
+                        else
+                        {
+                            ToolName = KeyName + "\\" + SubKeyName;
+                        }
+
+                        // Recursively enumerate subkeys
+                        EnumRegKeys(RootKey, ParentKeyName + SubKeyName  + "\\", ToolName);
+                    }
+                    delete KeyList;
+                }
             }
+            Reg->CloseKey();
+            bSuccess = true;
         }
         __finally
         {
@@ -396,51 +482,6 @@ private:
         //Set("control", "top", 0);
     }
 
-
-    //-------------------------------------------------------------------------
-    TOption GetOrCreateOption(const String& ToolName, const String& OptionName, const TOption& Default)
-    {
-        option_map_iterator map_iter = m_OptionMaps.find(ToolName);
-        if (map_iter == m_OptionMaps.end())
-        {
-            // No map-entry for this tool yet, add one
-            TOptionMap OptionMap;
-            OptionMap[OptionName] = Default;
-            m_OptionMaps[ToolName] = OptionMap;
-            return Default;
-        }
-        else
-        {
-            // Map-entry found, find option
-            option_iterator option_iter = (map_iter->second).find(OptionName);
-            if (option_iter == (map_iter->second).end())
-            {
-                // Option not in map yet, add it
-                (map_iter->second)[OptionName] = Default;
-                return Default;
-            }
-            else
-            {
-                return (option_iter->second);
-            }
-        }
-    }
-
-    //-------------------------------------------------------------------------
-    void SetOption(const String& ToolName, const String& OptionName, TOption Option)
-    {
-        option_map_iterator iter = m_OptionMaps.find(ToolName);
-        if (iter != m_OptionMaps.end())
-        {
-            (iter->second)[OptionName] = Option;
-        }
-        else
-        {
-            TOptionMap OptionMap;
-            OptionMap[OptionName] = Option;
-            m_OptionMaps[ToolName] = OptionMap;
-        }
-    }
 
 }; // TPersistToolOptions
 
