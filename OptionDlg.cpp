@@ -198,31 +198,7 @@ void TToolOptionsDialog::SaveOptions()
 
   g_ToolOptions.Set("capture", "autosave", ckAutosave->Checked);
   g_ToolOptions.Set("capture", "showloupe", ckShowLoupeOnGrab->Checked);
-
-  //g_ToolOptions.Save();
 }
-
-//---------------------------------------------------------------------------
-// void TToolOptionsDialog::InitHotkeyPanels()
-// {
-//   String RegBase = g_RegBaseKey + "hotkeys\\";
-//
-//   hkpDoubleClick->Load(RegBase + "doubleclick");
-//   hkpZoomIn->Load(RegBase + "zoomin");
-//   hkpZoomOut->Load(RegBase + "zoomout");
-//   hkpColorCopy->Load(RegBase + "colorcopy");
-//   hkpGrabScreen->Load(RegBase + "capturestart");
-// }
-//
-// //---------------------------------------------------------------------------
-// void TToolOptionsDialog::SaveHotkeyPanels()
-// {
-//   hkpDoubleClick->Save();
-//   hkpZoomIn->Save();
-//   hkpZoomOut->Save();
-//   hkpColorCopy->Save();
-//   hkpGrabScreen->Save();
-// }
 
 //---------------------------------------------------------------------------
 THotkeyInfo TToolOptionsDialog::LoadHotkeyInfo(const String& sHotKeyName)

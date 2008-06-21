@@ -6,10 +6,16 @@
 #include <registry.hpp>
 #include <map>
 #include "ToolOptions.h"
+#include "QuerySaveDlg.h"
 
-// Global String for registry access
-//extern const String g_RegBaseKey;
-const String g_RegBaseKey("Software\\TopTools 4\\");
+/////////////////////////////////////////////////////////////////////////////
+enum TRunMode
+{
+    rmPortable = 0,
+    rmIniFile = 1,
+    rmRegistry = 2
+};
+
 /////////////////////////////////////////////////////////////////////////////
 enum TDoubleClickOpen
 {
@@ -22,6 +28,11 @@ enum TDoubleClickOpen
 
 /////////////////////////////////////////////////////////////////////////////
 //
+//
+
+
+
+
 // Encapsulation of map that holds toolname - TOptionMap pairs
 // This class is a collection of all existing tool-options.
 // It uses a TOptionMap for each tool so it allows access by
@@ -43,18 +54,18 @@ private:
     String m_RegBaseKey;
     String m_IniFilePath;
     TRunMode m_RunMode;
+    bool m_QuerySave;
 
 public:
     //-------------------------------------------------------------------------
     TPersistOptions()
     {
-        //m_RegBaseKey = g_RegBaseKey;
-        //m_IniFilePath = ChangeFileExt(ParamStr(0), ".ini");
     }
 
     //-------------------------------------------------------------------------
     void Load(const String& RegBaseKey)
     {
+        m_QuerySave = false;
         m_RegBaseKey = RegBaseKey;
         m_IniFilePath = ChangeFileExt(ParamStr(0), ".ini");
 
@@ -105,9 +116,17 @@ public:
                 // If neither exists we run rmPortable and offer a dialog to
                 // choose what to do with the settings before TopTools exits.
                 m_RunMode = rmPortable;
+                m_QuerySave = true;
             }
         }
-
+/*
+            TQuerySaveDialog* QueryDlg = new TQuerySaveDialog(NULL);//Application);
+            if (QueryDlg->ShowModal() == mrOk)
+            {
+                m_RunMode = (TRunMode)QueryDlg->GetRunMode();
+            }
+            delete QueryDlg;
+*/
         switch (m_RunMode)
         {
         case rmIniFile:
@@ -122,14 +141,32 @@ public:
     //-------------------------------------------------------------------------
     bool Save()  // Save using last known RunMode
     {
+// We can't use a dialog when Application->Run() has terminated..
+//
+//         if (m_QuerySave)
+//         {
+//             // Offer a dialog and ask what to do with the settings
+//             TQuerySaveDialog* QueryDlg = new TQuerySaveDialog(NULL);
+//             if (QueryDlg->ShowModal() == mrOk)
+//             {
+//                 m_RunMode = (TRunMode)QueryDlg->GetRunMode();
+//             }
+//             delete QueryDlg;
+//         }
+
         if (m_RunMode == rmPortable)
-            // Offer a dialog and ask what to do with the settings
+        {
             return false;
+        }
 
         else if (m_RunMode == rmIniFile)
+        {
             return SaveToIniFile();
-
-        return SaveToRegistry();
+        }
+        else
+        {
+            return SaveToRegistry();
+        }
     }
 
     //-------------------------------------------------------------------------
@@ -260,7 +297,6 @@ private:
 
     }
 
-
     //-------------------------------------------------------------------------
     bool __fastcall EnumRegKeys(HKEY RootKey, const String& ParentKeyName, const String& KeyName)
     {
@@ -306,19 +342,19 @@ private:
                     for (int key = 0; key < KeyList->Count; key++)
                     {
                         String SubKeyName = KeyList->Strings[key];
-                        // Quick hack to avoid pending backslashes
-                        String ToolName;
+                        // Quick hack to avoid backslashes in front of basekey
+                        String NextKeyName;
                         if (KeyName == "")
                         {
-                            ToolName = SubKeyName;
+                            NextKeyName = SubKeyName;
                         }
                         else
                         {
-                            ToolName = KeyName + "\\" + SubKeyName;
+                            NextKeyName = KeyName + "\\" + SubKeyName;
                         }
 
                         // Recursively enumerate subkeys
-                        EnumRegKeys(RootKey, ParentKeyName + SubKeyName  + "\\", ToolName);
+                        EnumRegKeys(RootKey, ParentKeyName + SubKeyName  + "\\", NextKeyName);
                     }
                     delete KeyList;
                 }
@@ -423,65 +459,6 @@ private:
         }
         return bSuccess;
     }
-
-    //-------------------------------------------------------------------------
-    void InitOptions()
-    {
-        // For now only sections that appear in this list will be read by
-        // this class, in the future we will enumerate the storage medium
-        // and populate the OptionMap for each entry in there..
-
-        // Initialize with default settings
-//         Set("capture\\autosave", "bypassmenu", false);
-//         Set("capture\\autosave", "continuous", false);
-//         Set("capture\\autosave", "digits", 2);
-//         Set("capture\\autosave", "directory", "");
-//         Set("capture\\autosave", "existaction", 0);
-//         Set("capture\\autosave", "filename", "Snapshot");
-//         Set("capture\\autosave", "imagetype", 0);
-//         Set("capture\\autosave", "nextvalue", 1);
-//         Set("capture\\autosave", "lastdir", "");
-//
-//         Set("main", "autostart", false);
-//         Set("main", "doubleclick", dcoControl);
-//         Set("main", "istrayapp", false);
-//         Set("main", "rememberstate", true);
-//         Set("main", "savedstate", dcoControl);
-//         Set("main", "singleton", false);
-//         Set("main", "stayontop", true);
-//
-//         Set("ruler", "arrownudge", true);
-//         Set("ruler", "horizontal", true);
-//         Set("ruler", "length", 1024);
-//         Set("ruler", "transparency", 50);
-//         Set("ruler", "transparent", false);
-//
-//         Set("baseconv", "showbinary", true);
-//
-//         Set("loupe", "centerbox", false);
-//         Set("loupe", "crosshair", false);
-//         Set("loupe", "grid", false);
-//         Set("loupe", "height", 200);
-//         Set("loupe", "refresh", 250);
-//         Set("loupe", "selfmagnify", false);
-//         Set("loupe", "width", 200);
-//         Set("loupe", "zoom", 4);
-//
-//         Set("info", "prefix", false);
-//         Set("info", "quotes", false);
-//
-//         Set("capture", "autosave", false);
-//         Set("capture", "showloupe", false);
-//
-//         Set("hotkeys\\capturestart", "enabled", false);
-//         Set("hotkeys\\colorcopy", "enabled", false);
-//         Set("hotkeys\\doubleclick", "enabled", false);
-//         Set("hotkeys\\zoomin", "enabled", false);
-//         Set("hotkeys\\zoomout", "enabled", false);
-
-        //Set("control", "top", 0);
-    }
-
 
 }; // TPersistToolOptions
 

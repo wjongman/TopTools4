@@ -80,8 +80,6 @@ protected:
   void __fastcall LoadSettings();
   void __fastcall UpdateSettings();
   void __fastcall SaveSettings();
-//  void __fastcall LoadPosition();
-//  void __fastcall SavePosition();
 
 protected:
   void __fastcall HandleAppDeactivate(TObject *Sender);
@@ -99,19 +97,17 @@ private:  // User declarations
   void __fastcall SetTopMost(bool ontop);
   void __fastcall ShowTrayIcon(bool show);
   void __fastcall ShowTaskbarIcon(bool show);
-//  void __fastcall SetDefaultPosition();
   String GetColorFormatString();
 
   bool TimerNeeded();
+  bool m_bStayOnTop;
 
-//  TMainOptions m_Options;
   THotkeyManager* m_HotkeyManager;
 
   enum UIMode { uiNormal, uiTrayApp };
   UIMode m_UIMode;
 
   void __fastcall SetUI(bool isTrayApp);
-  //void __fastcall SetUI(UIMode mode);
   void __fastcall ActAsSingleton(bool singleton);
   int __fastcall GetTaskbarRect(LPRECT lprect);
 

@@ -35,11 +35,15 @@ USEUNIT("Monitor.cpp");
 USEUNIT("PersistImage.cpp");
 USEUNIT("TopToolBar.cpp");
 USEUNIT("TrayIcon.cpp");
+USEFORM("QuerySaveDlg.cpp", QuerySaveDialog);
+
+// Global option store
+TPersistOptions g_ToolOptions;
 
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
-    g_ToolOptions.Load(g_RegBaseKey);
+    g_ToolOptions.Load("Software\\TopTools 4\\");
     bool IsSingleton = g_ToolOptions.Get("main", "singleton", false);
 
     // This mutex provides the means to determine if a TopTools instance is

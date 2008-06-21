@@ -14,14 +14,6 @@
 #pragma resource "*.dfm"
 TMainForm *MainForm;
 
-// Global String for registry access
-//const String g_RegBaseKey("Software\\TopTools 4");
-// Global option store
-TPersistOptions g_ToolOptions;
-// Global flag to hold runmode
-TRunMode g_RunMode;
-
-
 //---------------------------------------------------------------------------
 __fastcall TMainForm::TMainForm(TComponent* Owner)
 : TToolForm(Owner, "main"),
@@ -37,7 +29,6 @@ __fastcall TMainForm::TMainForm(TComponent* Owner)
     Application->OnDeactivate = HandleAppDeactivate;
     Application->OnRestore = HandleAppRestore;
 
-//    g_ToolOptions.Load();
     LoadSettings();
 
     m_HotkeyManager = new THotkeyManager(Handle);
@@ -155,19 +146,20 @@ void __fastcall TMainForm::ShowTaskbarIcon(bool show)
 //  You can make the application window a tool window by calling the API
 //  GetWindowLong and SetWindowLong functions.
 {
+    ::ShowWindow(Application->Handle, SW_HIDE);
+
     if (show)
     {
         // Show taskbar icon by making the hidden application window a normal window
-        ::ShowWindow(Application->Handle, SW_HIDE);
         DWORD dwExStyle = GetWindowLong(Application->Handle, GWL_EXSTYLE);
         dwExStyle &= ~WS_EX_TOOLWINDOW;
         SetWindowLong(Application->Handle, GWL_EXSTYLE, dwExStyle);
+
         ::ShowWindow(Application->Handle, SW_SHOW);
     }
     else
     {
         // Hide taskbar icon by making the hidden application window a toolwindow
-        ::ShowWindow(Application->Handle, SW_HIDE);
         DWORD dwExStyle = GetWindowLong(Application->Handle, GWL_EXSTYLE);
         dwExStyle |= WS_EX_TOOLWINDOW;
         SetWindowLong(Application->Handle, GWL_EXSTYLE, dwExStyle);
@@ -248,6 +240,7 @@ void __fastcall TMainForm::HandleTrayMessage(TMessage &Message)
     case WM_LBUTTONDOWN:
         {
             // Toggle stay-on-top
+            SetTopMost(!m_bStayOnTop);
             break;
         }
     }
@@ -372,9 +365,10 @@ void __fastcall TMainForm::HandleTimerEvent(TObject *Sender)
 {
     static POINT ptLastMouse = TPoint(-1, -1);
 
-    // See if the mouse has moved
     POINT ptCurMouse;
     GetCursorPos(&ptCurMouse);
+
+    // Only update ruler if mouse has moved
     if (ptCurMouse.x != ptLastMouse.x || ptCurMouse.y != ptLastMouse.y)
     {
         ptLastMouse.x = ptCurMouse.x;
@@ -386,6 +380,7 @@ void __fastcall TMainForm::HandleTimerEvent(TObject *Sender)
 
     if (m_pInfo)
         m_pInfo->TimerEvent(ptCurMouse);
+
 }
 
 //---------------------------------------------------------------------------
@@ -393,14 +388,16 @@ void __fastcall TMainForm::LoadSettings()
 {
   SetUI(g_ToolOptions.Get("main", "istrayapp", false));
   RestoreToolState(g_ToolOptions.Get("main", "savedstate", dcoControl));
-  SetTopMost(g_ToolOptions.Get("main", "stayontop", true));
+  m_bStayOnTop = g_ToolOptions.Get("main", "stayontop", true);
+  SetTopMost(m_bStayOnTop);
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::UpdateSettings()
 {
   SetUI(g_ToolOptions.Get("main", "istrayapp", false));
-  SetTopMost(g_ToolOptions.Get("main", "stayontop", true));
+  m_bStayOnTop = g_ToolOptions.Get("main", "stayontop", true);
+  SetTopMost(m_bStayOnTop);
 }
 
 //---------------------------------------------------------------------------
@@ -412,6 +409,7 @@ void __fastcall TMainForm::SaveSettings()
       g_ToolOptions.Set("main", "savedstate", 0);
 
     g_ToolOptions.Set("main", "istrayapp", (m_UIMode == uiTrayApp));
+    g_ToolOptions.Set("main", "stayontop", m_bStayOnTop);
 }
 
 //---------------------------------------------------------------------------
@@ -428,6 +426,8 @@ void __fastcall TMainForm::SetTopMost(bool ontop)
     else
         SetWindowPos(Application->Handle, HWND_NOTOPMOST, 0, 0, 0, 0,
                      SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+
+    m_bStayOnTop = ontop;
 }
 
 //---------------------------------------------------------------------------
@@ -527,7 +527,9 @@ String TMainForm::GetColorFormatString()
 {
   String Format = "";
 
-  if (g_ToolOptions.Get("info", "quotes", false))
+  bool isQuoted = g_ToolOptions.Get("info", "quotes", false);
+
+  if (isQuoted)
     Format += "\"";
 
   if (g_ToolOptions.Get("info", "prefix", false))
@@ -535,7 +537,7 @@ String TMainForm::GetColorFormatString()
 
   Format += "%02X%02X%02X";
 
-  if (g_ToolOptions.Get("info", "quotes", false))
+  if (isQuoted)
     Format += "\"";
 
   return Format;
@@ -639,7 +641,10 @@ TToolForm* TMainForm::GetControlBar()
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::actCommandExecute(TObject *Sender)
 {
-    SetTopMost(g_ToolOptions.Get("main", "stayontop", true));
+//    SetTopMost(g_ToolOptions.Get("main", "stayontop", true));
+
+    // todo: find out why this is needed
+    SetTopMost(m_bStayOnTop);
 
     TAction* pAction = reinterpret_cast<TAction*>(Sender);
     if (pAction)
