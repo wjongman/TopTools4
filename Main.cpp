@@ -14,6 +14,9 @@
 #pragma resource "*.dfm"
 TMainForm *MainForm;
 
+// Global option store
+TPersistOptions g_ToolOptions;
+
 //---------------------------------------------------------------------------
 __fastcall TMainForm::TMainForm(TComponent* Owner)
 : TToolForm(Owner, "main"),
@@ -41,6 +44,7 @@ __fastcall TMainForm::~TMainForm()
 {
     SaveSettings();
 
+    // Tool destuctors will save settings for each tool
     delete m_pTrayIcon;
     delete m_HotkeyManager;
 
@@ -50,6 +54,9 @@ __fastcall TMainForm::~TMainForm()
     delete m_pInfo;
     delete m_pControlBar;
     delete m_pCapture;
+
+    // Persist tool options
+    g_ToolOptions.Save();
 }
 
 //---------------------------------------------------------------------------
@@ -387,6 +394,7 @@ void __fastcall TMainForm::HandleTimerEvent(TObject *Sender)
 void __fastcall TMainForm::LoadSettings()
 {
   SetUI(g_ToolOptions.Get("main", "istrayapp", false));
+  m_bRememberState = g_ToolOptions.Get("main", "rememberstate", true);
   RestoreToolState(g_ToolOptions.Get("main", "savedstate", dcoControl));
   m_bStayOnTop = g_ToolOptions.Get("main", "stayontop", true);
   SetTopMost(m_bStayOnTop);
@@ -396,6 +404,7 @@ void __fastcall TMainForm::LoadSettings()
 void __fastcall TMainForm::UpdateSettings()
 {
   SetUI(g_ToolOptions.Get("main", "istrayapp", false));
+  m_bRememberState = g_ToolOptions.Get("main", "rememberstate", true);
   m_bStayOnTop = g_ToolOptions.Get("main", "stayontop", true);
   SetTopMost(m_bStayOnTop);
 }
@@ -403,7 +412,7 @@ void __fastcall TMainForm::UpdateSettings()
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::SaveSettings()
 {
-    if (g_ToolOptions.Get("main", "rememberstate", true))
+    if (m_bRememberState)
       g_ToolOptions.Set("main", "savedstate", GetToolState());
     else
       g_ToolOptions.Set("main", "savedstate", 0);

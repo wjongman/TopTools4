@@ -101,6 +101,7 @@ private:  // User declarations
 
   bool TimerNeeded();
   bool m_bStayOnTop;
+  bool m_bRememberState;
 
   THotkeyManager* m_HotkeyManager;
 

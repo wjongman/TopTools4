@@ -37,9 +37,6 @@ USEUNIT("TopToolBar.cpp");
 USEUNIT("TrayIcon.cpp");
 USEFORM("QuerySaveDlg.cpp", QuerySaveDialog);
 
-// Global option store
-TPersistOptions g_ToolOptions;
-
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
@@ -91,8 +88,6 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     {
         Application->ShowException(&exception);
     }
-
-    g_ToolOptions.Save();
 
     return 0;
 }

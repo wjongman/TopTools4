@@ -142,6 +142,8 @@ public:
     bool Save()  // Save using last known RunMode
     {
 // We can't use a dialog when Application->Run() has terminated..
+// Instead we call g_ToolOptions.Save() from the MainForm destructor
+// when the messageloop is still running
 //
 //         if (m_QuerySave)
 //         {
@@ -213,7 +215,7 @@ public:
 
 private:
     //-------------------------------------------------------------------------
-    TOption GetOrCreateOption(const String& ToolName, const String& OptionName, const TOption& Default)
+    TOption GetOrCreateOption(const String& ToolName, const String& OptionName, TOption Default)
     {
         // m_OptionMaps is a map of maps of name-value pairs ;-)
         option_map_iterator map_iter = m_OptionMaps.find(ToolName);
@@ -243,7 +245,7 @@ private:
     }
 
     //-------------------------------------------------------------------------
-    void SetOption(const String& ToolName, const String& OptionName, TOption Option)
+    void SetOption(const String& ToolName, const String& OptionName, const TOption& Option)
     {
         option_map_iterator iter = m_OptionMaps.find(ToolName);
         if (iter != m_OptionMaps.end())
