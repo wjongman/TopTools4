@@ -1,6 +1,6 @@
 inherited LoupeForm: TLoupeForm
-  Left = 333
-  Top = 247
+  Left = 1353
+  Top = 319
   Width = 241
   Height = 249
   BorderStyle = bsSizeToolWin
