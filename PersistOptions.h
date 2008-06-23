@@ -28,25 +28,24 @@ enum TDoubleClickOpen
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// A (single) global instance of this class is the one and only object
+// to handle option persistence in a medium agnostic way.
+// (todo: make it a singleton)
 //
-
-
-
-
-// Encapsulation of map that holds toolname - TOptionMap pairs
-// This class is a collection of all existing tool-options.
-// It uses a TOptionMap for each tool so it allows access by
-// toolname to each tool's options
-//
-// Implements run-mode detection (portable / inifile / registry)
-// Load and save actions are delegated to all known TOptionMap entries
+// Implements run-mode detection (portable/inifile/registry).
+// Implements Load() and Save() functions which use either the registry
+// or an ini-file (or do nothing), according to detected run-mode.
 //
 /////////////////////////////////////////////////////////////////////////////
 class TPersistOptions
 {
 private:
+    // TOption is a (sort of) type agnostic option-data container.
+    // Each TOptionMap is a map of TOption items indexed by option-name.
     typedef std::map<String, TOption> TOptionMap;
     typedef std::map<String, TOption>::iterator option_iterator;
+
+    // A toolname indexed map of TOptionmap items holds the complete option set.
     typedef std::map<String, TOptionMap> TOptionMaps;
     typedef std::map<String, TOptionMap>::iterator option_map_iterator;
 

@@ -60,7 +60,7 @@ AutoIncBuild=1
 MajorVer=4
 MinorVer=0
 Release=0
-Build=18
+Build=19
 Debug=0
 PreRelease=1
 Special=0
@@ -72,7 +72,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Willem &amp; Co
 FileDescription=Screen Design Toolbox
-FileVersion=4.0.0.18
+FileVersion=4.0.0.19
 InternalName=TopTools
 LegalCopyright=Copyright © 1998-2008 Willem Jongman
 LegalTrademarks=
@@ -151,7 +151,7 @@ Item1=exe
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=-r
+RunParams=-i
 HostApplication=
 RemoteHost=
 RemotePath=
