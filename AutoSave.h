@@ -1,22 +1,21 @@
 //---------------------------------------------------------------------------
-#ifndef AutoSaveOptionsH
-#define AutoSaveOptionsH
+#ifndef AutoSaveH
+#define AutoSaveH
 //----------------------------------------------------------------------------
-class TAutoSaveOptions
+class TAutoSave
 {
 public:
-  TAutoSaveOptions();
+  TAutoSave();
 
-  void __fastcall Load();
-  void __fastcall Save();
-//  void __fastcall LoadFromRegistry();
-//  void __fastcall SaveToRegistry();
+  void __fastcall LoadOptions();
+  void __fastcall SaveOptions();
 
   String GetFullPathName();
   String GetFirstFilename(int startvalue);
   String GetNextFilename();
   String GetExtension(int index);
   String GetSequenceString();
+
 
   void IncrementNextValue() { NextValue++; }
 

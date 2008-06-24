@@ -26,7 +26,7 @@ USELIB("png\png.lib");
 USERC("Graphics.rc");
 USERES("Cursors.res");
 USERES("TopTools4.res");
-USEUNIT("AutoSaveOptions.cpp");
+USEUNIT("AutoSave.cpp");
 USEUNIT("Grabber.cpp");
 USEUNIT("hotkey\HotkeyInfo.cpp");
 USEUNIT("HotkeyManager.cpp");
@@ -36,7 +36,6 @@ USEUNIT("PersistImage.cpp");
 USEUNIT("TopToolBar.cpp");
 USEUNIT("TrayIcon.cpp");
 USEFORM("QuerySaveDlg.cpp", QuerySaveDialog);
-
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
@@ -81,7 +80,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         Application->Initialize();
         Application->Title = "TopTools 4";
         Application->CreateForm(__classid(TMainForm), &MainForm);
-        Application->ShowMainForm = false;
+         Application->ShowMainForm = false;
         Application->Run();
     }
     catch (Exception &exception)

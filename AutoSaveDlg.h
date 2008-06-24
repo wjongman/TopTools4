@@ -51,7 +51,7 @@ __published:
   void __fastcall ckByPassClick(TObject *Sender);
   void __fastcall bnOkClick(TObject *Sender);
 private:
-  TAutoSaveOptions options;
+  TAutoSave autosaver;
   bool Initialized;
 
   void LoadOptions();

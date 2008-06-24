@@ -23,18 +23,18 @@ __fastcall TAutoSaveDialog::TAutoSaveDialog(TComponent* AOwner)
 //---------------------------------------------------------------------
 void TAutoSaveDialog::LoadOptions()
 {
-  options.Load();
+  autosaver.LoadOptions();
 
-  ckByPass->Checked = options.Bypass;
-  ckContinuous->Checked = options.Continuous;
-  cbType->ItemIndex = options.ImageType;
-  edDirectory->Text = options.Directory;
-  edPrefix->Text = options.Prefix;
-  udDigits->Position = (short) options.Digits;
-  udOffset->Position = (short) options.NextValue;
-  rbPrompt->Checked = options.ExistAction == 0;
-  rbOverwrite->Checked = options.ExistAction == 1;
-  rbRename->Checked = options.ExistAction == 2;
+  ckByPass->Checked = autosaver.Bypass;
+  ckContinuous->Checked = autosaver.Continuous;
+  cbType->ItemIndex = autosaver.ImageType;
+  edDirectory->Text = autosaver.Directory;
+  edPrefix->Text = autosaver.Prefix;
+  udDigits->Position = (short) autosaver.Digits;
+  udOffset->Position = (short) autosaver.NextValue;
+  rbPrompt->Checked = autosaver.ExistAction == 0;
+  rbOverwrite->Checked = autosaver.ExistAction == 1;
+  rbRename->Checked = autosaver.ExistAction == 2;
 }
 
 //---------------------------------------------------------------------
@@ -42,20 +42,20 @@ void TAutoSaveDialog::SaveOptions()
 {
   RefreshOptions();
 
-  options.Save();
+  autosaver.SaveOptions();
 }
 
 //---------------------------------------------------------------------
 void TAutoSaveDialog::RefreshOptions()
 {
-  options.Bypass = ckByPass->Checked;
-  options.Continuous = ckContinuous->Checked;
-  options.ImageType = cbType->ItemIndex;
-  options.Directory = edDirectory->Text;
-  options.Prefix = edPrefix->Text;
-  options.Digits = udDigits->Position;
-  options.NextValue = udOffset->Position;
-  options.ExistAction = rbPrompt->Checked * 0 +
+  autosaver.Bypass = ckByPass->Checked;
+  autosaver.Continuous = ckContinuous->Checked;
+  autosaver.ImageType = cbType->ItemIndex;
+  autosaver.Directory = edDirectory->Text;
+  autosaver.Prefix = edPrefix->Text;
+  autosaver.Digits = udDigits->Position;
+  autosaver.NextValue = udOffset->Position;
+  autosaver.ExistAction = rbPrompt->Checked * 0 +
                         rbOverwrite->Checked * 1 +
                         rbRename->Checked * 2;
 }
@@ -77,7 +77,7 @@ void __fastcall TAutoSaveDialog::InputChange(TObject *Sender)
   if (Initialized)
   {
     RefreshOptions();
-    elbPreview->Caption = options.GetFullPathName();
+    elbPreview->Caption = autosaver.GetFullPathName();
   }
 }
 

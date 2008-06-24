@@ -5,11 +5,11 @@
 #include <Registry.hpp>
 #include <shlobj.h> // Make sure NO_WIN32_LEAN_AND_MEAN is defined..
 
-#include "AutoSaveOptions.h"
+#include "AutoSave.h"
 #include "PersistOptions.h"
 
 //---------------------------------------------------------------------------
-TAutoSaveOptions::TAutoSaveOptions()
+TAutoSave::TAutoSave()
 {
   // Init with default values
   Directory = GetSpecialFolderPath(CSIDL_DESKTOPDIRECTORY);
@@ -25,27 +25,27 @@ TAutoSaveOptions::TAutoSaveOptions()
 }
 
 //---------------------------------------------------------------------------
-String TAutoSaveOptions::GetFirstFilename(int startvalue)
+String TAutoSave::GetFirstFilename(int startvalue)
 {
   NextValue = startvalue;
   return GetFullPathName();
 }
 
 //---------------------------------------------------------------------------
-String TAutoSaveOptions::GetNextFilename()
+String TAutoSave::GetNextFilename()
 {
   NextValue++;
   return GetFullPathName();
 }
 
 //---------------------------------------------------------------------------
-String TAutoSaveOptions::GetFullPathName()
+String TAutoSave::GetFullPathName()
 {
   return Directory + Prefix + GetSequenceString() + GetExtension(ImageType);
 }
 
 //---------------------------------------------------------------------------
-String TAutoSaveOptions::GetSequenceString()
+String TAutoSave::GetSequenceString()
 {
   String SeqNum = "";
 
@@ -56,7 +56,7 @@ String TAutoSaveOptions::GetSequenceString()
 }
 
 //---------------------------------------------------------------------------
-String TAutoSaveOptions::GetExtension(int index)
+String TAutoSave::GetExtension(int index)
 {
   if (index < 0 || index > 3)
     return 0;
@@ -66,7 +66,7 @@ String TAutoSaveOptions::GetExtension(int index)
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TAutoSaveOptions::Load()
+void __fastcall TAutoSave::LoadOptions()
 {
     String ToolName = "capture\\autosave";
 
@@ -82,7 +82,7 @@ void __fastcall TAutoSaveOptions::Load()
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TAutoSaveOptions::Save()
+void __fastcall TAutoSave::SaveOptions()
 {
     String ToolName = "capture\\autosave";
 
@@ -98,7 +98,7 @@ void __fastcall TAutoSaveOptions::Save()
 }
 
 //---------------------------------------------------------------------------
-String TAutoSaveOptions::GetSpecialFolderPath(int FolderSpec)
+String TAutoSave::GetSpecialFolderPath(int FolderSpec)
 // Wrapper function around the SHGetSpecialFolderLocation +
 // SHGetPathFromIDList API pair, handling allocation intrinsics.
 {

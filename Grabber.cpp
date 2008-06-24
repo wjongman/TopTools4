@@ -21,7 +21,7 @@ __fastcall TScreenGrabber::TScreenGrabber(TComponent* Owner)
 
     OnRightButtonClick = HandleRightButtonClick;
 
-    m_AutoSaveOptions.Load();
+    m_AutoSaver.LoadOptions();
 }
 
 //---------------------------------------------------------------------------
@@ -32,22 +32,22 @@ __fastcall TScreenGrabber::~TScreenGrabber()
 
     delete m_pBufferBmp;
 
-    m_AutoSaveOptions.Save();
+    m_AutoSaver.SaveOptions();
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::UpdateSettings()
 {
-    m_AutoSaveOptions.Load();
+    m_AutoSaver.LoadOptions();
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::HandleCapture(int X, int Y)
 {
-    if (m_AutoSaveOptions.Bypass)
+    if (m_AutoSaver.Bypass)
     {
         AutoSaveToFile();
-        if (m_AutoSaveOptions.Continuous)
+        if (m_AutoSaver.Continuous)
         {
             CaptureNext();
         }
@@ -56,7 +56,7 @@ void __fastcall TScreenGrabber::HandleCapture(int X, int Y)
             EndCapture();
         }
     }
-//     else if (m_AutoSaveOptions.Openviewer)
+//     else if (m_AutoSaver.Openviewer)
 // //    else if (g_ToolOptions.GetBool("capture\\autosave", "openviewer"))
 //     {
 //         EndCapture();
@@ -248,14 +248,14 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Auto Save";
     NewItem->Hint = "AutoSave";
-    NewItem->Enabled = m_AutoSaveOptions.AutoSave;
+    NewItem->Enabled = m_AutoSaver.AutoSave;
     m_CaptureMenu->Items->Add(NewItem);
 
     NewItem = new TMenuItem(m_CaptureMenu);
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Auto Save && Grab More";
     NewItem->Hint = "AutoSaveOn";
-    NewItem->Enabled = m_AutoSaveOptions.AutoSave;
+    NewItem->Enabled = m_AutoSaver.AutoSave;
     m_CaptureMenu->Items->Add(NewItem);
 
     NewItem = new TMenuItem(m_CaptureMenu);
@@ -290,16 +290,16 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::SaveToFile()
 {
-    m_AutoSaveOptions.Load();
-    String InitialDir = m_AutoSaveOptions.LastDir;
-    int filterindex = m_AutoSaveOptions.ImageType;
+    m_AutoSaver.LoadOptions();
+    String InitialDir = m_AutoSaver.LastDir;
+    int filterindex = m_AutoSaver.ImageType;
 
     TPersistImage image(m_pBufferBmp);
     image.SaveFileDialog(filterindex, InitialDir);
 
-    m_AutoSaveOptions.ImageType = filterindex;
-    m_AutoSaveOptions.LastDir = InitialDir;
-    m_AutoSaveOptions.Save();
+    m_AutoSaver.ImageType = filterindex;
+    m_AutoSaver.LastDir = InitialDir;
+    m_AutoSaver.SaveOptions();
 
     m_pBufferBmp->Assign(NULL);
 }
@@ -381,29 +381,29 @@ void __fastcall TScreenGrabber::ViewerKeyPress(TObject *Sender, char &Key)
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::AutoSaveToFile()
 {
-    m_AutoSaveOptions.Load();
+    m_AutoSaver.LoadOptions();
 
     // First check if the target directory exists
-    if (!DirectoryExists(m_AutoSaveOptions.Directory))
+    if (!DirectoryExists(m_AutoSaver.Directory))
     {
         // todo: offer to change or create directory here..
         // todo: stuff all static strings in a resource file
         String sMsg = "Your autosave settings refer to a directory that doesn't exist: \n\n";
-        ShowMessage(sMsg + m_AutoSaveOptions.Directory);
+        ShowMessage(sMsg + m_AutoSaver.Directory);
         return;
     }
 
     // Find first available filename (might be slow on huge directories..)
-    while (FileExists(m_AutoSaveOptions.GetFullPathName()))
+    while (FileExists(m_AutoSaver.GetFullPathName()))
     {
-        m_AutoSaveOptions.IncrementNextValue();
+        m_AutoSaver.IncrementNextValue();
     }
 
     TPersistImage image(m_pBufferBmp);
-    image.Save(m_AutoSaveOptions.GetFullPathName());
+    image.Save(m_AutoSaver.GetFullPathName());
 
-    m_AutoSaveOptions.IncrementNextValue();
-    m_AutoSaveOptions.Save();
+    m_AutoSaver.IncrementNextValue();
+    m_AutoSaver.SaveOptions();
 }
 
 //---------------------------------------------------------------------------

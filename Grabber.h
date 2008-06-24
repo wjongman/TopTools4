@@ -25,7 +25,7 @@ private:
   TGrabberMode m_GrabberMode;
   Graphics::TBitmap* m_pBufferBmp;
   TPopupMenu* m_CaptureMenu;
-  TAutoSaveOptions m_AutoSaveOptions;
+  TAutoSave m_AutoSaver;
   TImageViewerList m_Viewers;
 
   void __fastcall ViewerKeyPress(TObject *Sender, char &Key);
