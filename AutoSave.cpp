@@ -7,62 +7,63 @@
 
 #include "AutoSave.h"
 #include "PersistOptions.h"
+#include "PersistImage.h"
 
 //---------------------------------------------------------------------------
 TAutoSave::TAutoSave()
 {
-  // Init with default values
-  Directory = GetSpecialFolderPath(CSIDL_DESKTOPDIRECTORY);
-  Prefix = "Snapshot";
-  Digits = 2;
-  NextValue = 1;
-  ImageType = 0;
-  ExistAction = 0;
-  Bypass = false;
-  Continuous = false;
-  LastDir = GetSpecialFolderPath(CSIDL_DESKTOPDIRECTORY);
-  //LastDir = "%USERPROFILE%\\Desktop";
+    // Init with default values
+    Directory = GetSpecialFolderPath(CSIDL_DESKTOPDIRECTORY);
+    Prefix = "Snapshot";
+    Digits = 2;
+    NextValue = 1;
+    ImageType = 0;
+    ExistAction = 0;
+    Bypass = false;
+    Continuous = false;
+    LastDir = GetSpecialFolderPath(CSIDL_DESKTOPDIRECTORY);
+    //LastDir = "%USERPROFILE%\\Desktop";
 }
 
 //---------------------------------------------------------------------------
 String TAutoSave::GetFirstFilename(int startvalue)
 {
-  NextValue = startvalue;
-  return GetFullPathName();
+    NextValue = startvalue;
+    return GetFullPathName();
 }
 
 //---------------------------------------------------------------------------
 String TAutoSave::GetNextFilename()
 {
-  NextValue++;
-  return GetFullPathName();
+    NextValue++;
+    return GetFullPathName();
 }
 
 //---------------------------------------------------------------------------
 String TAutoSave::GetFullPathName()
 {
-  return Directory + Prefix + GetSequenceString() + GetExtension(ImageType);
+    return Directory + Prefix + GetSequenceString() + GetExtension(ImageType);
 }
 
 //---------------------------------------------------------------------------
 String TAutoSave::GetSequenceString()
 {
-  String SeqNum = "";
+    String SeqNum = "";
 
-  if (Digits != 0)
-    SeqNum.sprintf("%0*d", Digits, NextValue);
+    if (Digits != 0)
+        SeqNum.sprintf("%0*d", Digits, NextValue);
 
-  return SeqNum;
+    return SeqNum;
 }
 
 //---------------------------------------------------------------------------
 String TAutoSave::GetExtension(int index)
 {
-  if (index < 0 || index > 3)
-    return 0;
+    if (index < 0 || index > 3)
+        return 0;
 
-  char* Extension[] = { ".bmp", ".png", ".gif", ".jpg" };
-  return Extension[index];
+    char* Extension[] = { ".bmp", ".png", ".gif", ".jpg"};
+    return Extension[index];
 }
 
 //---------------------------------------------------------------------------
@@ -102,29 +103,57 @@ String TAutoSave::GetSpecialFolderPath(int FolderSpec)
 // Wrapper function around the SHGetSpecialFolderLocation +
 // SHGetPathFromIDList API pair, handling allocation intrinsics.
 {
-  String sResult = "";
+    String sResult = "";
 
-  // Get the shell's IMalloc interface, we must use this
-  // interface to free the memory that is allocated by
-  // the shell when it passes us an ITEMIDLIST in *pidl
-  LPMALLOC Allocator;
-  if (::SHGetMalloc(&Allocator) == NOERROR)
-  {
-    ITEMIDLIST *pidl;
-    HWND hwndOwner = NULL;
-    if (::SHGetSpecialFolderLocation(hwndOwner, FolderSpec, &pidl) == NOERROR)
+    // Get the shell's IMalloc interface, we must use this
+    // interface to free the memory that is allocated by
+    // the shell when it passes us an ITEMIDLIST in *pidl
+    LPMALLOC Allocator;
+    if (::SHGetMalloc(&Allocator) == NOERROR)
     {
-      char folderpath[MAX_PATH];
-      if (::SHGetPathFromIDList(pidl, folderpath))
-      {
-        sResult = folderpath;
-        sResult += "\\";
-      }
-      Allocator->Free(pidl);
+        ITEMIDLIST *pidl;
+        HWND hwndOwner = NULL;
+        if (::SHGetSpecialFolderLocation(hwndOwner, FolderSpec, &pidl) == NOERROR)
+        {
+            char folderpath[MAX_PATH];
+            if (::SHGetPathFromIDList(pidl, folderpath))
+            {
+                sResult = folderpath;
+                sResult += "\\";
+            }
+            Allocator->Free(pidl);
+        }
+        Allocator->Release();
     }
-    Allocator->Release();
-  }
-  return sResult;
+    return sResult;
+}
+
+//---------------------------------------------------------------------------
+void TAutoSave::SaveBitmap(Graphics::TBitmap* pBitmap)
+{
+//    LoadOptions();
+
+    // First check if the target directory exists
+    if (!DirectoryExists(Directory))
+    {
+        // todo: offer to change or create directory here..
+        // todo: stuff all static strings in a resource file
+        String sMsg = "Your autosave settings refer to a directory that doesn't exist: \n\n";
+        ShowMessage(sMsg + Directory);
+        return;
+    }
+
+    // Find first available filename (might be slow on huge directories..)
+    while (FileExists(GetFullPathName()))
+    {
+        IncrementNextValue();
+    }
+
+    TPersistImage image(pBitmap);
+    image.Save(GetFullPathName());
+
+    IncrementNextValue();
+//    SaveOptions();
 }
 
 //---------------------------------------------------------------------------

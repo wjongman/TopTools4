@@ -5,33 +5,37 @@
 class TAutoSave
 {
 public:
-  TAutoSave();
+    TAutoSave();
 
-  void __fastcall LoadOptions();
-  void __fastcall SaveOptions();
+    void __fastcall LoadOptions();
+    void __fastcall SaveOptions();
 
-  String GetFullPathName();
-  String GetFirstFilename(int startvalue);
-  String GetNextFilename();
-  String GetExtension(int index);
-  String GetSequenceString();
+    String GetFullPathName();
+    String GetFirstFilename(int startvalue);
+    String GetNextFilename();
+    String GetExtension(int index);
+    String GetSequenceString();
+    void SaveBitmap(Graphics::TBitmap* pBitmap);
 
 
-  void IncrementNextValue() { NextValue++; }
+    void IncrementNextValue()
+    {
+        NextValue++;
+    }
 
-  String Directory;
-  String Prefix;
-  int Digits;
-  int NextValue;
-  int ImageType;
-  int ExistAction;
-  bool Bypass;
-  bool Continuous;
-  bool AutoSave;
-  String LastDir;
+    String Directory;
+    String Prefix;
+    int Digits;
+    int NextValue;
+    int ImageType;
+    int ExistAction;
+    bool Bypass;
+    bool Continuous;
+    bool AutoSave;
+    String LastDir;
 
 private:
-  String GetSpecialFolderPath(int FolderSpec);
+    String GetSpecialFolderPath(int FolderSpec);
 };
 
 //---------------------------------------------------------------------------

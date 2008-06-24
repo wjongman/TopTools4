@@ -290,6 +290,8 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::SaveToFile()
 {
+    m_AutoSaver.SaveBitmap(m_pBufferBmp);
+/*
     m_AutoSaver.LoadOptions();
     String InitialDir = m_AutoSaver.LastDir;
     int filterindex = m_AutoSaver.ImageType;
@@ -300,7 +302,7 @@ void __fastcall TScreenGrabber::SaveToFile()
     m_AutoSaver.ImageType = filterindex;
     m_AutoSaver.LastDir = InitialDir;
     m_AutoSaver.SaveOptions();
-
+*/
     m_pBufferBmp->Assign(NULL);
 }
 
@@ -381,6 +383,8 @@ void __fastcall TScreenGrabber::ViewerKeyPress(TObject *Sender, char &Key)
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::AutoSaveToFile()
 {
+    m_AutoSaver.SaveBitmap(m_pBufferBmp);
+/*
     m_AutoSaver.LoadOptions();
 
     // First check if the target directory exists
@@ -404,6 +408,7 @@ void __fastcall TScreenGrabber::AutoSaveToFile()
 
     m_AutoSaver.IncrementNextValue();
     m_AutoSaver.SaveOptions();
+*/
 }
 
 //---------------------------------------------------------------------------
