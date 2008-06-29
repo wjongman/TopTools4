@@ -17,11 +17,11 @@ TAutoSave::TAutoSave()
     Prefix = "Snapshot";
     Digits = 2;
     NextValue = 1;
-    ImageType = 0;
+    ImageType = 1;
     ExistAction = 0;
     Bypass = false;
     Continuous = false;
-    LastDir = GetSpecialFolderPath(CSIDL_DESKTOPDIRECTORY);
+    //LastDir = GetSpecialFolderPath(CSIDL_DESKTOPDIRECTORY);
     //LastDir = "%USERPROFILE%\\Desktop";
 }
 
@@ -71,7 +71,7 @@ void __fastcall TAutoSave::LoadOptions()
 {
     String ToolName = "capture\\autosave";
 
-    Directory = g_ToolOptions.Get(ToolName, "savedir", Directory);
+    Directory = g_ToolOptions.Get(ToolName, "directory", Directory);
     Prefix = g_ToolOptions.Get(ToolName, "filename", Prefix);
     Digits = g_ToolOptions.Get(ToolName, "digits", Digits);
     NextValue = g_ToolOptions.Get(ToolName, "nextvalue", NextValue);
@@ -79,7 +79,6 @@ void __fastcall TAutoSave::LoadOptions()
     ExistAction = g_ToolOptions.Get(ToolName, "existaction", ExistAction);
     Bypass = g_ToolOptions.Get(ToolName, "bypassmenu", Bypass);
     Continuous = g_ToolOptions.Get(ToolName, "continuous", Continuous);
-    LastDir = g_ToolOptions.Get(ToolName, "lastdir", LastDir);
 }
 
 //---------------------------------------------------------------------------
@@ -87,7 +86,7 @@ void __fastcall TAutoSave::SaveOptions()
 {
     String ToolName = "capture\\autosave";
 
-    g_ToolOptions.Set(ToolName, "savedir", Directory);
+    g_ToolOptions.Set(ToolName, "directory", Directory);
     g_ToolOptions.Set(ToolName, "filename", Prefix);
     g_ToolOptions.Set(ToolName, "digits", Digits);
     g_ToolOptions.Set(ToolName, "nextvalue", NextValue);
@@ -95,7 +94,6 @@ void __fastcall TAutoSave::SaveOptions()
     g_ToolOptions.Set(ToolName, "existaction", ExistAction);
     g_ToolOptions.Set(ToolName, "bypassmenu", Bypass);
     g_ToolOptions.Set(ToolName, "continuous", Continuous);
-    g_ToolOptions.Set(ToolName, "lastdir", LastDir);
 }
 
 //---------------------------------------------------------------------------

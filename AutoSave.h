@@ -32,7 +32,7 @@ public:
     bool Bypass;
     bool Continuous;
     bool AutoSave;
-    String LastDir;
+    //String LastDir;
 
 private:
     String GetSpecialFolderPath(int FolderSpec);

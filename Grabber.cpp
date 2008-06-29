@@ -157,7 +157,7 @@ void __fastcall TScreenGrabber::CaptureMenuClick(TObject *Sender)
         {
             AutosaveOptions();
             EndCapture();
-            //CaptureNext();
+            //CaptureNext();  // which one makes more sense?
         }
     }
 }
@@ -290,19 +290,15 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::SaveToFile()
 {
-    m_AutoSaver.SaveBitmap(m_pBufferBmp);
-/*
-    m_AutoSaver.LoadOptions();
-    String InitialDir = m_AutoSaver.LastDir;
-    int filterindex = m_AutoSaver.ImageType;
+    String InitialDir = g_ToolOptions.Get("capture", "lastsavedir", "%USERPROFILE%\\Desktop");
+    int filterindex = g_ToolOptions.Get("capture", "lastimagetype", 2);
 
     TPersistImage image(m_pBufferBmp);
     image.SaveFileDialog(filterindex, InitialDir);
 
-    m_AutoSaver.ImageType = filterindex;
-    m_AutoSaver.LastDir = InitialDir;
-    m_AutoSaver.SaveOptions();
-*/
+    g_ToolOptions.Set("capture", "lastsavedir", InitialDir);
+    g_ToolOptions.Set("capture", "lastimagetype", filterindex);
+
     m_pBufferBmp->Assign(NULL);
 }
 
