@@ -21,8 +21,6 @@ TAutoSave::TAutoSave()
     ExistAction = 0;
     Bypass = false;
     Continuous = false;
-    //LastDir = GetSpecialFolderPath(CSIDL_DESKTOPDIRECTORY);
-    //LastDir = "%USERPROFILE%\\Desktop";
 }
 
 //---------------------------------------------------------------------------
@@ -129,8 +127,6 @@ String TAutoSave::GetSpecialFolderPath(int FolderSpec)
 //---------------------------------------------------------------------------
 void TAutoSave::SaveBitmap(Graphics::TBitmap* pBitmap)
 {
-//    LoadOptions();
-
     // First check if the target directory exists
     if (!DirectoryExists(Directory))
     {
@@ -151,7 +147,6 @@ void TAutoSave::SaveBitmap(Graphics::TBitmap* pBitmap)
     image.Save(GetFullPathName());
 
     IncrementNextValue();
-//    SaveOptions();
 }
 
 //---------------------------------------------------------------------------
