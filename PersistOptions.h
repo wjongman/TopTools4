@@ -11,9 +11,10 @@
 /////////////////////////////////////////////////////////////////////////////
 enum TRunMode
 {
-    rmPortable = 0,
-    rmIniFile = 1,
-    rmRegistry = 2
+    rmUnknown = 0,
+    rmPortable = 1,
+    rmIniFile = 2,
+    rmRegistry = 3
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -138,23 +139,29 @@ public:
     }
 
     //-------------------------------------------------------------------------
-    bool Save()  // Save using last known RunMode
+    int KnowsRunMode()
     {
+        return m_QuerySave;
+    }
+
+    //-------------------------------------------------------------------------
+    void SetRunMode(int runmode)
+    {
+        m_RunMode = (TRunMode) runmode;
+    }
+
+    //    QuerySaveMode()  // Query (if needed) how to save settings
+//    {
 // We can't use a dialog when Application->Run() has terminated..
 // Instead we call g_ToolOptions.Save() from the MainForm destructor
 // when the messageloop is still running
 //
-//         if (m_QuerySave)
-//         {
-//             // Offer a dialog and ask what to do with the settings
-//             TQuerySaveDialog* QueryDlg = new TQuerySaveDialog(NULL);
-//             if (QueryDlg->ShowModal() == mrOk)
-//             {
-//                 m_RunMode = (TRunMode)QueryDlg->GetRunMode();
-//             }
-//             delete QueryDlg;
-//         }
+        //if (m_QuerySave)
+//    }
 
+    //-------------------------------------------------------------------------
+    bool Save()  // Save using last known RunMode
+    {
         if (m_RunMode == rmPortable)
         {
             return false;

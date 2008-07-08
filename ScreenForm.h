@@ -27,7 +27,9 @@ public:
 private:
   int m_MouseOldX;
   int m_MouseOldY;
-//  bool m_bSticky;
+
+  TTimer* m_Timer;
+  //  bool m_bSticky;
 
 protected:
   // This class overrides these two TForm methods

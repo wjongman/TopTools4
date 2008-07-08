@@ -20,14 +20,14 @@ TPersistOptions g_ToolOptions;
 //---------------------------------------------------------------------------
 __fastcall TMainForm::TMainForm(TComponent* Owner)
 : TToolForm(Owner, "main"),
-  m_pRuler(NULL),
-  m_pLoupe(NULL),
-  m_pBaseConv(NULL),
-  m_pInfo(NULL),
-  m_pControlBar(NULL),
-  m_pCapture(NULL),
-  m_pTrayIcon(NULL),
-  m_UIMode(uiNormal)
+m_pRuler(NULL),
+m_pLoupe(NULL),
+m_pBaseConv(NULL),
+m_pInfo(NULL),
+m_pControlBar(NULL),
+m_pCapture(NULL),
+m_pTrayIcon(NULL),
+m_UIMode(uiNormal)
 {
     Application->OnDeactivate = HandleAppDeactivate;
     Application->OnRestore = HandleAppRestore;
@@ -393,32 +393,44 @@ void __fastcall TMainForm::HandleTimerEvent(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::LoadSettings()
 {
-  SetUI(g_ToolOptions.Get("main", "istrayapp", false));
-  m_bRememberState = g_ToolOptions.Get("main", "rememberstate", true);
-  RestoreToolState(g_ToolOptions.Get("main", "savedstate", dcoControl));
-  m_bStayOnTop = g_ToolOptions.Get("main", "stayontop", true);
-  SetTopMost(m_bStayOnTop);
+    SetUI(g_ToolOptions.Get("main", "istrayapp", false));
+    m_bRememberState = g_ToolOptions.Get("main", "rememberstate", true);
+    RestoreToolState(g_ToolOptions.Get("main", "savedstate", dcoControl));
+    m_bStayOnTop = g_ToolOptions.Get("main", "stayontop", true);
+    SetTopMost(m_bStayOnTop);
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::UpdateSettings()
 {
-  SetUI(g_ToolOptions.Get("main", "istrayapp", false));
-  m_bRememberState = g_ToolOptions.Get("main", "rememberstate", true);
-  m_bStayOnTop = g_ToolOptions.Get("main", "stayontop", true);
-  SetTopMost(m_bStayOnTop);
+    SetUI(g_ToolOptions.Get("main", "istrayapp", false));
+    m_bRememberState = g_ToolOptions.Get("main", "rememberstate", true);
+    m_bStayOnTop = g_ToolOptions.Get("main", "stayontop", true);
+    SetTopMost(m_bStayOnTop);
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::SaveSettings()
 {
     if (m_bRememberState)
-      g_ToolOptions.Set("main", "savedstate", GetToolState());
+        g_ToolOptions.Set("main", "savedstate", GetToolState());
     else
-      g_ToolOptions.Set("main", "savedstate", 0);
+        g_ToolOptions.Set("main", "savedstate", 0);
 
     g_ToolOptions.Set("main", "istrayapp", (m_UIMode == uiTrayApp));
     g_ToolOptions.Set("main", "stayontop", m_bStayOnTop);
+
+    // Now is the time to determine how to persist settings
+    if (!g_ToolOptions.KnowsRunMode())
+    {
+        // Offer a dialog and ask what to do with the settings
+        TQuerySaveDialog* QueryDlg = new TQuerySaveDialog(this);
+        if (QueryDlg->ShowModal() == mrOk)
+        {
+            g_ToolOptions.SetRunMode(QueryDlg->GetRunMode());
+        }
+        delete QueryDlg;
+    }
 }
 
 //---------------------------------------------------------------------------
@@ -534,22 +546,22 @@ void TMainForm::HideAll()
 //---------------------------------------------------------------------------
 String TMainForm::GetColorFormatString()
 {
-  String Format = "";
+    String Format = "";
 
-  bool isQuoted = g_ToolOptions.Get("info", "quotes", false);
+    bool isQuoted = g_ToolOptions.Get("info", "quotes", false);
 
-  if (isQuoted)
-    Format += "\"";
+    if (isQuoted)
+        Format += "\"";
 
-  if (g_ToolOptions.Get("info", "prefix", false))
-    Format += "#";
+    if (g_ToolOptions.Get("info", "prefix", false))
+        Format += "#";
 
-  Format += "%02X%02X%02X";
+    Format += "%02X%02X%02X";
 
-  if (isQuoted)
-    Format += "\"";
+    if (isQuoted)
+        Format += "\"";
 
-  return Format;
+    return Format;
 }
 
 //---------------------------------------------------------------------------

@@ -23,6 +23,9 @@ __fastcall TScreenForm::TScreenForm(TComponent* Owner)
 
     Width = g_ToolOptions.Get(m_ToolName, "width", Width);
     Height = g_ToolOptions.Get(m_ToolName, "height", Height);
+
+    m_Timer = new TTimer(this);
+    m_Timer->Interval = 500; // twice a second
 }
 
 //---------------------------------------------------------------------------
@@ -30,6 +33,8 @@ __fastcall TScreenForm::~TScreenForm()
 {
     g_ToolOptions.Set(m_ToolName, "width", Width);
     g_ToolOptions.Set(m_ToolName, "height", Height);
+
+    delete m_Timer;
 }
 
 //---------------------------------------------------------------------------
