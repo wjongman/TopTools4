@@ -32,6 +32,18 @@ m_UIMode(uiNormal)
     Application->OnDeactivate = HandleAppDeactivate;
     Application->OnRestore = HandleAppRestore;
 
+    // Now is the time to determine how to persist settings
+    if (!g_ToolOptions.KnowsRunMode())
+    {
+        // Offer a dialog and ask what to do with the settings
+        TQuerySaveDialog* QueryDlg = new TQuerySaveDialog(this);
+        if (QueryDlg->ShowModal() == mrOk)
+        {
+            g_ToolOptions.SetRunMode(QueryDlg->GetRunMode());
+        }
+        delete QueryDlg;
+    }
+
     LoadSettings();
 
     m_HotkeyManager = new THotkeyManager(Handle);
@@ -55,8 +67,7 @@ __fastcall TMainForm::~TMainForm()
     delete m_pControlBar;
     delete m_pCapture;
 
-    // Persist tool options
-    g_ToolOptions.Save();
+//    g_ToolOptions.Save();
 }
 
 //---------------------------------------------------------------------------
@@ -83,7 +94,23 @@ void __fastcall TMainForm::WndProc(Messages::TMessage &Message)
         HandleHotkey((THotkeyId)Message.WParam);
         break;
 
+/*
+    case WM_DESTROY:         // About to end program
+        // Now is the time to determine how to persist settings
+        if (!g_ToolOptions.KnowsRunMode())
+        {
+            // Offer a dialog and ask what to do with the settings
+            TQuerySaveDialog* QueryDlg = new TQuerySaveDialog(this);
+            if (QueryDlg->ShowModal() == mrOk)
+            {
+                g_ToolOptions.SetRunMode(QueryDlg->GetRunMode());
+            }
+            delete QueryDlg;
+        }
+        break;
+*/
     case WM_QUERYENDSESSION: // About to shut down Windows
+        // Persist tool options
         SaveSettings();
         break;
 
@@ -419,18 +446,6 @@ void __fastcall TMainForm::SaveSettings()
 
     g_ToolOptions.Set("main", "istrayapp", (m_UIMode == uiTrayApp));
     g_ToolOptions.Set("main", "stayontop", m_bStayOnTop);
-
-    // Now is the time to determine how to persist settings
-    if (!g_ToolOptions.KnowsRunMode())
-    {
-        // Offer a dialog and ask what to do with the settings
-        TQuerySaveDialog* QueryDlg = new TQuerySaveDialog(this);
-        if (QueryDlg->ShowModal() == mrOk)
-        {
-            g_ToolOptions.SetRunMode(QueryDlg->GetRunMode());
-        }
-        delete QueryDlg;
-    }
 }
 
 //---------------------------------------------------------------------------
