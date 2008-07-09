@@ -1,12 +1,12 @@
 ; todo: check to see if program is currently running and offer to terminate it...
 [Setup]
-AppName=TopTools 4 alfa-1
+AppName=TopTools 4 alfa1
 AppVerName=TopTools version 4.0.0.20
 AppVersion=4.0.0.20
 AppCopyright=Copyright © 1997-2008 Willem Jongman.
 AppId=TopTools_4
 DefaultDirName={pf}\TopTools 4
-OutputBaseFilename=Setup_TopTools4_alfa1
+OutputBaseFilename=Setup_TopTools4_alfa_1
 
 DisableReadyMemo=no
 DisableReadyPage=no
@@ -48,18 +48,31 @@ Source: ..\exe\TopTools4.exe; DestDir: {app};
 ;;Name: "{userstartup}\TopTools"; Filename: "{app}\TopTools.exe";
 
 Name: {group}\TopTools 4; Filename: {app}\TopTools4.exe; Tasks: programgroup; IconIndex: 0;
-Name: {group}\Uninstall TopTools 4; Filename: {uninstallexe}; Tasks: programgroup;
+;Name: {group}\Uninstall TopTools 4; Filename: {uninstallexe}; Tasks: programgroup;
 Name: {userdesktop}\TopTools4; Filename: {app}\TopTools4.exe; Tasks: desktopicon;
 Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\TopTools; Filename: {app}\TopTools4.exe; Tasks: quicklaunchicon;
 ;Name: "{userstartmenu}\TopTools"; Filename: "{app}\TopTools.exe"; Tasks: startmenu
 ;Name: "{userstartup}\TopTools"; Filename: "{app}\TopTools.exe"; Tasks: startupicon
 
 [Registry]
+;> Under installation certain reg-keys are made (current-user).
+;> Limited user then logs in (but since that's another account) HKCU reg-keys
+;> are missing..
+;
+;Per MS's latest recommendations, installers should not create any keys in
+;HKCU. Nor should applications expect any HKCU keys/values to exist when they
+;are run; applications should gracefully fall back to the default settings
+;when any HKCU keys/values are missing.
+;
+;--
+;Jordan Russell
+
 ; delete "TopTools4" key upon install
 ;Root: HKCU; Subkey: Software\TopTools 4; Flags: deletekey
 ; delete "TopTools 4" key upon uninstall
-Root: HKCU; Subkey: Software\TopTools 4; Flags: uninsdeletekey;
-
+Root: HKCU; Subkey: "Software\TopTools 4"; Flags: uninsdeletekey;
+;Root: HKCU; Subkey: "Software\TopTools 4\main"; ValueType: dword; ValueName: "singleton"; ValueData: "0"; Flags: createvalueifdoesntexist
+;Root: HKLM; Subkey: "Software\TopTools 4"; ValueType: string; ValueName: "InstallPath"; ValueData: "{app}"
 [INI]
 ;Filename: "TopTools4.ini"; Section: "main"; Flags: uninsdeletesection;
 

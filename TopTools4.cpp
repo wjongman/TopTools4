@@ -35,7 +35,6 @@ USEUNIT("Monitor.cpp");
 USEUNIT("PersistImage.cpp");
 USEUNIT("TopToolBar.cpp");
 USEUNIT("TrayIcon.cpp");
-USEFORM("QuerySaveDlg.cpp", QuerySaveDialog);
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {

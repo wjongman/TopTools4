@@ -137,7 +137,47 @@ void TToolOptionsDialog::InitOptions()
   // General
   ckAutoStart->Checked = g_ToolOptions.Get("main", "autostart", false);
   ckTrayApp->Checked = g_ToolOptions.Get("main", "istrayapp", false);
-  ckSaveToolstate->Checked = g_ToolOptions.Get("main", "rememberstate", true);
+
+  ckRememberSettings->Checked = g_ToolOptions.Get("main", "rememberstate", true);
+
+  TRunMode runmode = g_ToolOptions.GetRunMode();
+  switch (runmode)
+  {
+  case rmPortable:
+    ckRememberSettings->Checked = false;
+    rbRegistry->Enabled = false;
+    rbInifile->Enabled = false;
+    break;
+  case rmRegistry:
+    ckRememberSettings->Checked = true;
+    rbRegistry->Enabled = true;
+    rbInifile->Enabled = true;
+    rbRegistry->Checked = true;
+    rbInifile->Checked = false;
+    break;
+  case rmIniFile:
+    ckRememberSettings->Checked = true;
+    rbRegistry->Enabled = true;
+    rbInifile->Enabled = true;
+    rbRegistry->Checked = false;
+    rbInifile->Checked = true;
+    break;
+  }
+//  ckRememberSettings->Checked = (runmode != rmPortable);
+
+
+  {
+    // See what kind of persistence is requested
+    if (rbRegistry->Checked)
+    {
+      runmode = rmRegistry;
+    }
+    else if (rbInifile->Checked)
+    {
+      runmode = rmIniFile;
+    }
+  }
+
   ckSingleton->Checked = g_ToolOptions.Get("main", "singleton", false);
   ckOnTop->Checked = g_ToolOptions.Get("main", "stayontop", true);
   int doubleclickaction = g_ToolOptions.Get("main", "doubleclick", dcoControl);
@@ -185,9 +225,25 @@ void TToolOptionsDialog::SaveOptions()
   g_ToolOptions.Set("main", "doubleclick", doubleclickopen);
   g_ToolOptions.Set("main", "autostart", ckAutoStart->Checked);
   g_ToolOptions.Set("main", "istrayapp", ckTrayApp->Checked);
-  g_ToolOptions.Set("main", "rememberstate", ckSaveToolstate->Checked);
   g_ToolOptions.Set("main", "singleton", ckSingleton->Checked);
   g_ToolOptions.Set("main", "stayontop", ckOnTop->Checked);
+
+  TRunMode runmode = rmPortable;
+  if (ckRememberSettings->Checked)
+  {
+    // See what kind of persistence is requested
+    if (rbRegistry->Checked)
+    {
+      runmode = rmRegistry;
+    }
+    else if (rbInifile->Checked)
+    {
+      runmode = rmIniFile;
+    }
+  }
+  g_ToolOptions.SetRunMode(runmode);
+
+  g_ToolOptions.Set("main", "rememberstate", ckRememberSettings->Checked);
 
   g_ToolOptions.Set("baseconv", "showbinary", ckBinary->Checked);
 
@@ -262,4 +318,14 @@ void __fastcall TToolOptionsDialog::bnAutosaveOptionsClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+
+
+void __fastcall TToolOptionsDialog::ckRememberSettingsClick(
+      TObject *Sender)
+{
+    rbRegistry->Enabled = ckRememberSettings->Checked;
+    rbInifile->Enabled = ckRememberSettings->Checked;
+}
+
+//---------------------------------------------------------------------------
 

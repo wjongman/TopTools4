@@ -11,10 +11,9 @@
 /////////////////////////////////////////////////////////////////////////////
 enum TRunMode
 {
-    rmUnknown = 0,
-    rmPortable = 1,
-    rmIniFile = 2,
-    rmRegistry = 3
+    rmPortable = 0,
+    rmIniFile = 1,
+    rmRegistry = 2
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -98,7 +97,15 @@ public:
         else
         {
             // No commandline arguments, heuristcly determine run-mode
-            if (RegKeyExists())
+            if (IniFileExists())
+            {
+                // todo: First test if inifile is writable 
+
+                // If an Ini file exists we'll run in rmIniFile mode
+                // Ini file overrides registry settings
+                m_RunMode = rmIniFile;
+            }
+            else if (RegKeyExists())
             {
                 // If a Registry key exists, TopTools was either installed
                 // using the setup program or the user chose to save settings
@@ -106,27 +113,15 @@ public:
                 // In this case we'll run in rmRegistry mode
                 m_RunMode = rmRegistry;
             }
-            else if (IniFileExists())
-            {
-                // If an Ini file exists we'll run in rmIniFile mode
-                m_RunMode = rmIniFile;
-            }
             else
             {
-                // If neither exists we run rmPortable and offer a dialog to
-                // choose what to do with the settings before TopTools exits.
+                // If neither exists we run rmPortable (and offer a dialog to
+                // choose what to do with the settings before TopTools exits?)
                 m_RunMode = rmPortable;
                 m_QuerySave = true;
             }
         }
-/*
-            TQuerySaveDialog* QueryDlg = new TQuerySaveDialog(NULL);//Application);
-            if (QueryDlg->ShowModal() == mrOk)
-            {
-                m_RunMode = (TRunMode)QueryDlg->GetRunMode();
-            }
-            delete QueryDlg;
-*/
+
         switch (m_RunMode)
         {
         case rmIniFile:
@@ -138,26 +133,23 @@ public:
         }
     }
 
-    //-------------------------------------------------------------------------
+    /*/-------------------------------------------------------------------------
     bool KnowsRunMode()
     {
         return !m_QuerySave;
+    } */
+
+    //-------------------------------------------------------------------------
+    void SetRunMode(TRunMode runmode)
+    {
+        m_RunMode = runmode;
     }
 
     //-------------------------------------------------------------------------
-    void SetRunMode(int runmode)
+    TRunMode GetRunMode()
     {
-        m_RunMode = (TRunMode) runmode;
+        return m_RunMode;
     }
-
-    //    QuerySaveMode()  // Query (if needed) how to save settings
-//    {
-// We can't use a dialog when Application->Run() has terminated..
-// Instead we call g_ToolOptions.Save() from the MainForm destructor
-// when the messageloop is still running
-//
-        //if (m_QuerySave)
-//    }
 
     //-------------------------------------------------------------------------
     bool Save()  // Save using last known RunMode

@@ -1,6 +1,6 @@
 object ToolOptionsDialog: TToolOptionsDialog
-  Left = 170
-  Top = 121
+  Left = 541
+  Top = 162
   BorderStyle = bsDialog
   Caption = 'TopTools Options'
   ClientHeight = 761
@@ -56,46 +56,65 @@ object ToolOptionsDialog: TToolOptionsDialog
       TabOrder = 0
       object ckAutoStart: TCheckBox
         Left = 16
-        Top = 55
+        Top = 119
         Width = 113
         Height = 17
         Hint = 'Adds TopTools to the run section in the registry'
-        Caption = '&Start with Windows'
+        Caption = 'Start with &Windows'
         ParentShowHint = False
         ShowHint = False
         TabOrder = 1
       end
       object ckOnTop: TCheckBox
         Left = 16
-        Top = 27
+        Top = 91
         Width = 98
         Height = 17
         Caption = '&Always on top'
         TabOrder = 0
       end
-      object ckSaveToolstate: TCheckBox
+      object ckRememberSettings: TCheckBox
         Left = 16
-        Top = 83
+        Top = 23
         Width = 177
         Height = 17
-        Caption = '&Preserve tool states on exit'
+        Caption = 'Remember &Settings'
         TabOrder = 2
+        OnClick = ckRememberSettingsClick
       end
       object ckTrayApp: TCheckBox
         Left = 16
         Top = 176
         Width = 241
         Height = 17
-        Caption = '&Reside in sytem tray (like older versions did)'
+        Caption = 'Reside in sytem &tray (like older versions did)'
         TabOrder = 3
       end
       object ckSingleton: TCheckBox
         Left = 16
-        Top = 112
+        Top = 148
         Width = 225
         Height = 17
         Caption = 'Allow only &one instance to run at a time'
         TabOrder = 4
+      end
+      object rbInifile: TRadioButton
+        Left = 35
+        Top = 64
+        Width = 113
+        Height = 17
+        Caption = 'Save to &Ini File'
+        TabOrder = 5
+      end
+      object rbRegistry: TRadioButton
+        Left = 35
+        Top = 43
+        Width = 113
+        Height = 17
+        Caption = 'Save to &Registry'
+        Checked = True
+        TabOrder = 6
+        TabStop = True
       end
     end
   end

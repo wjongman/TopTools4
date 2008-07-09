@@ -31,19 +31,19 @@ m_UIMode(uiNormal)
 {
     Application->OnDeactivate = HandleAppDeactivate;
     Application->OnRestore = HandleAppRestore;
-
-    // Now is the time to determine how to persist settings
-    if (!g_ToolOptions.KnowsRunMode())
-    {
-        // Offer a dialog and ask what to do with the settings
-        TQuerySaveDialog* QueryDlg = new TQuerySaveDialog(this);
-        if (QueryDlg->ShowModal() == mrOk)
-        {
-            g_ToolOptions.SetRunMode(QueryDlg->GetRunMode());
-        }
-        delete QueryDlg;
-    }
-
+/*
+     // Now is the time to determine how to persist settings
+     if (!g_ToolOptions.KnowsRunMode())
+     {
+         // Offer a dialog and ask what to do with the settings
+         TQuerySaveDialog* QueryDlg = new TQuerySaveDialog(this);
+         if (QueryDlg->ShowModal() == mrOk)
+         {
+             g_ToolOptions.SetRunMode(QueryDlg->GetRunMode());
+         }
+         delete QueryDlg;
+     }
+*/
     LoadSettings();
 
     m_HotkeyManager = new THotkeyManager(Handle);

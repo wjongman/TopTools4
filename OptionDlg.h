@@ -25,7 +25,7 @@ __published:  // IDE-managed Components
   TCheckBox *ckOnTop;
   TCheckBox *ckPrefix;
   TCheckBox *ckQuotes;
-  TCheckBox *ckSaveToolstate;
+    TCheckBox *ckRememberSettings;
   TCheckBox *ckAutoStart;
   TEdit *edLength;
   TEdit *edRefresh;
@@ -78,12 +78,15 @@ __published:  // IDE-managed Components
   TCheckBox *ckOptionsDlg;
   THotkeyPanel *hkpDoubleClick;
   TCheckBox *ckSingleton;
+    TRadioButton *rbInifile;
+    TRadioButton *rbRegistry;
 
   void __fastcall FormShow(TObject *Sender);
   void __fastcall lvSelectOptionChange(TObject *Sender, TListItem *Item,
           TItemChange Change);
   void __fastcall bnOkClick(TObject *Sender);
   void __fastcall bnAutosaveOptionsClick(TObject *Sender);
+    void __fastcall ckRememberSettingsClick(TObject *Sender);
 
 private:  // User declarations
   void HideAll();
