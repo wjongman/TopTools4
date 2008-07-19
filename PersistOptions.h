@@ -99,7 +99,7 @@ public:
             // No commandline arguments, heuristcly determine run-mode
             if (IniFileExists())
             {
-                // todo: First test if inifile is writable 
+                // todo: First test if inifile is writable
 
                 // If an Ini file exists we'll run in rmIniFile mode
                 // Ini file overrides registry settings
@@ -459,6 +459,74 @@ private:
         }
         return bSuccess;
     }
+
+    //-------------------------------------------------------------------------
+public:
+
+    bool ProgramDirIsWriteable()
+    {
+        // See if program directory is accessable
+        String FilePath = ExtractFilePath(ParamStr(0));
+
+         HANDLE hFile = 0;
+         hFile = CreateFile(FilePath.c_str(),
+                 GENERIC_READ | GENERIC_WRITE,
+                 FILE_SHARE_READ | FILE_SHARE_WRITE,     // share for reading and writing
+                 NULL,                                   // no security
+                 OPEN_EXISTING,                          // existing file only
+                 FILE_ATTRIBUTE_NORMAL | FILE_FLAG_BACKUP_SEMANTICS,
+                 NULL);                                  // no attr. template
+
+         if (hFile == INVALID_HANDLE_VALUE)
+         {
+             return false;
+         }
+         CloseHandle(hFile);
+
+         return true;
+    }
+
+/*
+//Function : CheckAccess( LPCTSTR fname, int mode)
+//Returns  : 0 when the access is present, -1 when access is not available
+//Desc     : This function can be used as a substitue for _access. The paramters are the same as in _access()
+//fname - file/directory whose access is to be checked
+//mode - mode to be checked, pass the code corresponding to the access test required.
+// 0 - Test existence
+// 2 - Write access
+// 4 - Read access
+// 6 - Read & Write access.
+//
+#include <io.h>
+
+int CheckAccess(LPCTSTR fname, int mode)
+{
+         DWORD dwAccess;
+         if (mode == 0)
+             return _access(fname, mode);                //access would do when we want to check the existence alone.
+
+         if (mode == 2)
+             dwAccess = GENERIC_WRITE;
+         else if (mode == 4)
+             dwAccess = GENERIC_READ;
+         else if (mode == 6)
+             dwAccess = GENERIC_READ  | GENERIC_WRITE;
+
+         HANDLE hFile = 0;
+         hFile = CreateFile(fname,
+                 dwAccess,
+                 FILE_SHARE_READ|FILE_SHARE_WRITE,       // share for reading and writing
+                 NULL,                                   // no security
+                 OPEN_EXISTING,                          // existing file only
+                 FILE_ATTRIBUTE_NORMAL | FILE_FLAG_BACKUP_SEMANTICS,
+                 NULL);                                  // no attr. template
+
+         if (hFile == INVALID_HANDLE_VALUE)
+             { return(-1); }
+         CloseHandle(hFile);
+         return(0);
+}
+*/
 
 }; // TPersistToolOptions
 

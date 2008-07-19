@@ -163,23 +163,19 @@ void TToolOptionsDialog::InitOptions()
     rbInifile->Checked = true;
     break;
   }
-//  ckRememberSettings->Checked = (runmode != rmPortable);
 
-
+  if (!g_ToolOptions.ProgramDirIsWriteable())
   {
-    // See what kind of persistence is requested
-    if (rbRegistry->Checked)
-    {
-      runmode = rmRegistry;
-    }
-    else if (rbInifile->Checked)
-    {
-      runmode = rmIniFile;
-    }
+    rbRegistry->Checked = true;
+    rbInifile->Checked = false;
+    rbInifile->Enabled = false;
   }
+
+  //  ckRememberSettings->Checked = (runmode != rmPortable);
 
   ckSingleton->Checked = g_ToolOptions.Get("main", "singleton", false);
   ckOnTop->Checked = g_ToolOptions.Get("main", "stayontop", true);
+
   int doubleclickaction = g_ToolOptions.Get("main", "doubleclick", dcoControl);
   ckOpenToolbar->Checked = doubleclickaction & dcoControl;
   ckOpenRuler->Checked = doubleclickaction & dcoRuler;

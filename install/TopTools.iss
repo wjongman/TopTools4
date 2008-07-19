@@ -15,7 +15,7 @@ DisableProgramGroupPage=yes
 
 DefaultGroupName=TopTools 4
 
-SetupIconFile=toptools3.ico
+SetupIconFile=..\graphics\toptools256f.ico
 
 WizardImageFile=logobig.bmp
 WizardSmallImageFile=logosmall.bmp
@@ -25,6 +25,8 @@ WizardImageStretch=false
 AppPublisher=Willem Jongman
 AppPublisherURL=http://toptools.org
 AppMutex=TopTools_4_Mutex
+
+PrivilegesRequired=admin
 
 ;[Types]
 ;Name: "normal"; Description: "Normal installation";
@@ -41,16 +43,16 @@ Source: ..\exe\TopTools4.exe; DestDir: {app};
 ;Source: ..\exe\TopTools4.exe; DestDir: {app}; Components: normal portable
 
 [Icons]
-;Name: "{group}\TopTools"; Filename: "{app}\TopTools.exe";
-;Name: "{userdesktop}\TopTools"; Filename: "{app}\TopTools.exe";
-;Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\TopTools"; Filename: "{app}\TopTools.exe";
+;Name: "{group}\TopTools"; Filename: "{app}\TopTools4.exe";
+;Name: "{userdesktop}\TopTools"; Filename: "{app}\TopTools4.exe";
+;Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\TopTools"; Filename: "{app}\TopTools4.exe";
 ;;Name: "{userstartmenu}\TopTools"; Filename: "{app}\TopTools.exe";
 ;;Name: "{userstartup}\TopTools"; Filename: "{app}\TopTools.exe";
 
 Name: {group}\TopTools 4; Filename: {app}\TopTools4.exe; Tasks: programgroup; IconIndex: 0;
 ;Name: {group}\Uninstall TopTools 4; Filename: {uninstallexe}; Tasks: programgroup;
-Name: {userdesktop}\TopTools4; Filename: {app}\TopTools4.exe; Tasks: desktopicon;
-Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\TopTools; Filename: {app}\TopTools4.exe; Tasks: quicklaunchicon;
+Name: {commondesktop}\TopTools 4; Filename: {app}\TopTools4.exe; Tasks: desktopicon;
+;Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\TopTools; Filename: {app}\TopTools4.exe; Tasks: quicklaunchicon;
 ;Name: "{userstartmenu}\TopTools"; Filename: "{app}\TopTools.exe"; Tasks: startmenu
 ;Name: "{userstartup}\TopTools"; Filename: "{app}\TopTools.exe"; Tasks: startupicon
 
@@ -77,8 +79,8 @@ Root: HKCU; Subkey: "Software\TopTools 4"; Flags: uninsdeletekey;
 ;Filename: "TopTools4.ini"; Section: "main"; Flags: uninsdeletesection;
 
 [Tasks]
-Name: programgroup; Description: Create a &Program group in in the Startmenu; Flags: checkedonce; GroupDescription: Shortcuts and Icons:
-Name: quicklaunchicon; Description: Create an icon on the &Quick Launch bar; Flags: checkedonce; GroupDescription: Shortcuts and Icons:
+Name: programgroup; Description: Create a &Program group in the Startmenu; Flags: checkedonce; GroupDescription: Shortcuts and Icons:
+;Name: quicklaunchicon; Description: Create an icon on the &Quick Launch bar; Flags: checkedonce; GroupDescription: Shortcuts and Icons:
 Name: desktopicon; Description: Create an icon on the &Desktop; Flags: unchecked; GroupDescription: Shortcuts and Icons:
 ;Name: regentry; Description: "Use system-registry to save preferences and settings"; GroupDescription: "Settings:"; Flags: unchecked
 ;Name: inifile; Description: "Use .ini-file to save preferences and settings"; GroupDescription: "Settings:"; Flags: unchecked
@@ -86,7 +88,7 @@ Name: desktopicon; Description: Create an icon on the &Desktop; Flags: unchecked
 
 
 [Run]
-Filename: {app}\TopTools4.exe; Description: Start the program; Flags: postinstall nowait skipifsilent
+;Filename: {app}\TopTools4.exe; Description: Start the program; Flags: postinstall nowait skipifsilent
 
 [_ISToolPreCompile]
-Name: D:\Develop\TopTools4\install\prepare_install.bat; Parameters: ..\exe\TopTools4.exe
+Name: prepare_install.bat; Parameters: ..\exe\TopTools4.exe

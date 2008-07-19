@@ -3,6 +3,7 @@
 #pragma hdrstop
 
 #include <Registry.hpp>
+#include <Filectrl.hpp>
 #include <shlobj.h> // Make sure NO_WIN32_LEAN_AND_MEAN is defined..
 
 #include "AutoSave.h"

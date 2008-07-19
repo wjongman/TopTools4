@@ -23,7 +23,6 @@ USEFORM("ScreenForm.cpp", ScreenForm);
 USEFORM("Tool.cpp", ToolForm);
 USELIB("gif\gif.lib");
 USELIB("png\png.lib");
-USERC("Graphics.rc");
 USERES("Cursors.res");
 USERES("TopTools4.res");
 USEUNIT("AutoSave.cpp");
@@ -35,6 +34,7 @@ USEUNIT("Monitor.cpp");
 USEUNIT("PersistImage.cpp");
 USEUNIT("TopToolBar.cpp");
 USEUNIT("TrayIcon.cpp");
+USERES("Graphics.RES");
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
