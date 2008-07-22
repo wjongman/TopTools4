@@ -25,7 +25,9 @@ __fastcall TScreenForm::TScreenForm(TComponent* Owner)
     Height = g_ToolOptions.Get(m_ToolName, "height", Height);
 
     m_Timer = new TTimer(this);
-    m_Timer->Interval = 500; // twice a second
+    m_Timer->Interval = 100; // twice a second
+    m_Timer->OnTimer = OnTimerTick;
+    m_Timer->Enabled = true;
 }
 
 //---------------------------------------------------------------------------
@@ -67,6 +69,34 @@ void __fastcall TScreenForm::MouseMove(TShiftState Shift, int X, int Y)
         Top  += Y - m_MouseOldY;
     }
 
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TScreenForm::OnTimerTick(TObject *Sender)
+{
+    if (FSticky)
+    // Move the form
+    {
+        TPoint ptMouse;
+        GetCursorPos(&ptMouse);
+
+        TRect rcClient = GetClientRect();
+        int CenterX = rcClient.Width() / 2;
+        int CenterY = rcClient.Height() / 2;
+
+        Left = ptMouse.x - CenterX;
+        Top = ptMouse.y - CenterY;
+
+        POINT pt = ScreenToClient(ptMouse);
+        m_MouseOldX = pt.x;
+        m_MouseOldY = pt.y;
+//        Left += X - m_MouseOldX;
+//        Top  += Y - m_MouseOldY;
+    }
+    else
+    {
+        m_Timer->Enabled = false;
+    }
 }
 
 //---------------------------------------------------------------------------

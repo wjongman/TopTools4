@@ -180,18 +180,23 @@ void __fastcall TPersistImage::DoCopyToClipboard()
 //---------------------------------------------------------------------------
 void __fastcall TPersistImage::DoPrintImage()
 {
-    Printer()->BeginDoc();
+    TPrintDialog *PrintDialog = new TPrintDialog(NULL);
+    if (PrintDialog->Execute())
+    {
+        Printer()->BeginDoc();
 
-    double fPrinterVert = (double) GetDeviceCaps(Printer()->Canvas->Handle, LOGPIXELSY);
-    double fPrinterHorz = (double) GetDeviceCaps(Printer()->Canvas->Handle, LOGPIXELSX);
+        double fPrinterVert = (double) GetDeviceCaps(Printer()->Canvas->Handle, LOGPIXELSY);
+        double fPrinterHorz = (double) GetDeviceCaps(Printer()->Canvas->Handle, LOGPIXELSX);
 
-    int iHeight = (int) ((double)m_pBitmap->Height * (fPrinterVert / Screen->PixelsPerInch));
-    int iWidth  = (int) ((double)m_pBitmap->Width  * (fPrinterHorz / Screen->PixelsPerInch));
+        int iHeight = (int) ((double)m_pBitmap->Height * (fPrinterVert / Screen->PixelsPerInch));
+        int iWidth  = (int) ((double)m_pBitmap->Width  * (fPrinterHorz / Screen->PixelsPerInch));
 
-    //DoPrintImage(Printer()->Canvas, 0, 0int pX,int pY, Graphics::TBitmap *pBitmap)
-    StretchToPrintCanvas(Printer()->Canvas, 0, 0, iWidth, iHeight, m_pBitmap);
+        //DoPrintImage(Printer()->Canvas, 0, 0int pX,int pY, Graphics::TBitmap *pBitmap)
+        StretchToPrintCanvas(Printer()->Canvas, 0, 0, iWidth, iHeight, m_pBitmap);
 
-    Printer()->EndDoc();
+        Printer()->EndDoc();
+    }
+    delete PrintDialog;
 }
 
 //---------------------------------------------------------------------------

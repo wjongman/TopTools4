@@ -37,6 +37,8 @@ protected:
   DYNAMIC void __fastcall MouseDown(TMouseButton Button,
                                     Classes::TShiftState Shift, int X, int Y);
 
+  void __fastcall OnTimerTick(TObject *Sender);
+
   BEGIN_MESSAGE_MAP
     VCL_MESSAGE_HANDLER(WM_NCHITTEST, TWMNCHitTest, OnNCHitTest)
   END_MESSAGE_MAP(TForm)
