@@ -80,20 +80,28 @@ void __fastcall TScreenGrabber::HandleRightButtonClick(TObject *Sender,
      {
      case gmOpenViewer:
          ViewImage(m_pBufferBmp);
+         EndCapture();
          break;
+
      case gmShowMenu:
          ShowCaptureMenu(X, Y);
          break;
+
      case gmBypassMenu:
          AutoSaveToFile();
+         EndCapture();
          break;
+
      case gmContinuous:
+         AutoSaveToFile();
+         CaptureNext();
          break;
 
      default:
+         EndCapture();
          break;
      }
-     EndCapture();
+//     EndCapture();
 // Left Click to drag or resize, Right Click to grab area.
 }
 

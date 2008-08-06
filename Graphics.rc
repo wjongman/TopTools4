@@ -1,7 +1,3 @@
-APPICON      ICON   "graphics/toptools256g.ico"
-TRAYICON     ICON   "graphics/toptools256g.ico"
-//TRAYICON     ICON   "graphics/trayicon.ico"
-
 MAINICONS    BITMAP "graphics/mainicons.bmp"
 LOUPEICONS   BITMAP "graphics/loupeicons.bmp"
 

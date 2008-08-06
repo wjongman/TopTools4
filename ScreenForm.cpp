@@ -43,19 +43,25 @@ __fastcall TScreenForm::~TScreenForm()
 void __fastcall TScreenForm::MouseDown(TMouseButton Button,
                                        TShiftState Shift, int X, int Y)
 {
-    FSticky = false;
-
-    if (Button == mbLeft)
-    // Start a drag-operation
-    // todo: allow for moving and sizing with the arrow keys
+    // When sticky, release stickiness
+    if (FSticky)
     {
-        m_MouseOldX = X;
-        m_MouseOldY = Y;
+        FSticky = false;
     }
-    else if (Button == mbRight && FOnRightButtonClick)
-    // Signal right-button event
+//    else
     {
-        FOnRightButtonClick(this, Button, Shift, X, Y);
+        if (Button == mbLeft)
+        // Start a drag-operation
+        // todo: allow for moving and sizing with the arrow keys
+        {
+            m_MouseOldX = X;
+            m_MouseOldY = Y;
+        }
+        else if (Button == mbRight && FOnRightButtonClick)
+        // Signal right-button event
+        {
+            FOnRightButtonClick(this, Button, Shift, X, Y);
+        }
     }
 }
 

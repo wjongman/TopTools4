@@ -154,6 +154,7 @@ void __fastcall TMainForm::ShowTrayIcon(bool show)
 {
     if (show)
     {
+//        HICON hTrayIcon = ::LoadImage(HInstance, "APPICON", IMAGE_ICON, 16, 16, NULL);
         HICON hTrayIcon = ::LoadImage(HInstance, "TRAYICON", IMAGE_ICON, 16, 16, NULL);
         if (!m_pTrayIcon)
             m_pTrayIcon = new cTrayIcon(Handle, hTrayIcon, "TopTools 4");

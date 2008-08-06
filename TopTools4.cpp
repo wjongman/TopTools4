@@ -35,6 +35,7 @@ USEUNIT("PersistImage.cpp");
 USEUNIT("TopToolBar.cpp");
 USEUNIT("TrayIcon.cpp");
 USERES("Graphics.RES");
+USERES("appicon.RES");
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
