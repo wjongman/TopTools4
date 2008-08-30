@@ -25,7 +25,7 @@ __fastcall TScreenForm::TScreenForm(TComponent* Owner)
     Height = g_ToolOptions.Get(m_ToolName, "height", Height);
 
     m_Timer = new TTimer(this);
-    m_Timer->Interval = 100; // twice a second
+    m_Timer->Interval = 100; // milliseconds
     m_Timer->OnTimer = OnTimerTick;
     m_Timer->Enabled = true;
 }
@@ -43,25 +43,22 @@ __fastcall TScreenForm::~TScreenForm()
 void __fastcall TScreenForm::MouseDown(TMouseButton Button,
                                        TShiftState Shift, int X, int Y)
 {
-    // When sticky, release stickiness
-    if (FSticky)
+    // Release stickiness
+    FSticky = false;
+
+    if (Button == mbLeft)
+    // Start a drag-operation
+    // todo: allow for moving and sizing with the arrow keys
+    // todo: show tooltip that indicates position and size of selection
+    // todo: show a zoomed closeup of the target area
     {
-        FSticky = false;
+        m_MouseOldX = X;
+        m_MouseOldY = Y;
     }
-//    else
+    else if (Button == mbRight && FOnRightButtonClick)
+    // Signal right-button event
     {
-        if (Button == mbLeft)
-        // Start a drag-operation
-        // todo: allow for moving and sizing with the arrow keys
-        {
-            m_MouseOldX = X;
-            m_MouseOldY = Y;
-        }
-        else if (Button == mbRight && FOnRightButtonClick)
-        // Signal right-button event
-        {
-            FOnRightButtonClick(this, Button, Shift, X, Y);
-        }
+        FOnRightButtonClick(this, Button, Shift, X, Y);
     }
 }
 
@@ -75,6 +72,13 @@ void __fastcall TScreenForm::MouseMove(TShiftState Shift, int X, int Y)
         Top  += Y - m_MouseOldY;
     }
 
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TScreenForm::SetSticky(bool sticky)
+{
+    FSticky = sticky;
+    m_Timer->Enabled = sticky;
 }
 
 //---------------------------------------------------------------------------
@@ -220,6 +224,7 @@ void __fastcall TScreenForm::FormPaint(TObject *Sender)
     Canvas->LineTo(rc.Left, rc.Bottom - 1);
     Canvas->LineTo(rc.Left, rc.Top);
 
+    // Center square
     //int x_center = (rc.Right - rc.Left)/ 2;
     //int y_center = (rc.Bottom - rc.Top)/ 2;
     //Canvas->FillRect(Rect(x_center - 10, y_center - 10, x_center + 10, y_center + 10));
@@ -235,23 +240,23 @@ void __fastcall TScreenForm::FormPaint(TObject *Sender)
         Canvas->LineTo(rc.Left + i * x_incr, rc.Top);
     }
 
-    // Top-Right sizegrip
     for (int i = 1; i <= INC; i++)
     {
+        // Top-Right sizegrip
         Canvas->MoveTo(rc.Right, rc.Top + i * y_incr);
         Canvas->LineTo(rc.Right - i * x_incr, rc.Top);
     }
 
-    // Bottom-Right sizegrip
     for (int i = 1; i <= INC; i++)
     {
+        // Bottom-Right sizegrip
         Canvas->MoveTo(rc.Right, rc.Bottom - i * y_incr);
         Canvas->LineTo(rc.Right - i * x_incr, rc.Bottom);
     }
 
-    // Bottom-Left sizegrip
     for (int i = 1; i <= INC; i++)
     {
+        // Bottom-Left sizegrip
         Canvas->MoveTo(rc.Left, rc.Bottom - i * y_incr);
         Canvas->LineTo(rc.Left + i * x_incr, rc.Bottom);
     }

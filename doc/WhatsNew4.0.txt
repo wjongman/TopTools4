@@ -1,12 +1,12 @@
 New in version 4.0
 
 Screengrabber
-redone capture UI for Vista
-added capture autosave options
+Redone capture UI for Vista
+Added capture autosave options
 Print suppport
 
 Options
-added hotkey support for commonly used actions
+Added hotkey support for commonly used actions
 
 Portability
 

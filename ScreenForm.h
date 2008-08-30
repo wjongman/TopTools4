@@ -53,11 +53,13 @@ __published:  // IDE-managed Components
 
 __published:
   __property TMouseEvent OnRightButtonClick = { read = FOnRightButtonClick, write = FOnRightButtonClick };
-  __property bool Sticky = { read = FSticky, write = FSticky };
+  __property bool Sticky = { read = FSticky, write = SetSticky };
 
 protected:
   TMouseEvent FOnRightButtonClick;
+
   bool FSticky;
+  void __fastcall SetSticky(bool sticky);
 
   // Override TToolWindow to show up near mouse pointer
   virtual void __fastcall OnToolShow(TObject *Sender) { FormShow(Sender); }
