@@ -28,6 +28,8 @@ __fastcall TScreenForm::TScreenForm(TComponent* Owner)
     m_Timer->Interval = 100; // milliseconds
     m_Timer->OnTimer = OnTimerTick;
     m_Timer->Enabled = true;
+
+    m_ToolTip = new TToolTipForm(this);
 }
 
 //---------------------------------------------------------------------------
@@ -37,6 +39,7 @@ __fastcall TScreenForm::~TScreenForm()
     g_ToolOptions.Set(m_ToolName, "height", Height);
 
     delete m_Timer;
+    delete m_ToolTip;
 }
 
 //---------------------------------------------------------------------------
@@ -70,6 +73,14 @@ void __fastcall TScreenForm::MouseMove(TShiftState Shift, int X, int Y)
     {
         Left += X - m_MouseOldX;
         Top  += Y - m_MouseOldY;
+
+        m_ToolTip->Left = Left;
+        m_ToolTip->Top = Top - 32;
+
+        AnsiString sText;
+        sText.printf("left: %d\r\n, top: %d\r\n, width: %d\r\n, height: %d", Left, Top, Width, Height);
+
+        m_ToolTip->SetText(sText);
     }
 
 }
@@ -233,9 +244,9 @@ void __fastcall TScreenForm::FormPaint(TObject *Sender)
     int x_incr = GetSystemMetrics(SM_CXVSCROLL) / INC;
     int y_incr = GetSystemMetrics(SM_CXHSCROLL) / INC;
 
+    // Top-Left sizegrip
     for (int i = 1; i <= INC; i++)
     {
-        // Top-Left sizegrip
         Canvas->MoveTo(rc.Left, rc.Top + i * y_incr);
         Canvas->LineTo(rc.Left + i * x_incr, rc.Top);
     }
@@ -286,22 +297,13 @@ void __fastcall TScreenForm::FormShow(TObject *Sender)
         POINT pt = ScreenToClient(ptMouse);
         m_MouseOldX = pt.x;
         m_MouseOldY = pt.y;
+
+//        m_ToolTip->Left = ptMouse.x;
+//        m_ToolTip->Top = ptMouse.y;
+//        m_ToolTip->Show();
     }
 }
+
 //---------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

@@ -17,6 +17,7 @@
 #endif
 
 #include "tool.h"
+#include "ToolTip.h"
 //---------------------------------------------------------------------------
 class TScreenForm : public TToolForm
 {
@@ -28,6 +29,7 @@ private:
   int m_MouseOldX;
   int m_MouseOldY;
 
+  TToolTipForm* m_ToolTip;
   TTimer* m_Timer;
   //  bool m_bSticky;
 
