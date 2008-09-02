@@ -1,12 +1,12 @@
 object ScreenForm: TScreenForm
-  Left = 1327
-  Top = 659
+  Left = 1318
+  Top = 431
   Width = 309
   Height = 172
   Cursor = crSizeAll
   Hint = 
     'Click right mouse-button to capture selected area\r\nleft to set' +
-    ' positionn'
+    ' position'
   Caption = 'ScreenForm'
   Color = clBtnFace
   Constraints.MinHeight = 16
@@ -17,7 +17,8 @@ object ScreenForm: TScreenForm
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
-  ShowHint = True
+  ShowHint = False
+  OnCloseQuery = FormCloseQuery
   OnPaint = FormPaint
   OnResize = FormResize
   OnShow = FormShow

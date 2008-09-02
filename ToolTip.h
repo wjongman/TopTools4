@@ -11,6 +11,8 @@
 class TToolTipForm : public TForm
 {
 __published:  // IDE-managed Components
+    TLabel *Label1;
+    TLabel *Label2;
     void __fastcall FormShow(TObject *Sender);
     void __fastcall FormPaint(TObject *Sender);
 
@@ -20,6 +22,8 @@ private:  // User declarations
 public:   // User declarations
     __fastcall TToolTipForm(TComponent* Owner);
     void __fastcall SetText(const String& sIn);
+    void __fastcall SetPosition(int X, int Y);
+    void __fastcall SetDimensions(int W, int H);
 
 protected:
     virtual void __fastcall CreateParams(Controls::TCreateParams &Params);

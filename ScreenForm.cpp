@@ -11,7 +11,7 @@
 
 //---------------------------------------------------------------------------
 __fastcall TScreenForm::TScreenForm(TComponent* Owner)
-: TToolForm(Owner, "capture")
+: TToolForm(Owner, "capture"), m_ToolTip(NULL)
 {
     BorderStyle = bsNone;
     Color = clWhite;
@@ -21,6 +21,8 @@ __fastcall TScreenForm::TScreenForm(TComponent* Owner)
     Cursor = crSizeAll;
     FSticky = false;
 
+    m_ToolTip = new TToolTipForm(this);
+
     Width = g_ToolOptions.Get(m_ToolName, "width", Width);
     Height = g_ToolOptions.Get(m_ToolName, "height", Height);
 
@@ -28,8 +30,6 @@ __fastcall TScreenForm::TScreenForm(TComponent* Owner)
     m_Timer->Interval = 100; // milliseconds
     m_Timer->OnTimer = OnTimerTick;
     m_Timer->Enabled = true;
-
-    m_ToolTip = new TToolTipForm(this);
 }
 
 //---------------------------------------------------------------------------
@@ -75,12 +75,13 @@ void __fastcall TScreenForm::MouseMove(TShiftState Shift, int X, int Y)
         Top  += Y - m_MouseOldY;
 
         m_ToolTip->Left = Left;
-        m_ToolTip->Top = Top - 32;
+        m_ToolTip->Top = Top - 64;
 
         AnsiString sText;
-        sText.printf("left: %d\r\n, top: %d\r\n, width: %d\r\n, height: %d", Left, Top, Width, Height);
+        sText.printf(" left: %d\r\n top: %d\r\n width: %d\r\n height: %d", Left, Top, Width, Height);
 
         m_ToolTip->SetText(sText);
+//        m_ToolTip->SetPosition(Left, Top);
     }
 
 }
@@ -211,6 +212,14 @@ void __fastcall TScreenForm::OnNCHitTest(TWMNCHitTest &Message)
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::FormResize(TObject *Sender)
 {
+    if (m_ToolTip)
+    {
+        AnsiString sText;
+        sText.printf(" left: %d\r\n top: %d\r\n width: %d\r\n height: %d", Left, Top, Width, Height);
+
+        m_ToolTip->SetText(sText);
+//        m_ToolTip->SetPosition(Left, Top);
+    }
     Invalidate();
 }
 
@@ -298,12 +307,17 @@ void __fastcall TScreenForm::FormShow(TObject *Sender)
         m_MouseOldX = pt.x;
         m_MouseOldY = pt.y;
 
-//        m_ToolTip->Left = ptMouse.x;
-//        m_ToolTip->Top = ptMouse.y;
-//        m_ToolTip->Show();
+        m_ToolTip->Show();
     }
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TScreenForm::FormCloseQuery(TObject *Sender,
+      bool &CanClose)
+{
+    m_ToolTip->Close();
+    CanClose = true;
+}
 
+//---------------------------------------------------------------------------
 

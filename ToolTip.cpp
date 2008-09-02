@@ -13,6 +13,8 @@ __fastcall TToolTipForm::TToolTipForm(TComponent* Owner)
     : TForm(Owner)
 {
    m_TipText = "Uninitialized";
+   Label1->Visible = false;
+   Label2->Visible = false;
 }
 
 //---------------------------------------------------------------------------
@@ -34,13 +36,17 @@ void __fastcall TToolTipForm::CreateParams(Controls::TCreateParams &Params)
 //---------------------------------------------------------------------------
 void __fastcall TToolTipForm::FormShow(TObject *Sender)
 {
-    Width = 32;
-    Height = 32;
+    Width = 64;
+    Height = 64;
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TToolTipForm::FormPaint(TObject *Sender)
 {
+  Canvas->Brush->Color = this->Color;
+  Canvas->Brush->Style = bsSolid;
+//  Canvas->FillRect(ClientRect);
+
   RECT rcClient = ClientRect;
 
   rcClient.left += 2;
@@ -50,10 +56,26 @@ void __fastcall TToolTipForm::FormPaint(TObject *Sender)
   DrawText(Canvas->Handle, m_TipText.c_str(), -1, &rcClient, DT_LEFT | DT_NOPREFIX | DT_WORDBREAK);
 
 }
+
 //---------------------------------------------------------------------------
 void __fastcall TToolTipForm::SetText(const String& sIn)
 {
     m_TipText = sIn;
+    Invalidate();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TToolTipForm::SetPosition(int X, int Y)
+{
+    Label1->Caption = "X: " + String(X);
+    Label2->Caption = "Y: " + String(Y);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TToolTipForm::SetDimensions(int W, int H)
+{
+    Label1->Caption = "W: " + String(W);
+    Label2->Caption = "H: " + String(W);
 }
 
 
