@@ -12,6 +12,9 @@ TToolTipForm *ToolTipForm;
 __fastcall TToolTipForm::TToolTipForm(TComponent* Owner)
     : TForm(Owner)
 {
+   // Set to false so we look decent with large fonts
+   Scaled = false;
+
    m_TipText = "Uninitialized";
    Label1->Visible = false;
    Label2->Visible = false;
@@ -53,8 +56,21 @@ void __fastcall TToolTipForm::FormPaint(TObject *Sender)
   rcClient.top += 2;
 
   Canvas->Font->Color = clInfoText;
-  DrawText(Canvas->Handle, m_TipText.c_str(), -1, &rcClient, DT_LEFT | DT_NOPREFIX | DT_WORDBREAK);
+  DrawText(Canvas->Handle, m_TipText.c_str(), -1, &rcClient, DT_LEFT | DT_NOPREFIX | DT_WORDBREAK | DT_EXPANDTABS);
 
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TToolTipForm::SetDisplayPosition(int left, int top, int width, int height)
+{
+    Left = left;
+    Top = top;
+    if (width > 0)
+        Width = width;
+    if (height > 0)
+        Height = height;
+//    Width = 200;
+//    Height = 16;
 }
 
 //---------------------------------------------------------------------------

@@ -29,9 +29,11 @@ private:
   int m_MouseOldX;
   int m_MouseOldY;
 
-  TToolTipForm* m_ToolTip;
+//  TToolTipForm* m_ToolTip;
   TTimer* m_Timer;
-  //  bool m_bSticky;
+
+  void __fastcall UpdateInfoLabel();
+  String FInfoText;
 
 protected:
   // This class overrides these two TForm methods
@@ -49,6 +51,7 @@ protected:
 
 
 __published:  // IDE-managed Components
+    TLabel *InfoLabel;
     void __fastcall FormPaint(TObject *Sender);
     void __fastcall FormResize(TObject *Sender);
     void __fastcall FormShow(TObject *Sender);

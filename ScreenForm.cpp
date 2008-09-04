@@ -11,7 +11,7 @@
 
 //---------------------------------------------------------------------------
 __fastcall TScreenForm::TScreenForm(TComponent* Owner)
-: TToolForm(Owner, "capture"), m_ToolTip(NULL)
+: TToolForm(Owner, "capture") //, m_ToolTip(NULL)
 {
     BorderStyle = bsNone;
     Color = clWhite;
@@ -21,7 +21,7 @@ __fastcall TScreenForm::TScreenForm(TComponent* Owner)
     Cursor = crSizeAll;
     FSticky = false;
 
-    m_ToolTip = new TToolTipForm(this);
+    //m_ToolTip = new TToolTipForm(this);
 
     Width = g_ToolOptions.Get(m_ToolName, "width", Width);
     Height = g_ToolOptions.Get(m_ToolName, "height", Height);
@@ -39,7 +39,7 @@ __fastcall TScreenForm::~TScreenForm()
     g_ToolOptions.Set(m_ToolName, "height", Height);
 
     delete m_Timer;
-    delete m_ToolTip;
+    //delete m_ToolTip;
 }
 
 //---------------------------------------------------------------------------
@@ -74,13 +74,9 @@ void __fastcall TScreenForm::MouseMove(TShiftState Shift, int X, int Y)
         Left += X - m_MouseOldX;
         Top  += Y - m_MouseOldY;
 
-        m_ToolTip->Left = Left;
-        m_ToolTip->Top = Top - 64;
+        //m_ToolTip->SetDisplayPosition(Left, Top, Width, Height);
 
-        AnsiString sText;
-        sText.printf(" left: %d\r\n top: %d\r\n width: %d\r\n height: %d", Left, Top, Width, Height);
-
-        m_ToolTip->SetText(sText);
+        UpdateInfoLabel();
 //        m_ToolTip->SetPosition(Left, Top);
     }
 
@@ -112,8 +108,6 @@ void __fastcall TScreenForm::OnTimerTick(TObject *Sender)
         POINT pt = ScreenToClient(ptMouse);
         m_MouseOldX = pt.x;
         m_MouseOldY = pt.y;
-//        Left += X - m_MouseOldX;
-//        Top  += Y - m_MouseOldY;
     }
     else
     {
@@ -212,15 +206,21 @@ void __fastcall TScreenForm::OnNCHitTest(TWMNCHitTest &Message)
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::FormResize(TObject *Sender)
 {
-    if (m_ToolTip)
-    {
-        AnsiString sText;
-        sText.printf(" left: %d\r\n top: %d\r\n width: %d\r\n height: %d", Left, Top, Width, Height);
-
-        m_ToolTip->SetText(sText);
-//        m_ToolTip->SetPosition(Left, Top);
-    }
+    UpdateInfoLabel();
     Invalidate();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TScreenForm::UpdateInfoLabel()
+{
+    //if (m_ToolTip)
+    {
+        String sText;
+        //sText.printf("X:\t%d\tY:\t%d\tW:\t%d\tH:\t%d", Left, Top, Width, Height);
+        sText.printf("X: %d\r\nY: %d\r\nW: %d\r\nH: %d", Left, Top, Width, Height);
+        FInfoText = sText;
+        InfoLabel->Caption = sText;
+    }
 }
 
 #define INC 4
@@ -281,6 +281,21 @@ void __fastcall TScreenForm::FormPaint(TObject *Sender)
         Canvas->LineTo(rc.Left + i * x_incr, rc.Bottom);
     }
 
+//     if (1)
+//     {
+//         //Canvas->Brush->Color = this->Color;
+//         //Canvas->Brush->Style = bsSolid;
+//         //  Canvas->FillRect(ClientRect);
+//
+//         RECT rcText = ClientRect;
+//
+//         rcText.left += 2;
+//         rcText.top += 2;
+//
+//         //Canvas->Font->Color = clInfoText;
+//         DrawText(Canvas->Handle, m_TipText.c_str(), -1, &rcText, DT_LEFT | DT_NOPREFIX | DT_WORDBREAK | DT_EXPANDTABS);
+//     }
+
     // Restore original settings
     Canvas->Brush->Color = OldBrushColor;
     Canvas->Pen->Color = OldPenColor;
@@ -307,15 +322,15 @@ void __fastcall TScreenForm::FormShow(TObject *Sender)
         m_MouseOldX = pt.x;
         m_MouseOldY = pt.y;
 
-        m_ToolTip->Show();
+        //m_ToolTip->Show();
     }
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::FormCloseQuery(TObject *Sender,
-      bool &CanClose)
+                                            bool &CanClose)
 {
-    m_ToolTip->Close();
+    //m_ToolTip->Close();
     CanClose = true;
 }
 

@@ -24,6 +24,7 @@ public:   // User declarations
     void __fastcall SetText(const String& sIn);
     void __fastcall SetPosition(int X, int Y);
     void __fastcall SetDimensions(int W, int H);
+    void __fastcall SetDisplayPosition(int left, int top, int width = 0, int height = 0);
 
 protected:
     virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
