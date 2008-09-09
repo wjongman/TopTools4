@@ -29,6 +29,8 @@ private:
   int m_MouseOldX;
   int m_MouseOldY;
 
+  bool InitCalled;
+  void InitTooltip(String sText);
 //  TToolTipForm* m_ToolTip;
   TTimer* m_Timer;
 

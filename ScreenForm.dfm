@@ -24,7 +24,7 @@ object ScreenForm: TScreenForm
   PixelsPerInch = 96
   TextHeight = 13
   object InfoLabel: TLabel
-    Left = 16
+    Left = 19
     Top = 1
     Width = 63
     Height = 14

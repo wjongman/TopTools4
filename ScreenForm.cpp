@@ -11,7 +11,7 @@
 
 //---------------------------------------------------------------------------
 __fastcall TScreenForm::TScreenForm(TComponent* Owner)
-: TToolForm(Owner, "capture") //, m_ToolTip(NULL)
+: TToolForm(Owner, "capture"), InitCalled(false) //, m_ToolTip(NULL)
 {
     BorderStyle = bsNone;
     Color = clWhite;
@@ -87,6 +87,7 @@ void __fastcall TScreenForm::SetSticky(bool sticky)
 {
     FSticky = sticky;
     m_Timer->Enabled = sticky;
+    InitTooltip("dit is een test");
 }
 
 //---------------------------------------------------------------------------
@@ -334,5 +335,120 @@ void __fastcall TScreenForm::FormCloseQuery(TObject *Sender,
     CanClose = true;
 }
 
+
+/*
+
 //---------------------------------------------------------------------------
+procedure ShowBalloonTip(Control: HWnd; Icon: integer; Title: pchar; Text: PWideChar; BackCL, TextCL: TColor);
+const
+ TOOLTIPS_CLASS = 'tooltips_class32';
+ TTS_ALWAYSTIP = $01;
+ TTS_NOPREFIX = $02;
+ TTS_BALLOON = $40;
+ TTF_SUBCLASS = $0010;
+ TTF_TRANSPARENT = $0100;
+ TTF_CENTERTIP = $0002;
+ TTM_ADDTOOL = $0400 + 50;
+ TTM_SETTITLE = (WM_USER + 32);
+ ICC_WIN95_CLASSES = $000000FF;
+type
+ TOOLINFO = packed record
+   cbSize: Integer;
+   uFlags: Integer;
+   hwnd: THandle;
+   uId: Integer;
+   rect: TRect;
+   hinst: THandle;
+   lpszText: PWideChar;
+   lParam: Integer;
+ end;
+var
+ hWndTip: THandle;
+ ti: TOOLINFO;
+ hWnd: THandle;
+begin
+ hWnd := Control;
+ hWndTip := CreateWindow(TOOLTIPS_CLASS, nil,
+   WS_POPUP or TTS_NOPREFIX or TTS_BALLOON or TTS_ALWAYSTIP,
+   0, 0, 0, 0, hWnd, 0, HInstance, nil);
+ if hWndTip <> 0 then
+ begin
+   SetWindowPos(hWndTip, HWND_TOPMOST, 0, 0, 0, 0,
+     SWP_NOACTIVATE or SWP_NOMOVE or SWP_NOSIZE);
+   ti.cbSize := SizeOf(ti);
+   ti.uFlags := TTF_CENTERTIP or TTF_TRANSPARENT or TTF_SUBCLASS;
+   ti.hwnd := hWnd;
+   ti.lpszText := Text;
+   Windows.GetClientRect(hWnd, ti.rect);
+   SendMessage(hWndTip, TTM_SETTIPBKCOLOR, BackCL, 0);
+   SendMessage(hWndTip, TTM_SETTIPTEXTCOLOR, TextCL, 0);
+   SendMessage(hWndTip, TTM_ADDTOOL, 1, Integer(@ti));
+   SendMessage(hWndTip, TTM_SETTITLE, Icon mod 4, Integer(Title));
+ end;
+end;
+*/
+void TScreenForm::InitTooltip(String sText)
+{
+    if (!InitCalled)
+    {
+        TOOLINFO ti;
+        // CREATE A TOOLTIP WINDOW
+        HWND hwndTooltip = CreateWindowEx(
+                 WS_EX_TOPMOST,
+                 TOOLTIPS_CLASS,
+                 NULL,
+                 TTS_NOPREFIX | TTS_ALWAYSTIP,
+                 CW_USEDEFAULT,
+                 CW_USEDEFAULT,
+                 CW_USEDEFAULT,
+                 CW_USEDEFAULT,
+                 Application->MainForm->Handle,
+                 0,
+                 Application->Handle,
+                 0);
+
+        TSize TextSize = Canvas->TextExtent(sText);
+
+        // INITIALIZE MEMBERS OF THE TOOLINFO STRUCTURE
+        ti.cbSize = sizeof(TOOLINFO);
+        ti.uFlags = TTF_TRACK;
+        ti.hwnd = Handle;
+        ti.hinst = Application->Handle;
+        ti.uId = 0;
+        ti.lpszText = sText.c_str();  // mustn't be "", otherwise the tooltip never appears
+        // ToolTip control will cover the whole window
+        ti.rect.left = 0;
+        ti.rect.top = 0;
+        ti.rect.right = 60;
+        ti.rect.bottom = 60;
+
+        SetWindowPos(
+                hwndTooltip,
+                HWND_TOPMOST,
+                0,
+                0,
+                0,
+                0,
+                SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+
+//         int CRHMaxLen = strlen(BigString);
+//         CDC *pDC = GetDC();
+//         CSize vCSize = pDC->GetTextExtent(BigString, CRHMaxLen);
+//         ReleaseDC(pDC);
+
+
+        TPoint CursorPos;
+        ::GetCursorPos(&CursorPos);
+
+        // SEND AN ADDTOOL MESSAGE TO THE TOOLTIP CONTROL WINDOW
+        SendMessage(Handle, TTM_ADDTOOL, 0, (LPARAM)(LPTOOLINFO) &ti);
+
+        SendMessage(Handle, TTM_TRACKPOSITION, 0, (LPARAM)(DWORD) MAKELONG((CursorPos.x - TextSize.cx), (CursorPos.y - TextSize.cy)));
+            // the "- vCSize.*"s are so that the tooltip is not obscured by the mouse pointer
+        SendMessage(Handle, TTM_TRACKACTIVATE, true, (LPARAM)(LPTOOLINFO) &ti);
+
+        InitCalled = true;
+    }
+}
+
 
