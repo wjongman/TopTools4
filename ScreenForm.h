@@ -28,13 +28,17 @@ public:
 private:
   int m_MouseOldX;
   int m_MouseOldY;
+  bool m_TrackingMouse;
+  HWND m_hwndTooltip;
+  TOOLINFO m_ToolInfo;
 
   bool InitCalled;
-  void InitTooltip(String sText);
+//  void InitTooltip(String sText);
 //  TToolTipForm* m_ToolTip;
   TTimer* m_Timer;
 
   void __fastcall UpdateInfoLabel();
+  HWND CreateTrackingToolTip(int toolID, HWND hDlg, WCHAR* pText);
   String FInfoText;
 
 protected:
@@ -42,7 +46,10 @@ protected:
   DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
   DYNAMIC void __fastcall MouseDown(TMouseButton Button,
                                     Classes::TShiftState Shift, int X, int Y);
-
+#define WITH_WINPROC 0
+#if WITH_WINPROC
+  virtual void __fastcall WndProc(TMessage &Msg);
+#endif
   void __fastcall OnTimerTick(TObject *Sender);
 
   BEGIN_MESSAGE_MAP
