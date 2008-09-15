@@ -127,7 +127,6 @@ void __fastcall TScreenForm::MouseMove(TShiftState Shift, int X, int Y)
        // Tooltip shows above left-top of window unless it is
        // off-screen, in which case we position it at the screen edge
        POINT pt = { Left, Top - tipsize.cy };
-       //::ClientToScreen(Handle, &pt);
 
         // Stay on screen
         if (Left < 0)
@@ -144,22 +143,13 @@ void __fastcall TScreenForm::MouseMove(TShiftState Shift, int X, int Y)
             pt.y = Top + Height - 1;
         }
 
-//        if (Top > Screen->Height - tipsize.cx)
-        {
-//            pt.y = Top + Height - 1;
-        }
-
-
         ::SendMessage(m_hwndTooltip, TTM_TRACKPOSITION,
                     0, (LPARAM)MAKELONG(pt.x, pt.y));
-//                    0, (LPARAM)MAKELONG(Left, Top - 20));
-//                      0, (LPARAM)MAKELONG(pt.x, pt.y));
     }
 }
 
-//m_ToolInfo is a global TOOLITEM structure.
-
-HWND TScreenForm::CreateTrackingToolTip(int toolID, HWND hDlg, WCHAR* pText)
+//---------------------------------------------------------------------------
+HWND TScreenForm::CreateTrackingToolTip()
 {
     // Create a ToolTip.
     HWND hwndTT = CreateWindowEx(WS_EX_TOPMOST,
@@ -167,7 +157,7 @@ HWND TScreenForm::CreateTrackingToolTip(int toolID, HWND hDlg, WCHAR* pText)
         WS_POPUP | TTS_NOPREFIX | TTS_ALWAYSTIP,
         CW_USEDEFAULT, CW_USEDEFAULT,
         CW_USEDEFAULT, CW_USEDEFAULT,
-        hDlg, NULL, Application->Handle, NULL);
+        Handle, NULL, Application->Handle, NULL);
 
     if (!hwndTT)
     {
@@ -178,11 +168,11 @@ HWND TScreenForm::CreateTrackingToolTip(int toolID, HWND hDlg, WCHAR* pText)
     // In this case, the "tool" is the entire parent window.
     m_ToolInfo.cbSize = sizeof(TOOLINFO);
     m_ToolInfo.uFlags = TTF_IDISHWND | TTF_TRACK | TTF_ABSOLUTE;
-    m_ToolInfo.hwnd = hDlg;
+    m_ToolInfo.hwnd = Handle;
     m_ToolInfo.hinst = Application->Handle;
     m_ToolInfo.lpszText = "pText";
-    m_ToolInfo.uId = (UINT_PTR)hDlg;
-    ::GetClientRect (hDlg, &m_ToolInfo.rect);
+    m_ToolInfo.uId = (UINT_PTR)Handle;
+    ::GetClientRect (Handle, &m_ToolInfo.rect);
 
     // Associate the ToolTip with the tool window.
     ::SendMessage(hwndTT, TTM_ADDTOOL, 0, (LPARAM) (LPTOOLINFO) &m_ToolInfo);
@@ -437,7 +427,7 @@ void __fastcall TScreenForm::FormShow(TObject *Sender)
         m_MouseOldX = pt.x;
         m_MouseOldY = pt.y;
 
-        m_hwndTooltip = CreateTrackingToolTip(1, Handle, L"");
+        m_hwndTooltip = CreateTrackingToolTip();
         //m_ToolTip->Show();
     }
 }
@@ -462,62 +452,64 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
 {
     switch (Message.Msg)
     {
+    case WM_KEYDOWN:
+        break;
 //     case WM_INITDIALOG:
 //         InitCommonControls();
 //         m_hwndTooltip = CreateTrackingToolTip(IDC_BUTTON1, hDlg, L"");
 //         return TRUE;
 
-    case WM_MOUSELEAVE:
-        // The mouse pointer has left our window.
-        // Deactivate the ToolTip.
-        SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, (WPARAM)FALSE, (LPARAM)&m_ToolInfo);
-        m_TrackingMouse = FALSE;
-        return FALSE;
-
-    case WM_MOUSEMOVE:
-        static int oldX, oldY;
-        int newX, newY;
-
-        if (!m_TrackingMouse)
-        // The mouse has just entered the window.
-        {
-            // Request notification when the mouse leaves.
-            TRACKMOUSEEVENT tme = { sizeof(TRACKMOUSEEVENT) };
-            tme.hwndTrack = Handle;
-            tme.dwFlags = TME_LEAVE;
-            TrackMouseEvent(&tme);
-
-            // Activate the ToolTip.
-            SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE,
-                        (WPARAM)TRUE, (LPARAM)&m_ToolInfo);
-            m_TrackingMouse = TRUE;
-        }
-
-        newX = GET_X_LPARAM(lParam);
-        newY = GET_Y_LPARAM(lParam);
-
-        // Make sure the mouse has actually moved. The presence of the ToolTip
-        // causes Windows to send the message continuously.
-        if ((newX != oldX) || (newY != oldY))
-        {
-            oldX = newX;
-            oldY = newY;
-
-            // Update the text.
-            WCHAR coords[12];
-            swprintf_s(coords, ARRAYSIZE(coords), L"%d, %d", newX, newY);
-            m_ToolInfo.lpszText = coords;
-            SendMessage(m_hwndTooltip, TTM_SETTOOLINFO, 0, (LPARAM)&m_ToolInfo);
-
-            // Position the ToolTip.
-            // The coordinates are adjusted so that the ToolTip does not
-            // overlap the mouse pointer.
-            POINT pt = { newX, newY};
-            ClientToScreen(hDlg, &pt);
-            SendMessage(m_hwndTooltip, TTM_TRACKPOSITION,
-                        0, (LPARAM)MAKELONG(pt.x + 10, pt.y - 20));
-        }
-        return FALSE;
+//     case WM_MOUSELEAVE:
+//         // The mouse pointer has left our window.
+//         // Deactivate the ToolTip.
+//         SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, (WPARAM)FALSE, (LPARAM)&m_ToolInfo);
+//         m_TrackingMouse = FALSE;
+//         return FALSE;
+//
+//     case WM_MOUSEMOVE:
+//         static int oldX, oldY;
+//         int newX, newY;
+//
+//         if (!m_TrackingMouse)
+//         // The mouse has just entered the window.
+//         {
+//             // Request notification when the mouse leaves.
+//             TRACKMOUSEEVENT tme = { sizeof(TRACKMOUSEEVENT) };
+//             tme.hwndTrack = Handle;
+//             tme.dwFlags = TME_LEAVE;
+//             TrackMouseEvent(&tme);
+//
+//             // Activate the ToolTip.
+//             SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE,
+//                         (WPARAM)TRUE, (LPARAM)&m_ToolInfo);
+//             m_TrackingMouse = TRUE;
+//         }
+//
+//         newX = GET_X_LPARAM(lParam);
+//         newY = GET_Y_LPARAM(lParam);
+//
+//         // Make sure the mouse has actually moved. The presence of the ToolTip
+//         // causes Windows to send the message continuously.
+//         if ((newX != oldX) || (newY != oldY))
+//         {
+//             oldX = newX;
+//             oldY = newY;
+//
+//             // Update the text.
+//             WCHAR coords[12];
+//             swprintf_s(coords, ARRAYSIZE(coords), L"%d, %d", newX, newY);
+//             m_ToolInfo.lpszText = coords;
+//             SendMessage(m_hwndTooltip, TTM_SETTOOLINFO, 0, (LPARAM)&m_ToolInfo);
+//
+//             // Position the ToolTip.
+//             // The coordinates are adjusted so that the ToolTip does not
+//             // overlap the mouse pointer.
+//             POINT pt = { newX, newY};
+//             ClientToScreen(hDlg, &pt);
+//             SendMessage(m_hwndTooltip, TTM_TRACKPOSITION,
+//                         0, (LPARAM)MAKELONG(pt.x + 10, pt.y - 20));
+//         }
+//         return FALSE;
 
     }
 
@@ -738,3 +730,4 @@ case WM_MOUSEMOVE:
 
 #endif
 */
+

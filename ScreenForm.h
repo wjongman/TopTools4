@@ -38,7 +38,7 @@ private:
   TTimer* m_Timer;
 
   void __fastcall UpdateInfoLabel();
-  HWND CreateTrackingToolTip(int toolID, HWND hDlg, WCHAR* pText);
+  HWND CreateTrackingToolTip();
   String FInfoText;
 
 protected:
@@ -46,7 +46,7 @@ protected:
   DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
   DYNAMIC void __fastcall MouseDown(TMouseButton Button,
                                     Classes::TShiftState Shift, int X, int Y);
-#define WITH_WINPROC 0
+#define WITH_WINPROC 1
 #if WITH_WINPROC
   virtual void __fastcall WndProc(TMessage &Msg);
 #endif
