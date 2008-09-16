@@ -128,13 +128,13 @@ void __fastcall TScreenGrabber::CaptureMenuClick(TObject *Sender)
         }
         else if (menuItem->Hint == "Save")
         {
-            SaveToFile();
-            EndCapture();
+            if (SaveToFile())
+                EndCapture();
         }
         else if (menuItem->Hint == "SaveOn")
         {
-            SaveToFile();
-            CaptureNext();
+            if (SaveToFile())
+                CaptureNext();
         }
         else if (menuItem->Hint == "AutoSave")
         {
@@ -296,18 +296,22 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TScreenGrabber::SaveToFile()
+bool __fastcall TScreenGrabber::SaveToFile()
 {
     String InitialDir = g_ToolOptions.Get("capture", "lastsavedir", "%USERPROFILE%\\Desktop");
     int filterindex = g_ToolOptions.Get("capture", "lastimagetype", 2);
 
     TPersistImage image(m_pBufferBmp);
-    image.SaveFileDialog(filterindex, InitialDir);
+    bool result = image.SaveFileDialog(filterindex, InitialDir);
+    if (result)
+    {
+        g_ToolOptions.Set("capture", "lastsavedir", InitialDir);
+        g_ToolOptions.Set("capture", "lastimagetype", filterindex);
 
-    g_ToolOptions.Set("capture", "lastsavedir", InitialDir);
-    g_ToolOptions.Set("capture", "lastimagetype", filterindex);
+        m_pBufferBmp->Assign(NULL);
+    }
 
-    m_pBufferBmp->Assign(NULL);
+    return result;
 }
 
 //---------------------------------------------------------------------------

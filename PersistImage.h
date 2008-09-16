@@ -8,7 +8,7 @@ class TPersistImage
 public:
   __fastcall TPersistImage(Graphics::TBitmap* pBitmap);
   __fastcall ~TPersistImage();
-  void __fastcall SaveFileDialog(int &filterindex, String& InitialDir);
+  bool __fastcall SaveFileDialog(int &filterindex, String& InitialDir);
   void __fastcall Print()                      { DoPrintImage(); }
   void __fastcall Save(const String& PathName) { DoSaveToFile(PathName); }
   void __fastcall Copy()                       { DoCopyToClipboard(); }

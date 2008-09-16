@@ -44,7 +44,7 @@ private:
   void __fastcall HandleCapture(int X, int Y);
   void __fastcall ViewImage(Graphics::TBitmap* pBufferBmp);
   void __fastcall AutosaveOptions();
-  void __fastcall SaveToFile();
+  bool __fastcall SaveToFile();
   void __fastcall Print();
   void __fastcall AutoSaveToFile();
 //   void __fastcall DoSaveToFile(const String& PathName);

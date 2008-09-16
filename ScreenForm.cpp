@@ -93,6 +93,7 @@ void __fastcall TScreenForm::MouseMove(TShiftState Shift, int X, int Y)
         // Activate the ToolTip.
         ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE,
                     (WPARAM)true, (LPARAM)&m_ToolInfo);
+
         m_TrackingMouse = true;
     }
 
@@ -114,10 +115,6 @@ void __fastcall TScreenForm::MouseMove(TShiftState Shift, int X, int Y)
         HDC dcTooltip = ::GetDC(m_hwndTooltip);
         ::GetTextExtentPoint32(dcTooltip, sCoords.c_str(), sCoords.Length(), &tipsize);
         ::ReleaseDC(m_hwndTooltip, dcTooltip);
-
-//         String sTipCoords;
-//         sTipCoords.printf("W: %d  H: %d", tipsize.cx, tipsize.cy);
-//         InfoLabel->Caption = sTipCoords;
 
         // Update the tooltip text
         m_ToolInfo.lpszText = sCoords.c_str();

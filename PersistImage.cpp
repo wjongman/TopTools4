@@ -33,8 +33,12 @@ bool __fastcall TPersistImage::DisplayIsPaletted()
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TPersistImage::SaveFileDialog(int &filterindex, String& InitialDir)
+bool __fastcall TPersistImage::SaveFileDialog(int &filterindex, String& InitialDir)
 {
+    // return true when the user makes a selection and clicks OK,
+    // return false when the user closes the dialog without making a selection.
+    bool retval = false;
+
     TSavePictureDialog *SavePicDlg = new TSavePictureDialog(Application);
     SavePicDlg->Options << ofOverwritePrompt << ofEnableSizing;
     //SavePicDlg->InitialDir = g_ToolOptions.GetString("capture", "lastdir");
@@ -64,9 +68,12 @@ void __fastcall TPersistImage::SaveFileDialog(int &filterindex, String& InitialD
         filterindex = SavePicDlg->FilterIndex;
 
         DoSaveToFile(SavePicDlg->FileName);
+        retval = true;
     }
 
     delete SavePicDlg;
+
+    return retval;
 }
 
 //---------------------------------------------------------------------------
