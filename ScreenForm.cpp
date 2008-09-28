@@ -728,3 +728,20 @@ case WM_MOUSEMOVE:
 #endif
 */
 
+void __fastcall TScreenForm::FormKeyDown(TObject *Sender, WORD &Key,
+      TShiftState Shift)
+{
+    switch (Key)
+    {
+    case VK_LEFT:     // Arrow keys move the ruler (cursor)
+    case VK_RIGHT:
+    case VK_UP:
+    case VK_DOWN:
+//        if (m_pRuler)
+//            m_pRuler->HandleArrowKeys(Key, Shift);
+        break;
+    }
+
+}
+//---------------------------------------------------------------------------
+

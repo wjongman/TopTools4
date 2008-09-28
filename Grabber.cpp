@@ -16,7 +16,8 @@ __fastcall TScreenGrabber::TScreenGrabber(TComponent* Owner)
     // Have a bitmap to store the grabbed stuff
     m_pBufferBmp = new Graphics::TBitmap;
 
-    // enum TGrabberMode { gmOpenViewer, gmShowMenu, gmBypassMenu, gmCopy, gmContinuous };
+    // TGrabberMode can be one of:
+    // gmOpenViewer, gmShowMenu, gmBypassMenu, gmCopy, gmContinuous
     m_GrabberMode = gmShowMenu;
 
     OnRightButtonClick = HandleRightButtonClick;

@@ -65,6 +65,8 @@ __published:  // IDE-managed Components
     void __fastcall FormResize(TObject *Sender);
     void __fastcall FormShow(TObject *Sender);
     void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
+    void __fastcall FormKeyDown(TObject *Sender, WORD &Key,
+          TShiftState Shift);
 
 __published:
   __property TMouseEvent OnRightButtonClick = { read = FOnRightButtonClick, write = FOnRightButtonClick };
