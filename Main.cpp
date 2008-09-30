@@ -67,7 +67,7 @@ __fastcall TMainForm::~TMainForm()
     delete m_pControlBar;
     delete m_pCapture;
 
-//    g_ToolOptions.Save();
+    g_ToolOptions.Save();
 }
 
 //---------------------------------------------------------------------------

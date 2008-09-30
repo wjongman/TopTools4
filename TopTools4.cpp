@@ -89,7 +89,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         Application->ShowException(&exception);
     }
 
-    g_ToolOptions.Save();
+//    g_ToolOptions.Save();
 
     return 0;
 }
