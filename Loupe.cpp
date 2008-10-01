@@ -3,6 +3,7 @@
 #pragma hdrstop
 
 #include "Loupe.h"
+#include "PersistImage.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "Tool"
@@ -173,7 +174,61 @@ void __fastcall TLoupeForm::UpdateUI()
 //---------------------------------------------------------------------------
 void __fastcall TLoupeForm::LoupeMenuPopup(TObject *Sender)
 {
+    PopulatePersistMenu(LoupeMenu);
     UpdateUI();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TLoupeForm::PopulatePersistMenu(TMenu* PersistMenu)
+{
+    // Start with an empty menu
+    //PersistMenu->Items->Clear();
+
+    // Populate the menu
+    TMenuItem *NewItem;
+
+    NewItem = new TMenuItem(PersistMenu);
+    NewItem->OnClick = PersistMenuClick;
+    NewItem->Caption = "Copy To Clipboard";
+    NewItem->Hint = "Copy";
+    PersistMenu->Items->Add(NewItem);
+
+    NewItem = new TMenuItem(PersistMenu);
+    NewItem->OnClick = PersistMenuClick;
+    NewItem->Caption = "Save To File...";
+    NewItem->Hint = "Save";
+    PersistMenu->Items->Add(NewItem);
+
+    NewItem = new TMenuItem(PersistMenu);
+    NewItem->OnClick = PersistMenuClick;
+    NewItem->Caption = "Print...";
+    NewItem->Hint = "Print";
+    PersistMenu->Items->Add(NewItem);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TLoupeForm::PersistMenuClick(TObject *Sender)
+{
+    TMenuItem* menuItem = dynamic_cast<TMenuItem*>(Sender);
+
+    if (menuItem)
+    {
+        TPersistImage image(m_pLoupe->Bitmap);
+
+        if (menuItem->Hint == "Save")
+        {
+            //SaveToFile();
+
+        }
+        else if (menuItem->Hint == "Copy")
+        {
+            image.Copy();
+        }
+        else if (menuItem->Hint == "Print")
+        {
+            image.Print();
+        }
+    }
 }
 
 //---------------------------------------------------------------------------

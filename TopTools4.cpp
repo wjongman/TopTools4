@@ -89,6 +89,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         Application->ShowException(&exception);
     }
 
+// destructor of MainForm persists tooloptions.        
 //    g_ToolOptions.Save();
 
     return 0;

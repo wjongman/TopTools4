@@ -80,6 +80,9 @@ private:
   void __fastcall SetSelfMagnify(bool magnify);
   bool m_bMagnifySelf;
 
+  void __fastcall PopulatePersistMenu(TMenu* Menu);
+  void __fastcall PersistMenuClick(TObject *Sender);
+
 protected:
   virtual void __fastcall WndProc(TMessage &Msg);
 

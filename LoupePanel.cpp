@@ -204,6 +204,57 @@ void __fastcall TLoupePanel::UpdateView2(const TPoint& ptMouse)
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TLoupePanel::Paint(void)
+{
+  if (!m_MaskBmp)
+  {
+    m_MaskBmp = new Graphics::TBitmap();
+    RenderMask(m_MaskBmp);
+  }
+
+  // Copy the Grid-mask to the buffer bitmap
+  TRect r = Rect(0, 0, m_BufferBmp->Width, m_BufferBmp->Height);
+  m_BufferBmp->Canvas->CopyRect(r, m_MaskBmp->Canvas, r);
+
+  // Offset the source rectangle
+  int srcX = m_rcSource.left + m_ptViewCenter.x;
+  int srcY = m_rcSource.top + m_ptViewCenter.y;
+
+  if (!m_bMagnifySelf && PtInRect(&ClientRect, ScreenToClient(m_ptViewCenter)))
+  {
+    // Avoid magnifying our own canvas, just draw the mask
+//    Canvas->CopyRect(ClientRect, m_BufferBmp->Canvas, ClientRect);
+    // On second thought: don't even draw the mask
+    Canvas->Brush->Color = clBlack;
+    Canvas->FillRect(ClientRect);
+  }
+  else
+  {
+    // Add a sized copy of the screen to our buffer bitmap
+    HDC BitmapDC = m_BufferBmp->Canvas->Handle;
+
+    HDC DesktopDC = GetDC(NULL);
+    StretchBlt(BitmapDC,
+               0, 0, m_BufferBmp->Width, m_BufferBmp->Height,
+               DesktopDC,
+               srcX, srcY, m_rcSource.Width(), m_rcSource.Height(),
+               SRCINVERT);
+//               SRCINVERT | CAPTUREBLT);
+    ReleaseDC(NULL, DesktopDC);
+
+    // Bitmap is now ready to be displayed, copy it to the screen
+    Canvas->CopyRect(ClientRect, m_BufferBmp->Canvas, ClientRect);
+  }
+/*
+  // Bitmap is now ready to be displayed, so copy it to the screen..
+  BitBlt(Canvas->Handle, 0, 0, ClientWidth, ClientHeight,
+         BitmapDC, 0, 0, SRCCOPY);
+*/  // not sure which is better or if it even matters
+
+  m_Timer->Enabled = true;
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TLoupePanel::Paint2(void)
 {
   if (!m_MaskBmp)
@@ -255,7 +306,7 @@ void __fastcall TLoupePanel::Paint2(void)
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TLoupePanel::Paint(void)
+void __fastcall TLoupePanel::Paint3(void)
 {
   if (!m_MaskBmp)
   {

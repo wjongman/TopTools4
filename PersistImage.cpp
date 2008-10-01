@@ -23,6 +23,59 @@ __fastcall TPersistImage::~TPersistImage()
 {
 }
 
+// //---------------------------------------------------------------------------
+// void __fastcall TPersistImage::PopulateMenu(TMenu* ViewerMenu)
+// {
+//     // Start with an empty menu
+//     //m_ViewerMenu->Items->Clear();
+//
+//     // Populate the menu
+//     TMenuItem *NewItem;
+//
+//     NewItem = new TMenuItem(m_ViewerMenu);
+//     NewItem->OnClick = MenuClick;
+//     NewItem->Caption = "Copy To Clipboard";
+//     NewItem->Hint = "Copy";
+//     ViewerMenu->Items->Add(NewItem);
+//
+//     NewItem = new TMenuItem(m_ViewerMenu);
+//     NewItem->OnClick = MenuClick;
+//     NewItem->Caption = "Save To File...";
+//     NewItem->Hint = "Save";
+//     ViewerMenu->Items->Add(NewItem);
+//
+//     NewItem = new TMenuItem(m_ViewerMenu);
+//     NewItem->OnClick = MenuClick;
+//     NewItem->Caption = "Print...";
+//     NewItem->Hint = "Print";
+//     ViewerMenu->Items->Add(NewItem);
+// }
+//
+// //---------------------------------------------------------------------------
+// void __fastcall TPersistImage::ViewerMenuClick(TObject *Sender)
+// {
+//     TMenuItem* menuItem = dynamic_cast<TMenuItem*>(Sender);
+//
+//     if (menuItem)
+//     {
+//         TPersistImage image(Image->Picture->Bitmap);
+//
+//         if (menuItem->Hint == "Save")
+//         {
+//             DoSaveToFile();
+//
+//         }
+//         else if (menuItem->Hint == "Copy")
+//         {
+//             DoCopyToClipboard();
+//         }
+//         else if (menuItem->Hint == "Print")
+//         {
+//             DoPrintImage();
+//         }
+//     }
+// }
+
 //---------------------------------------------------------------------------
 bool __fastcall TPersistImage::DisplayIsPaletted()
 {
