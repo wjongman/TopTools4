@@ -174,15 +174,15 @@ void __fastcall TLoupeForm::UpdateUI()
 //---------------------------------------------------------------------------
 void __fastcall TLoupeForm::LoupeMenuPopup(TObject *Sender)
 {
-    PopulatePersistMenu(LoupeMenu);
+//    PopulatePersistMenu(miSaveView);
     UpdateUI();
 }
-
+/*
 //---------------------------------------------------------------------------
-void __fastcall TLoupeForm::PopulatePersistMenu(TMenu* PersistMenu)
+void __fastcall TLoupeForm::PopulatePersistMenu(TMenuItem* PersistMenu)
 {
     // Start with an empty menu
-    //PersistMenu->Items->Clear();
+    PersistMenu->Items->Clear();
 
     // Populate the menu
     TMenuItem *NewItem;
@@ -204,10 +204,10 @@ void __fastcall TLoupeForm::PopulatePersistMenu(TMenu* PersistMenu)
     NewItem->Caption = "Print...";
     NewItem->Hint = "Print";
     PersistMenu->Items->Add(NewItem);
-}
+  }*/
 
 //---------------------------------------------------------------------------
-void __fastcall TLoupeForm::PersistMenuClick(TObject *Sender)
+void __fastcall TLoupeForm::miSaveViewClick(TObject *Sender)
 {
     TMenuItem* menuItem = dynamic_cast<TMenuItem*>(Sender);
 
@@ -217,8 +217,7 @@ void __fastcall TLoupeForm::PersistMenuClick(TObject *Sender)
 
         if (menuItem->Hint == "Save")
         {
-            //SaveToFile();
-
+            SaveToFile();
         }
         else if (menuItem->Hint == "Copy")
         {
@@ -229,6 +228,21 @@ void __fastcall TLoupeForm::PersistMenuClick(TObject *Sender)
             image.Print();
         }
     }
+
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TLoupeForm::SaveToFile()
+{
+    TPersistImage image(m_pLoupe->Bitmap);
+
+    String InitialDir = g_ToolOptions.Get("loupe", "lastsavedir", "%USERPROFILE%\\Desktop");
+    int filterindex = g_ToolOptions.Get("loupe", "lastimagetype", 2);
+
+    image.SaveFileDialog(filterindex, InitialDir);
+
+    g_ToolOptions.Set("loupe", "lastsavedir", InitialDir);
+    g_ToolOptions.Set("loupe", "lastimagetype", filterindex);
 }
 
 //---------------------------------------------------------------------------
@@ -393,4 +407,5 @@ void __fastcall TLoupeForm::FormKeyDown(TObject *Sender, WORD &Key,
     }
 }
 
+//---------------------------------------------------------------------------
 

@@ -46,10 +46,15 @@ __published:  // IDE-managed Components
   TToolButton *Separator2;
   TToolButton *bnLockPos;
   TMenuItem *N5;
+    TMenuItem *miSaveView;
+    TMenuItem *miCopyToClipboard;
+    TMenuItem *miSaveToFile;
+    TMenuItem *miPrint;
 
   void __fastcall LoupeMenuPopup(TObject *Sender);
 
   void __fastcall miHideClick(TObject *Sender);
+  void __fastcall miSaveViewClick(TObject *Sender);
   void __fastcall miZoomInClick(TObject *Sender);
   void __fastcall miZoomOutClick(TObject *Sender);
   void __fastcall miCrosshairClick(TObject *Sender);
@@ -80,14 +85,13 @@ private:
   void __fastcall SetSelfMagnify(bool magnify);
   bool m_bMagnifySelf;
 
-  void __fastcall PopulatePersistMenu(TMenu* Menu);
-  void __fastcall PersistMenuClick(TObject *Sender);
-
 protected:
   virtual void __fastcall WndProc(TMessage &Msg);
 
   virtual void __fastcall LoadSettings();
   virtual void __fastcall SaveSettings();
+
+  void __fastcall SaveToFile();
 
 public:
   __fastcall TLoupeForm(TComponent* Owner);
