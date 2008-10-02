@@ -176,7 +176,7 @@ inherited LoupeForm: TLoupeForm
     object N6: TMenuItem
       Caption = '-'
     end
-    object miSaveView: TMenuItem
+    object miView: TMenuItem
       Caption = '&Save View'
       object miCopyToClipboard: TMenuItem
         Caption = '&Copy To Clipboard'

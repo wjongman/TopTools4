@@ -46,7 +46,7 @@ __published:  // IDE-managed Components
   TToolButton *Separator2;
   TToolButton *bnLockPos;
   TMenuItem *N5;
-    TMenuItem *miSaveView;
+    TMenuItem *miView;
     TMenuItem *miCopyToClipboard;
     TMenuItem *miSaveToFile;
     TMenuItem *miPrint;
