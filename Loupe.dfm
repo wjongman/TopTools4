@@ -112,27 +112,6 @@ inherited LoupeForm: TLoupeForm
       Default = True
       OnClick = miHideClick
     end
-    object miSaveView: TMenuItem
-      Caption = '&Save View'
-      object miCopyToClipboard: TMenuItem
-        Caption = '&Copy To Clipboard'
-        Hint = 'Copy'
-        ShortCut = 16451
-        OnClick = miSaveViewClick
-      end
-      object miSaveToFile: TMenuItem
-        Caption = '&Save To File...'
-        Hint = 'Save'
-        ShortCut = 16467
-        OnClick = miSaveViewClick
-      end
-      object miPrint: TMenuItem
-        Caption = '&Print...'
-        Hint = 'Print'
-        ShortCut = 16464
-        OnClick = miSaveViewClick
-      end
-    end
     object N1: TMenuItem
       Caption = '-'
     end
@@ -193,6 +172,30 @@ inherited LoupeForm: TLoupeForm
       Caption = '&Magnify Self'
       Visible = False
       OnClick = miMagnifySelfClick
+    end
+    object N6: TMenuItem
+      Caption = '-'
+    end
+    object miSaveView: TMenuItem
+      Caption = '&Save View'
+      object miCopyToClipboard: TMenuItem
+        Caption = '&Copy To Clipboard'
+        Hint = 'Copy'
+        ShortCut = 16451
+        OnClick = miSaveViewClick
+      end
+      object miSaveToFile: TMenuItem
+        Caption = '&Save To File...'
+        Hint = 'Save'
+        ShortCut = 16467
+        OnClick = miSaveViewClick
+      end
+      object miPrint: TMenuItem
+        Caption = '&Print...'
+        Hint = 'Print'
+        ShortCut = 16464
+        OnClick = miSaveViewClick
+      end
     end
     object N5: TMenuItem
       Caption = '-'

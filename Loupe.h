@@ -50,6 +50,7 @@ __published:  // IDE-managed Components
     TMenuItem *miCopyToClipboard;
     TMenuItem *miSaveToFile;
     TMenuItem *miPrint;
+    TMenuItem *N6;
 
   void __fastcall LoupeMenuPopup(TObject *Sender);
 
