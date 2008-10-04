@@ -30,7 +30,6 @@ public:
   void __fastcall UpdateView();
   void __fastcall UpdateView(const TPoint& ptMouse);
   void __fastcall MoveLockPos(int dx, int dy);
-  void __fastcall UpdateView2(const TPoint& ptMouse);
 
 protected:
   void __fastcall RenderMask(Graphics::TBitmap* TargetBmp);
@@ -43,8 +42,7 @@ protected:
 protected:
   DYNAMIC void __fastcall Resize(void);
   virtual void __fastcall Paint(void);
-  virtual void __fastcall Paint2(void);
-  virtual void __fastcall Paint3(void);
+  virtual void __fastcall OldPaint(void);
 
   MESSAGE void OnNCHitTest(TWMNCHitTest &Message);
 protected:
@@ -54,11 +52,16 @@ END_MESSAGE_MAP(TCustomPanel)
 
 private:
   Graphics::TBitmap* m_ScreenCopyBmp;
+  Graphics::TBitmap* __fastcall GetBitmap();
+
   Graphics::TBitmap* m_BufferBmp;
   Graphics::TBitmap* m_MaskBmp;
-//  Graphics::TBitmap* m_Snapshot;
 
-//  HDC m_DesktopDC;
+  void __fastcall CaptureDesktop();
+  Graphics::TBitmap* m_DesktopCopyBmp;
+  //Graphics::TBitmap* __fastcall GetDesktopBitmap();
+
+
   TTimer* m_Timer;
   void __fastcall TimerTick(TObject *Sender);
   int m_RefreshRate;
@@ -83,7 +86,6 @@ private:
   void __fastcall SetCrosshair(bool show) { m_bShowCrosshair = show; Invalidate(); }
   void __fastcall SetGrid(bool show)      { m_bShowGrid      = show; Invalidate(); }
   void __fastcall SetCenterbox(bool show) { m_bShowCenterbox = show; Invalidate(); }
-  Graphics::TBitmap* __fastcall GetBitmap(); // { /*if (m_bIsLocked)*/ return m_BufferBmp; }
 
   DYNAMIC void __fastcall MouseDown(TMouseButton Button, TShiftState Shift, int X, int Y);
   DYNAMIC void __fastcall MouseMove(TShiftState Shift, int X, int Y);

@@ -102,6 +102,13 @@ inherited LoupeForm: TLoupeForm
       Style = tbsCheck
       OnClick = miLockPosClick
     end
+    object bnFreezeView: TToolButton
+      Left = 154
+      Top = 0
+      Caption = 'Freeze'
+      ImageIndex = 9
+      OnClick = miFreezeViewClick
+    end
   end
   object LoupeMenu: TPopupMenu
     OnPopup = LoupeMenuPopup
@@ -159,9 +166,8 @@ inherited LoupeForm: TLoupeForm
     end
     object miFreezeView: TMenuItem
       Caption = 'Freeze View'
-      Enabled = False
+      ImageIndex = 9
       ShortCut = 16416
-      Visible = False
       OnClick = miFreezeViewClick
     end
     object N4: TMenuItem

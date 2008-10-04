@@ -19,6 +19,7 @@ __fastcall TLoupePanel::TLoupePanel(TComponent* Owner)
     m_ScreenCopyBmp = NULL;
     m_BufferBmp = new Graphics::TBitmap();
     m_MaskBmp = NULL;
+    m_DesktopCopyBmp = NULL;
 
     m_bDragging = false;
     m_RefreshRate = 250;
@@ -36,7 +37,7 @@ __fastcall TLoupePanel::~TLoupePanel()
     delete m_ScreenCopyBmp;
     delete m_BufferBmp;
     delete m_MaskBmp;
-
+    delete m_DesktopCopyBmp;
 //  ReleaseDC(NULL, m_DesktopDC);
 }
 
@@ -171,143 +172,63 @@ void __fastcall TLoupePanel::UpdateView(const TPoint& ptMouse)
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TLoupePanel::UpdateView2(const TPoint& ptMouse)
+void __fastcall TLoupePanel::Paint(void)
 {
-    // When the view is locked or the mouse didn't move,
-    // we don't want to update too often, so we count to 10 first
-    static int count = 0;
-
-    if (m_bIsLocked)
-    {
-        m_ptViewCenter = m_ptLockPos;
-        if (count >= 9)
-        {
-            count = 0;
-            Invalidate();
-        }
-    }
-
-    else if (ptMouse.x == m_ptViewCenter.x && ptMouse.y == m_ptViewCenter.y)
-    {
-        if (count >= 9)
-        {
-            count = 0;
-            Invalidate();
-        }
-    }
-
-    else
-    {
-        m_ptViewCenter = ptMouse;
-        Invalidate();
-    }
-    count++;
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TLoupePanel::Paint3(void)
-{
-    if (!m_MaskBmp)
-    {
-        m_MaskBmp = new Graphics::TBitmap();
-        RenderMask(m_MaskBmp);
-    }
-
-    // Copy the Grid-mask to the buffer bitmap
-    TRect r = Rect(0, 0, m_BufferBmp->Width, m_BufferBmp->Height);
-    m_BufferBmp->Canvas->CopyRect(r, m_MaskBmp->Canvas, r);
-
-    // Offset the source rectangle
-    int srcX = m_rcSource.left + m_ptViewCenter.x;
-    int srcY = m_rcSource.top + m_ptViewCenter.y;
-
     if (!m_bMagnifySelf && PtInRect(&ClientRect, ScreenToClient(m_ptViewCenter)))
     {
-        // Avoid magnifying our own canvas, just draw the mask
-//    Canvas->CopyRect(ClientRect, m_BufferBmp->Canvas, ClientRect);
-        // On second thought: don't even draw the mask
+        // Avoid magnifying our own canvas, just black out
         Canvas->Brush->Color = clBlack;
         Canvas->FillRect(ClientRect);
     }
     else
     {
-        // Add a sized copy of the screen to our buffer bitmap
-        HDC BitmapDC = m_BufferBmp->Canvas->Handle;
+        // Position the screen source-rectangle
+        int srcX = m_rcSource.left + m_ptViewCenter.x;
+        int srcY = m_rcSource.top + m_ptViewCenter.y;
 
-        HDC DesktopDC = GetDC(NULL);
-        StretchBlt(BitmapDC,
-                   0, 0, m_BufferBmp->Width, m_BufferBmp->Height,
-                   DesktopDC,
-                   srcX, srcY, m_rcSource.Width(), m_rcSource.Height(),
-                   SRCINVERT);
-//               SRCINVERT | CAPTUREBLT);
-        ReleaseDC(NULL, DesktopDC);
+        // Have a sized copy of the screen into our buffer bitmap
+        HDC TargetDC = m_BufferBmp->Canvas->Handle;
+
+        if (m_bIsFrozen)
+        {
+            if (!m_DesktopCopyBmp)
+            {
+                CaptureDesktop();
+            }
+            HDC SourceDC = m_DesktopCopyBmp->Canvas->Handle;
+            StretchBlt(TargetDC, 0, 0, m_BufferBmp->Width, m_BufferBmp->Height,
+                       SourceDC, srcX, srcY, m_rcSource.Width(), m_rcSource.Height(),
+                       SRCCOPY); // SRCINVERT | CAPTUREBLT);
+        }
+        else
+        {
+            HDC SourceDC = GetDC(NULL);
+            StretchBlt(TargetDC, 0, 0, m_BufferBmp->Width, m_BufferBmp->Height,
+                       SourceDC, srcX, srcY, m_rcSource.Width(), m_rcSource.Height(),
+                       SRCCOPY); // SRCINVERT | CAPTUREBLT);
+            ReleaseDC(NULL, SourceDC);
+        }
+
+        if (!m_MaskBmp)
+        {
+            m_MaskBmp = new Graphics::TBitmap();
+            RenderMask(m_MaskBmp);
+        }
+
+        // Overlay the Grid-mask
+        TRect r = Rect(0, 0, m_BufferBmp->Width, m_BufferBmp->Height);
+        m_BufferBmp->Canvas->CopyMode = cmSrcInvert;
+        m_BufferBmp->Canvas->CopyRect(r, m_MaskBmp->Canvas, r);
 
         // Bitmap is now ready to be displayed, copy it to the screen
         Canvas->CopyRect(ClientRect, m_BufferBmp->Canvas, ClientRect);
     }
-/*
-  // Bitmap is now ready to be displayed, so copy it to the screen..
-  BitBlt(Canvas->Handle, 0, 0, ClientWidth, ClientHeight,
-         BitmapDC, 0, 0, SRCCOPY);
-*/  // not sure which is better or if it even matters
 
     m_Timer->Enabled = true;
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TLoupePanel::Paint2(void)
-{
-    if (!m_MaskBmp)
-    {
-        m_MaskBmp = new Graphics::TBitmap();
-        RenderMask(m_MaskBmp);
-    }
-
-    // Copy the Grid-mask to the buffer bitmap
-    TRect r = Rect(0, 0, m_BufferBmp->Width, m_BufferBmp->Height);
-    m_BufferBmp->Canvas->CopyRect(r, m_MaskBmp->Canvas, r);
-
-    // Offset the source rectangle
-    int srcX = m_rcSource.left + m_ptViewCenter.x;
-    int srcY = m_rcSource.top + m_ptViewCenter.y;
-
-    if (!m_bMagnifySelf && PtInRect(&ClientRect, ScreenToClient(m_ptViewCenter)))
-    {
-        // Avoid magnifying our own canvas, just draw the mask
-//    Canvas->CopyRect(ClientRect, m_BufferBmp->Canvas, ClientRect);
-        // On second thought: don't even draw the mask
-        Canvas->Brush->Color = clBlack;
-        Canvas->FillRect(ClientRect);
-    }
-    else
-    {
-        // Add a sized copy of the screen to our buffer bitmap
-        HDC BitmapDC = m_BufferBmp->Canvas->Handle;
-
-        HDC DesktopDC = GetDC(NULL);
-
-        BitBlt(BitmapDC,
-               0, 0, m_BufferBmp->Width, m_BufferBmp->Height,
-               DesktopDC,
-               srcX, srcY,
-               SRCINVERT | CAPTUREBLT);
-        ReleaseDC(NULL, DesktopDC);
-
-        // Bitmap is now ready to be displayed, copy it to the screen
-        Canvas->StretchDraw(ClientRect, m_BufferBmp);
-    }
-/*
-  // Bitmap is now ready to be displayed, so copy it to the screen..
-  BitBlt(Canvas->Handle, 0, 0, ClientWidth, ClientHeight,
-         BitmapDC, 0, 0, SRCCOPY);
-*/  // not sure which is better or if it even matters
-
-    m_Timer->Enabled = true;
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TLoupePanel::Paint(void)
+void __fastcall TLoupePanel::OldPaint(void)
 {
     if (!m_bMagnifySelf && PtInRect(&ClientRect, ScreenToClient(m_ptViewCenter)))
     {
@@ -331,13 +252,13 @@ void __fastcall TLoupePanel::Paint(void)
 
         ReleaseDC(NULL, DesktopDC);
 
-        // Overlay the Grid-mask
         if (!m_MaskBmp)
         {
             m_MaskBmp = new Graphics::TBitmap();
             RenderMask(m_MaskBmp);
         }
 
+        // Overlay the Grid-mask
         TRect r = Rect(0, 0, m_BufferBmp->Width, m_BufferBmp->Height);
         m_BufferBmp->Canvas->CopyMode = cmSrcInvert;
         m_BufferBmp->Canvas->CopyRect(r, m_MaskBmp->Canvas, r);
@@ -376,6 +297,29 @@ Graphics::TBitmap* __fastcall TLoupePanel::GetBitmap()
     ReleaseDC(NULL, DesktopDC);
 
     return m_ScreenCopyBmp;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TLoupePanel::CaptureDesktop()
+{
+    // Lazy-initialize a bitmap to hold a copy of the desktop
+    if (!m_DesktopCopyBmp)
+    {
+        m_DesktopCopyBmp = new Graphics::TBitmap();
+    }
+
+    m_DesktopCopyBmp->Width = Screen->DesktopWidth;
+    m_DesktopCopyBmp->Height = Screen->DesktopHeight;
+
+    // Have a copy of the desktop into our bitmap
+    HDC BitmapDC = m_DesktopCopyBmp->Canvas->Handle;
+    HDC DesktopDC = GetDC(NULL);
+
+    BitBlt(BitmapDC, 0, 0, m_DesktopCopyBmp->Width, m_DesktopCopyBmp->Height,
+               DesktopDC, Screen->DesktopLeft, Screen->DesktopTop,
+               SRCCOPY);
+
+    ReleaseDC(NULL, DesktopDC);
 }
 
 //---------------------------------------------------------------------------
@@ -559,12 +503,19 @@ void __fastcall TLoupePanel::ToggleGrid()
 //---------------------------------------------------------------------------
 void __fastcall TLoupePanel::ToggleFrozen()
 {
-//  m_bIsFrozen = !m_bIsFrozen;
-//
-//  if (m_bIsFrozen)
-//    // Save the currently visible view as a bitmap
-//
-//  Invalidate();
+     m_bIsFrozen = !m_bIsFrozen;
+
+     if (m_bIsFrozen)
+     {
+         // Save the entire desktop in a bitmap like "Print Screen" does
+         CaptureDesktop();
+     }
+     else
+     {
+         //DisposeDesktopBmp();
+     }
+
+     Invalidate();
 }
 
 //---------------------------------------------------------------------------
@@ -573,19 +524,21 @@ void __fastcall TLoupePanel::ToggleLocked()
     m_bIsLocked = !m_bIsLocked;
 
     if (m_bIsLocked)
+    {
         // Save the lock position
         GetCursorPos(&m_ptLockPos);
+    }
 
     Invalidate();
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// Support for dragging the frozen view
+// Support for dragging the locked or frozen view
 /////////////////////////////////////////////////////////////////////////////
 void __fastcall TLoupePanel::MouseDown(TMouseButton Button, TShiftState Shift,
                                        int X, int Y)
 {
-    if (m_bIsLocked && Button == mbLeft)
+    if (Button == mbLeft && (m_bIsLocked || m_bIsFrozen))
     {
         m_ptDragStart = Point(X, Y);
         m_bDragging = true;

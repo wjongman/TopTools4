@@ -111,7 +111,7 @@ void __fastcall TLoupeForm::SetSelfMagnify(bool magnify)
 //---------------------------------------------------------------------------
 void __fastcall TLoupeForm::Freeze()
 {
-//  m_pLoupe->ToggleFrozen();
+    m_pLoupe->ToggleFrozen();
 }
 
 //---------------------------------------------------------------------------
@@ -159,7 +159,8 @@ void __fastcall TLoupeForm::UpdateUI()
     miMagnifySelf->Checked = m_bMagnifySelf;
 
     // we need both 'lock position" and "freeze view"
-//  miFreezeView->Caption = m_pLoupe->Frozen ? "Unfreeze View" : "Freeze View";
+    miFreezeView->Checked = m_pLoupe->Frozen;
+    bnFreezeView->Down = m_pLoupe->Frozen;
 
     bnZoomOut->Enabled = (m_pLoupe->Zoom > 1);
     miZoomOut->Enabled = (m_pLoupe->Zoom > 1);
@@ -174,37 +175,8 @@ void __fastcall TLoupeForm::UpdateUI()
 //---------------------------------------------------------------------------
 void __fastcall TLoupeForm::LoupeMenuPopup(TObject *Sender)
 {
-//    PopulatePersistMenu(miSaveView);
     UpdateUI();
 }
-/*
-//---------------------------------------------------------------------------
-void __fastcall TLoupeForm::PopulatePersistMenu(TMenuItem* PersistMenu)
-{
-    // Start with an empty menu
-    PersistMenu->Items->Clear();
-
-    // Populate the menu
-    TMenuItem *NewItem;
-
-    NewItem = new TMenuItem(PersistMenu);
-    NewItem->OnClick = PersistMenuClick;
-    NewItem->Caption = "Copy To Clipboard";
-    NewItem->Hint = "Copy";
-    PersistMenu->Items->Add(NewItem);
-
-    NewItem = new TMenuItem(PersistMenu);
-    NewItem->OnClick = PersistMenuClick;
-    NewItem->Caption = "Save To File...";
-    NewItem->Hint = "Save";
-    PersistMenu->Items->Add(NewItem);
-
-    NewItem = new TMenuItem(PersistMenu);
-    NewItem->OnClick = PersistMenuClick;
-    NewItem->Caption = "Print...";
-    NewItem->Hint = "Print";
-    PersistMenu->Items->Add(NewItem);
-  }*/
 
 //---------------------------------------------------------------------------
 void __fastcall TLoupeForm::miSaveViewClick(TObject *Sender)
@@ -213,18 +185,18 @@ void __fastcall TLoupeForm::miSaveViewClick(TObject *Sender)
 
     if (menuItem)
     {
-        TPersistImage image(m_pLoupe->Bitmap);
-
         if (menuItem->Hint == "Save")
         {
             SaveToFile();
         }
         else if (menuItem->Hint == "Copy")
         {
+            TPersistImage image(m_pLoupe->Bitmap);
             image.Copy();
         }
         else if (menuItem->Hint == "Print")
         {
+            TPersistImage image(m_pLoupe->Bitmap);
             image.Print();
         }
     }
@@ -289,8 +261,10 @@ void __fastcall TLoupeForm::miCenterboxClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TLoupeForm::miFreezeViewClick(TObject *Sender)
 {
-    Freeze();
+    m_pLoupe->ToggleFrozen();
+    UpdateUI();
 }
+
 
 //---------------------------------------------------------------------------
 void __fastcall TLoupeForm::miLockPosClick(TObject *Sender)
@@ -408,4 +382,6 @@ void __fastcall TLoupeForm::FormKeyDown(TObject *Sender, WORD &Key,
 }
 
 //---------------------------------------------------------------------------
+
+
 
