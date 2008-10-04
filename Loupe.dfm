@@ -1,6 +1,6 @@
 inherited LoupeForm: TLoupeForm
-  Left = 1353
-  Top = 319
+  Left = 1358
+  Top = 218
   Width = 241
   Height = 249
   BorderStyle = bsSizeToolWin
@@ -181,18 +181,21 @@ inherited LoupeForm: TLoupeForm
       object miCopyToClipboard: TMenuItem
         Caption = '&Copy To Clipboard'
         Hint = 'Copy'
+        ImageIndex = 6
         ShortCut = 16451
         OnClick = miSaveViewClick
       end
       object miSaveToFile: TMenuItem
         Caption = '&Save To File...'
         Hint = 'Save'
+        ImageIndex = 7
         ShortCut = 16467
         OnClick = miSaveViewClick
       end
       object miPrint: TMenuItem
         Caption = '&Print...'
         Hint = 'Print'
+        ImageIndex = 8
         ShortCut = 16464
         OnClick = miSaveViewClick
       end

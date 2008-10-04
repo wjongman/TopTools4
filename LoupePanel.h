@@ -53,9 +53,10 @@ BEGIN_MESSAGE_MAP
 END_MESSAGE_MAP(TCustomPanel)
 
 private:
+  Graphics::TBitmap* m_ScreenCopyBmp;
   Graphics::TBitmap* m_BufferBmp;
   Graphics::TBitmap* m_MaskBmp;
-  Graphics::TBitmap* m_Snapshot;
+//  Graphics::TBitmap* m_Snapshot;
 
 //  HDC m_DesktopDC;
   TTimer* m_Timer;
@@ -82,7 +83,7 @@ private:
   void __fastcall SetCrosshair(bool show) { m_bShowCrosshair = show; Invalidate(); }
   void __fastcall SetGrid(bool show)      { m_bShowGrid      = show; Invalidate(); }
   void __fastcall SetCenterbox(bool show) { m_bShowCenterbox = show; Invalidate(); }
-  Graphics::TBitmap* __fastcall GetBitmap() { /*if (m_bIsLocked)*/ return m_BufferBmp; }
+  Graphics::TBitmap* __fastcall GetBitmap(); // { /*if (m_bIsLocked)*/ return m_BufferBmp; }
 
   DYNAMIC void __fastcall MouseDown(TMouseButton Button, TShiftState Shift, int X, int Y);
   DYNAMIC void __fastcall MouseMove(TShiftState Shift, int X, int Y);

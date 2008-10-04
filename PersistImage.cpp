@@ -23,59 +23,6 @@ __fastcall TPersistImage::~TPersistImage()
 {
 }
 
-// //---------------------------------------------------------------------------
-// void __fastcall TPersistImage::PopulateMenu(TMenu* ViewerMenu)
-// {
-//     // Start with an empty menu
-//     //m_ViewerMenu->Items->Clear();
-//
-//     // Populate the menu
-//     TMenuItem *NewItem;
-//
-//     NewItem = new TMenuItem(m_ViewerMenu);
-//     NewItem->OnClick = MenuClick;
-//     NewItem->Caption = "Copy To Clipboard";
-//     NewItem->Hint = "Copy";
-//     ViewerMenu->Items->Add(NewItem);
-//
-//     NewItem = new TMenuItem(m_ViewerMenu);
-//     NewItem->OnClick = MenuClick;
-//     NewItem->Caption = "Save To File...";
-//     NewItem->Hint = "Save";
-//     ViewerMenu->Items->Add(NewItem);
-//
-//     NewItem = new TMenuItem(m_ViewerMenu);
-//     NewItem->OnClick = MenuClick;
-//     NewItem->Caption = "Print...";
-//     NewItem->Hint = "Print";
-//     ViewerMenu->Items->Add(NewItem);
-// }
-//
-// //---------------------------------------------------------------------------
-// void __fastcall TPersistImage::ViewerMenuClick(TObject *Sender)
-// {
-//     TMenuItem* menuItem = dynamic_cast<TMenuItem*>(Sender);
-//
-//     if (menuItem)
-//     {
-//         TPersistImage image(Image->Picture->Bitmap);
-//
-//         if (menuItem->Hint == "Save")
-//         {
-//             DoSaveToFile();
-//
-//         }
-//         else if (menuItem->Hint == "Copy")
-//         {
-//             DoCopyToClipboard();
-//         }
-//         else if (menuItem->Hint == "Print")
-//         {
-//             DoPrintImage();
-//         }
-//     }
-// }
-
 //---------------------------------------------------------------------------
 bool __fastcall TPersistImage::DisplayIsPaletted()
 {
@@ -94,7 +41,6 @@ bool __fastcall TPersistImage::SaveFileDialog(int &filterindex, String& InitialD
 
     TSavePictureDialog *SavePicDlg = new TSavePictureDialog(Application);
     SavePicDlg->Options << ofOverwritePrompt << ofEnableSizing;
-    //SavePicDlg->InitialDir = g_ToolOptions.GetString("capture", "lastdir");
     SavePicDlg->InitialDir = InitialDir;
 
     bool haspalette = DisplayIsPaletted();
@@ -105,8 +51,7 @@ bool __fastcall TPersistImage::SaveFileDialog(int &filterindex, String& InitialD
     }
     else
     {
-        //SavePicDlg->FilterIndex = g_ToolOptions.GetInt("capture", "filterindex");
-        SavePicDlg->FilterIndex = filterindex; //g_ToolOptions.GetInt("capture", "filterindex");
+        SavePicDlg->FilterIndex = filterindex;
         SavePicDlg->Filter = "Windows Bitmap (*.bmp)|*.bmp|"
                              "PNG Image (*.png)|*.png|"
                              "GIF Image (*.gif)|*.gif|"
@@ -115,8 +60,7 @@ bool __fastcall TPersistImage::SaveFileDialog(int &filterindex, String& InitialD
 
     if (SavePicDlg->Execute())
     {
-        //g_ToolOptions.Set("capture", "lastdir", ExtractFilePath(SavePicDlg->FileName));
-        //g_ToolOptions.Set("capture", "filterindex", SavePicDlg->FilterIndex);
+        // Allow caller to update last used settings
         InitialDir = ExtractFilePath(SavePicDlg->FileName);
         filterindex = SavePicDlg->FilterIndex;
 

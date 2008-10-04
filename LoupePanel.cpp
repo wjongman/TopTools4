@@ -16,9 +16,9 @@ __fastcall TLoupePanel::TLoupePanel(TComponent* Owner)
     m_bShowCenterbox = false;
     m_bMagnifySelf = false;
 
+    m_ScreenCopyBmp = NULL;
     m_BufferBmp = new Graphics::TBitmap();
     m_MaskBmp = NULL;
-//  m_DesktopDC = GetDC(NULL);
 
     m_bDragging = false;
     m_RefreshRate = 250;
@@ -33,6 +33,7 @@ __fastcall TLoupePanel::TLoupePanel(TComponent* Owner)
 __fastcall TLoupePanel::~TLoupePanel()
 {
     delete m_Timer;
+    delete m_ScreenCopyBmp;
     delete m_BufferBmp;
     delete m_MaskBmp;
 
@@ -348,11 +349,34 @@ void __fastcall TLoupePanel::Paint(void)
     m_Timer->Enabled = true;
 }
 
-/*/---------------------------------------------------------------------------
-void __fastcall TLoupePanel::GetView(Graphics::TBitmap* TargetBmp)
+//---------------------------------------------------------------------------
+Graphics::TBitmap* __fastcall TLoupePanel::GetBitmap()
 {
+    // Lazy-initialize a bitmap to hold the screen-copy
+    if (!m_ScreenCopyBmp)
+    {
+        m_ScreenCopyBmp = new Graphics::TBitmap();
+    }
 
-} */
+    m_ScreenCopyBmp->Width = m_BufferBmp->Width;
+    m_ScreenCopyBmp->Height = m_BufferBmp->Height;
+
+    // Position the screen source-rectangle
+    int srcX = m_rcSource.left + m_ptViewCenter.x;
+    int srcY = m_rcSource.top + m_ptViewCenter.y;
+
+    // Have a sized copy of the screen into our bitmap
+    HDC BitmapDC = m_ScreenCopyBmp->Canvas->Handle;
+    HDC DesktopDC = GetDC(NULL);
+
+    StretchBlt(BitmapDC, 0, 0, m_ScreenCopyBmp->Width, m_ScreenCopyBmp->Height,
+               DesktopDC, srcX, srcY, m_rcSource.Width(), m_rcSource.Height(),
+               SRCCOPY);
+
+    ReleaseDC(NULL, DesktopDC);
+
+    return m_ScreenCopyBmp;
+}
 
 //---------------------------------------------------------------------------
 void __fastcall TLoupePanel::RenderMask(Graphics::TBitmap* TargetBmp)

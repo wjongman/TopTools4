@@ -1,0 +1,4 @@
+APPICON      ICON   "graphics/loupe_ruler02-16color.ico"
+//TRAYICON     ICON   "graphics/loupe_ruler02-16color.ico"
+TRAYICON     ICON   "graphics/trayicon.ico"
+
