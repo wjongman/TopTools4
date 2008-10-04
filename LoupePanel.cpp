@@ -186,6 +186,10 @@ void __fastcall TLoupePanel::Paint(void)
         int srcX = m_rcSource.left + m_ptViewCenter.x;
         int srcY = m_rcSource.top + m_ptViewCenter.y;
 
+        // Start with an all black buffer bitmap
+        m_BufferBmp->Canvas->Brush->Color = clBlack;
+        m_BufferBmp->Canvas->FillRect(ClientRect);
+
         // Have a sized copy of the screen into our buffer bitmap
         HDC TargetDC = m_BufferBmp->Canvas->Handle;
 
@@ -195,6 +199,7 @@ void __fastcall TLoupePanel::Paint(void)
             {
                 CaptureDesktop();
             }
+
             HDC SourceDC = m_DesktopCopyBmp->Canvas->Handle;
             StretchBlt(TargetDC, 0, 0, m_BufferBmp->Width, m_BufferBmp->Height,
                        SourceDC, srcX, srcY, m_rcSource.Width(), m_rcSource.Height(),
@@ -286,15 +291,41 @@ Graphics::TBitmap* __fastcall TLoupePanel::GetBitmap()
     int srcX = m_rcSource.left + m_ptViewCenter.x;
     int srcY = m_rcSource.top + m_ptViewCenter.y;
 
-    // Have a sized copy of the screen into our bitmap
-    HDC BitmapDC = m_ScreenCopyBmp->Canvas->Handle;
-    HDC DesktopDC = GetDC(NULL);
+//     // Have a sized copy of the screen into our bitmap
+//     HDC BitmapDC = m_ScreenCopyBmp->Canvas->Handle;
+//     HDC DesktopDC = GetDC(NULL);
+    // Have a sized copy of the screen into our buffer bitmap
+    HDC TargetDC = m_ScreenCopyBmp->Canvas->Handle;
 
-    StretchBlt(BitmapDC, 0, 0, m_ScreenCopyBmp->Width, m_ScreenCopyBmp->Height,
-               DesktopDC, srcX, srcY, m_rcSource.Width(), m_rcSource.Height(),
-               SRCCOPY);
+    if (m_bIsFrozen)
+    {
+        if (!m_DesktopCopyBmp)
+        {
+            CaptureDesktop();
+        }
 
-    ReleaseDC(NULL, DesktopDC);
+        HDC SourceDC = m_DesktopCopyBmp->Canvas->Handle;
+
+        StretchBlt(TargetDC, 0, 0, m_BufferBmp->Width, m_BufferBmp->Height,
+                   SourceDC, srcX, srcY, m_rcSource.Width(), m_rcSource.Height(),
+                   SRCCOPY);
+    }
+    else
+    {
+        HDC SourceDC = GetDC(NULL);
+
+        StretchBlt(TargetDC, 0, 0, m_BufferBmp->Width, m_BufferBmp->Height,
+                   SourceDC, srcX, srcY, m_rcSource.Width(), m_rcSource.Height(),
+                   SRCCOPY);
+
+        ReleaseDC(NULL, SourceDC);
+    }
+
+//     StretchBlt(BitmapDC, 0, 0, m_ScreenCopyBmp->Width, m_ScreenCopyBmp->Height,
+//                DesktopDC, srcX, srcY, m_rcSource.Width(), m_rcSource.Height(),
+//                SRCCOPY);
+//
+//     ReleaseDC(NULL, DesktopDC);
 
     return m_ScreenCopyBmp;
 }

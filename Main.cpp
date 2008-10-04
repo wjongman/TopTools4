@@ -235,7 +235,8 @@ void __fastcall TMainForm::HandleHotkey(THotkeyId id)
 
     case hkZoomIn:
         if (m_pLoupe)
-            m_pLoupe->ZoomIn();
+//            m_pLoupe->ZoomIn();
+            m_pLoupe->Freeze();
         break;
 
     case hkZoomOut:

@@ -105,8 +105,11 @@ inherited LoupeForm: TLoupeForm
     object bnFreezeView: TToolButton
       Left = 154
       Top = 0
-      Caption = 'Freeze'
+      Hint = 'Capture Current View'
       ImageIndex = 9
+      ParentShowHint = False
+      ShowHint = True
+      Style = tbsCheck
       OnClick = miFreezeViewClick
     end
   end

@@ -112,6 +112,7 @@ void __fastcall TLoupeForm::SetSelfMagnify(bool magnify)
 void __fastcall TLoupeForm::Freeze()
 {
     m_pLoupe->ToggleFrozen();
+    UpdateUI();
 }
 
 //---------------------------------------------------------------------------
