@@ -147,7 +147,17 @@ void __fastcall TLoupeForm::UnLock()
 void __fastcall TLoupeForm::UpdateUI()
 {
     // Update the state of all UI elements
-    Caption = "Loupe " + String(m_pLoupe->Zoom) + "x";
+    String sCaption = "Loupe " + String(m_pLoupe->Zoom) + "x";
+
+    if (m_pLoupe->Locked)
+    {
+        sCaption += " [locked]";
+    }
+    if (m_pLoupe->Frozen)
+    {
+        sCaption += " [frozen]";
+    }
+    Caption = sCaption;
 
     miCrosshair->Checked = m_pLoupe->CrosshairVisible;
     bnCrosshair->Down = m_pLoupe->CrosshairVisible;

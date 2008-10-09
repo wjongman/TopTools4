@@ -238,12 +238,6 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
 
     NewItem = new TMenuItem(m_CaptureMenu);
     NewItem->OnClick = CaptureMenuClick;
-    NewItem->Caption = "View...";
-    NewItem->Hint = "View";
-    m_CaptureMenu->Items->Add(NewItem);
-
-    NewItem = new TMenuItem(m_CaptureMenu);
-    NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Print...";
     NewItem->Hint = "Print";
     m_CaptureMenu->Items->Add(NewItem);

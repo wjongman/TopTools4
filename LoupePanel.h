@@ -57,7 +57,8 @@ private:
   Graphics::TBitmap* m_BufferBmp;
   Graphics::TBitmap* m_MaskBmp;
 
-  void __fastcall CaptureDesktop();
+  void __fastcall CaptureDesktopBmp();
+  void __fastcall ReleaseDesktopBmp();
   Graphics::TBitmap* m_DesktopCopyBmp;
   //Graphics::TBitmap* __fastcall GetDesktopBitmap();
 

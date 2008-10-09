@@ -46,7 +46,7 @@ protected:
   DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
   DYNAMIC void __fastcall MouseDown(TMouseButton Button,
                                     Classes::TShiftState Shift, int X, int Y);
-#define WITH_WINPROC 1
+#define WITH_WINPROC 0
 #if WITH_WINPROC
   virtual void __fastcall WndProc(TMessage &Msg);
 #endif
@@ -60,7 +60,6 @@ protected:
 
 
 __published:  // IDE-managed Components
-    TLabel *InfoLabel;
     void __fastcall FormPaint(TObject *Sender);
     void __fastcall FormResize(TObject *Sender);
     void __fastcall FormShow(TObject *Sender);

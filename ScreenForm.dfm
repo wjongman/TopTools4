@@ -24,17 +24,4 @@ object ScreenForm: TScreenForm
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object InfoLabel: TLabel
-    Left = 19
-    Top = 1
-    Width = 63
-    Height = 14
-    Caption = 'InfoLabel'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'Courier New'
-    Font.Style = []
-    ParentFont = False
-  end
 end

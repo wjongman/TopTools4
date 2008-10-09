@@ -9,25 +9,24 @@ __fastcall TLoupePanel::TLoupePanel(TComponent* Owner)
 : TCustomPanel(Owner)
 {
     m_zoom = 4;
-//  m_bIsFrozen = false;
+    m_bIsFrozen = false;
     m_bIsLocked = false;
     m_bShowCrosshair = false;
     m_bShowGrid = false;
     m_bShowCenterbox = false;
     m_bMagnifySelf = false;
+    m_bDragging = false;
 
-    m_ScreenCopyBmp = NULL;
-    m_BufferBmp = new Graphics::TBitmap();
     m_MaskBmp = NULL;
     m_DesktopCopyBmp = NULL;
+    m_ScreenCopyBmp = NULL;
+    m_BufferBmp = new Graphics::TBitmap();
 
-    m_bDragging = false;
     m_RefreshRate = 250;
     m_Timer = new TTimer(this);
     m_Timer->Interval = m_RefreshRate;
     m_Timer->OnTimer = TimerTick;
     m_Timer->Enabled = true;
-
 }
 
 //---------------------------------------------------------------------------
@@ -100,7 +99,9 @@ void __fastcall TLoupePanel::SetRefreshRate(int rate)
 //---------------------------------------------------------------------------
 void __fastcall TLoupePanel::TimerTick(TObject *Sender)
 {
+    // Timer will be re-enabled during next call of Paint()
     m_Timer->Enabled = false;
+
     UpdateView();
 }
 
@@ -197,7 +198,7 @@ void __fastcall TLoupePanel::Paint(void)
         {
             if (!m_DesktopCopyBmp)
             {
-                CaptureDesktop();
+                CaptureDesktopBmp();
             }
 
             HDC SourceDC = m_DesktopCopyBmp->Canvas->Handle;
@@ -229,7 +230,10 @@ void __fastcall TLoupePanel::Paint(void)
         Canvas->CopyRect(ClientRect, m_BufferBmp->Canvas, ClientRect);
     }
 
-    m_Timer->Enabled = true;
+    //if (!m_bIsFrozen)
+    {
+        m_Timer->Enabled = true;
+    }
 }
 
 //---------------------------------------------------------------------------
@@ -301,7 +305,7 @@ Graphics::TBitmap* __fastcall TLoupePanel::GetBitmap()
     {
         if (!m_DesktopCopyBmp)
         {
-            CaptureDesktop();
+            CaptureDesktopBmp();
         }
 
         HDC SourceDC = m_DesktopCopyBmp->Canvas->Handle;
@@ -331,7 +335,7 @@ Graphics::TBitmap* __fastcall TLoupePanel::GetBitmap()
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TLoupePanel::CaptureDesktop()
+void __fastcall TLoupePanel::CaptureDesktopBmp()
 {
     // Lazy-initialize a bitmap to hold a copy of the desktop
     if (!m_DesktopCopyBmp)
@@ -347,10 +351,21 @@ void __fastcall TLoupePanel::CaptureDesktop()
     HDC DesktopDC = GetDC(NULL);
 
     BitBlt(BitmapDC, 0, 0, m_DesktopCopyBmp->Width, m_DesktopCopyBmp->Height,
-               DesktopDC, Screen->DesktopLeft, Screen->DesktopTop,
-               SRCCOPY);
+           DesktopDC, Screen->DesktopLeft, Screen->DesktopTop,
+           SRCCOPY | CAPTUREBLT);
 
     ReleaseDC(NULL, DesktopDC);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TLoupePanel::ReleaseDesktopBmp()
+{
+    // Get rid of the bitmap that holds a copy of the desktop
+    if (m_DesktopCopyBmp)
+    {
+        delete m_DesktopCopyBmp;
+        m_DesktopCopyBmp = NULL;
+    }
 }
 
 //---------------------------------------------------------------------------
@@ -534,19 +549,19 @@ void __fastcall TLoupePanel::ToggleGrid()
 //---------------------------------------------------------------------------
 void __fastcall TLoupePanel::ToggleFrozen()
 {
-     m_bIsFrozen = !m_bIsFrozen;
+    m_bIsFrozen = !m_bIsFrozen;
 
-     if (m_bIsFrozen)
-     {
-         // Save the entire desktop in a bitmap like "Print Screen" does
-         CaptureDesktop();
-     }
-     else
-     {
-         //DisposeDesktopBmp();
-     }
+    if (m_bIsFrozen)
+    {
+        // Save the entire desktop in a bitmap like "Print Screen" does
+        CaptureDesktopBmp();
+    }
+    else
+    {
+        ReleaseDesktopBmp();
+    }
 
-     Invalidate();
+    Invalidate();
 }
 
 //---------------------------------------------------------------------------
