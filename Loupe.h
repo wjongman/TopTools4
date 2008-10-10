@@ -52,7 +52,6 @@ class TLoupeForm : public TToolForm
     TMenuItem *miSaveToFile;
     TMenuItem *miPrint;
     TMenuItem *N6;
-    TImageList *ImageList1;
 
     void __fastcall LoupeMenuPopup(TObject *Sender);
 

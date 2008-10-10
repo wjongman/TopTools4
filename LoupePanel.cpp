@@ -37,7 +37,6 @@ __fastcall TLoupePanel::~TLoupePanel()
     delete m_BufferBmp;
     delete m_MaskBmp;
     delete m_DesktopCopyBmp;
-//  ReleaseDC(NULL, m_DesktopDC);
 }
 
 //---------------------------------------------------------------------------
@@ -64,12 +63,36 @@ void TLoupePanel::OnNCHitTest(TWMNCHitTest &Message)
 //---------------------------------------------------------------------------
 void __fastcall TLoupePanel::Resize()
 {
-    int srcX = ClientWidth / (2 * m_zoom);
-    int srcY = ClientHeight / (2 * m_zoom);
+    int srcLeft;
+    int srcTop;
+    int srcWidth;
+    int srcHeight;
 
-    // To compensate for round-off differences we make the
-    // source rectangle 2 pixels larger then calculated
-    m_rcSource = Rect(-srcX, -srcY, srcX + 2, srcY + 2);
+    if (m_bIsFrozen)
+    {
+        srcLeft = m_rcSource.Left;
+        srcTop = m_rcSource.Top;
+        srcWidth = ClientWidth / (m_zoom);
+        srcHeight = ClientHeight / (m_zoom);
+    }
+    else
+    {
+        int srcX = ClientWidth / (2 * m_zoom);
+        int srcY = ClientHeight / (2 * m_zoom);
+
+        srcLeft = -srcX;
+        srcTop = -srcY;
+        srcWidth = srcX;
+        srcHeight = srcY;
+    }
+
+    m_rcSource = Rect(srcLeft, srcTop, srcWidth + 2, srcHeight + 2);
+//     int srcX = ClientWidth / (2 * m_zoom);
+//     int srcY = ClientHeight / (2 * m_zoom);
+//
+//     // To compensate for round-off differences we make the
+//     // source rectangle 2 pixels larger then calculated
+//     m_rcSource = Rect(-srcX, -srcY, srcX + 2, srcY + 2);
 
     // Calculate the buffer bitmap dimensions.
     // Because we made the source rectangle bigger than calculated
@@ -88,7 +111,6 @@ void __fastcall TLoupePanel::Resize()
     Invalidate();
 }
 
-
 //----------------------------------------------------------------------------
 void __fastcall TLoupePanel::SetRefreshRate(int rate)
 {
@@ -99,7 +121,7 @@ void __fastcall TLoupePanel::SetRefreshRate(int rate)
 //---------------------------------------------------------------------------
 void __fastcall TLoupePanel::TimerTick(TObject *Sender)
 {
-    // Timer will be re-enabled during next call of Paint()
+    // Timer will be re-enabled in next call of Paint()
     m_Timer->Enabled = false;
 
     UpdateView();
@@ -513,13 +535,25 @@ void __fastcall TLoupePanel::DrawCenterbox(Graphics::TBitmap* TargetBmp)
     DrawTickMarks(TargetBmp);
 }
 
+// //---------------------------------------------------------------------------
+// void __fastcall TLoupePanel::DrawGrid(Graphics::TBitmap* TargetBmp)
+// {
+//     COLORREF crColor =  RGB(255, 255, 255);
+//     for (int x = 0; x < TargetBmp->Width; x += m_zoom)
+//         for (int y = 0; y < TargetBmp->Height; y += m_zoom)
+//             SetPixelV(TargetBmp->Canvas->Handle, x, y, crColor);
+// }
+
 //---------------------------------------------------------------------------
 void __fastcall TLoupePanel::DrawGrid(Graphics::TBitmap* TargetBmp)
 {
-    COLORREF crColor =  RGB(255, 255, 255);
-    for (int x = 0; x < TargetBmp->Width; x += m_zoom)
-        for (int y = 0; y < TargetBmp->Height; y += m_zoom)
-            SetPixelV(TargetBmp->Canvas->Handle, x, y, crColor);
+    if (m_zoom > 2)
+    {
+        COLORREF crColor =  RGB(255, 255, 255);
+        for (int x = 0; x < TargetBmp->Width; x += m_zoom)
+            for (int y = 0; y < TargetBmp->Height; y += m_zoom)
+                SetPixelV(TargetBmp->Canvas->Handle, x, y, crColor);
+    }
 }
 
 //---------------------------------------------------------------------------
@@ -546,9 +580,11 @@ void __fastcall TLoupePanel::ToggleGrid()
     Invalidate();
 }
 
+#define WITH_FROZEN 0
 //---------------------------------------------------------------------------
 void __fastcall TLoupePanel::ToggleFrozen()
 {
+#if WITH_FROZEN
     m_bIsFrozen = !m_bIsFrozen;
 
     if (m_bIsFrozen)
@@ -562,8 +598,8 @@ void __fastcall TLoupePanel::ToggleFrozen()
     }
 
     Invalidate();
+#endif
 }
-
 //---------------------------------------------------------------------------
 void __fastcall TLoupePanel::ToggleLocked()
 {
