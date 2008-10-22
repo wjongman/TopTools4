@@ -112,6 +112,6 @@ public:   // User declarations
     __fastcall ~TToolOptionsDialog();
 };
 //---------------------------------------------------------------------------
-extern PACKAGE TToolOptionsDialog *ToolOptionsDialog;
+//extern PACKAGE TToolOptionsDialog *ToolOptionsDialog;
 //---------------------------------------------------------------------------
 #endif
