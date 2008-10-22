@@ -15,7 +15,8 @@
 //---------------------------------------------------------------------------
 __fastcall TToolForm::TToolForm(TComponent* Owner, const String& toolname)
 : TForm(Owner), m_ToolName(toolname), FSnapEdge(true), FWindowStyle(twsTool),
-  FDraggableForm(false)//, m_Transparent(false)
+  FDraggableForm(false), FOnOptions(NULL), FOnMinimize(NULL)
+  //, m_Transparent(false)
 {
   OnShow = OnToolShow;   // OnToolShow calls LoadPosition() by default
   OnHide = OnToolHide;   // OnToolHide calls SavePosition() by default

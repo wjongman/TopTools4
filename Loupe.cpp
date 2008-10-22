@@ -292,6 +292,13 @@ void __fastcall TLoupeForm::miMagnifySelfClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TLoupeForm::miOptionsClick(TObject *Sender)
+{
+    if (FOnOptions)
+        FOnOptions(this);
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TLoupeForm::miExitClick(TObject *Sender)
 {
     Application->Terminate();

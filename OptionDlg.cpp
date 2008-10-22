@@ -117,11 +117,13 @@ void __fastcall TToolOptionsDialog::FormShow(TObject *Sender)
 {
   ActivatePage(m_sActivePage);
 
+  InitListView();
+  
   // Set focus to currently visible item
-  if (lvSelectOption->Items->Count > 0)
+  if (lvOptionSelector->Items->Count > 0)
   {
 
-    TListItem *item = lvSelectOption->FindCaption(0, m_sActivePage, false, true, false);
+    TListItem *item = lvOptionSelector->FindCaption(0, m_sActivePage, false, true, false);
 
     if (item)
     {
@@ -135,11 +137,48 @@ void __fastcall TToolOptionsDialog::FormShow(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TToolOptionsDialog::lvSelectOptionChange(TObject *Sender,
+void __fastcall TToolOptionsDialog::lvOptionSelectorChange(TObject *Sender,
                                                          TListItem *Item, TItemChange Change)
 {
-  if (lvSelectOption->ItemFocused)
-    ActivatePage(lvSelectOption->ItemFocused->Caption);
+  if (lvOptionSelector->ItemFocused)
+    ActivatePage(lvOptionSelector->ItemFocused->Caption);
+}
+
+//---------------------------------------------------------------------------
+void TToolOptionsDialog::InitListView()
+{
+  lvOptionSelector->Items->Clear();
+
+  TListItem *pItem;
+
+  pItem = lvOptionSelector->Items->Add();
+  pItem->Caption = "General";
+  pItem->Data = 0;
+//    pItem->ImageIndex = i;
+
+  pItem = lvOptionSelector->Items->Add();
+  pItem->Caption = "Ruler";
+  pItem->Data = 0;
+
+  pItem = lvOptionSelector->Items->Add();
+  pItem->Caption = "Loupe";
+  pItem->Data = 0;
+
+  pItem = lvOptionSelector->Items->Add();
+  pItem->Caption = "Info";
+  pItem->Data = 0;
+
+  pItem = lvOptionSelector->Items->Add();
+  pItem->Caption = "Base Converter";
+  pItem->Data = 0;
+
+  pItem = lvOptionSelector->Items->Add();
+  pItem->Caption = "Screen Grabber";
+  pItem->Data = 0;
+
+  pItem = lvOptionSelector->Items->Add();
+  pItem->Caption = "Tray Icon";
+  pItem->Data = 0;
 }
 
 //---------------------------------------------------------------------------

@@ -52,6 +52,7 @@ class TLoupeForm : public TToolForm
     TMenuItem *miSaveToFile;
     TMenuItem *miPrint;
     TMenuItem *N6;
+    TMenuItem *miOptions;
 
     void __fastcall LoupeMenuPopup(TObject *Sender);
 
@@ -75,6 +76,7 @@ class TLoupeForm : public TToolForm
                                 TShiftState Shift);
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall FormDestroy(TObject *Sender);
+    void __fastcall miOptionsClick(TObject *Sender);
 
 private:
     TLoupePanel* m_pLoupe;

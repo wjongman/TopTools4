@@ -16,7 +16,7 @@ object ToolOptionsDialog: TToolOptionsDialog
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object lvSelectOption: TListView
+  object lvOptionSelector: TListView
     Left = 10
     Top = 12
     Width = 105
@@ -25,20 +25,12 @@ object ToolOptionsDialog: TToolOptionsDialog
     ColumnClick = False
     HideSelection = False
     HotTrackStyles = [htUnderlineHot]
-    Items.Data = {
-      D50000000700000000000000FFFFFFFFFFFFFFFF00000000000000000747656E
-      6572616C00000000FFFFFFFFFFFFFFFF00000000000000000552756C65720000
-      0000FFFFFFFFFFFFFFFF0000000000000000054C6F75706500000000FFFFFFFF
-      FFFFFFFF000000000000000004496E666F00000000FFFFFFFFFFFFFFFF000000
-      00000000000E4261736520436F6E76657274657200000000FFFFFFFFFFFFFFFF
-      00000000000000000E53637265656E204772616262657200000000FFFFFFFFFF
-      FFFFFF000000000000000009547261792049636F6E}
     ReadOnly = True
     RowSelect = True
     ShowColumnHeaders = False
     TabOrder = 0
     ViewStyle = vsList
-    OnChange = lvSelectOptionChange
+    OnChange = lvOptionSelectorChange
   end
   object plGeneral: TPanel
     Left = 406

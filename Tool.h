@@ -45,6 +45,7 @@ protected:
   bool FDraggableForm;
   TToolWindowStyle FWindowStyle;
   TNotifyEvent FOnMinimize;
+  TNotifyEvent FOnOptions;
 
   bool __fastcall TransparencyIsSupported();
   void __fastcall SetTransparency(bool layered, int percent = 0);
@@ -69,10 +70,12 @@ protected:
 __published:  // IDE-managed Components
   __property OnKeyDown;
   __property OnClose;
+  __property String ToolName = { read = m_ToolName }; // , write = FToolName };
   __property bool SnapScreenEdges = { read = FSnapEdge, write = FSnapEdge };
   __property bool DraggableForm = { read = FDraggableForm, write = FDraggableForm };
   __property TToolWindowStyle WindowStyle = { read = FWindowStyle, write = SetWindowStyle };
   __property TNotifyEvent OnMinimize = { read = FOnMinimize, write = FOnMinimize };
+  __property TNotifyEvent OnOptions = { read = FOnOptions, write = FOnOptions };
 
 };
 

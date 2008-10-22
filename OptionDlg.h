@@ -38,7 +38,7 @@ __published:  // IDE-managed Components
   TLabel *lbRefreshrate;
   TLabel *lbMilliseconds;
   TLabel *lbLength;
-  TListView *lvSelectOption;
+    TListView *lvOptionSelector;
   TPanel *plBaseconv;
   TPanel *plGeneral;
   TPanel *plGrabber;
@@ -81,7 +81,7 @@ __published:  // IDE-managed Components
   TCheckBox *ckRememberPos;
 
   void __fastcall FormShow(TObject *Sender);
-  void __fastcall lvSelectOptionChange(TObject *Sender, TListItem *Item, TItemChange Change);
+  void __fastcall lvOptionSelectorChange(TObject *Sender, TListItem *Item, TItemChange Change);
   void __fastcall bnOkClick(TObject *Sender);
   void __fastcall bnAutosaveOptionsClick(TObject *Sender);
   void __fastcall ckRememberSettingsClick(TObject *Sender);
@@ -96,8 +96,9 @@ private:  // User declarations
   void InitOptions();
   void SaveOptions();
 
-  void InitOptions0();
-  void SaveOptions0();
+  void InitListView();
+//   void InitOptions0();
+//   void SaveOptions0();
 
   void InitHotkeyPanels();
   void SaveHotkeyPanels();

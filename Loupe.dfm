@@ -184,6 +184,10 @@ inherited LoupeForm: TLoupeForm
       Visible = False
       OnClick = miMagnifySelfClick
     end
+    object miOptions: TMenuItem
+      Caption = 'Options...'
+      OnClick = miOptionsClick
+    end
     object N6: TMenuItem
       Caption = '-'
     end

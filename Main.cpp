@@ -622,6 +622,7 @@ TToolForm* TMainForm::GetLoupeForm()
     {
         m_pLoupe = new TLoupeForm(this);
         m_pLoupe->OnClose = HandleToolWindowClose;
+        m_pLoupe->OnOptions = HandleToolWindowOptions;
     }
     return m_pLoupe;
 }
@@ -785,6 +786,38 @@ void __fastcall TMainForm::HandleCaptureComplete(TObject *Sender)
         m_pLoupe->Visible = m_SavedLoupeState;
 
     //m_HotkeyManager->EnableHotkeys();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TMainForm::HandleToolWindowOptions(TObject *Sender)
+{
+    TToolForm *Tool = reinterpret_cast<TToolForm*>(Sender);
+
+    if (Tool)
+    {
+        if (Sender == this)
+        {
+        }
+        else if (Sender == m_pControlBar)
+        {
+        }
+        else if (Sender == m_pBaseConv)
+        {
+        }
+        else if (Sender == m_pInfo)
+        {
+        }
+        else if (Sender == m_pLoupe)
+        {
+           actOptionsExecute(Sender);
+        }
+        else if (Sender == m_pRuler)
+        {
+        }
+        else if (Sender == m_pCapture)
+        {
+        }
+    }
 }
 
 //---------------------------------------------------------------------------
