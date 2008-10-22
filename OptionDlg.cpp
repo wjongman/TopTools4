@@ -18,13 +18,15 @@
 __fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner)
 : TForm(Owner)
 {
-  // Set Form dimensions relative to plMarker so we scale properly
-  // independent of display settings (ie. "Large fonts")
+  // Set Form dimensions relative to plMarker so we scale properly,
+  // regardless of display settings (ie. "Large fonts").
   ClientHeight = plMarker->Top;
   ClientWidth = plMarker->Left;
 
   plRef->Visible = false;
-  ActivatePage("General");
+
+  m_sActivePage = "General";
+  m_sActivePage = g_ToolOptions.Get("options", "activepage", m_sActivePage);
 }
 
 //---------------------------------------------------------------------------
@@ -38,12 +40,14 @@ __fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner,
   ClientWidth = plMarker->Left;
 
   plRef->Visible = false;
-  ActivatePage(PageName);
+
+  m_sActivePage = PageName;
 }
 
 //---------------------------------------------------------------------------
 __fastcall TToolOptionsDialog::~TToolOptionsDialog()
 {
+  g_ToolOptions.Set("options", "activepage", m_sActivePage);
 }
 
 //---------------------------------------------------------------------------
@@ -68,7 +72,7 @@ void TToolOptionsDialog::ActivatePage(const String sActive)
 
   if (ActivePanel)
   {
-    ActivePage = sActive;
+    m_sActivePage = sActive;
     HideAll();
     ActivePanel->Left = plRef->Left;
     ActivePanel->Top = plRef->Top;
@@ -111,12 +115,19 @@ void TToolOptionsDialog::HideAll()
 //---------------------------------------------------------------------------
 void __fastcall TToolOptionsDialog::FormShow(TObject *Sender)
 {
+  ActivatePage(m_sActivePage);
+
   // Set focus to currently visible item
   if (lvSelectOption->Items->Count > 0)
   {
-    TListItem *item = lvSelectOption->Items->Item[m_CurrentItem];
-    item->Selected = true;
-    item->Focused = true;
+
+    TListItem *item = lvSelectOption->FindCaption(0, m_sActivePage, false, true, false);
+
+    if (item)
+    {
+      item->Selected = true;
+      item->Focused = true;
+    }
   }
 
   InitHotkeyPanels();
@@ -202,6 +213,7 @@ void TToolOptionsDialog::InitOptions()
   // Grabber
   ckAutosave->Checked = g_ToolOptions.Get("capture", "autosave", false);
   ckShowLoupeOnGrab->Checked = g_ToolOptions.Get("capture", "showloupe", false);
+  ckRememberPos->Checked = g_ToolOptions.Get("capture", "rememberpos", false);
 }
 
 //---------------------------------------------------------------------------
@@ -250,6 +262,7 @@ void TToolOptionsDialog::SaveOptions()
 
   g_ToolOptions.Set("capture", "autosave", ckAutosave->Checked);
   g_ToolOptions.Set("capture", "showloupe", ckShowLoupeOnGrab->Checked);
+  g_ToolOptions.Set("capture", "rememberpos", ckRememberPos->Checked);
 }
 
 //---------------------------------------------------------------------------
@@ -289,7 +302,6 @@ void TToolOptionsDialog::SaveHotkeyPanels()
   SaveHotkeyInfo("zoomout", hkpZoomOut->GetKeyInfo());
   SaveHotkeyInfo("colorcopy", hkpColorCopy->GetKeyInfo());
   SaveHotkeyInfo("capturestart", hkpGrabScreen->GetKeyInfo());
-  //g_ToolOptions.Save();
 }
 
 //---------------------------------------------------------------------------
@@ -310,12 +322,9 @@ void __fastcall TToolOptionsDialog::bnAutosaveOptionsClick(TObject *Sender)
     delete AutoSaveDialog;
     ::ShowWindow(Handle, SW_SHOW);
   }
-
 }
+
 //---------------------------------------------------------------------------
-
-
-
 void __fastcall TToolOptionsDialog::ckRememberSettingsClick(
       TObject *Sender)
 {

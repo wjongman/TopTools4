@@ -12,8 +12,6 @@
 
 #include "HotkeyInfo.h"
 #include "HotkeyPanel.h"
-//#include "ToolOptions.h"
-//#include "Persist.h"
 
 /////////////////////////////////////////////////////////////////////////////
 class TToolOptionsDialog : public TForm
@@ -25,7 +23,7 @@ __published:  // IDE-managed Components
   TCheckBox *ckOnTop;
   TCheckBox *ckPrefix;
   TCheckBox *ckQuotes;
-    TCheckBox *ckRememberSettings;
+  TCheckBox *ckRememberSettings;
   TCheckBox *ckAutoStart;
   TEdit *edLength;
   TEdit *edRefresh;
@@ -78,25 +76,23 @@ __published:  // IDE-managed Components
   TCheckBox *ckOptionsDlg;
   THotkeyPanel *hkpDoubleClick;
   TCheckBox *ckSingleton;
-    TRadioButton *rbInifile;
-    TRadioButton *rbRegistry;
+  TRadioButton *rbInifile;
+  TRadioButton *rbRegistry;
+  TCheckBox *ckRememberPos;
 
   void __fastcall FormShow(TObject *Sender);
-  void __fastcall lvSelectOptionChange(TObject *Sender, TListItem *Item,
-          TItemChange Change);
+  void __fastcall lvSelectOptionChange(TObject *Sender, TListItem *Item, TItemChange Change);
   void __fastcall bnOkClick(TObject *Sender);
   void __fastcall bnAutosaveOptionsClick(TObject *Sender);
-    void __fastcall ckRememberSettingsClick(TObject *Sender);
+  void __fastcall ckRememberSettingsClick(TObject *Sender);
 
 private:  // User declarations
   void HideAll();
   void ActivatePage(const String sActive);
   void ActivatePage(int PageIndex);
 
-  String ActivePage;
-  int m_CurrentItem;
+  String m_sActivePage;
 
-//  TopTools::Options m_Options;
   void InitOptions();
   void SaveOptions();
 
@@ -105,6 +101,7 @@ private:  // User declarations
 
   void InitHotkeyPanels();
   void SaveHotkeyPanels();
+
   THotkeyInfo LoadHotkeyInfo(const String& sHotKeyName);
   void SaveHotkeyInfo(const String& sHotKeyName, const THotkeyInfo& HotkeyInfo);
 

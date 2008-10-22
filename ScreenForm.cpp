@@ -178,7 +178,7 @@ HWND TScreenForm::CreateTrackingToolTip()
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::SetSticky(bool sticky)
 {
-    bool bUseSticky = false;
+    bool bUseSticky = true; //false;
     if (bUseSticky)
     {
         FSticky = sticky;
@@ -382,6 +382,8 @@ void __fastcall TScreenForm::FormPaint(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::FormShow(TObject *Sender)
 {
+//    FSticky = !g_ToolOptions.Get("capture", "rememberpos", false));
+
     if (FSticky)
     {
         // Show with form center below mouse

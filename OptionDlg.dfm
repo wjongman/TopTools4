@@ -1,10 +1,10 @@
 object ToolOptionsDialog: TToolOptionsDialog
-  Left = 541
-  Top = 162
+  Left = 655
+  Top = 189
   BorderStyle = bsDialog
   Caption = 'TopTools Options'
-  ClientHeight = 752
-  ClientWidth = 966
+  ClientHeight = 806
+  ClientWidth = 1013
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -273,7 +273,7 @@ object ToolOptionsDialog: TToolOptionsDialog
       end
       object hkpZoomIn: THotkeyPanel
         Left = 8
-        Top = 51
+        Top = 75
         Width = 250
         Height = 65
         BevelOuter = bvNone
@@ -282,7 +282,7 @@ object ToolOptionsDialog: TToolOptionsDialog
       end
       object hkpZoomOut: THotkeyPanel
         Left = 8
-        Top = 109
+        Top = 140
         Width = 250
         Height = 65
         BevelOuter = bvNone
@@ -307,7 +307,7 @@ object ToolOptionsDialog: TToolOptionsDialog
       TabOrder = 0
       object gbAttributes: TGroupBox
         Left = 16
-        Top = 85
+        Top = 27
         Width = 233
         Height = 57
         Hint = 'Specify attributes to add to the webcolor string.'
@@ -333,8 +333,8 @@ object ToolOptionsDialog: TToolOptionsDialog
         end
       end
       object hkpColorCopy: THotkeyPanel
-        Left = 8
-        Top = 19
+        Left = 9
+        Top = 140
         Width = 250
         Height = 67
         BevelOuter = bvNone
@@ -359,7 +359,7 @@ object ToolOptionsDialog: TToolOptionsDialog
       TabOrder = 0
       object ckBinary: TCheckBox
         Left = 16
-        Top = 27
+        Top = 24
         Width = 113
         Height = 17
         Caption = '&Show binary field'
@@ -400,8 +400,8 @@ object ToolOptionsDialog: TToolOptionsDialog
       Caption = 'Screen Grabber'
       TabOrder = 0
       object hkpGrabScreen: THotkeyPanel
-        Left = 7
-        Top = 19
+        Left = 8
+        Top = 140
         Width = 250
         Height = 67
         BevelOuter = bvNone
@@ -410,9 +410,9 @@ object ToolOptionsDialog: TToolOptionsDialog
       end
       object gbAutoSave: TGroupBox
         Left = 16
-        Top = 99
+        Top = 81
         Width = 233
-        Height = 57
+        Height = 56
         Caption = 'Autosave to file'
         TabOrder = 1
         object ckAutosave: TCheckBox
@@ -438,11 +438,19 @@ object ToolOptionsDialog: TToolOptionsDialog
       end
       object ckShowLoupeOnGrab: TCheckBox
         Left = 16
-        Top = 176
+        Top = 52
         Width = 225
         Height = 17
         Caption = '&Show Loupe during screen capture'
         TabOrder = 2
+      end
+      object ckRememberPos: TCheckBox
+        Left = 16
+        Top = 24
+        Width = 225
+        Height = 17
+        Caption = '&Remember last position and size'
+        TabOrder = 3
       end
     end
   end
@@ -548,7 +556,7 @@ object ToolOptionsDialog: TToolOptionsDialog
       end
       object hkpDoubleClick: THotkeyPanel
         Left = 9
-        Top = 136
+        Top = 140
         Width = 250
         Height = 67
         BevelOuter = bvNone
