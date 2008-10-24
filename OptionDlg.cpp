@@ -29,7 +29,7 @@ __fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner)
 
 //---------------------------------------------------------------------------
 __fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner,
-                                                  const String& PageName)
+                                                  const String& sPageName)
 : TForm(Owner)
 {
     // Set Form dimensions relative to plMarker so we scale properly
@@ -39,7 +39,7 @@ __fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner,
 
     plRef->Visible = false;
 
-    m_sActivePage = PageName;
+    m_sActivePage = sPageName;
 }
 
 //---------------------------------------------------------------------------
@@ -362,8 +362,7 @@ void __fastcall TToolOptionsDialog::bnAutosaveOptionsClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TToolOptionsDialog::ckRememberSettingsClick(
-                                                           TObject *Sender)
+void __fastcall TToolOptionsDialog::ckRememberSettingsClick(TObject *Sender)
 {
     rbRegistry->Enabled = ckRememberSettings->Checked;
     rbInifile->Enabled = ckRememberSettings->Checked;

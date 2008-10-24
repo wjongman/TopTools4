@@ -208,6 +208,7 @@ void __fastcall TScreenForm::OnTimerTick(TObject *Sender)
     }
     else
     {
+        // todo: Initially flash borders until mouseclick
         m_Timer->Enabled = false;
     }
 }

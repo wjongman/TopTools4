@@ -26,7 +26,7 @@ public:
     }
 
     //-------------------------------------------------------------------------
-    TOption(String sValue)
+    TOption(const String& sValue)
     {
         IntVal = StrToIntDef(sValue, 0);
         StringVal = sValue;

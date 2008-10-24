@@ -122,15 +122,28 @@ public:
             }
         }
 
-        switch (m_RunMode)
+        if (m_RunMode == rmIniFile)
         {
-        case rmIniFile:
             LoadFromIniFile();
-            break;
-        case rmRegistry:
-            LoadFromRegistry();
-            break;
         }
+        else if (m_RunMode == rmRegistry)
+        {
+            LoadFromRegistry();
+        }
+        else
+        {
+            // Do nothing.
+        }
+
+//         switch (m_RunMode)
+//         {
+//         case rmIniFile:
+//             LoadFromIniFile();
+//             break;
+//         case rmRegistry:
+//             LoadFromRegistry();
+//             break;
+//         }
     }
 
     /*/-------------------------------------------------------------------------
@@ -198,7 +211,7 @@ public:
     }
 
     //-------------------------------------------------------------------------
-    void Set(const String& ToolName, const String& OptionName, String sOption)
+    void Set(const String& ToolName, const String& OptionName, const String& sOption)
     {
         TOption Option(sOption);
         SetOption(ToolName, OptionName, Option);
@@ -465,7 +478,7 @@ public:
 
     bool ProgramDirIsWriteable()
     {
-        // See if program directory is accessable
+        // See if program directory is accessable (by using the CreateFile API).
         String FilePath = ExtractFilePath(ParamStr(0));
 
          HANDLE hFile = 0;

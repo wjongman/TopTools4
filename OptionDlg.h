@@ -108,7 +108,7 @@ private:  // User declarations
 
 public:   // User declarations
     __fastcall TToolOptionsDialog(TComponent* Owner);
-    __fastcall TToolOptionsDialog(TComponent* Owner, const String& PageName);
+    __fastcall TToolOptionsDialog(TComponent* Owner, const String& sPageName);
     __fastcall ~TToolOptionsDialog();
 };
 //---------------------------------------------------------------------------
