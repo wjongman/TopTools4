@@ -8,6 +8,10 @@
 #include "ToolOptions.h"
 #include "QuerySaveDlg.h"
 
+// Suppress W8027:
+// Functions containing ‘[statement]’ are not expanded inline
+#pragma warn -inl
+
 /////////////////////////////////////////////////////////////////////////////
 enum TRunMode
 {
@@ -226,13 +230,14 @@ public:
 
 private:
     //-------------------------------------------------------------------------
-    TOption GetOrCreateOption(const String& ToolName, const String& OptionName, TOption Default)
+    TOption GetOrCreateOption(const String& ToolName, const String& OptionName, const TOption& Default)
     {
         // m_OptionMaps is a map of maps of name-value pairs ;-)
         option_map_iterator map_iter = m_OptionMaps.find(ToolName);
         if (map_iter == m_OptionMaps.end())
         {
-            // No map-entry for this tool yet, add one
+            // No map-entry for this tool yet, add a tool of this
+            // name and initialize option by this name to default.
             TOptionMap OptionMap;
             OptionMap[OptionName] = Default;
             m_OptionMaps[ToolName] = OptionMap;
@@ -481,22 +486,54 @@ public:
         // See if program directory is accessable (by using the CreateFile API).
         String FilePath = ExtractFilePath(ParamStr(0));
 
-         HANDLE hFile = 0;
-         hFile = CreateFile(FilePath.c_str(),
-                 GENERIC_READ | GENERIC_WRITE,
-                 FILE_SHARE_READ | FILE_SHARE_WRITE,     // share for reading and writing
-                 NULL,                                   // no security
-                 OPEN_EXISTING,                          // existing file only
-                 FILE_ATTRIBUTE_NORMAL | FILE_FLAG_BACKUP_SEMANTICS,
-                 NULL);                                  // no attr. template
+        HANDLE hFile = 0;
+        hFile = CreateFile(FilePath.c_str(),
+                           GENERIC_READ | GENERIC_WRITE,
+                           FILE_SHARE_READ | FILE_SHARE_WRITE,     // share for reading and writing
+                           NULL,                                   // no security
+                           OPEN_EXISTING,                          // existing file only
+                           FILE_ATTRIBUTE_NORMAL | FILE_FLAG_BACKUP_SEMANTICS,
+                           NULL);                                  // no attr. template
 
-         if (hFile == INVALID_HANDLE_VALUE)
-         {
-             return false;
-         }
-         CloseHandle(hFile);
+        if (hFile == INVALID_HANDLE_VALUE)
+        {
+            return false;
+        }
+        CloseHandle(hFile);
 
-         return true;
+        return true;
+    }
+/*
+    bool ProgramDirIsWriteable()
+    {
+        // See if program directory is accessable
+        String sProgDir = ExtractFilePath(ParamStr(0));
+
+        return DirectoryIsWriteable(sProgDir);
+    }
+*/
+    bool DirectoryIsWriteable(const String& sDirectoryName)
+    {
+        // Test if directory is accessable by using the CreateFile API.
+        String sTestFilePath = sDirectoryName; // + "\\testfile";
+
+        HANDLE hTestFile = NULL;
+        hTestFile = CreateFile(sTestFilePath.c_str(),
+                               GENERIC_READ | GENERIC_WRITE,
+                               FILE_SHARE_READ | FILE_SHARE_WRITE,     // share for reading and writing
+                               NULL,                                   // no security
+                               OPEN_EXISTING,                          // existing file only
+                               FILE_ATTRIBUTE_NORMAL | FILE_FLAG_BACKUP_SEMANTICS,
+                               NULL);                                  // no attr. template
+
+        if (hTestFile == INVALID_HANDLE_VALUE)
+        {
+            return false;
+        }
+
+        CloseHandle(hTestFile);
+
+        return true;
     }
 
 /*
