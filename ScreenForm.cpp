@@ -26,6 +26,8 @@ __fastcall TScreenForm::TScreenForm(TComponent* Owner)
     Cursor = crSizeAll;
     FSticky = false;
 
+    Left = g_ToolOptions.Get(m_ToolName, "left", Left);
+    Top = g_ToolOptions.Get(m_ToolName, "top", Top);
     Width = g_ToolOptions.Get(m_ToolName, "width", Width);
     Height = g_ToolOptions.Get(m_ToolName, "height", Height);
 
@@ -38,6 +40,8 @@ __fastcall TScreenForm::TScreenForm(TComponent* Owner)
 //---------------------------------------------------------------------------
 __fastcall TScreenForm::~TScreenForm()
 {
+    g_ToolOptions.Set(m_ToolName, "left", Left);
+    g_ToolOptions.Set(m_ToolName, "top", Top);
     g_ToolOptions.Set(m_ToolName, "width", Width);
     g_ToolOptions.Set(m_ToolName, "height", Height);
 
