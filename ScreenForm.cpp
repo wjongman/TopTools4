@@ -58,47 +58,25 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
     case WM_KEYDOWN:
         // Default action is to move the form
         bool resize = false;
+
         // Resize form when control key is down
-        if (::GetKeyState(VK_CONTROL) &0x8000)
+        if (::GetKeyState(VK_CONTROL) & 0x8000)
             resize = true;
 
         // Default increment is 1
         int delta = 1;
+
         // Increment is 10 when shift key is down
-        if (::GetKeyState(VK_SHIFT) &0x8000)
+        if (::GetKeyState(VK_SHIFT) & 0x8000)
             delta = 10;
 
         switch (Message.WParam)
         {
-        case VK_LEFT:
-            if (resize)
-                Width -= delta;
-            else
-                Left -= delta;
-            break;
-
-        case VK_RIGHT:
-            if (resize)
-                Width += delta;
-            else
-                Left += delta;
-            break;
-
-        case VK_UP:
-            if (resize)
-                Height -= delta;
-            else
-                Top -= delta;
-            break;
-
-        case VK_DOWN:
-            if (resize)
-                Height += delta;
-            else
-                Top += delta;
-            break;
+        case VK_LEFT:  resize ? Width -= delta : Left -= delta; return; //break;
+        case VK_RIGHT: resize ? Width += delta : Left += delta; return; //break;
+        case VK_UP:    resize ? Height -= delta : Top -= delta; return; //break;
+        case VK_DOWN:  resize ? Height += delta : Top += delta; return; //break;
         }
-
     }
 
     // Resume normal processing
