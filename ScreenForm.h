@@ -46,7 +46,7 @@ protected:
   DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
   DYNAMIC void __fastcall MouseDown(TMouseButton Button,
                                     Classes::TShiftState Shift, int X, int Y);
-#define WITH_WINPROC 0
+#define WITH_WINPROC 1
 #if WITH_WINPROC
   virtual void __fastcall WndProc(TMessage &Msg);
 #endif
@@ -64,8 +64,6 @@ __published:  // IDE-managed Components
     void __fastcall FormResize(TObject *Sender);
     void __fastcall FormShow(TObject *Sender);
     void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
-    void __fastcall FormKeyDown(TObject *Sender, WORD &Key,
-          TShiftState Shift);
 
 __published:
   __property TMouseEvent OnRightButtonClick = { read = FOnRightButtonClick, write = FOnRightButtonClick };

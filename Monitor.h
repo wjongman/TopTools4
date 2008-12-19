@@ -21,6 +21,7 @@
 #define MONITOR_AREA     0x0000        // use monitor entire area
 
 void ClipOrCenterRectToMonitor(LPRECT prc, UINT flags);
+void ClipOrCenterRectToMonitor2(LPRECT prc, UINT flags);
 LPRECT ConstrainBounds(LPRECT prc);
 void CenterWindowToMonitor(HWND hwnd);
 void ClipWindowToMonitor(HWND hwnd);

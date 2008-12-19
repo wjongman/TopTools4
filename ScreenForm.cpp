@@ -49,6 +49,103 @@ __fastcall TScreenForm::~TScreenForm()
 
 }
 
+#if WITH_WINPROC
+//---------------------------------------------------------------------------
+void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
+{
+    switch (Message.Msg)
+    {
+    case WM_KEYDOWN:
+        // Default action is to move the form
+        bool resize = false;
+        // Resize form when control key is down
+        if (::GetKeyState(VK_CONTROL) &0x8000)
+            resize = true;
+
+        // Default increment is 1
+        int delta = 1;
+        // Increment is 10 when shift key is down
+        if (::GetKeyState(VK_SHIFT) &0x8000)
+            delta = 10;
+
+        switch (Message.WParam)
+        {
+        case VK_LEFT:
+            if (resize)
+                Width -= delta;
+            else
+                Left -= delta;
+            break;
+
+        case VK_RIGHT:
+            if (resize)
+                Width += delta;
+            else
+                Left += delta;
+            break;
+
+        case VK_UP:
+            if (resize)
+                Height -= delta;
+            else
+                Top -= delta;
+            break;
+
+        case VK_DOWN:
+            if (resize)
+                Height += delta;
+            else
+                Top += delta;
+            break;
+        }
+
+    }
+
+    // Resume normal processing
+    TToolForm::WndProc(Message);
+}
+#endif
+
+//---------------------------------------------------------------------------
+void __fastcall TScreenForm::FormShow(TObject *Sender)
+{
+//    FSticky = !g_ToolOptions.Get("capture", "rememberpos", false));
+
+    if (FSticky)
+    {
+        // Show with form center below mouse
+        TPoint ptMouse;
+        GetCursorPos(&ptMouse);
+
+        TRect rcClient = GetClientRect();
+        int CenterX = rcClient.Width() / 2;
+        int CenterY = rcClient.Height() / 2;
+
+        Left = ptMouse.x - CenterX;
+        Top = ptMouse.y - CenterY;
+
+        POINT pt = ScreenToClient(ptMouse);
+        m_MouseOldX = pt.x;
+        m_MouseOldY = pt.y;
+    }
+#ifdef _DEBUG
+//    m_hwndTooltip = CreateTrackingToolTip();
+#endif
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TScreenForm::FormCloseQuery(TObject *Sender,
+                                            bool &CanClose)
+{
+    if (m_hwndTooltip)
+    {
+        SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, (WPARAM)false, (LPARAM)&m_ToolInfo);
+        m_TrackingMouse = false;
+
+    }
+    CanClose = true;
+}
+
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::MouseDown(TMouseButton Button,
                                        TShiftState Shift, int X, int Y)
@@ -124,7 +221,7 @@ void __fastcall TScreenForm::MouseMove(TShiftState Shift, int X, int Y)
             // Set the tooltip position.
             // Tooltip shows above left-top of window unless it is
             // off-screen, in which case we position it at the screen edge
-            POINT pt = { Left, Top - tipsize.cy};
+            POINT pt = { Left, Top - tipsize.cy - 1};
 
             // Stay on screen
             if (Left < 0)
@@ -138,7 +235,7 @@ void __fastcall TScreenForm::MouseMove(TShiftState Shift, int X, int Y)
 
             if (Top < tipsize.cy)
             {
-                pt.y = Top + Height - 1;
+                pt.y = Top + Height;
             }
 
             ::SendMessage(m_hwndTooltip, TTM_TRACKPOSITION,
@@ -385,57 +482,5 @@ void __fastcall TScreenForm::FormPaint(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TScreenForm::FormShow(TObject *Sender)
-{
-//    FSticky = !g_ToolOptions.Get("capture", "rememberpos", false));
 
-    if (FSticky)
-    {
-        // Show with form center below mouse
-        TPoint ptMouse;
-        GetCursorPos(&ptMouse);
-
-        TRect rcClient = GetClientRect();
-        int CenterX = rcClient.Width() / 2;
-        int CenterY = rcClient.Height() / 2;
-
-        Left = ptMouse.x - CenterX;
-        Top = ptMouse.y - CenterY;
-
-        POINT pt = ScreenToClient(ptMouse);
-        m_MouseOldX = pt.x;
-        m_MouseOldY = pt.y;
-
-        m_hwndTooltip = CreateTrackingToolTip();
-    }
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TScreenForm::FormCloseQuery(TObject *Sender,
-                                            bool &CanClose)
-{
-    if (m_hwndTooltip)
-    {
-        SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, (WPARAM)false, (LPARAM)&m_ToolInfo);
-        m_TrackingMouse = false;
-
-    }
-    CanClose = true;
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TScreenForm::FormKeyDown(TObject *Sender, WORD &Key,
-                                         TShiftState Shift)
-{
-    switch (Key)
-    {
-    case VK_LEFT:     // Arrow keys move the window (cursor)
-    case VK_RIGHT:
-    case VK_UP:
-    case VK_DOWN:
-        break;
-    }
-
-}
-//---------------------------------------------------------------------------
 

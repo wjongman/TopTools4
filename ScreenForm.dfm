@@ -18,7 +18,6 @@ object ScreenForm: TScreenForm
   Font.Style = []
   OldCreateOrder = False
   OnCloseQuery = FormCloseQuery
-  OnKeyDown = FormKeyDown
   OnPaint = FormPaint
   OnResize = FormResize
   OnShow = FormShow

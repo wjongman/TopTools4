@@ -25,6 +25,44 @@
 //  MONITOR_WORKAREA 0x0002        // use monitor work area
 //  MONITOR_AREA     0x0000        // use monitor entire area
 
+void ClipOrCenterRectToMonitor2(LPRECT prc, UINT flags)
+{
+  HMONITOR hMonitor;
+  MONITORINFO mi;
+  RECT        rc;
+  int         w = prc->right  - prc->left;
+  int         h = prc->bottom - prc->top;
+
+  // Get the nearest monitor to the passed rect.
+  hMonitor = MonitorFromRect(prc, MONITOR_DEFAULTTONEAREST);
+
+  // Get the work area or entire monitor rect.
+  mi.cbSize = sizeof(mi);
+  GetMonitorInfo(hMonitor, &mi);
+
+  if (flags & MONITOR_WORKAREA)
+    rc = mi.rcWork;
+  else
+    rc = mi.rcMonitor;
+
+  // Center or clip the passed rect to the monitor rect
+  if (flags & MONITOR_CENTER)
+  {
+    prc->left   = rc.left + (rc.right  - rc.left - w) / 2;
+    prc->top    = rc.top  + (rc.bottom - rc.top  - h) / 2;
+    prc->right  = prc->left + w;
+    prc->bottom = prc->top  + h;
+  }
+  else
+  {
+    prc->left   = max(rc.left, min(rc.right-w,  prc->left));
+    prc->top    = max(rc.top,  min(rc.bottom-h, prc->top));
+    prc->right  = prc->left + w;
+    prc->bottom = prc->top  + h;
+  }
+}
+
+//---------------------------------------------------------------------------
 void ClipOrCenterRectToMonitor(LPRECT prcGiven, UINT flags)
 {
     // Get the nearest monitor to the passed rect.
@@ -73,26 +111,26 @@ void ClipOrCenterRectToMonitor(LPRECT prcGiven, UINT flags)
 //---------------------------------------------------------------------------
 LPRECT ConstrainBounds(LPRECT prc)
 {
-    ClipOrCenterRectToMonitor(prc, MONITOR_CLIP | MONITOR_WORKAREA);
-    return prc;
+  ClipOrCenterRectToMonitor(prc, MONITOR_CLIP | MONITOR_WORKAREA);
+  return prc;
 }
 
 //---------------------------------------------------------------------------
 void CenterWindowToMonitor(HWND hwnd)
 {
-    RECT rc;
-    GetWindowRect(hwnd, &rc);
-    ClipOrCenterRectToMonitor(&rc, MONITOR_CENTER | MONITOR_WORKAREA);
-    SetWindowPos(hwnd, NULL, rc.left, rc.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+  RECT rc;
+  GetWindowRect(hwnd, &rc);
+  ClipOrCenterRectToMonitor(&rc, MONITOR_CENTER | MONITOR_WORKAREA);
+  SetWindowPos(hwnd, NULL, rc.left, rc.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
 //---------------------------------------------------------------------------
 void ClipWindowToMonitor(HWND hwnd)
 {
-    RECT rc;
-    GetWindowRect(hwnd, &rc);
-    ClipOrCenterRectToMonitor(&rc, MONITOR_CLIP | MONITOR_WORKAREA);
-    SetWindowPos(hwnd, NULL, rc.left, rc.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+  RECT rc;
+  GetWindowRect(hwnd, &rc);
+  ClipOrCenterRectToMonitor(&rc, MONITOR_CLIP | MONITOR_WORKAREA);
+  SetWindowPos(hwnd, NULL, rc.left, rc.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
 

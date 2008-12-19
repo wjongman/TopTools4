@@ -9,7 +9,7 @@ MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
 DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
-PROJECTS = gif.lib png.lib TopTools4.exe ColorTest.exe
+PROJECTS = gif.lib png.lib TopTools4.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -23,10 +23,6 @@ png.lib: png\png.bpr
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 
 TopTools4.exe: TopTools4.bpr
-  $(ROOT)\bin\bpr2mak $**
-  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
-
-ColorTest.exe: ..\Assistant\SelectColors\ColorTest.bpr
   $(ROOT)\bin\bpr2mak $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 
