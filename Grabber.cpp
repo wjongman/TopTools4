@@ -415,12 +415,43 @@ void __fastcall TScreenGrabber::AutoSaveToFile()
 }
 
 //---------------------------------------------------------------------------
+typedef HRESULT (CALLBACK * pfDwmIsCompositionEnabled)(BOOL *pfEnabled);
+bool IsCompositionEnabled()
+{
+    // Detect Aero
+    bool result = false;
+
+    HMODULE library = ::LoadLibrary("dwmapi.dll");
+    if (library)
+    {
+        pfDwmIsCompositionEnabled fIsEnabled;
+        fIsEnabled = (pfDwmIsCompositionEnabled)::GetProcAddress(library, "DwmIsCompositionEnabled");
+        if (fIsEnabled)
+        {
+            BOOL enabled = FALSE;
+            result = SUCCEEDED(fIsEnabled(&enabled)) && enabled;
+        }
+        ::FreeLibrary(library);
+    }
+
+    return result;
+}
+
+
+
+//---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::GetDesktopArea()
 {
     GetWindowRect(Handle, &m_rcSelect);
-    Hide();  // we are transparent but under Aero we are visible
+    if (IsCompositionEnabled())
+    {
+        Hide();  // we are transparent but under Aero we are visible
+    }
     GetDesktopArea(&m_rcSelect);
-    Show();
+    if (IsCompositionEnabled())
+    {
+        Show();
+    }
 }
 
 //---------------------------------------------------------------------------
