@@ -1,12 +1,12 @@
 ; todo: check to see if program is currently running and offer to terminate it...
 [Setup]
-AppName=TopTools 4 beta 3
-AppVerName=TopTools version 4.0.0.34
-AppVersion=4.0.0.34
-AppCopyright=Copyright © 1997-2008 Willem Jongman.
+AppName=TopTools 4 beta 4
+AppVerName=TopTools version 4.0.0.40
+AppVersion=4.0.0.40
+AppCopyright=Copyright © 1997-2009 Willem Jongman.
 AppId=TopTools_4
 DefaultDirName={pf}\TopTools 4
-OutputBaseFilename=Setup_TopTools4_beta_3
+OutputBaseFilename=Setup_TopTools4_beta_4
 
 DisableReadyMemo=no
 DisableReadyPage=no

@@ -387,34 +387,10 @@ void __fastcall TScreenGrabber::ViewerKeyPress(TObject *Sender, char &Key)
 void __fastcall TScreenGrabber::AutoSaveToFile()
 {
     m_AutoSaver.SaveBitmap(m_pBufferBmp);
-/*
-    m_AutoSaver.LoadOptions();
-
-    // First check if the target directory exists
-    if (!DirectoryExists(m_AutoSaver.Directory))
-    {
-        // todo: offer to change or create directory here..
-        // todo: stuff all static strings in a resource file
-        String sMsg = "Your autosave settings refer to a directory that doesn't exist: \n\n";
-        ShowMessage(sMsg + m_AutoSaver.Directory);
-        return;
-    }
-
-    // Find first available filename (might be slow on huge directories..)
-    while (FileExists(m_AutoSaver.GetFullPathName()))
-    {
-        m_AutoSaver.IncrementNextValue();
-    }
-
-    TPersistImage image(m_pBufferBmp);
-    image.Save(m_AutoSaver.GetFullPathName());
-
-    m_AutoSaver.IncrementNextValue();
-    m_AutoSaver.SaveOptions();
-*/
 }
 
 //---------------------------------------------------------------------------
+// Version independent way of checking if Aero is active
 typedef HRESULT (CALLBACK * pfDwmIsCompositionEnabled)(BOOL *pfEnabled);
 bool IsCompositionEnabled()
 {
@@ -437,21 +413,28 @@ bool IsCompositionEnabled()
     return result;
 }
 
-
-
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::GetDesktopArea()
 {
+    // todo: Cache result of IsCompositionEnabled() and
+    // implement handling the 
+    bool AeroActive = IsCompositionEnabled();
+
+    if (AeroActive)
+    {
+        // We are transparent but under Aero we are visible so
+        // we need to hide.
+        // However when Aero is not active, hiding our window
+        // forces a redraw of the underlying window and causes
+        // GetDesktopArea() to fetch incomplete screen-grabs.
+        Hide();
+    }
+
     GetWindowRect(Handle, &m_rcSelect);
-    if (IsCompositionEnabled())
-    {
-        Hide();  // we are transparent but under Aero we are visible
-    }
     GetDesktopArea(&m_rcSelect);
-    if (IsCompositionEnabled())
-    {
+
+    if (AeroActive)
         Show();
-    }
 }
 
 //---------------------------------------------------------------------------
