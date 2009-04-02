@@ -49,16 +49,11 @@ __fastcall TScreenForm::~TScreenForm()
 
 }
 
-#if WITH_WINPROC
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
 {
     switch (Message.Msg)
     {
-//    case WM_NCHITTEST:
-//        OnNCHitTest(Message);
-//        break;
-
     case WM_KEYDOWN:
 
         // Default action is to move the form
@@ -89,13 +84,10 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
     // Resume normal processing
     TToolForm::WndProc(Message);
 }
-#endif
 
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::FormShow(TObject *Sender)
 {
-//    FSticky = !g_ToolOptions.Get("capture", "rememberpos", false));
-
     if (FSticky)
     {
         // Show with form center below mouse
@@ -113,13 +105,13 @@ void __fastcall TScreenForm::FormShow(TObject *Sender)
         m_MouseOldX = pt.x;
         m_MouseOldY = pt.y;
     }
-#ifdef _DEBUG
+
     m_hwndTooltip = CreateTrackingToolTip();
 
     // Activate the ToolTip.
     ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, (WPARAM)true, (LPARAM)&m_ToolInfo);
+
     UpdateToolTip();
-#endif
 }
 
 //---------------------------------------------------------------------------
@@ -145,8 +137,6 @@ void __fastcall TScreenForm::MouseDown(TMouseButton Button,
     if (Button == mbLeft)
     {
         // Left button down, start a drag-operation.
-        // todo: allow for moving and sizing with the arrow keys
-        // todo: show tooltip that indicates position and size of selection
         // todo: show a zoomed closeup of the target area
         m_MouseOldX = X;
         m_MouseOldY = Y;
@@ -310,7 +300,6 @@ void __fastcall TScreenForm::OnTimerTick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-//void __fastcall TScreenForm::OnNCHitTest(TMessage &Message)
 void __fastcall TScreenForm::OnNCHitTest(TWMNCHitTest &Message)
 {
     // Make our borders behave as resize area
@@ -318,10 +307,6 @@ void __fastcall TScreenForm::OnNCHitTest(TWMNCHitTest &Message)
 
     if (Message.Result == HTCLIENT)
     {
-//        int xPos = LOWORD(Message.LParam);  // horizontal position of cursor
-//        int yPos = HIWORD(Message.LParam);  // vertical position of cursor
-//        POINT pt = ScreenToClient(Point(xPos, yPos));
-
         // Make maximum space for showing resize
         // cursors proportional to window dimensions.
         // Minimum space is 4 (for now).

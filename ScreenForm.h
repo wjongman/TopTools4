@@ -33,11 +33,8 @@ private:
     TOOLINFO m_ToolInfo;
 
     bool InitCalled;
-//  void InitTooltip(String sText);
-//  TToolTipForm* m_ToolTip;
     TTimer* m_Timer;
 
-//  void __fastcall UpdateInfoLabel();
     void UpdateToolTip();
     HWND CreateTrackingToolTip();
     String FInfoText;
@@ -47,10 +44,9 @@ protected:
     DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
     DYNAMIC void __fastcall MouseDown(TMouseButton Button,
                                       Classes::TShiftState Shift, int X, int Y);
-#define WITH_WINPROC 1
-#if WITH_WINPROC
+
     virtual void __fastcall WndProc(TMessage &Msg);
-#endif
+
     void __fastcall OnTimerTick(TObject *Sender);
 
 BEGIN_MESSAGE_MAP
@@ -58,8 +54,6 @@ BEGIN_MESSAGE_MAP
 END_MESSAGE_MAP(TForm)
 
     void __fastcall OnNCHitTest(TWMNCHitTest &Message);
-//    void __fastcall OnNCHitTest(TMessage &Message);
-
 
 __published:  // IDE-managed Components
     void __fastcall FormPaint(TObject *Sender);
