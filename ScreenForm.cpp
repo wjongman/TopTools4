@@ -55,7 +55,12 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
 {
     switch (Message.Msg)
     {
+//    case WM_NCHITTEST:
+//        OnNCHitTest(Message);
+//        break;
+
     case WM_KEYDOWN:
+
         // Default action is to move the form
         bool resize = false;
 
@@ -72,10 +77,12 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
 
         switch (Message.WParam)
         {
-        case VK_LEFT:  resize ? Width -= delta : Left -= delta; return; //break;
-        case VK_RIGHT: resize ? Width += delta : Left += delta; return; //break;
-        case VK_UP:    resize ? Height -= delta : Top -= delta; return; //break;
-        case VK_DOWN:  resize ? Height += delta : Top += delta; return; //break;
+        case VK_LEFT:  resize ? Width -= delta : Left -= delta; UpdateToolTip(); return;
+        case VK_RIGHT: resize ? Width += delta : Left += delta; UpdateToolTip(); return;
+        case VK_UP:    resize ? Height -= delta : Top -= delta; UpdateToolTip(); return;
+        case VK_DOWN:  resize ? Height += delta : Top += delta; UpdateToolTip(); return;
+
+        case VK_ESCAPE: Close(); return;
         }
     }
 
@@ -107,7 +114,11 @@ void __fastcall TScreenForm::FormShow(TObject *Sender)
         m_MouseOldY = pt.y;
     }
 #ifdef _DEBUG
-//    m_hwndTooltip = CreateTrackingToolTip();
+    m_hwndTooltip = CreateTrackingToolTip();
+
+    // Activate the ToolTip.
+    ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, (WPARAM)true, (LPARAM)&m_ToolInfo);
+    UpdateToolTip();
 #endif
 }
 
@@ -156,7 +167,7 @@ void __fastcall TScreenForm::MouseMove(TShiftState Shift, int X, int Y)
         Left += X - m_MouseOldX;
         Top  += Y - m_MouseOldY;
 
-        UpdateInfoLabel();
+        UpdateToolTip();
     }
 
     if (!m_TrackingMouse)
@@ -182,42 +193,7 @@ void __fastcall TScreenForm::MouseMove(TShiftState Shift, int X, int Y)
 
         if (m_hwndTooltip)
         {
-            // Update tooltip position and text.
-            String sCoords;
-            sCoords.printf("X: %d  Y: %d  W: %d  H: %d", Left, Top, Width, Height);
-
-            // Calculate the space required for our tooltip
-            SIZE tipsize;
-            HDC dcTooltip = ::GetDC(m_hwndTooltip);
-            ::GetTextExtentPoint32(dcTooltip, sCoords.c_str(), sCoords.Length(), &tipsize);
-            ::ReleaseDC(m_hwndTooltip, dcTooltip);
-
-            // Set the tooltip text
-            m_ToolInfo.lpszText = sCoords.c_str();
-            ::SendMessage(m_hwndTooltip, TTM_SETTOOLINFO, 0, (LPARAM)&m_ToolInfo);
-
-            // Set the tooltip position.
-            // Tooltip shows above left-top of window unless it is
-            // off-screen, in which case we position it at the screen edge
-            POINT pt = { Left, Top - tipsize.cy - 1};
-
-            // Stay on screen
-            if (Left < 0)
-            {
-                pt.x = 0;
-            }
-            if (Left > Screen->DesktopWidth - tipsize.cx)
-            {
-                pt.x = Screen->DesktopWidth - tipsize.cx;
-            }
-
-            if (Top < tipsize.cy)
-            {
-                pt.y = Top + Height;
-            }
-
-            ::SendMessage(m_hwndTooltip, TTM_TRACKPOSITION,
-                          0, (LPARAM)MAKELONG(pt.x, pt.y));
+            UpdateToolTip();
         }
     }
 }
@@ -252,6 +228,47 @@ HWND TScreenForm::CreateTrackingToolTip()
     ::SendMessage(hwndToolTip, TTM_ADDTOOL, 0, (LPARAM) (LPTOOLINFO) &m_ToolInfo);
 
     return hwndToolTip;
+}
+
+//---------------------------------------------------------------------------
+void TScreenForm::UpdateToolTip()
+{
+    // Update tooltip position and text.
+    String sCoords;
+    sCoords.printf("X: %d  Y: %d  W: %d  H: %d", Left, Top, Width, Height);
+
+    // Calculate the space required for our tooltip
+    SIZE tipsize;
+    HDC dcTooltip = ::GetDC(m_hwndTooltip);
+    ::GetTextExtentPoint32(dcTooltip, sCoords.c_str(), sCoords.Length(), &tipsize);
+    ::ReleaseDC(m_hwndTooltip, dcTooltip);
+
+    // Set the tooltip text
+    m_ToolInfo.lpszText = sCoords.c_str();
+    ::SendMessage(m_hwndTooltip, TTM_SETTOOLINFO, 0, (LPARAM)&m_ToolInfo);
+
+    // Set the tooltip position.
+    // Tooltip shows above left-top of window unless it is
+    // off-screen, in which case we position it at the screen edge
+    POINT pt = { Left, Top - tipsize.cy - 1};
+
+    // Stay on screen
+    if (Left < 0)
+    {
+        pt.x = 0;
+    }
+    if (Left > Screen->DesktopWidth - tipsize.cx)
+    {
+        pt.x = Screen->DesktopWidth - tipsize.cx;
+    }
+
+    if (Top < tipsize.cy)
+    {
+        pt.y = Top + Height;
+    }
+
+    ::SendMessage(m_hwndTooltip, TTM_TRACKPOSITION,
+                  0, (LPARAM)MAKELONG(pt.x, pt.y));
 }
 
 //---------------------------------------------------------------------------
@@ -293,6 +310,7 @@ void __fastcall TScreenForm::OnTimerTick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
+//void __fastcall TScreenForm::OnNCHitTest(TMessage &Message)
 void __fastcall TScreenForm::OnNCHitTest(TWMNCHitTest &Message)
 {
     // Make our borders behave as resize area
@@ -300,6 +318,10 @@ void __fastcall TScreenForm::OnNCHitTest(TWMNCHitTest &Message)
 
     if (Message.Result == HTCLIENT)
     {
+//        int xPos = LOWORD(Message.LParam);  // horizontal position of cursor
+//        int yPos = HIWORD(Message.LParam);  // vertical position of cursor
+//        POINT pt = ScreenToClient(Point(xPos, yPos));
+
         // Make maximum space for showing resize
         // cursors proportional to window dimensions.
         // Minimum space is 4 (for now).
@@ -381,23 +403,8 @@ void __fastcall TScreenForm::OnNCHitTest(TWMNCHitTest &Message)
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::FormResize(TObject *Sender)
 {
-    UpdateInfoLabel();
+    UpdateToolTip();
     Invalidate();
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TScreenForm::UpdateInfoLabel()
-{
-    if (m_hwndTooltip)
-    {
-        // Update the tool-tip text.
-        String sCoords;
-        sCoords.printf("X: %d  Y: %d  W: %d  H: %d", Left, Top, Width, Height);
-
-        m_ToolInfo.lpszText = sCoords.c_str();
-
-        ::SendMessage(m_hwndTooltip, TTM_SETTOOLINFO, 0, (LPARAM)&m_ToolInfo);
-    }
 }
 
 #define INC 4

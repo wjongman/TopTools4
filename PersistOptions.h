@@ -27,7 +27,8 @@ enum TDoubleClickOpen
     dcoRuler = 2,
     dcoLoupe = 4,
     dcoInfo = 8,
-    dcoBaseconv = 16
+    dcoBaseconv = 16,
+    dcoGrab = 32
 };
 
 /////////////////////////////////////////////////////////////////////////////

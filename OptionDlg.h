@@ -69,16 +69,15 @@ __published:  // IDE-managed Components
     TGroupBox *gbTrayicon;
     TGroupBox *gbDoubleClick;
     TCheckBox *ckOpenRuler;
-    TCheckBox *ckOpenInfo;
     TCheckBox *ckOpenLoupe;
-    TCheckBox *ckOpenBaseconv;
     TCheckBox *ckOpenToolbar;
-    TCheckBox *ckOptionsDlg;
+    TCheckBox *ckGrabScreen;
     THotkeyPanel *hkpDoubleClick;
     TCheckBox *ckSingleton;
     TRadioButton *rbInifile;
     TRadioButton *rbRegistry;
     TCheckBox *ckRememberPos;
+    TCheckBox *CheckBox4;
 
     void __fastcall FormShow(TObject *Sender);
     void __fastcall lvOptionSelectorChange(TObject *Sender, TListItem *Item, TItemChange Change);

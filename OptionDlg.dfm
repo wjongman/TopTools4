@@ -1,6 +1,6 @@
 object ToolOptionsDialog: TToolOptionsDialog
-  Left = 647
-  Top = 176
+  Left = 601
+  Top = 129
   BorderStyle = bsDialog
   Caption = 'TopTools Options'
   ClientHeight = 806
@@ -490,12 +490,20 @@ object ToolOptionsDialog: TToolOptionsDialog
       Height = 210
       Caption = 'Tray Icon'
       TabOrder = 0
-      object gbDoubleClick: TGroupBox
+      object CheckBox4: TCheckBox
         Left = 16
         Top = 27
+        Width = 232
+        Height = 16
+        Caption = '&Single click toggles '#39'Always on top'#39
+        TabOrder = 2
+      end
+      object gbDoubleClick: TGroupBox
+        Left = 16
+        Top = 58
         Width = 233
-        Height = 105
-        Caption = '&Double-clicking tray icon shows:'
+        Height = 80
+        Caption = '&Double click shows/hides:'
         TabOrder = 0
         object ckOpenRuler: TCheckBox
           Left = 14
@@ -505,29 +513,13 @@ object ToolOptionsDialog: TToolOptionsDialog
           Caption = '&Ruler'
           TabOrder = 0
         end
-        object ckOpenInfo: TCheckBox
+        object ckOpenLoupe: TCheckBox
           Left = 117
           Top = 24
           Width = 100
           Height = 17
-          Caption = '&Info'
-          TabOrder = 1
-        end
-        object ckOpenLoupe: TCheckBox
-          Left = 15
-          Top = 72
-          Width = 100
-          Height = 17
           Caption = '&Loupe'
-          TabOrder = 2
-        end
-        object ckOpenBaseconv: TCheckBox
-          Left = 117
-          Top = 48
-          Width = 100
-          Height = 17
-          Caption = '&Base Converter'
-          TabOrder = 3
+          TabOrder = 1
         end
         object ckOpenToolbar: TCheckBox
           Left = 13
@@ -535,15 +527,15 @@ object ToolOptionsDialog: TToolOptionsDialog
           Width = 100
           Height = 17
           Caption = '&Toolbar'
-          TabOrder = 4
+          TabOrder = 2
         end
-        object ckOptionsDlg: TCheckBox
+        object ckGrabScreen: TCheckBox
           Left = 117
-          Top = 72
+          Top = 48
           Width = 100
           Height = 17
-          Caption = '&Options Dialog'
-          TabOrder = 5
+          Caption = '&Screen-grabber'
+          TabOrder = 3
         end
       end
       object hkpDoubleClick: THotkeyPanel

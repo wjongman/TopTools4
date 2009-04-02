@@ -503,11 +503,14 @@ void TMainForm::RestoreToolState(int opentools)
     if (opentools & dcoLoupe)
         actCommandExecute(actLoupe);
 
-    if (opentools & dcoInfo)
-        actCommandExecute(actInfo);
+//    if (opentools & dcoInfo)
+//        actCommandExecute(actInfo);
 
-    if (opentools & dcoBaseconv)
-        actCommandExecute(actBaseConv);
+//    if (opentools & dcoBaseconv)
+//        actCommandExecute(actBaseConv);
+
+    if (opentools & dcoGrab)
+        actCommandExecute(actCapture);
 }
 
 //---------------------------------------------------------------------------
@@ -517,8 +520,9 @@ int TMainForm::GetToolState()
     return( (GetControlBar()->Visible) * dcoControl +
             (m_pRuler && m_pRuler->Visible) * dcoRuler +
             (m_pLoupe && m_pLoupe->Visible) * dcoLoupe +
-            (m_pInfo && m_pInfo->Visible) * dcoInfo +
-            (m_pBaseConv && m_pBaseConv->Visible) * dcoBaseconv );
+//            (m_pInfo && m_pInfo->Visible) * dcoInfo +
+//            (m_pBaseConv && m_pBaseConv->Visible) * dcoBaseconv );
+            (m_pCapture && m_pCapture->Visible) * dcoGrab);
 }
 
 //---------------------------------------------------------------------------
@@ -836,13 +840,21 @@ void __fastcall TMainForm::actOptionsExecute(TObject *Sender)
         m_HotkeyManager->AssignHotkeys();
 
         if (m_pRuler)
+        {
             m_pRuler->UpdateUI();
+        }
         if (m_pLoupe)
+        {
             m_pLoupe->UpdateSettings();
+        }
         if (m_pBaseConv)
+        {
             m_pBaseConv->UpdateSettings();
+        }
         if (m_pCapture)
+        {
             m_pCapture->UpdateSettings();
+        }
     }
     else
     {
@@ -868,5 +880,6 @@ void __fastcall TMainForm::actExitExecute(TObject *Sender)
 {
     Application->Terminate();
 }
+
 
 

@@ -11,9 +11,9 @@
 #include <ComCtrls.hpp>
 
 #ifdef _DEBUG
-#define TRACE(s) OutputDebugString(s)
+    #define TRACE(s) OutputDebugString(s)
 #else
-#define TRACE(s)
+    #define TRACE(s)
 #endif
 
 #include "tool.h"
@@ -22,41 +22,43 @@
 class TScreenForm : public TToolForm
 {
 public:
-  __fastcall TScreenForm(TComponent* Owner);
-  __fastcall TScreenForm::~TScreenForm();
+    __fastcall TScreenForm(TComponent* Owner);
+    __fastcall TScreenForm::~TScreenForm();
 
 private:
-  int m_MouseOldX;
-  int m_MouseOldY;
-  bool m_TrackingMouse;
-  HWND m_hwndTooltip;
-  TOOLINFO m_ToolInfo;
+    int m_MouseOldX;
+    int m_MouseOldY;
+    bool m_TrackingMouse;
+    HWND m_hwndTooltip;
+    TOOLINFO m_ToolInfo;
 
-  bool InitCalled;
+    bool InitCalled;
 //  void InitTooltip(String sText);
 //  TToolTipForm* m_ToolTip;
-  TTimer* m_Timer;
+    TTimer* m_Timer;
 
-  void __fastcall UpdateInfoLabel();
-  HWND CreateTrackingToolTip();
-  String FInfoText;
+//  void __fastcall UpdateInfoLabel();
+    void UpdateToolTip();
+    HWND CreateTrackingToolTip();
+    String FInfoText;
 
 protected:
-  // This class overrides these two TForm methods
-  DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
-  DYNAMIC void __fastcall MouseDown(TMouseButton Button,
-                                    Classes::TShiftState Shift, int X, int Y);
+    // This class overrides these two TForm methods
+    DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
+    DYNAMIC void __fastcall MouseDown(TMouseButton Button,
+                                      Classes::TShiftState Shift, int X, int Y);
 #define WITH_WINPROC 1
 #if WITH_WINPROC
-  virtual void __fastcall WndProc(TMessage &Msg);
+    virtual void __fastcall WndProc(TMessage &Msg);
 #endif
-  void __fastcall OnTimerTick(TObject *Sender);
+    void __fastcall OnTimerTick(TObject *Sender);
 
-  BEGIN_MESSAGE_MAP
-    VCL_MESSAGE_HANDLER(WM_NCHITTEST, TWMNCHitTest, OnNCHitTest)
-  END_MESSAGE_MAP(TForm)
+BEGIN_MESSAGE_MAP
+   VCL_MESSAGE_HANDLER(WM_NCHITTEST, TWMNCHitTest, OnNCHitTest)
+END_MESSAGE_MAP(TForm)
 
-  void __fastcall OnNCHitTest(TWMNCHitTest &Message);
+    void __fastcall OnNCHitTest(TWMNCHitTest &Message);
+//    void __fastcall OnNCHitTest(TMessage &Message);
 
 
 __published:  // IDE-managed Components
@@ -66,17 +68,20 @@ __published:  // IDE-managed Components
     void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
 
 __published:
-  __property TMouseEvent OnRightButtonClick = { read = FOnRightButtonClick, write = FOnRightButtonClick };
-  __property bool Sticky = { read = FSticky, write = SetSticky };
+    __property TMouseEvent OnRightButtonClick = { read = FOnRightButtonClick, write = FOnRightButtonClick };
+    __property bool Sticky = { read = FSticky, write = SetSticky };
 
 protected:
-  TMouseEvent FOnRightButtonClick;
+    TMouseEvent FOnRightButtonClick;
 
-  bool FSticky;
-  void __fastcall SetSticky(bool sticky);
+    bool FSticky;
+    void __fastcall SetSticky(bool sticky);
 
-  // Override TToolWindow to show up near mouse pointer
-  virtual void __fastcall OnToolShow(TObject *Sender) { FormShow(Sender); }
+    // Override TToolWindow to show up near mouse pointer
+    virtual void __fastcall OnToolShow(TObject *Sender)
+    {
+        FormShow(Sender);
+    }
 };
 
 //---------------------------------------------------------------------------

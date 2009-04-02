@@ -349,7 +349,7 @@ void __fastcall TScreenGrabber::ViewImage(Graphics::TBitmap* pBufferBmp)
     TImageViewer* pImageViewer = m_Viewers.NewViewer(this, m_rcSelect);
     pImageViewer->Bitmap = pBufferBmp;
     pImageViewer->KeyPreview = true;
-    //pImageViewer->OnKeyPress = ViewerKeyPress;
+    pImageViewer->OnKeyPress = ViewerKeyPress;
     pImageViewer->OnClose = ViewerClosed;
 
     pImageViewer->Show();
@@ -363,22 +363,17 @@ void __fastcall TScreenGrabber::ViewerClosed(TObject *Sender, TCloseAction &Acti
     {
         m_Viewers.DeleteViewer(viewer->Id);
     }
-//    Action = caHide;
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::ViewerKeyPress(TObject *Sender, char &Key)
 {
-    // todo: Raises exception !!
     if (Key == VK_ESCAPE)
     {
         TImageViewer* viewer = reinterpret_cast<TImageViewer*>(Sender);
         if (viewer)
         {
-            // Nuke OnClose handler, we don't want to unleash recursive close actions..
-//            viewer->OnClose = NULL;
-            viewer->Close();
-//            m_Viewers.DeleteViewer(viewer->Id);
+            PostMessage(viewer->Handle, WM_CLOSE, 0, 0);
         }
     }
 }

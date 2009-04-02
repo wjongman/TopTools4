@@ -228,8 +228,9 @@ void TToolOptionsDialog::InitOptions()
     ckOpenToolbar->Checked = doubleclickaction & dcoControl;
     ckOpenRuler->Checked = doubleclickaction & dcoRuler;
     ckOpenLoupe->Checked = doubleclickaction & dcoLoupe;
-    ckOpenInfo->Checked = doubleclickaction & dcoInfo;
-    ckOpenBaseconv->Checked = doubleclickaction & dcoBaseconv;
+    ckGrabScreen->Checked = doubleclickaction & dcoGrab;
+    //ckOpenInfo->Checked = doubleclickaction & dcoInfo;
+    //ckOpenBaseconv->Checked = doubleclickaction & dcoBaseconv;
 
     // Ruler
     udLength->Position = (short) g_ToolOptions.Get("ruler", "length", 1024);
@@ -264,8 +265,9 @@ void TToolOptionsDialog::SaveOptions()
     int doubleclickopen = ckOpenToolbar->Checked * dcoControl +
                           ckOpenRuler->Checked * dcoRuler +
                           ckOpenLoupe->Checked * dcoLoupe +
-                          ckOpenInfo->Checked * dcoInfo +
-                          ckOpenBaseconv->Checked * dcoBaseconv;
+                          //ckOpenInfo->Checked * dcoInfo +
+                          //ckOpenBaseconv->Checked * dcoBaseconv +
+                          ckGrabScreen->Checked * dcoGrab;
 
     g_ToolOptions.Set("main", "doubleclick", doubleclickopen);
     g_ToolOptions.Set("main", "autostart", ckAutoStart->Checked);
