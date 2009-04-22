@@ -22,6 +22,7 @@ TAutoSave::TAutoSave()
     ExistAction = 0;
     Bypass = false;
     Continuous = false;
+    AutoSave = false;
 }
 
 //---------------------------------------------------------------------------
