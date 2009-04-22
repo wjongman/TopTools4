@@ -1,4 +1,18 @@
 New in version 4.0
+Portability
+
+TopTools is now "portable" [http://en.wikipedia.org/wiki/Portable_app], although it has always been possible to copy TopTools.exe to a USB-stick and
+run it from there (it doesn't depend on external libraries or frameworks),
+it would save settings in the registry of the host machine, so it broke the Rules of Portable Apps.
+Version 4 saves settings only if you ask it to.
+
+
+Commandline options
+
+-p
+-r
+-i [inifile path]
+
 
 Screengrabber
 Redone capture UI for Vista
@@ -7,10 +21,6 @@ Print suppport
 
 Options
 Added hotkey support for commonly used actions
-
-Portability
-
-TopTools is now fully "portable" [link]
 
 TopTools has always been a native Win32 executable and never needed any additional DLL's or runtime frameworks to do what it does.
 

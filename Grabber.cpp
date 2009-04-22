@@ -28,9 +28,7 @@ __fastcall TScreenGrabber::TScreenGrabber(TComponent* Owner)
 //---------------------------------------------------------------------------
 __fastcall TScreenGrabber::~TScreenGrabber()
 {
-    if (m_CaptureMenu)
-        delete m_CaptureMenu;
-
+    delete m_CaptureMenu;
     delete m_pBufferBmp;
 
     m_AutoSaver.SaveOptions();

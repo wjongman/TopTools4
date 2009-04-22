@@ -19,9 +19,10 @@
 //---------------------------------------------------------------------------
 class TControlForm : public TToolForm
 {
-__published:	// IDE-managed Components
-public:		// User declarations
+__published:  // IDE-managed Components
+public:   // User declarations
   __fastcall TControlForm(TComponent* Owner);
+  virtual __fastcall ~TControlForm();
 
   void __fastcall UpdateFocus();
 //  void __fastcall TimerEvent(const TPoint& ptMouse)
@@ -37,7 +38,7 @@ protected:
   // Overridden to show up near the tray area
   virtual void __fastcall SetDefaultPosition();
 
-private:	// User declarations
+private:  // User declarations
   TTopToolBar* m_toolbar;
 
 };

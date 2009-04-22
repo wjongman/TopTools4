@@ -190,6 +190,7 @@ object ToolOptionsDialog: TToolOptionsDialog
         Height = 17
         Caption = '&Transparent (but invisible for the loupe)'
         TabOrder = 3
+        OnClick = cbTransparentClick
       end
       object edTransparency: TEdit
         Left = 111
@@ -303,7 +304,7 @@ object ToolOptionsDialog: TToolOptionsDialog
         Width = 233
         Height = 57
         Hint = 'Specify attributes to add to the webcolor string.'
-        Caption = 'When copying:'
+        Caption = 'When copying pixel color:'
         ParentShowHint = False
         ShowHint = True
         TabOrder = 1

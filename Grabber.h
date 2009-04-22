@@ -14,7 +14,7 @@ class TScreenGrabber : public TScreenForm
 {
 public:
   __fastcall TScreenGrabber(TComponent* Owner);
-  __fastcall ~TScreenGrabber();
+  virtual __fastcall ~TScreenGrabber();
   void __fastcall UpdateSettings();
 
 private:

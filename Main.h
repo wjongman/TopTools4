@@ -64,12 +64,14 @@ __published:  // IDE-managed Components
   TMenuItem *N1;
   TMenuItem *miExit;
   TTimer *Timer;
+    TImageList *MainIcons;
   void __fastcall HandleTimerEvent(TObject *Sender);
   void __fastcall actExitExecute(TObject *Sender);
   void __fastcall actCommandExecute(TObject *Sender);
   void __fastcall actOptionsExecute(TObject *Sender);
   void __fastcall actAboutExecute(TObject *Sender);
   void __fastcall actCaptureExecute(TObject *Sender);
+    void __fastcall TrayMenuPopup(TObject *Sender);
 
 public:   // User declarations
   __fastcall TMainForm(TComponent* Owner);

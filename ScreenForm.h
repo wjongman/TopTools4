@@ -23,7 +23,7 @@ class TScreenForm : public TToolForm
 {
 public:
     __fastcall TScreenForm(TComponent* Owner);
-    __fastcall TScreenForm::~TScreenForm();
+    virtual __fastcall ~TScreenForm();
 
 private:
     int m_MouseOldX;

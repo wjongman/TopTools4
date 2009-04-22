@@ -30,7 +30,7 @@ __published:
 
 public:   // User declarations
   __fastcall TToolForm(TComponent* Owner, const String& toolname);
-  __fastcall ~TToolForm();
+  virtual __fastcall ~TToolForm();
 
 private:  // User declarations
   void __fastcall CreateParams(TCreateParams &Params);

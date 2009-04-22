@@ -27,6 +27,12 @@ __fastcall TControlForm::TControlForm(TComponent* Owner)
 }
 
 //---------------------------------------------------------------------------
+__fastcall TControlForm::~TControlForm()
+{
+  delete m_toolbar;
+}
+
+  //---------------------------------------------------------------------------
 void __fastcall TControlForm::OnGetFocus()
 {
   m_toolbar->Focussed = true;

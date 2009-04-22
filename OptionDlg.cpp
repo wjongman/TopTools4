@@ -238,6 +238,11 @@ void TToolOptionsDialog::InitOptions()
     udTransparency->Position = (short) g_ToolOptions.Get("ruler", "transparency", 50);
     cbTransparent->Checked = g_ToolOptions.Get("ruler", "transparent", false);
 
+    lbTransparency->Enabled = cbTransparent->Checked;
+    edTransparency->Enabled = cbTransparent->Checked;
+    udTransparency->Enabled = cbTransparent->Checked;
+    lbPercent->Enabled = cbTransparent->Checked;
+
     // Base converter
     ckBinary->Checked = g_ToolOptions.Get("baseconv", "showbinary", true);
 
@@ -368,6 +373,15 @@ void __fastcall TToolOptionsDialog::ckRememberSettingsClick(TObject *Sender)
 {
     rbRegistry->Enabled = ckRememberSettings->Checked;
     rbInifile->Enabled = ckRememberSettings->Checked;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TToolOptionsDialog::cbTransparentClick(TObject *Sender)
+{
+    lbTransparency->Enabled = cbTransparent->Checked;
+    edTransparency->Enabled = cbTransparent->Checked;
+    udTransparency->Enabled = cbTransparent->Checked;
+    lbPercent->Enabled = cbTransparent->Checked;
 }
 
 //---------------------------------------------------------------------------

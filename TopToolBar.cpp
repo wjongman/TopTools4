@@ -177,6 +177,8 @@ __fastcall TTopToolBar::TTopToolBar(TComponent* Owner)
 //---------------------------------------------------------------------------
 __fastcall TTopToolBar::~TTopToolBar()
 {
+  delete m_timer;
+
   for (unsigned int i = 0; i < m_buttons.size(); i++)
     delete m_buttons[i];
 }

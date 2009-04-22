@@ -24,10 +24,7 @@ __fastcall TImageViewer::TImageViewer(TComponent* Owner, int id, const TRect& rc
 //---------------------------------------------------------------------------
 __fastcall TImageViewer::~TImageViewer()
 {
-    if (m_ViewerMenu)
-    {
-        delete m_ViewerMenu;
-    }
+    delete m_ViewerMenu;
 }
 
 //---------------------------------------------------------------------------

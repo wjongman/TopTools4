@@ -7,8 +7,8 @@ public:
   int right;
   int bottom;
 
-  TSnapRect()
-    {}
+//  TSnapRect()
+//    {}
 
   TSnapRect(const TPoint& TL, const TPoint& BR)
     { left=TL.x; top=TL.y; right=BR.x; bottom=BR.y; }

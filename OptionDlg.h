@@ -84,6 +84,7 @@ __published:  // IDE-managed Components
     void __fastcall bnOkClick(TObject *Sender);
     void __fastcall bnAutosaveOptionsClick(TObject *Sender);
     void __fastcall ckRememberSettingsClick(TObject *Sender);
+    void __fastcall cbTransparentClick(TObject *Sender);
 
 private:  // User declarations
     void HideAll();

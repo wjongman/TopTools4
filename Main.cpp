@@ -881,5 +881,21 @@ void __fastcall TMainForm::actExitExecute(TObject *Sender)
     Application->Terminate();
 }
 
+//---------------------------------------------------------------------------
+void __fastcall TMainForm::TrayMenuPopup(TObject *Sender)
+{
+    if (m_UIMode == uiNormal)
+    {
+        PopupMenu->Items->Items[0]->Visible = false;
+        PopupMenu->Items->Items[1]->Visible = false;
+    }
+    else
+    {
+        PopupMenu->Items->Items[0]->Visible = true;
+        PopupMenu->Items->Items[1]->Visible = true;
+    }
 
+}
+
+//---------------------------------------------------------------------------
 
