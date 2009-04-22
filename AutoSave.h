@@ -31,8 +31,7 @@ public:
     int ExistAction;
     bool Bypass;
     bool Continuous;
-    bool AutoSave;
-    //String LastDir;
+    bool Enabled;
 
 private:
     String GetSpecialFolderPath(int FolderSpec);

@@ -254,7 +254,7 @@ void TToolOptionsDialog::InitOptions()
     ckQuotes->Checked = g_ToolOptions.Get("info", "quotes", false);
 
     // Grabber
-    ckAutosave->Checked = g_ToolOptions.Get("capture", "autosave", false);
+    ckAutosave->Checked = g_ToolOptions.Get("capture\\autosave", "enabled", false);
     ckShowLoupeOnGrab->Checked = g_ToolOptions.Get("capture", "showloupe", false);
     ckRememberPos->Checked = g_ToolOptions.Get("capture", "rememberpos", false);
 }
@@ -304,7 +304,7 @@ void TToolOptionsDialog::SaveOptions()
 
     g_ToolOptions.Set("loupe", "refresh", udRefresh->Position);
 
-    g_ToolOptions.Set("capture", "autosave", ckAutosave->Checked);
+    g_ToolOptions.Set("capture\\autosave", "enabled", ckAutosave->Checked);
     g_ToolOptions.Set("capture", "showloupe", ckShowLoupeOnGrab->Checked);
     g_ToolOptions.Set("capture", "rememberpos", ckRememberPos->Checked);
 }

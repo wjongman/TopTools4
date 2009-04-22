@@ -22,7 +22,7 @@ TAutoSave::TAutoSave()
     ExistAction = 0;
     Bypass = false;
     Continuous = false;
-    AutoSave = false;
+    Enabled = false;
 }
 
 //---------------------------------------------------------------------------
@@ -79,6 +79,7 @@ void __fastcall TAutoSave::LoadOptions()
     ExistAction = g_ToolOptions.Get(ToolName, "existaction", ExistAction);
     Bypass = g_ToolOptions.Get(ToolName, "bypassmenu", Bypass);
     Continuous = g_ToolOptions.Get(ToolName, "continuous", Continuous);
+    Enabled = g_ToolOptions.Get(ToolName, "enabled", Enabled);
 }
 
 //---------------------------------------------------------------------------
@@ -94,6 +95,7 @@ void __fastcall TAutoSave::SaveOptions()
     g_ToolOptions.Set(ToolName, "existaction", ExistAction);
     g_ToolOptions.Set(ToolName, "bypassmenu", Bypass);
     g_ToolOptions.Set(ToolName, "continuous", Continuous);
+    g_ToolOptions.Set(ToolName, "enabled", Enabled);
 }
 
 //---------------------------------------------------------------------------

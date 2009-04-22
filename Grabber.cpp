@@ -249,14 +249,14 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Auto Save";
     NewItem->Hint = "AutoSave";
-    NewItem->Enabled = m_AutoSaver.AutoSave;
+    NewItem->Enabled = m_AutoSaver.Enabled;
     m_CaptureMenu->Items->Add(NewItem);
 
     NewItem = new TMenuItem(m_CaptureMenu);
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Auto Save && Grab More";
     NewItem->Hint = "AutoSaveOn";
-    NewItem->Enabled = m_AutoSaver.AutoSave;
+    NewItem->Enabled = m_AutoSaver.Enabled;
     m_CaptureMenu->Items->Add(NewItem);
 
     NewItem = new TMenuItem(m_CaptureMenu);
