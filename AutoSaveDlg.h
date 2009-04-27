@@ -23,8 +23,6 @@ __published:
   TButton *bnBrowseDir;
   TButton *bnCancel;
   TButton *bnOk;
-  TCheckBox *ckByPass;
-  TCheckBox *ckContinuous;
   TComboBox *cbType;
   TEdit *edDigits;
   TEdit *edDirectory;

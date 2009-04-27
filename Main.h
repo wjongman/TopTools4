@@ -71,7 +71,7 @@ __published:  // IDE-managed Components
   void __fastcall actOptionsExecute(TObject *Sender);
   void __fastcall actAboutExecute(TObject *Sender);
   void __fastcall actCaptureExecute(TObject *Sender);
-    void __fastcall TrayMenuPopup(TObject *Sender);
+  void __fastcall TrayMenuPopup(TObject *Sender);
 
 public:   // User declarations
   __fastcall TMainForm(TComponent* Owner);

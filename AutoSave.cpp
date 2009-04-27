@@ -20,9 +20,6 @@ TAutoSave::TAutoSave()
     NextValue = 1;
     ImageType = 1;
     ExistAction = 0;
-    Bypass = false;
-    Continuous = false;
-    Enabled = false;
 }
 
 //---------------------------------------------------------------------------
@@ -77,9 +74,6 @@ void __fastcall TAutoSave::LoadOptions()
     NextValue = g_ToolOptions.Get(ToolName, "nextvalue", NextValue);
     ImageType = g_ToolOptions.Get(ToolName, "imagetype", ImageType);
     ExistAction = g_ToolOptions.Get(ToolName, "existaction", ExistAction);
-    Bypass = g_ToolOptions.Get(ToolName, "bypassmenu", Bypass);
-    Continuous = g_ToolOptions.Get(ToolName, "continuous", Continuous);
-    Enabled = g_ToolOptions.Get(ToolName, "enabled", Enabled);
 }
 
 //---------------------------------------------------------------------------
@@ -93,9 +87,6 @@ void __fastcall TAutoSave::SaveOptions()
     g_ToolOptions.Set(ToolName, "nextvalue", NextValue);
     g_ToolOptions.Set(ToolName, "imagetype", ImageType);
     g_ToolOptions.Set(ToolName, "existaction", ExistAction);
-    g_ToolOptions.Set(ToolName, "bypassmenu", Bypass);
-    g_ToolOptions.Set(ToolName, "continuous", Continuous);
-    g_ToolOptions.Set(ToolName, "enabled", Enabled);
 }
 
 //---------------------------------------------------------------------------

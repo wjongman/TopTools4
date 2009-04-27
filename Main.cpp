@@ -763,7 +763,7 @@ void __fastcall TMainForm::actCaptureExecute(TObject *Sender)
         //m_pCapture->OnCaptureLost = HandleCaptureComplete;
     }
 
-    m_pCapture->Sticky = true;
+//    m_pCapture->Sticky = true;
     m_pCapture->Show();
     //HandleCaptureNext(this);
 

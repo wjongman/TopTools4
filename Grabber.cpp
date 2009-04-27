@@ -41,35 +41,6 @@ void __fastcall TScreenGrabber::UpdateSettings()
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TScreenGrabber::HandleCapture(int X, int Y)
-{
-    if (m_AutoSaver.Bypass)
-    {
-        AutoSaveToFile();
-        if (m_AutoSaver.Continuous)
-        {
-            CaptureNext();
-        }
-        else
-        {
-            EndCapture();
-        }
-    }
-//     else if (m_AutoSaver.Openviewer)
-// //    else if (g_ToolOptions.GetBool("capture\\autosave", "openviewer"))
-//     {
-//         EndCapture();
-//         ViewImage(m_pBufferBmp);
-//     }
-    else
-    {
-        // Ask user what to do with this grabbed bitmap
-        POINT ptAbs = ClientToScreen(Point(X, Y));
-        ShowCaptureMenu(ptAbs.x, ptAbs.y);
-    }
-}
-
-//---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::HandleRightButtonClick(TObject *Sender,
                         TMouseButton Button, TShiftState Shift, int X, int Y)
 {
@@ -215,18 +186,26 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Copy To Clipboard";
     NewItem->Hint = "Copy";
+//    NewItem->ShortCut = ShortCut(Word('C'), TShiftState() << ssCtrl);
+    m_CaptureMenu->Items->Add(NewItem);
+
+    // Separator ------------------------
+    NewItem = new TMenuItem(m_CaptureMenu);
+    NewItem->Caption = "-";
     m_CaptureMenu->Items->Add(NewItem);
 
     NewItem = new TMenuItem(m_CaptureMenu);
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Save To File...";
     NewItem->Hint = "Save";
+//    NewItem->ShortCut = ShortCut(Word('S'), TShiftState() << ssCtrl);
     m_CaptureMenu->Items->Add(NewItem);
 
     NewItem = new TMenuItem(m_CaptureMenu);
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Save && Grab More...";
     NewItem->Hint = "SaveOn";
+//    NewItem->ShortCut = ShortCut(Word('S'), TShiftState() << ssCtrl << ssShift);
     m_CaptureMenu->Items->Add(NewItem);
 
     // Separator ------------------------
@@ -238,6 +217,15 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Print...";
     NewItem->Hint = "Print";
+//    NewItem->ShortCut = ShortCut(Word('P'), TShiftState() << ssCtrl);
+    m_CaptureMenu->Items->Add(NewItem);
+
+    NewItem = new TMenuItem(m_CaptureMenu);
+    NewItem->OnClick = CaptureMenuClick;
+    NewItem->Caption = "Print && Grab More...";
+    NewItem->Hint = "PrintOn";
+//    NewItem->ShortCut = ShortCut(Word('P'), TShiftState() << ssCtrl << ssShift);
+    NewItem->Enabled = false;
     m_CaptureMenu->Items->Add(NewItem);
 
     // Separator ------------------------
@@ -249,14 +237,16 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Auto Save";
     NewItem->Hint = "AutoSave";
-    NewItem->Enabled = m_AutoSaver.Enabled;
+//    NewItem->ShortCut = ShortCut(Word('A'), TShiftState() << ssCtrl);
+    //NewItem->Enabled = m_AutoSaver.Enabled;
     m_CaptureMenu->Items->Add(NewItem);
 
     NewItem = new TMenuItem(m_CaptureMenu);
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Auto Save && Grab More";
     NewItem->Hint = "AutoSaveOn";
-    NewItem->Enabled = m_AutoSaver.Enabled;
+//    NewItem->ShortCut = ShortCut(Word('A'), TShiftState() << ssCtrl << ssShift);
+    //NewItem->Enabled = m_AutoSaver.Enabled;
     m_CaptureMenu->Items->Add(NewItem);
 
     NewItem = new TMenuItem(m_CaptureMenu);

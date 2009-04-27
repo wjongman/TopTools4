@@ -90,6 +90,7 @@ public:
             else if (ParamStr(1) == "-i")
             {
                 m_RunMode = rmIniFile;
+
                 // Optional ParamStr(2) to indicate target inifile
                 if (ParamCount() > 1)
                 {
@@ -97,6 +98,28 @@ public:
                     if (FileExists(IniFilePath))
                     {
                         m_IniFilePath = IniFilePath;
+                    }
+                    else
+                    {
+                        String IniFileDir = ExtractFileDir(IniFilePath);
+                        if (IniFileDir == "")
+                        {
+                            IniFileDir = ExtractFilePath(ParamStr(0));
+                            IniFilePath = IniFileDir + IniFilePath;
+                        }
+
+                        if (TryCreateFile(IniFilePath))
+                        {
+                            m_IniFilePath = IniFilePath;
+                        }
+                        else
+                        {
+                            String sMsg = "Could not create " + IniFilePath
+                                + "\nSettings will not be saved.\n\n";
+
+                            ShowMessage(sMsg);
+                            m_RunMode = rmPortable;
+                        }
                     }
                 }
             }
@@ -515,17 +538,19 @@ public:
         return DirectoryIsWriteable(sProgDir);
     }
 */
-    bool DirectoryIsWriteable(const String& sDirectoryName)
+    bool TryCreateFile(const String& sFilePath)
     {
-        // Test if directory is accessable by using the CreateFile API.
-        String sTestFilePath = sDirectoryName; // + "\\testfile";
+        if (FileExists(sFilePath))
+        {
+            return true;
+        }
 
         HANDLE hTestFile = NULL;
-        hTestFile = CreateFile(sTestFilePath.c_str(),
+        hTestFile = CreateFile(sFilePath.c_str(),
                                GENERIC_READ | GENERIC_WRITE,
                                FILE_SHARE_READ | FILE_SHARE_WRITE,     // share for reading and writing
                                NULL,                                   // no security
-                               OPEN_EXISTING,                          // existing file only
+                               CREATE_NEW,                             // create new file, fail if file already exists
                                FILE_ATTRIBUTE_NORMAL | FILE_FLAG_BACKUP_SEMANTICS,
                                NULL);                                  // no attr. template
 
@@ -535,6 +560,7 @@ public:
         }
 
         CloseHandle(hTestFile);
+        //DeleteFile(sTestFilePath);
 
         return true;
     }

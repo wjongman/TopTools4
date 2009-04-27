@@ -29,9 +29,6 @@ public:
     int NextValue;
     int ImageType;
     int ExistAction;
-    bool Bypass;
-    bool Continuous;
-    bool Enabled;
 
 private:
     String GetSpecialFolderPath(int FolderSpec);

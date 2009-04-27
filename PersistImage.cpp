@@ -237,7 +237,7 @@ void __fastcall TPersistImage::StretchBltBitmap(TCanvas *pCanvas, int iX, int iY
         int iWidth, int iHeight,
         Graphics::TBitmap *pBitmap)
 {
-    char* Buffer = NULL;
+//    char* Buffer = NULL;
     unsigned int HeaderSize = 0, ImageSize = 0;
     GetDIBSizes(pBitmap->Handle, HeaderSize, ImageSize);
     try

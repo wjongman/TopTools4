@@ -25,8 +25,8 @@ void TAutoSaveDialog::LoadOptions()
 {
   autosaver.LoadOptions();
 
-  ckByPass->Checked = autosaver.Bypass;
-  ckContinuous->Checked = autosaver.Continuous;
+//  ckByPass->Checked = autosaver.Bypass;
+//  ckContinuous->Checked = autosaver.Continuous;
   cbType->ItemIndex = autosaver.ImageType;
   edDirectory->Text = autosaver.Directory;
   edPrefix->Text = autosaver.Prefix;
@@ -48,8 +48,8 @@ void TAutoSaveDialog::SaveOptions()
 //---------------------------------------------------------------------
 void TAutoSaveDialog::RefreshOptions()
 {
-  autosaver.Bypass = ckByPass->Checked;
-  autosaver.Continuous = ckContinuous->Checked;
+//  autosaver.Bypass = ckByPass->Checked;
+//  autosaver.Continuous = ckContinuous->Checked;
   autosaver.ImageType = cbType->ItemIndex;
   autosaver.Directory = edDirectory->Text;
   autosaver.Prefix = edPrefix->Text;
@@ -94,7 +94,7 @@ void __fastcall TAutoSaveDialog::edDigitsChange(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TAutoSaveDialog::ckByPassClick(TObject *Sender)
 {
-  ckContinuous->Enabled = ckByPass->Checked;
+//  ckContinuous->Enabled = ckByPass->Checked;
 }
 
 //---------------------------------------------------------------------------
