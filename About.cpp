@@ -49,9 +49,10 @@ void __fastcall TAboutBox::CloseClick(TObject *Sender)
 void __fastcall TAboutBox::FormShow(TObject *Sender)
 {
    lbVersion->Caption = "Version: " + GetVersionString() + "  (" + g_sBuildDate + ")";
+   lbCopy->Caption = GetCopyrightString();
 }
-//---------------------------------------------------------------------------
 
+//---------------------------------------------------------------------------
 String __fastcall TAboutBox::GetVersionString(void)
 {
    DWORD handle;
@@ -74,14 +75,49 @@ String __fastcall TAboutBox::GetVersionString(void)
 }
 
 //---------------------------------------------------------------------------
+String __fastcall TAboutBox::GetCopyrightString(void)
+{
+  return VersionInfo("LegalCopyright");
+  //return "© 1998-2009 Willem Jongman";
+}
 
+//---------------------------------------------------------------------------
 void __fastcall TAboutBox::FormPaint(TObject *Sender)
 {
   // Draw a black border around our form
   Canvas->Brush->Color = clBlack;
   Canvas->FrameRect(ClientRect);
 }
-//---------------------------------------------------------------------------
 
+//---------------------------------------------------------------------------
+String __fastcall TAboutBox::VersionInfo(const String& sQuery)
+{
+    DWORD c;
+    DWORD dw = 0;
+    UINT ui;
+    char *p;
+    LPVOID ptr;
+    String sOut = ParamStr(0); ///ParamStr(0) holds exe name
+
+    c = GetFileVersionInfoSize(ParamStr(0).c_str(), &dw);
+    p = new char[c + 1]; //file://create the space
+    GetFileVersionInfo(ParamStr(0).c_str(), 0, c, p);//get the version info data
+
+/// Extract the language/translation information...
+    VerQueryValue(p, TEXT("\\VarFileInfo\\Translation"), &ptr, &ui);
+
+/// ptr comes back as a ptr to two (16-bit) words containing the two halves of
+/// the translation number required for StringFileInfo
+    WORD *id = (WORD*)ptr;
+    String sBase = String( "\\StringFileInfo\\") +
+                   IntToHex(id[0], 4) +
+                   IntToHex(id[1], 4) +
+                   "\\";
+    String qs = sBase + sQuery ; // query string
+    VerQueryValue(p, qs.c_str(), &ptr, &ui);
+    sOut = (char*)ptr;
+    delete [] p;
+    return sOut;
+}
 
 

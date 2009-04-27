@@ -28,6 +28,8 @@ __published:
 
 private:
   String __fastcall GetVersionString(void);
+  String __fastcall GetCopyrightString(void);
+  String __fastcall VersionInfo(const String& sQuery);
 
 public:
   virtual __fastcall TAboutBox(TComponent* AOwner);

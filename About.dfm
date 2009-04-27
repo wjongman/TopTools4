@@ -1,6 +1,6 @@
 object AboutBox: TAboutBox
-  Left = 313
-  Top = 399
+  Left = 1136
+  Top = 233
   BorderIcons = [biSystemMenu]
   BorderStyle = bsNone
   Caption = 'About TopTools'
@@ -45,7 +45,7 @@ object AboutBox: TAboutBox
     Height = 16
     Alignment = taCenter
     AutoSize = False
-    Caption = '© 1998-2008 Willem Jongman'
+    Caption = 'copyright string'
     Color = clBlack
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
