@@ -55,7 +55,6 @@ __published:  // IDE-managed Components
     TLabel *lbPixels;
     TCheckBox *ckNudgeRuler;
     TGroupBox *gbAutoSave;
-    TCheckBox *ckAutosave;
     TButton *bnAutosaveOptions;
     TPanel *plMarker;
     TCheckBox *cbTransparent;

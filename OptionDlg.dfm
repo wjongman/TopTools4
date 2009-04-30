@@ -408,24 +408,13 @@ object ToolOptionsDialog: TToolOptionsDialog
         Height = 56
         Caption = 'Autosave to file'
         TabOrder = 1
-        object ckAutosave: TCheckBox
-          Left = 16
-          Top = 24
-          Width = 113
-          Height = 17
-          Hint = 'Adds TopTools to the run section in the registry'
-          Caption = '&Enable'
-          ParentShowHint = False
-          ShowHint = False
-          TabOrder = 0
-        end
         object bnAutosaveOptions: TButton
-          Left = 144
+          Left = 17
           Top = 20
           Width = 75
           Height = 25
           Caption = 'Configure...'
-          TabOrder = 1
+          TabOrder = 0
           OnClick = bnAutosaveOptionsClick
         end
       end

@@ -626,7 +626,7 @@ TToolForm* TMainForm::GetLoupeForm()
     {
         m_pLoupe = new TLoupeForm(this);
         m_pLoupe->OnClose = HandleToolWindowClose;
-        m_pLoupe->OnOptions = HandleToolWindowOptions;
+        m_pLoupe->OnOptions = actOptionsExecute;
     }
     return m_pLoupe;
 }
@@ -792,46 +792,82 @@ void __fastcall TMainForm::HandleCaptureComplete(TObject *Sender)
     //m_HotkeyManager->EnableHotkeys();
 }
 
+// //---------------------------------------------------------------------------
+// void __fastcall TMainForm::HandleToolWindowOptions(TObject *Sender)
+// {
+//     TToolForm *Tool = reinterpret_cast<TToolForm*>(Sender);
+//
+//     if (Tool)
+//     {
+//         if (Sender == this)
+//         {
+//         }
+//         else if (Sender == m_pControlBar)
+//         {
+//         }
+//         else if (Sender == m_pBaseConv)
+//         {
+//         }
+//         else if (Sender == m_pInfo)
+//         {
+//         }
+//         else if (Sender == m_pLoupe)
+//         {
+//            actOptionsExecute(Sender, "Loupe");
+//         }
+//         else if (Sender == m_pRuler)
+//         {
+//         }
+//         else if (Sender == m_pCapture)
+//         {
+//         }
+//     }
+// }
+
 //---------------------------------------------------------------------------
-void __fastcall TMainForm::HandleToolWindowOptions(TObject *Sender)
+void __fastcall TMainForm::actOptionsExecute(TObject *Sender)
 {
+    // See what page we need to show
+    String sPageToShow = "";
     TToolForm *Tool = reinterpret_cast<TToolForm*>(Sender);
 
     if (Tool)
     {
         if (Sender == this)
         {
+            sPageToShow = "";
         }
         else if (Sender == m_pControlBar)
         {
+            sPageToShow = "";
         }
         else if (Sender == m_pBaseConv)
         {
+            sPageToShow = "";
         }
         else if (Sender == m_pInfo)
         {
+            sPageToShow = "";
         }
         else if (Sender == m_pLoupe)
         {
-           actOptionsExecute(Sender);
+            sPageToShow = "Loupe";
         }
         else if (Sender == m_pRuler)
         {
+            sPageToShow = "Ruler";
         }
         else if (Sender == m_pCapture)
         {
+            sPageToShow = "";
         }
     }
-}
 
-//---------------------------------------------------------------------------
-void __fastcall TMainForm::actOptionsExecute(TObject *Sender)
-{
     // We disable the Hotkeys while this modal dialog is showing, we don't
     // want to steal keypresses while recording a new key combination
     m_HotkeyManager->DisableHotkeys();
 
-    TToolOptionsDialog *OptionForm = new TToolOptionsDialog(this);
+    TToolOptionsDialog *OptionForm = new TToolOptionsDialog(this, sPageToShow);
     if (OptionForm->ShowModal() == mrOk)
     {
         // Changes are communicated through g_ToolOptions

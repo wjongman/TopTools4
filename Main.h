@@ -94,7 +94,7 @@ protected:
   void __fastcall HandleCaptureNext(TObject *Sender);
   void __fastcall HandleCaptureComplete(TObject *Sender);
   void __fastcall HandleHotkey(THotkeyId id);
-  void __fastcall HandleToolWindowOptions(TObject *Sender);
+  //void __fastcall HandleToolWindowOptions(TObject *Sender);
 
 private:  // User declarations
   void __fastcall SetTopMost(bool ontop);
