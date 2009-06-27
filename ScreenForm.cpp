@@ -16,7 +16,7 @@
 
 //---------------------------------------------------------------------------
 __fastcall TScreenForm::TScreenForm(TComponent* Owner)
-: TToolForm(Owner, "capture"), InitCalled(false), m_TrackingMouse(false), m_hwndTooltip(NULL)
+: TToolForm(Owner, "capture"), InitCalled(false), m_TrackingMouse(false), m_pToolTip(NULL)//, m_hwndTooltip(NULL)
 {
     BorderStyle = bsNone;
     Color = clWhite;
@@ -46,7 +46,7 @@ __fastcall TScreenForm::~TScreenForm()
     g_ToolOptions.Set(m_ToolName, "height", Height);
 
     delete m_Timer;
-
+    delete m_pToolTip;
 }
 
 //---------------------------------------------------------------------------
@@ -54,6 +54,25 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
 {
     switch (Message.Msg)
     {
+// //    case WM_NCMOUSELEAVE:
+//     case WM_MOUSELEAVE:
+//         m_TrackingMouse = false;
+//         UpdateToolTip();
+//         break;
+//
+//     case WM_NCMOUSEHOVER:
+// //    case WM_MOUSEHOVER:
+//     {
+//         switch (Message.WParam)
+//         {
+//         case HTTOPLEFT:
+//         }
+//
+//     }
+//         m_TrackingMouse = true;
+//         UpdateToolTip();
+//         break;
+
     case WM_KEYDOWN:
 
         // Default action is to move the form
@@ -79,6 +98,7 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
 
         case VK_ESCAPE: Close(); return;
         }
+
     }
 
     // Resume normal processing
@@ -106,24 +126,17 @@ void __fastcall TScreenForm::FormShow(TObject *Sender)
         m_MouseOldY = pt.y;
     }
 
-    m_hwndTooltip = CreateTrackingToolTip();
+    m_pToolTip = new TToolTip(Handle);
 
-    // Activate the ToolTip.
-    ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, (WPARAM)true, (LPARAM)&m_ToolInfo);
-
-    UpdateToolTip();
+    m_TrackingMouse = true;
+    m_pToolTip->Show();
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::FormCloseQuery(TObject *Sender,
                                             bool &CanClose)
 {
-    if (m_hwndTooltip)
-    {
-        SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, (WPARAM)false, (LPARAM)&m_ToolInfo);
-        m_TrackingMouse = false;
-
-    }
+    m_pToolTip->Hide();
     CanClose = true;
 }
 
@@ -160,16 +173,17 @@ void __fastcall TScreenForm::MouseMove(TShiftState Shift, int X, int Y)
         UpdateToolTip();
     }
 
-    if (!m_TrackingMouse)
-    {
-        if (m_hwndTooltip)
-        {
-            // Activate the ToolTip.
-            ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE,
-                          (WPARAM)true, (LPARAM)&m_ToolInfo);
-        }
-        m_TrackingMouse = true;
-    }
+//     if (!m_TrackingMouse)
+//     {
+//         TRACKMOUSEEVENT tme;
+//         tme.cbSize = sizeof(TRACKMOUSEEVENT);
+//         tme.dwFlags = TME_HOVER | TME_NONCLIENT; // | TME_LEAVE
+//         tme.hwndTrack = Handle;
+//         if (::_TrackMouseEvent(&tme))
+//         {
+//             m_TrackingMouse = true;
+//         }
+//     }
 
     // Make sure the mouse has actually moved, the
     // presence of the ToolTip causes Windows to
@@ -181,84 +195,24 @@ void __fastcall TScreenForm::MouseMove(TShiftState Shift, int X, int Y)
         oldX = X;
         oldY = Y;
 
-        if (m_hwndTooltip)
-        {
-            UpdateToolTip();
-        }
+        UpdateToolTip();
     }
-}
-
-//---------------------------------------------------------------------------
-HWND TScreenForm::CreateTrackingToolTip()
-{
-    // Create a tooltip window.
-    HWND hwndToolTip = CreateWindowEx(
-                                     WS_EX_TOPMOST, TOOLTIPS_CLASS, NULL,
-                                     WS_POPUP | TTS_NOPREFIX | TTS_ALWAYSTIP,
-                                     CW_USEDEFAULT, CW_USEDEFAULT,
-                                     CW_USEDEFAULT, CW_USEDEFAULT,
-                                     Handle, NULL, Application->Handle, NULL);
-
-    if (!hwndToolTip)
-    {
-        return NULL;
-    }
-
-    // Set up tool information.
-    // In this case, the "tool" is the entire parent window.
-    m_ToolInfo.cbSize = sizeof(TOOLINFO);
-    m_ToolInfo.uFlags = TTF_IDISHWND | TTF_TRACK | TTF_ABSOLUTE;
-    m_ToolInfo.hwnd = Handle;
-    m_ToolInfo.hinst = Application->Handle;
-    m_ToolInfo.lpszText = "pText";
-    m_ToolInfo.uId = (UINT_PTR)Handle;
-    ::GetClientRect (Handle, &m_ToolInfo.rect);
-
-    // Associate the ToolTip with the tool window.
-    ::SendMessage(hwndToolTip, TTM_ADDTOOL, 0, (LPARAM) (LPTOOLINFO) &m_ToolInfo);
-
-    return hwndToolTip;
 }
 
 //---------------------------------------------------------------------------
 void TScreenForm::UpdateToolTip()
 {
-    // Update tooltip position and text.
-    String sCoords;
-    sCoords.printf("X: %d  Y: %d  W: %d  H: %d", Left, Top, Width, Height);
-
-    // Calculate the space required for our tooltip
-    SIZE tipsize;
-    HDC dcTooltip = ::GetDC(m_hwndTooltip);
-    ::GetTextExtentPoint32(dcTooltip, sCoords.c_str(), sCoords.Length(), &tipsize);
-    ::ReleaseDC(m_hwndTooltip, dcTooltip);
-
-    // Set the tooltip text
-    m_ToolInfo.lpszText = sCoords.c_str();
-    ::SendMessage(m_hwndTooltip, TTM_SETTOOLINFO, 0, (LPARAM)&m_ToolInfo);
-
-    // Set the tooltip position.
-    // Tooltip shows above left-top of window unless it is
-    // off-screen, in which case we position it at the screen edge
-    POINT pt = { Left, Top - tipsize.cy - 1};
-
-    // Stay on screen
-    if (Left < 0)
+    if (m_pToolTip)
     {
-        pt.x = 0;
+        if (m_TrackingMouse)
+        {
+            m_pToolTip->Update(TRect(Left, Top, Left + Width,  Top + Height));
+        }
+        else
+        {
+            m_pToolTip->Hide();
+        }
     }
-    if (Left > Screen->DesktopWidth - tipsize.cx)
-    {
-        pt.x = Screen->DesktopWidth - tipsize.cx;
-    }
-
-    if (Top < tipsize.cy)
-    {
-        pt.y = Top + Height;
-    }
-
-    ::SendMessage(m_hwndTooltip, TTM_TRACKPOSITION,
-                  0, (LPARAM)MAKELONG(pt.x, pt.y));
 }
 
 //---------------------------------------------------------------------------
@@ -275,16 +229,16 @@ void __fastcall TScreenForm::SetSticky(bool sticky)
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::OnTimerTick(TObject *Sender)
 {
+    TPoint ptMouse;
+    GetCursorPos(&ptMouse);
+
     if (FSticky)
     {
-        // Move the form
-        TPoint ptMouse;
-        GetCursorPos(&ptMouse);
-
         TRect rcClient = GetClientRect();
         int CenterX = rcClient.Width() / 2;
         int CenterY = rcClient.Height() / 2;
 
+        // Move the form
         Left = ptMouse.x - CenterX;
         Top = ptMouse.y - CenterY;
 
@@ -294,6 +248,22 @@ void __fastcall TScreenForm::OnTimerTick(TObject *Sender)
     }
     else
     {
+/*
+        // Hide tooltip when mouse is not above the form
+        POINT pt = ScreenToClient(Point(Message.XPos, Message.YPos));
+
+        TRect rcTopLeft = GetClientRect();
+        rcTopLeft.Right = rcTopLeft.Left + x_margin;
+        rcTopLeft.Bottom  = rcTopLeft.Top + y_margin;
+        if (PtInRect(&rcTopLeft, pt))
+        {
+            Message.Result = HTTOPLEFT;
+            return;
+        }
+
+*/
+
+
         // todo: Initially flash borders until mouseclick
         m_Timer->Enabled = false;
     }

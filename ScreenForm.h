@@ -18,6 +18,21 @@
 
 #include "tool.h"
 #include "ToolTip.h"
+
+//
+// If the messages for TrackMouseEvent have not been defined then define them
+// now.
+//
+#ifndef WM_MOUSEHOVER
+#define WM_MOUSEHOVER                   0x02A1
+#define WM_MOUSELEAVE                   0x02A3
+#endif
+
+#if(WINVER >= 0x0500)
+#define WM_NCMOUSEHOVER                 0x02A0
+#define WM_NCMOUSELEAVE                 0x02A2
+#endif /* WINVER >= 0x0500 */
+
 //---------------------------------------------------------------------------
 class TScreenForm : public TToolForm
 {
@@ -29,15 +44,12 @@ private:
     int m_MouseOldX;
     int m_MouseOldY;
     bool m_TrackingMouse;
-    HWND m_hwndTooltip;
-    TOOLINFO m_ToolInfo;
 
     bool InitCalled;
     TTimer* m_Timer;
 
+    TToolTip* m_pToolTip;
     void UpdateToolTip();
-    HWND CreateTrackingToolTip();
-    String FInfoText;
 
 protected:
     // This class overrides these two TForm methods

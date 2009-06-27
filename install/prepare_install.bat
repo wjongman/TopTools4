@@ -11,3 +11,6 @@ rem            /F  force stripping DLLs instead of skipping them. do not use!
 stripreloc ..\exe\TopTools4.exe
 clearexports ..\exe\TopTools4.exe
 
+copy ..\exe\TopTools4.exe Output\TopTools4.exe
+
+C:\bin\upx.exe Output\TopTools4.exe

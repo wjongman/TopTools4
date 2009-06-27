@@ -36,7 +36,6 @@ USEUNIT("TopToolBar.cpp");
 USEUNIT("TrayIcon.cpp");
 USERES("Graphics.RES");
 USERES("appicon.RES");
-USEFORM("ToolTip.cpp", ToolTipForm);
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
