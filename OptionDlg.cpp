@@ -59,8 +59,6 @@ __fastcall TToolOptionsDialog::~TToolOptionsDialog()
 //---------------------------------------------------------------------------
 void TToolOptionsDialog::ActivatePage(const String sActive)
 {
-    return;
-    
     TPanel* ActivePanel = NULL;
 
     if (sActive == "General")

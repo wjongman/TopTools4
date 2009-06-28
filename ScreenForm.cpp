@@ -137,6 +137,8 @@ void __fastcall TScreenForm::FormCloseQuery(TObject *Sender,
                                             bool &CanClose)
 {
     m_pToolTip->Hide();
+    m_Timer->Enabled = false;
+
     CanClose = true;
 }
 
@@ -218,11 +220,11 @@ void TScreenForm::UpdateToolTip()
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::SetSticky(bool sticky)
 {
-    bool bUseSticky = true; //false;
-    if (bUseSticky)
+//    bool bUseSticky = true; //false;
+//    if (bUseSticky)
     {
         FSticky = sticky;
-        m_Timer->Enabled = sticky;
+//        m_Timer->Enabled = sticky;
     }
 }
 
@@ -231,10 +233,10 @@ void __fastcall TScreenForm::OnTimerTick(TObject *Sender)
 {
     TPoint ptMouse;
     GetCursorPos(&ptMouse);
+    TRect rcClient = GetClientRect();
 
     if (FSticky)
     {
-        TRect rcClient = GetClientRect();
         int CenterX = rcClient.Width() / 2;
         int CenterY = rcClient.Height() / 2;
 
@@ -246,26 +248,25 @@ void __fastcall TScreenForm::OnTimerTick(TObject *Sender)
         m_MouseOldX = pt.x;
         m_MouseOldY = pt.y;
     }
-    else
+    //else
     {
-/*
         // Hide tooltip when mouse is not above the form
-        POINT pt = ScreenToClient(Point(Message.XPos, Message.YPos));
-
-        TRect rcTopLeft = GetClientRect();
-        rcTopLeft.Right = rcTopLeft.Left + x_margin;
-        rcTopLeft.Bottom  = rcTopLeft.Top + y_margin;
-        if (PtInRect(&rcTopLeft, pt))
+        POINT pt = ScreenToClient(ptMouse);
+        if (PtInRect(&rcClient, pt))
         {
-            Message.Result = HTTOPLEFT;
-            return;
+            m_TrackingMouse = true;
+        }
+        else
+        {
+            m_TrackingMouse = false;
         }
 
-*/
+        UpdateToolTip();
+
 
 
         // todo: Initially flash borders until mouseclick
-        m_Timer->Enabled = false;
+//        m_Timer->Enabled = false;
     }
 }
 
