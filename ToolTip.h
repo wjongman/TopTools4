@@ -3,16 +3,13 @@ class TToolTip
 
 private:
     HWND m_hwndTooltip;
-    HWND m_hwndOwner;
-
     TOOLINFO m_ToolInfo;
-    String FInfoText;
     bool m_TrackingMouse;
 
 public:
-    TToolTip(HWND hwndOwner) : m_hwndOwner(hwndOwner)
+    TToolTip(HWND hwndOwner)
     {
-        m_hwndTooltip = CreateTrackingToolTip();
+        m_hwndTooltip = CreateTrackingToolTip(hwndOwner);
         m_TrackingMouse = false;
     }
 
@@ -44,7 +41,7 @@ public:
     void Update(const TRect& rc)
     {
         Show();
-        
+
         // Update tooltip text.
         String sCoords;
         sCoords.printf("X: %d  Y: %d  W: %d  H: %d", rc.left, rc.top, rc.Width(), rc.Height());
@@ -86,14 +83,14 @@ public:
 private:
 
     //-------------------------------------------------------------------------
-    HWND CreateTrackingToolTip()
+    HWND CreateTrackingToolTip(HWND hwndOwner)
     {
         // Create a tooltip window.
         HWND hwndToolTip = CreateWindowEx(WS_EX_TOPMOST, TOOLTIPS_CLASS, NULL,
                                           WS_POPUP | TTS_NOPREFIX | TTS_ALWAYSTIP,
                                           CW_USEDEFAULT, CW_USEDEFAULT,
                                           CW_USEDEFAULT, CW_USEDEFAULT,
-                                          m_hwndOwner, NULL, Application->Handle, NULL);
+                                          hwndOwner, NULL, Application->Handle, NULL);
 
         if (!hwndToolTip)
         {
@@ -104,11 +101,11 @@ private:
         // In this case, the "tool" is the entire parent window.
         m_ToolInfo.cbSize = sizeof(TOOLINFO);
         m_ToolInfo.uFlags = TTF_IDISHWND | TTF_TRACK | TTF_ABSOLUTE;
-        m_ToolInfo.hwnd = m_hwndOwner;
+        m_ToolInfo.hwnd = hwndOwner;
         m_ToolInfo.hinst = Application->Handle;
         m_ToolInfo.lpszText = "pText";
-        m_ToolInfo.uId = (UINT_PTR)m_hwndOwner;
-        ::GetClientRect (m_hwndOwner, &m_ToolInfo.rect);
+        m_ToolInfo.uId = (UINT_PTR)hwndOwner;
+        ::GetClientRect (hwndOwner, &m_ToolInfo.rect);
 
         // Associate the ToolTip with the tool window.
         ::SendMessage(hwndToolTip, TTM_ADDTOOL, 0, (LPARAM) (LPTOOLINFO) &m_ToolInfo);

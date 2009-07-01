@@ -34,7 +34,7 @@ __fastcall TScreenForm::TScreenForm(TComponent* Owner)
     m_Timer = new TTimer(this);
     m_Timer->Interval = 100; // milliseconds
     m_Timer->OnTimer = OnTimerTick;
-    m_Timer->Enabled = true;
+    m_Timer->Enabled = false;
 }
 
 //---------------------------------------------------------------------------
@@ -126,10 +126,14 @@ void __fastcall TScreenForm::FormShow(TObject *Sender)
         m_MouseOldY = pt.y;
     }
 
-    m_pToolTip = new TToolTip(Handle);
+    if (!m_pToolTip)
+    {
+        m_pToolTip = new TToolTip(Handle);
+    }
 
     m_TrackingMouse = true;
-    m_pToolTip->Show();
+    m_Timer->Enabled = true;
+//    m_pToolTip->Show();
 }
 
 //---------------------------------------------------------------------------
