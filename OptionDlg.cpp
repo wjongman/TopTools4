@@ -220,6 +220,9 @@ void TToolOptionsDialog::InitOptions()
         break;
     }
 
+    rbInifile->Hint = g_ToolOptions.GetIniFilePath();
+    rbRegistry->Hint = g_ToolOptions.GetRegPath();
+
     if (!g_ToolOptions.ProgramDirIsWriteable())
     {
         rbRegistry->Checked = true;

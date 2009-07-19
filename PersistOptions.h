@@ -507,6 +507,18 @@ private:
     //-------------------------------------------------------------------------
 public:
 
+    String GetIniFilePath()
+    {
+        return ExtractFilePath(ParamStr(0)) + m_IniFilePath;
+    }
+
+    //-------------------------------------------------------------------------
+    String GetRegPath()
+    {
+        return "HKEY_CURRENT_USER\\" + m_RegBaseKey;
+    }
+
+    //-------------------------------------------------------------------------
     bool ProgramDirIsWriteable()
     {
         // See if program directory is accessable (by using the CreateFile API).

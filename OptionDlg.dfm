@@ -96,6 +96,8 @@ object ToolOptionsDialog: TToolOptionsDialog
         Width = 113
         Height = 17
         Caption = 'Save to &Ini File'
+        ParentShowHint = False
+        ShowHint = True
         TabOrder = 5
       end
       object rbRegistry: TRadioButton
@@ -105,6 +107,8 @@ object ToolOptionsDialog: TToolOptionsDialog
         Height = 17
         Caption = 'Save to &Registry'
         Checked = True
+        ParentShowHint = False
+        ShowHint = True
         TabOrder = 6
         TabStop = True
       end
