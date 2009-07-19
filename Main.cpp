@@ -829,7 +829,7 @@ void __fastcall TMainForm::HandleCaptureComplete(TObject *Sender)
 void __fastcall TMainForm::actOptionsExecute(TObject *Sender)
 {
     // See what page we need to show
-    String sPageToShow = "";
+    String sPageToShow = "General";
     TToolForm *Tool = reinterpret_cast<TToolForm*>(Sender);
 
     if (Tool)

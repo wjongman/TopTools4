@@ -1,8 +1,8 @@
 ; todo: check to see if program is currently running and offer to terminate it...
 [Setup]
 AppName=TopTools 4
-AppVerName=TopTools version 4.0.0.47
-AppVersion=4.0.0.47
+AppVerName=TopTools version 4.0.0.49
+AppVersion=4.0.0.49
 AppCopyright=Copyright © 1997-2009 Willem Jongman.
 AppId=TopTools_4
 DefaultDirName={pf}\TopTools 4
@@ -39,7 +39,7 @@ PrivilegesRequired=poweruser
 ;Name: "portable"; Description: "Portable installation"; Types: portable; Flags: fixed
 
 [Files]
-Source: ..\exe\TopTools4.exe; DestDir: {app};
+Source: TopTools4.exe; DestDir: {app};
 ;Source: ..\exe\TopTools4.exe; DestDir: {app}; Components: normal portable
 
 [Icons]
@@ -82,7 +82,7 @@ Root: HKCU; Subkey: "Software\TopTools 4"; Flags: uninsdeletekey;
 Name: programgroup; Description: Create a &Program group in the Startmenu; Flags: checkedonce; GroupDescription: Shortcuts and Icons:
 ;Name: quicklaunchicon; Description: Create an icon on the &Quick Launch bar; Flags: checkedonce; GroupDescription: Shortcuts and Icons:
 Name: desktopicon; Description: Create an icon on the &Desktop; Flags: unchecked; GroupDescription: Shortcuts and Icons:
-;Name: regentry; Description: "Use system-registry to save preferences and settings"; GroupDescription: "Settings:"; Flags: unchecked
+;Name: portable; Description: "Use system-registry to save preferences and settings"; GroupDescription: "Settings:"; Flags: unchecked
 ;Name: inifile; Description: "Use .ini-file to save preferences and settings"; GroupDescription: "Settings:"; Flags: unchecked
 ;Name: startupicon; Description: "Create a shortcut in the &Startup folder"; GroupDescription: "Shortcuts:"; Flags: unchecked
 

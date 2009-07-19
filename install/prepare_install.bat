@@ -8,9 +8,9 @@ rem switches:  /B  don't create .bak backup files
 rem            /C  write a valid checksum in the header (instead of zero)
 rem            /F  force stripping DLLs instead of skipping them. do not use!
 
-stripreloc ..\exe\TopTools4.exe
-clearexports ..\exe\TopTools4.exe
+copy ..\exe\TopTools4.exe .\TopTools4.exe
 
-copy ..\exe\TopTools4.exe Output\TopTools4.exe
+stripreloc .\TopTools4.exe
+clearexports .\TopTools4.exe
 
-C:\bin\upx.exe Output\TopTools4.exe
+C:\bin\upx.exe .\TopTools4.exe
