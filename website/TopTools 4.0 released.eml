@@ -1,0 +1,77 @@
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00800000
+X-Mozilla-Keys:                                                                                 
+BCC: TopTools <toptools@xs4all.nl>, Pieter Duijves <pieter@duijves.nl>, 
+ info@letempsdunechanson.com, Sean Curto <seanpcurto@yahoo.com>, 
+ =?ISO-8859-1?Q?Hans-Peter_K=FChnel?= <kuhnel.h@o4s.com>, 
+ "Bode, Ronald" <ronald.bode@hp.com>,
+ Hans_de_Doelder@bose.com, Luke Hamburg <luke@solvent-LLC.com>, 
+ ralf.sitte@itergo.com, Will.Smith4@t-mobile.co.uk, 
+ Marco Miedl <marco.miedl@wave-solutions.com>,
+ sguzenko@bizmail.com.au, paul camphuijzen <p.camphuijzen@hccnet.nl>, 
+ Bas Vossen <bas_vossen@yahoo.com>,
+ Johan <johan.gantois@skynet.be>, Marko Blokland <mao@fire.vinden.nl>, 
+ Jan Meijering <jan@meijering.com>,
+ Bartke Maatje <bartke@chello.nl>, 
+ Remco Vermeulen <r.vermeulen@dankersfrank.com>
+Message-ID: <4A675580.1010304@xs4all.nl>
+Date: Wed, 22 Jul 2009 20:08:00 +0200
+From: TopTools <toptools@xs4all.nl>
+User-Agent: Thunderbird 2.0.0.22 (Windows/20090605)
+MIME-Version: 1.0
+To: undisclosed-recipients:;
+Subject: TopTools 4.0 released
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Dear TopTools user,
+
+TopTools 4.0 is now available for download from:
+
+http://www.xs4all.nl/~wij/toptools/toptools4.html
+
+New in version 4.0:
+
+Portable App
+TopTools is now "portable", so you can run it from a USB-stick etc. 
+Contrary to TopTools 3, version 4 saves settings only if you ask it to, 
+either in the registry or in an .ini file.
+
+No installer
+Since TopTools doesn't depend on external libraries or frameworks, there 
+is no (and never really was any) reason for it to be "installed", just 
+unzip the exe and run it.
+
+Main window
+* Minimize to system tray is now optional.
+* Added Options button.
+
+Screengrabber
+* Grabbed view can now be printed.
+* Completely rewritten for Vista, but won't work on Win95/98 ..
+* Grab-screen now shows a sizable, transparent window that can be 
+accurately positioned by using the mouse or the keyboard.
+* Screen-capture can be activated with global hotkey.
+* Grabbed View can be opened in a window, saved to file, copied to 
+clipboard or printed.
+* New Autosave features make it easy to capture a sequence of views with 
+a minimum of keystrokes.
+
+Info
+* Left-click and drag from the Info-window to display mouse coordinates 
+relative to the window above which the mouse is hovering (instead of 
+relative to the top-left of the desktop).
+
+Loupe
+* Locked View can now be copied, saved or printed.
+
+Ruler
+* Can now be made transparent (not on Win95/98).
+
+Options dialog
+* Many new options
+
+
+Regards,
+Willem Jongman.
+

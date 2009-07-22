@@ -429,6 +429,7 @@ object ToolOptionsDialog: TToolOptionsDialog
         Height = 17
         Caption = '&Show Loupe during screen capture'
         TabOrder = 2
+        Visible = False
       end
       object ckRememberPos: TCheckBox
         Left = 16
