@@ -37,7 +37,7 @@
   <tr>
     <td>
       <div class="remark" align="center">
-        Last modified: Jun 17, 2009
+        Last modified: Jul 20, 2009
       </div>
     </td>
   </tr>
@@ -46,15 +46,14 @@
   </tr>
   <tr>
     <td>
-      <p class="title">
+<!--       <p class="title">
       Eternal Beta
-<!--       TopTools v4 -->
       </p>
       <p class="subtitle">
       </p>
-<!--       <p class="subtitle"> -->
-<!--       Work in progress     -->
-<!--       </p>                 -->
+      <p class="subtitle">
+      Work in progress
+      </p>
       <p class="text">
       I have been adding features to TopTools when I needed them or when users requested them,
       but I never came to release a new version; there was always something to be finished first..
@@ -66,36 +65,33 @@
       Now that Google set a new standard by leaving their applications in eternal beta state,
       I thought I might do as well, so here it is: TopTools 4.0 beta, it still lacks documentation
       and has not been fully polished, but it works for me :-).
-      </p>
+      </p> -->
       <p class="subtitle">
       Download
       </p>
       <p class="text">
-        <a href="download/Setup_TopTools40.exe">Toptools4 Installer</a> (950 Kb.)
-      </p>
-      <p class="text">
-        <a href="download/TopTools40.zip">Portable version</a> (680 Kb. Zipped executable)
-      </p>
-      <p class="text">
-        <a href="download/TopTools40.exe">Portable version</a> (590 Kb. UPX compressed executable)
+        <a href="http://www.xs4all.nl/~wij/toptools/download/TopTools4_00_51.zip">TopTools 4</a> (560 Kb. Zipped executable)
       </p>
       <p class="title">
       New in version 4.0
       </p>
       <p class="subtitle">
+      No installer
+      </p>
+      <p class="text">
+        Since TopTools doesn't depend on external libraries or frameworks,
+        there is no (and never really was any) reason for it to be "installed",
+        just unzip the exe and run it.
+      </p>
+      <p class="subtitle">
       Portable App
       </p>
       <p class="text">
-      <ul>
-      <li>TopTools is now <a href="http://en.wikipedia.org/wiki/Portable_app">"portable"</a>.
-      <br>
-      Although it has always been possible to copy TopTools.exe to a USB-stick and run
-      it from there (it doesn't depend on external libraries or frameworks), it
-      would save settings in the registry of the host machine, so it broke the Rules
-      of Portability.
-      <br>
-      Version 4 saves settings only if you ask it to.
-      </ul>
+      <i>A portable application does not leave its files or settings on the host computer. Typically this means that the application does not write to the Windows registry and instead stores its settings in one or more configuration files (e.g. an INI file) located in its directory.</i>
+       <a href="http://en.wikipedia.org/wiki/Portable_app">(Wikipedia)</a>
+      <br><br>
+        TopTools is now "portable", so you can run it from a USB-stick etc.
+      Contrary to TopTools 3, version 4 saves settings only if you ask it to, either in the registry or to an .ini file.
       </p>
       <p class="subtitle">Main window
       </p>
@@ -105,14 +101,39 @@
       <li>Minimize to system tray is now optional.
       <li>Added Options button.
       </ul>
+      <p class="subtitle">Screengrabber
+      </p>
+      <p class="text">
+      <ul>
+        <li>Completely rewritten for Vista, but won't work on Win95/98 ..
+        <li>Grab-screen now shows a sizable, transparent window that can be
+          accurately positioned by using the mouse or the keyboard.
+        <li>Screen-capture can be activated with global hotkey.
+        <li>Grabbed View can be opened in a window, saved to file, copied to clipboard or printed.
+        <img src="grabber.png">
+        <li>New Autosave features make it easy to capture a sequence of views with a minimum of keystrokes.
+        <img src="autosave.png">
+      </ul>
+      </p>
+      <p class="subtitle">Info
+      </p>
+      <p class="text">
+<!--       The coordinates displayed in the info-window are relative to the top-left of the desktop.                                                                                                                                      -->
+<!--       <br>                                                                                                                                                                                                                           -->
+<!--       To display the coordinates relative to the window the mouse is above, left click in the info window and hold the mousebutton down, as in dragging, move the mouse over any window.                                             -->
+<!--       <br>                                                                                                                                                                                                                           -->
+<!--       This is not always what you like, left click in the info window and hold the mousebutton down, as in dragging, move the mouse over any window and it will show you the coordinates relative to the window the mouse is above.  -->
+    <ul>
+    <li>Left-click and drag from the Info-window to display mouse coordinates
+  relative to the window above which the mouse is hovering (instead of
+  relative to the top-left of the desktop).
+    </ul>
+      </p>
       <p class="subtitle">Ruler
       </p>
       <p class="text">
       <ul>
         <li>Can now be made transparent (not on Win95/98).
-      <div class="remark">
-        Not supported on Win95/98.
-      </div>
       </ul>
       </p>
       <p class="subtitle">Loupe
@@ -121,17 +142,20 @@
       <ul>
         <li>Locked View can now be saved, copied or printed.
       </ul>
-        <img src="lockedloupe.png">
       </p>
-      <p class="subtitle">Screengrabber
+      <p class="subtitle">Options dialog
       </p>
       <p class="text">
       <ul>
-        <li>Completely rewritten, Grab-screen now shows a sizable, transparent window that can be
-          accurately positioned by using the mouse or the keyboard.
-        <li>Screen-capture can be activated with global hotkey.
-        <li>Grabbed View can be opened in a window, saved to file, copied to clipboard or printed.
-        <li>New Autosave features make it easy to capture a sequence of views with a minimum of keystrokes.
+        <li>Many new options
+        <img src="options.png">
+      </ul>
+      </p>
+      <p class="subtitle">To do:
+      </p>
+      <p class="text">
+      <ul>
+        <li>Document keyboard shortcuts and other hidden features.
       </ul>
       </p>
       <p class="subtitle">Acknowledgements
@@ -140,13 +164,9 @@
       <ul>
       <li>GIF support: <a href="http://melander.dk/delphi/gifimage/">TGifImage</a> by Anders Melander.
       <li>PNG support: <a href="http://pngdelphi.sourceforge.net/">TPNGImage</a> by Gustavo Daud.
-      <li>Installer: <a href="http://www.jrsoftware.org/isinfo.php">InnoSetup</a> by Jordan Russell.
+<!--       <li>Installer: <a href="http://www.jrsoftware.org/isinfo.php">InnoSetup</a> by Jordan Russell.  -->
 
       </ul>
-      </p>
-      <p class="subtitle">
-      </p>
-      <p class="text">
       </p>
       <p class="subtitle">
       </p>
