@@ -60,37 +60,17 @@ bool __fastcall TPersistImage::SaveFileDialog(int &filterindex, String& InitialD
 
     if (SavePicDlg->Execute())
     {
-        // Allow caller to update last used settings
-        InitialDir = ExtractFilePath(SavePicDlg->FileName);
+        String sFileName = SavePicDlg->FileName;
+
+        // Update last used settings
+        InitialDir = ExtractFilePath(sFileName);
         filterindex = SavePicDlg->FilterIndex;
 
-        DoSaveToFile(SavePicDlg->FileName);
-        retval = true;
-    }
-
-    delete SavePicDlg;
-
-    return retval;
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPersistImage::DoSaveToFile(const String& PathName)
-{
-    String sFileName = PathName;
-    if (DisplayIsPaletted())
-    {
-        // On paletted displays we only support Windows .bmp bitmaps
-        sFileName = ChangeFileExt(sFileName, ".bmp");
-        m_pBitmap->SaveToFile(sFileName);
-    }
-    else
-    {
+        // See if we've got an extension
         String extension = ExtractFileExt(sFileName).LowerCase();
         if (extension == "")
         {
-            // Default extension is .png (as of now, May 29 2008)
-            int FilterIndex = 2;
-            switch (FilterIndex)
+            switch (filterindex)
             {
             case 1:
                 extension = ".bmp";
@@ -104,74 +84,94 @@ void __fastcall TPersistImage::DoSaveToFile(const String& PathName)
             case 4:
                 extension = ".jpg";
                 break;
-
             default:
                 extension = ".png";
             }
+
             sFileName += extension;
         }
 
-        if (extension == ".bmp")
+        DoSaveToFile(sFileName);
+        retval = true;
+    }
+
+    delete SavePicDlg;
+
+    return retval;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPersistImage::DoSaveToFile(const String& PathName)
+{
+    String sFileName = PathName;
+
+    // On paletted displays we only support Windows .bmp bitmaps
+    if (DisplayIsPaletted())
+    {
+        sFileName = ChangeFileExt(sFileName, ".bmp");
+    }
+
+    String extension = ExtractFileExt(sFileName).LowerCase();
+    if (extension == ".bmp")
+    {
+        __try
         {
-            __try
-            {
-                m_pBitmap->SaveToFile(sFileName);
-            }
-            catch (const Exception &E)
-            {
-                ShowMessage(String(E.Message));
-            }
+            m_pBitmap->SaveToFile(sFileName);
         }
-        else if (extension == ".jpg")
+        catch (const Exception &E)
         {
-            TJPEGImage* Image = new TJPEGImage();
-            Image->Assign(m_pBitmap);
-            __try
-            {
-                Image->SaveToFile(sFileName);
-            }
-            catch (const Exception &E)
-            {
-                ShowMessage(String(E.Message));
-            }
-            delete Image;
+            ShowMessage(String(E.Message));
         }
-        else if (extension == ".gif")
+    }
+    else if (extension == ".jpg")
+    {
+        TJPEGImage* Image = new TJPEGImage();
+        Image->Assign(m_pBitmap);
+        __try
         {
-            TGIFImage* Image = new TGIFImage();
-            Image->ColorReduction = rmQuantizeWindows;
-            Image->Assign(m_pBitmap);
-            __try
-            {
-                Image->SaveToFile(sFileName);
-            }
-            catch (const Exception &E)
-            {
-                ShowMessage(String(E.Message));
-            }
-            delete Image;
+            Image->SaveToFile(sFileName);
         }
-        else if (extension == ".png")
+        catch (const Exception &E)
         {
-            TPNGObject* Image = new TPNGObject();
-            Image->Assign(m_pBitmap);
-            __try
-            {
-                Image->SaveToFile(sFileName);
-            }
-            catch (const Exception &E)
-            {
-                ShowMessage(String(E.Message));
-            }
-            delete Image;
+            ShowMessage(String(E.Message));
         }
-        else
+        delete Image;
+    }
+    else if (extension == ".gif")
+    {
+        TGIFImage* Image = new TGIFImage();
+        Image->ColorReduction = rmQuantizeWindows;
+        Image->Assign(m_pBitmap);
+        __try
         {
-            // We have an unsupported extension here, should we change
-            // the extension to reflect the filter-index settings?
-            // Or should we popup a messagebox to notify the user?
-            // For now we just do nothing...
+            Image->SaveToFile(sFileName);
         }
+        catch (const Exception &E)
+        {
+            ShowMessage(String(E.Message));
+        }
+        delete Image;
+    }
+    else if (extension == ".png")
+    {
+        TPNGObject* Image = new TPNGObject();
+        Image->Assign(m_pBitmap);
+        __try
+        {
+            Image->SaveToFile(sFileName);
+        }
+        catch (const Exception &E)
+        {
+            ShowMessage(String(E.Message));
+        }
+        delete Image;
+    }
+    else
+    {
+        // We have an unsupported extension here, should we change
+        // the extension to reflect the filter-index settings?
+        // Or should we popup a messagebox to notify the user?
+        // For now we just do nothing...
     }
 }
 
