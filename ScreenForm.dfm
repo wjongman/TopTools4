@@ -17,6 +17,7 @@ object ScreenForm: TScreenForm
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  Position = poScreenCenter
   OnCloseQuery = FormCloseQuery
   OnPaint = FormPaint
   OnResize = FormResize
