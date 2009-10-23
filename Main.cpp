@@ -154,17 +154,20 @@ void __fastcall TMainForm::ShowTrayIcon(bool show)
 {
     if (show)
     {
-//        HICON hTrayIcon = ::LoadImage(HInstance, "APPICON", IMAGE_ICON, 16, 16, NULL);
-        HICON hTrayIcon = ::LoadImage(HInstance, "TRAYICON", IMAGE_ICON, 16, 16, NULL);
         if (!m_pTrayIcon)
+        {
+//            HICON hTrayIcon = ::LoadImage(HInstance, "APPICON", IMAGE_ICON, 16, 16, NULL);
+            HICON hTrayIcon = ::LoadImage(HInstance, "TRAYICON", IMAGE_ICON, 16, 16, NULL);
             m_pTrayIcon = new cTrayIcon(Handle, hTrayIcon, "TopTools 4");
-
+        }
         m_pTrayIcon->Add();
     }
     else
     {
         if (m_pTrayIcon)
+        {
             m_pTrayIcon->Remove();
+        }
     }
 }
 
@@ -235,8 +238,8 @@ void __fastcall TMainForm::HandleHotkey(THotkeyId id)
 
     case hkZoomIn:
         if (m_pLoupe)
-//            m_pLoupe->ZoomIn();
-            m_pLoupe->Freeze();
+            m_pLoupe->ZoomIn();
+//            m_pLoupe->Freeze();
         break;
 
     case hkZoomOut:
