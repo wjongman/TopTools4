@@ -127,6 +127,16 @@ def dateFromFilename(filename):
     return time.strftime("%Y-%m", ts)
 
 #------------------------------------------------------------------------------
+def printCSV(traffic):
+    print traffic[0] + ';' + \
+          traffic[1] + ';' + \
+          traffic[2] + ';' + \
+          traffic[4] + ';' + \
+          traffic[5] + ';' + \
+          traffic[6] + ';' + \
+          traffic[7]
+
+#------------------------------------------------------------------------------
 day_traffic = []
 
 #------------------------------------------------------------------------------
@@ -136,6 +146,6 @@ if __name__ == '__main__':
 
     day_traffic.sort()
     for traffic in day_traffic:
-        print traffic[0] + ';' + traffic[1] + ';' + traffic[2] + ';' + traffic[4] + ';' + traffic[5] + ';' + traffic[6] + ';' + traffic[7]
+        printCSV(traffic)
 
 
