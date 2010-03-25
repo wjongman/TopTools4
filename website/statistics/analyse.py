@@ -20,6 +20,30 @@ def hasExtension(file, ext):
     return fnmatch.fnmatch(file,'*.' + ext)
 
 #------------------------------------------------------------------------------
+class DayTraffic:
+    def __init__(self, daydata):
+        self.date = daydata[0]
+        self.traffic = daydata[1]
+        self.downloads = daydata[2]
+        self.month = daydata[3]
+        self.hits243 = daydata[4]
+        self.hits300 = daydata[5]
+        self.hits400 = daydata[6]
+        self.sofar = daydata[7]
+
+##     traffic[0]  # date of day
+##     traffic[1]  # day traffic (kB)
+##     traffic[2]  # approx. nr. of downloads this day
+##     traffic[4]  # hits243
+##     traffic[5]  # hits300
+##     traffic[6]  # hits400
+##     traffic[7]  # accumulated month total
+
+
+
+
+
+#------------------------------------------------------------------------------
 def getPreSections(html):
     """
     Extract all <pre> sections and return their content as a list
@@ -167,7 +191,7 @@ def printCSV(traffic):
 ##     traffic[7]  # accumulated month total
 
 #------------------------------------------------------------------------------
-def buildBluffRepr(traffic):
+def buildBluffRepr(alltraffic):
     """
     Reorder data so it can be used by the Bluff graphing script
     """
@@ -177,14 +201,9 @@ def buildBluffRepr(traffic):
 ##     g.data('Peaches', [9, 9, 10, 8, 7, 9]);
 ##     g.labels = {0: '2003', 2: '2004', 4: '2005'};
 
+    for traffic in alltraffic:
+        pass
 
-    print traffic[0] + ';' + \
-          traffic[1] + ';' + \
-          traffic[2] + ';' + \
-          traffic[4] + ';' + \
-          traffic[5] + ';' + \
-          traffic[6] + ';' + \
-          traffic[7]
 
 #------------------------------------------------------------------------------
 all_traffic = []
