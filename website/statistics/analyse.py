@@ -42,7 +42,7 @@ def processDir(arg, path, files):
         processFile(arg, path, file)
 
 #------------------------------------------------------------------------------
-def processFile0(arg, path, file):
+def processFile(arg, path, file):
     """
     Build table of downloads per day, repeating per-month data
     """
@@ -58,23 +58,13 @@ def processFile0(arg, path, file):
         # append accumulated day count
         countsofar += int(daycount[2])
         daystat.append(str(countsofar))
-        # collect in month list
-        monthstats.append(daystat)
-
-    all_traffic.append(monthstats)
-
-#------------------------------------------------------------------------------
-def processFile(arg, path, file):
-    countsofar = 0
-    counts = getMonthCount(arg, path, file)
-    results = getDayCount(arg, path, file)
-
-    for result in results:
-        daystat = result + counts
-        countsofar += int(result[2])
-        daystat.append(str(countsofar))
 
         all_traffic.append(daystat)
+
+##         # collect in month list
+##         monthstats.append(daystat)
+##
+##     all_traffic += monthstats
 
 #------------------------------------------------------------------------------
 def getMonthCount(arg, path, file):
@@ -157,7 +147,36 @@ def dateFromFilename(filename):
 
 #------------------------------------------------------------------------------
 def printCSV(traffic):
-    print traffic
+    """
+    Print as comma separated values
+    """
+    print traffic[0] + ';' + \
+          traffic[1] + ';' + \
+          traffic[2] + ';' + \
+          traffic[4] + ';' + \
+          traffic[5] + ';' + \
+          traffic[6] + ';' + \
+          traffic[7]
+
+##     traffic[0]  # date of day
+##     traffic[1]  # day traffic (kB)
+##     traffic[2]  # approx. nr. of downloads this day
+##     traffic[4]  # hits243
+##     traffic[5]  # hits300
+##     traffic[6]  # hits400
+##     traffic[7]  # accumulated month total
+
+#------------------------------------------------------------------------------
+def buildBluffRepr(traffic):
+    """
+    Reorder data so it can be used by the Bluff graphing script
+    """
+##     g.data('Apples', [1, 2, 3, 4, 4, 3]);
+##     g.data('Oranges', [4, 8, 7, 9, 8, 9]);
+##     g.data('Watermelon', [2, 3, 1, 5, 6, 8]);
+##     g.data('Peaches', [9, 9, 10, 8, 7, 9]);
+##     g.labels = {0: '2003', 2: '2004', 4: '2005'};
+
 
     print traffic[0] + ';' + \
           traffic[1] + ';' + \
@@ -172,7 +191,7 @@ all_traffic = []
 
 #------------------------------------------------------------------------------
 if __name__ == '__main__':
-    folder = os.curdir
+    folder = os.curdir + '/test'
     os.path.walk(folder, processDir, None)
 
     all_traffic.sort()
