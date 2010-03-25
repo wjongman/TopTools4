@@ -21,7 +21,8 @@ def hasExtension(file, ext):
 
 #------------------------------------------------------------------------------
 def getPreSections(html):
-    """Extract all <pre> sections and return their content as a list
+    """
+    Extract all <pre> sections and return their content as a list
     """
     pre = []
 
@@ -41,6 +42,28 @@ def processDir(arg, path, files):
         processFile(arg, path, file)
 
 #------------------------------------------------------------------------------
+def processFile0(arg, path, file):
+    """
+    Build table of downloads per day, repeating per-month data
+    """
+    monthstats = []
+    countsofar = 0
+
+    monthcount = getMonthCount(arg, path, file)
+    daycounts = getDayCount(arg, path, file)
+
+    for daycount in daycounts:
+        # combine stats
+        daystat = daycount + monthcount
+        # append accumulated day count
+        countsofar += int(daycount[2])
+        daystat.append(str(countsofar))
+        # collect in month list
+        monthstats.append(daystat)
+
+    all_traffic.append(monthstats)
+
+#------------------------------------------------------------------------------
 def processFile(arg, path, file):
     countsofar = 0
     counts = getMonthCount(arg, path, file)
@@ -51,11 +74,13 @@ def processFile(arg, path, file):
         countsofar += int(result[2])
         daystat.append(str(countsofar))
 
-        day_traffic.append(daystat)
+        all_traffic.append(daystat)
 
 #------------------------------------------------------------------------------
 def getMonthCount(arg, path, file):
-    """Count number of downloads for certain files
+    """
+    Count number of downloads for some hardcoded
+    filenames in month this file is covering
     """
     fullname = os.path.join(path, file)
     html = open(fullname).read()
@@ -86,7 +111,9 @@ def getMonthCount(arg, path, file):
 
 #------------------------------------------------------------------------------
 def getDayCount(arg, path, file):
-    """Count number of downloads per day for month this file is covering
+    """
+    Count number of downloads per day
+    in month this file is covering
     """
     fullname = os.path.join(path, file)
     html = open(fullname).read()
@@ -114,20 +141,24 @@ def approxDownloads(kbstr, size=1):
 
 #------------------------------------------------------------------------------
 def convertDate(rawdate):
-    """Convert date format; ie. 27 Dec 2009 becomes 2009-12-27
+    """
+    Convert date format; ie. 27 Dec 2009 becomes 2009-12-27
     """
     ts = time.strptime(rawdate, "%d %b %Y")
     return time.strftime("%Y-%m-%d", ts)
 
 #------------------------------------------------------------------------------
 def dateFromFilename(filename):
-    """Convert filename; ie. Dec2009.html becomes 2009-12
+    """
+    Convert filename; ie. Dec2009.html becomes 2009-12
     """
     ts = time.strptime(filename, "%b%Y.html")
     return time.strftime("%Y-%m", ts)
 
 #------------------------------------------------------------------------------
 def printCSV(traffic):
+    print traffic
+
     print traffic[0] + ';' + \
           traffic[1] + ';' + \
           traffic[2] + ';' + \
@@ -137,15 +168,15 @@ def printCSV(traffic):
           traffic[7]
 
 #------------------------------------------------------------------------------
-day_traffic = []
+all_traffic = []
 
 #------------------------------------------------------------------------------
 if __name__ == '__main__':
     folder = os.curdir
     os.path.walk(folder, processDir, None)
 
-    day_traffic.sort()
-    for traffic in day_traffic:
+    all_traffic.sort()
+    for traffic in all_traffic:
         printCSV(traffic)
 
 
