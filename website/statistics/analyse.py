@@ -20,7 +20,7 @@ def hasExtension(file, ext):
     return fnmatch.fnmatch(file,'*.' + ext)
 
 #------------------------------------------------------------------------------
-class DayTraffic:
+class FullTraffic:
     def __init__(self, daydata):
         self.date = daydata[0]
         self.traffic = daydata[1]
@@ -43,13 +43,40 @@ class DayTraffic:
               self.hits300 + ';' + \
               self.hits400 + ';' + \
               self.sofar
-##     traffic[0]  # date of day
-##     traffic[1]  # day traffic (kB)
-##     traffic[2]  # approx. nr. of downloads this day
-##     traffic[4]  # hits243
-##     traffic[5]  # hits300
-##     traffic[6]  # hits400
-##     traffic[7]  # accumulated month total
+
+#------------------------------------------------------------------------------
+class DayTraffic:
+    def __init__(self, daydata):
+        self.date = daydata[0]
+        self.traffic = daydata[1]
+        self.downloads = daydata[2]
+        self.sofar = daydata[7]
+
+    def printCSV(self):
+        """
+        Print as comma separated values
+        """
+        print self.date + ';' + \
+              self.traffic + ';' + \
+              self.downloads + ';' + \
+              self.sofar
+
+#------------------------------------------------------------------------------
+class MonthTraffic:
+    def __init__(self, daydata):
+        self.month = daydata[3]
+        self.hits243 = daydata[4]
+        self.hits300 = daydata[5]
+        self.hits400 = daydata[6]
+
+    def printCSV(self):
+        """
+        Print as comma separated values
+        """
+        print self.month + ';' + \
+              self.hits243 + ';' + \
+              self.hits300 + ';' + \
+              self.hits400
 
 #------------------------------------------------------------------------------
 def getPreSections(html):
@@ -194,6 +221,7 @@ def printCSV_0(traffic):
 def buildBluffRepr(alltraffic):
     """
     Reorder data so it can be used by the Bluff graphing script
+    alltraffic is a list of lists
     """
 ##     g.data('Apples', [1, 2, 3, 4, 4, 3]);
 ##     g.data('Oranges', [4, 8, 7, 9, 8, 9]);
@@ -201,8 +229,23 @@ def buildBluffRepr(alltraffic):
 ##     g.data('Peaches', [9, 9, 10, 8, 7, 9]);
 ##     g.labels = {0: '2003', 2: '2004', 4: '2005'};
 
+##     daytraffic = DayTraffic(alltraffic)
+##     fulltraffic = FullTraffic(alltraffic)
+
+    ## quick hack, I'll refactor soon, I promise!
+    last_seen_month = ''
     for traffic in alltraffic:
-        pass
+        monthtraffic = MonthTraffic(traffic)
+        if monthtraffic.month != last_seen_month:
+            print last_seen_month ,
+            print monthtraffic.month ,
+            print monthtraffic.hits243 ,
+            print monthtraffic.hits300 ,
+            print monthtraffic.hits400
+            last_seen_month = monthtraffic.month
+
+## ToDo: retrieve data directly in appropriate class and maintain list of class-instances
+##
 
 
 #------------------------------------------------------------------------------
@@ -213,8 +256,11 @@ if __name__ == '__main__':
     folder = os.curdir + '/test'
     os.path.walk(folder, processDir, None)
 
-    all_traffic.sort()
-    for traffic in all_traffic:
-        daytraffic = DayTraffic(traffic)
-        daytraffic.printCSV()
+##     all_traffic.sort()
+##     for traffic in all_traffic:
+## ##         daytraffic = DayTraffic(traffic)
+## ##         daytraffic.printCSV()
+##         monthtraffic = MonthTraffic(traffic)
+##         monthtraffic.printCSV()
 
+    buildBluffRepr(all_traffic)
