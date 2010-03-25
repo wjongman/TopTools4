@@ -31,6 +31,18 @@ class DayTraffic:
         self.hits400 = daydata[6]
         self.sofar = daydata[7]
 
+    def printCSV(self):
+        """
+        Print as comma separated values
+        """
+        print self.date + ';' + \
+              self.traffic + ';' + \
+              self.downloads + ';' + \
+              self.month + ';' + \
+              self.hits243 + ';' + \
+              self.hits300 + ';' + \
+              self.hits400 + ';' + \
+              self.sofar
 ##     traffic[0]  # date of day
 ##     traffic[1]  # day traffic (kB)
 ##     traffic[2]  # approx. nr. of downloads this day
@@ -38,10 +50,6 @@ class DayTraffic:
 ##     traffic[5]  # hits300
 ##     traffic[6]  # hits400
 ##     traffic[7]  # accumulated month total
-
-
-
-
 
 #------------------------------------------------------------------------------
 def getPreSections(html):
@@ -170,7 +178,7 @@ def dateFromFilename(filename):
     return time.strftime("%Y-%m", ts)
 
 #------------------------------------------------------------------------------
-def printCSV(traffic):
+def printCSV_0(traffic):
     """
     Print as comma separated values
     """
@@ -181,14 +189,6 @@ def printCSV(traffic):
           traffic[5] + ';' + \
           traffic[6] + ';' + \
           traffic[7]
-
-##     traffic[0]  # date of day
-##     traffic[1]  # day traffic (kB)
-##     traffic[2]  # approx. nr. of downloads this day
-##     traffic[4]  # hits243
-##     traffic[5]  # hits300
-##     traffic[6]  # hits400
-##     traffic[7]  # accumulated month total
 
 #------------------------------------------------------------------------------
 def buildBluffRepr(alltraffic):
@@ -215,6 +215,6 @@ if __name__ == '__main__':
 
     all_traffic.sort()
     for traffic in all_traffic:
-        printCSV(traffic)
-
+        daytraffic = DayTraffic(traffic)
+        daytraffic.printCSV()
 
