@@ -42,7 +42,7 @@ class FullTraffic:
               self.hits243 + ';' + \
               self.hits300 + ';' + \
               self.hits400 + ';' + \
-              self.sofar
+              self.sofar + '\n'
 
 #------------------------------------------------------------------------------
 class DayTraffic:
@@ -50,7 +50,6 @@ class DayTraffic:
         self.date = daydata[0]
         self.traffic = daydata[1]
         self.downloads = daydata[2]
-        self.sofar = daydata[7]
 
     def printCSV(self):
         """
@@ -58,16 +57,15 @@ class DayTraffic:
         """
         print self.date + ';' + \
               self.traffic + ';' + \
-              self.downloads + ';' + \
-              self.sofar
+              self.downloads
 
 #------------------------------------------------------------------------------
 class MonthTraffic:
-    def __init__(self, daydata):
-        self.month = daydata[3]
-        self.hits243 = daydata[4]
-        self.hits300 = daydata[5]
-        self.hits400 = daydata[6]
+    def __init__(self, data):
+        self.month = data[0]
+        self.hits243 = data[1]
+        self.hits300 = data[2]
+        self.hits400 = data[3]
 
     def printCSV(self):
         """
@@ -103,27 +101,17 @@ def processDir(arg, path, files):
 #------------------------------------------------------------------------------
 def processFile(arg, path, file):
     """
-    Build table of downloads per day, repeating per-month data
+    Fill traffic tables
     """
     monthstats = []
     countsofar = 0
 
     monthcount = getMonthCount(arg, path, file)
+    month_traffic.append(monthcount)
+
     daycounts = getDayCount(arg, path, file)
-
     for daycount in daycounts:
-        # combine stats
-        daystat = daycount + monthcount
-        # append accumulated day count
-        countsofar += int(daycount[2])
-        daystat.append(str(countsofar))
-
-        all_traffic.append(daystat)
-
-##         # collect in month list
-##         monthstats.append(daystat)
-##
-##     all_traffic += monthstats
+        day_traffic.append(daycount)
 
 #------------------------------------------------------------------------------
 def getMonthCount(arg, path, file):
@@ -218,10 +206,10 @@ def printCSV_0(traffic):
           traffic[7]
 
 #------------------------------------------------------------------------------
-def buildBluffRepr(alltraffic):
+def buildBluffRepr(trafficdata):
     """
     Reorder data so it can be used by the Bluff graphing script
-    alltraffic is a list of lists
+    trafficdata is a list of lists
     """
 ##     g.data('Apples', [1, 2, 3, 4, 4, 3]);
 ##     g.data('Oranges', [4, 8, 7, 9, 8, 9]);
@@ -232,35 +220,40 @@ def buildBluffRepr(alltraffic):
 ##     daytraffic = DayTraffic(alltraffic)
 ##     fulltraffic = FullTraffic(alltraffic)
 
-    ## quick hack, I'll refactor soon, I promise!
-    last_seen_month = ''
-    for traffic in alltraffic:
+    ## Have a dictionary indexed by date
+    stats = {}
+
+    for traffic in trafficdata:
         monthtraffic = MonthTraffic(traffic)
-        if monthtraffic.month != last_seen_month:
-            print last_seen_month ,
-            print monthtraffic.month ,
-            print monthtraffic.hits243 ,
-            print monthtraffic.hits300 ,
-            print monthtraffic.hits400
-            last_seen_month = monthtraffic.month
+        stats[monthtraffic.month] = [monthtraffic.hits243, monthtraffic.hits300 , monthtraffic.hits400]
+
+    return stats
 
 ## ToDo: retrieve data directly in appropriate class and maintain list of class-instances
 ##
 
 
 #------------------------------------------------------------------------------
+day_traffic = []
+month_traffic = []
 all_traffic = []
+
+month_downloads = {}
 
 #------------------------------------------------------------------------------
 if __name__ == '__main__':
     folder = os.curdir + '/test'
     os.path.walk(folder, processDir, None)
 
-##     all_traffic.sort()
-##     for traffic in all_traffic:
-## ##         daytraffic = DayTraffic(traffic)
-## ##         daytraffic.printCSV()
-##         monthtraffic = MonthTraffic(traffic)
-##         monthtraffic.printCSV()
+    month_traffic.sort()
+    for traffic in month_traffic:
+        monthtraffic = MonthTraffic(traffic)
+        monthtraffic.printCSV()
+##         buildBluffRepr(traffic)
 
-    buildBluffRepr(all_traffic)
+    day_traffic.sort()
+    for traffic in day_traffic:
+        daytraffic = DayTraffic(traffic)
+        daytraffic.printCSV()
+
+    print buildBluffRepr(month_traffic)
