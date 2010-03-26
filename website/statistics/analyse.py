@@ -51,6 +51,7 @@ def processFile(arg, path, file):
 
     month = dateFromFilename(file)
     month_downloads[month] = getMonthDownloads(html, [])
+
     day_traffic.update(getDayTraffic(html))
 
 #------------------------------------------------------------------------------
@@ -127,32 +128,92 @@ def dateFromFilename(filename):
     return time.strftime("%Y-%m", ts)
 
 #------------------------------------------------------------------------------
-def buildBluffRepr(trafficdata):
+def printBluffMonth(stats):
     """
     Reorder data so it can be used by the Bluff graphing script
-    trafficdata is a list of lists
+    stats is a dictionary indexed by date
     """
 ##     g.data('Apples', [1, 2, 3, 4, 4, 3]);
 ##     g.data('Oranges', [4, 8, 7, 9, 8, 9]);
 ##     g.data('Watermelon', [2, 3, 1, 5, 6, 8]);
 ##     g.data('Peaches', [9, 9, 10, 8, 7, 9]);
 ##     g.labels = {0: '2003', 2: '2004', 4: '2005'};
+    for date in stats:
+        printstr = "g.data('%s', [%s, %s, %s]);" % (date, stats[date][0], stats[date][1], stats[date][2])
+        print printstr
 
-##     daytraffic = DayTraffic(alltraffic)
-##     fulltraffic = FullTraffic(alltraffic)
+#------------------------------------------------------------------------------
+def pivotMonths(monthstats):
 
-    ## Have a dictionary indexed by date
-    stats = {}
+    t243 = []
+    t300 = []
+    t400 = []
 
-    for traffic in trafficdata:
-        monthtraffic = MonthTraffic(traffic)
-        stats[monthtraffic.month] = [monthtraffic.hits243, monthtraffic.hits300 , monthtraffic.hits400]
+    months = monthstats.keys()
+    months.sort()
+    for month in months:
+        t243.append(monthstats[month][0])
+        t300.append(monthstats[month][1])
+        t400.append(monthstats[month][2])
 
-    return stats
+    print t243
+    print t300
+    print t400
+    print months
 
-## ToDo: retrieve data directly in appropriate class and maintain list of class-instances
-##
+    print formatBluff('243', t243)
+    print formatBluff('300', t300)
+    print formatBluff('400', t400)
+    print formatBluff('400', t400)
+    print formatBluffLabels(months)
 
+#------------------------------------------------------------------------------
+def pivotDays(daystats):
+
+    traffic = []
+
+    days = daystats.keys()
+    days.sort()
+    for day in days:
+        traffic.append(daystats[days][0])
+
+    print traffic
+
+    print formatBluff('traffic', traffic)
+    print formatBluffLabels(days)
+
+#------------------------------------------------------------------------------
+def formatBluff(label, datalist):
+    """
+    Reorder data so it can be used by the Bluff graphing script
+    stats is a dictionary indexed by date
+    """
+##     g.data('Apples', [1, 2, 3, 4, 4, 3]);
+##     g.data('Oranges', [4, 8, 7, 9, 8, 9]);
+
+    printstr = "g.data('%s', [%s" % (label, datalist[0])
+    for data in datalist[1:]:
+        printstr += " ,%s" % (data)
+    printstr += "]);"
+
+    return printstr
+
+#------------------------------------------------------------------------------
+def formatBluffLabels(labellist):
+    """
+    Arrange labels so they can be used by the Bluff graphing script
+    """
+##     g.labels = {0: '2003', 2: '2004', 4: '2005'};
+
+    printstr = "g.Labels = {0: '%s'" % (labellist[0])
+
+    i = 1
+    for label in labellist[1:]:
+        printstr += ", %d: '%s'" % (i, label)
+        i = i + 1
+    printstr += "};"
+
+    return printstr
 
 #------------------------------------------------------------------------------
 month_downloads = {}
@@ -163,11 +224,14 @@ if __name__ == '__main__':
     folder = os.curdir + '/test'
     os.path.walk(folder, processDir, None)
 
-    for month in month_downloads:
-        print month + ':' ,
-        print month_downloads[month]
+    pivotMonths(month_downloads)
 
-    for day in day_traffic:
-        print day + ':' ,
-        print day_traffic[day]
-
+##     for month in month_downloads:
+##         print month + ':' ,
+##         print month_downloads[month]
+##
+##     for day in day_traffic:
+##         print day + ':' ,
+##         print day_traffic[day]
+##
+##     printBluffMonth(month_downloads)
