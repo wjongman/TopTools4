@@ -103,6 +103,70 @@ def processFile(arg, path, file):
     """
     Fill traffic tables
     """
+    fullname = os.path.join(path, file)
+    html = open(fullname).read()
+
+    month = dateFromFilename(file)
+    month_downloads[month] = getMonthDownloads(html, [])
+    day_traffic.update(getDayTraffic(html))
+
+#------------------------------------------------------------------------------
+def getMonthDownloads(html, filenames):
+    """
+    Count number of downloads for some hardcoded
+    filenames in month this file is covering
+    """
+    # first <pre> element contains list of downloads in month
+    pre = getPreSections(html)[0]
+    lines = str(pre).splitlines()
+
+    hits243 = '0'
+    hits300 = '0'
+    hits400 = '0'
+
+    for line in lines:
+        if line.find('toptools243.exe') > 0:
+            parts = line.strip().split()
+            hits243 = parts[3]
+
+        if line.find('Setup_TopTools30.exe') > 0:
+            parts = line.strip().split()
+            hits300 = parts[3]
+
+        if line.find('TopTools4_00_52.zip') > 0:
+            parts = line.strip().split()
+            hits400 = parts[3]
+
+    return [hits243, hits300, hits400]
+
+#------------------------------------------------------------------------------
+def getDayTraffic(html):
+    """
+    Count number of downloads per day
+    in month this file is covering
+    """
+    # third <pre> element contains downloads per day (in Kb)
+    pre = getPreSections(html)[2]
+    lines = str(pre).splitlines()
+
+    daytraffic = {}
+
+    for line in lines:
+        # format of line:  18 Nov 2009       278  (5423Kb)
+        parts = line.strip().split()
+        if len(parts) > 3:
+            date = convertDate(parts[0] + ' ' + parts[1] + ' ' + parts[2])
+            hits = parts[3]
+            kbstr = parts[4]
+            daytraffic[date] = [hits, kbstr]
+
+    return daytraffic
+
+#------------------------------------------------------------------------------
+def processFile0(arg, path, file):
+    """
+    Fill traffic tables
+    """
     monthstats = []
     countsofar = 0
 
@@ -111,7 +175,7 @@ def processFile(arg, path, file):
 
     daycounts = getDayCount(arg, path, file)
     for daycount in daycounts:
-        day_traffic.append(daycount)
+        traffic_per_day.append(daycount)
 
 #------------------------------------------------------------------------------
 def getMonthCount(arg, path, file):
@@ -234,26 +298,30 @@ def buildBluffRepr(trafficdata):
 
 
 #------------------------------------------------------------------------------
-day_traffic = []
+traffic_per_day = []
 month_traffic = []
 all_traffic = []
 
 month_downloads = {}
-
+day_traffic = {}
 #------------------------------------------------------------------------------
 if __name__ == '__main__':
     folder = os.curdir + '/test'
     os.path.walk(folder, processDir, None)
 
-    month_traffic.sort()
-    for traffic in month_traffic:
-        monthtraffic = MonthTraffic(traffic)
-        monthtraffic.printCSV()
-##         buildBluffRepr(traffic)
+    print month_downloads
+    print day_traffic
 
-    day_traffic.sort()
-    for traffic in day_traffic:
-        daytraffic = DayTraffic(traffic)
-        daytraffic.printCSV()
+##     month_traffic.sort()
+##     for traffic in month_traffic:
+##         monthtraffic = MonthTraffic(traffic)
+##         monthtraffic.printCSV()
+## ##         buildBluffRepr(traffic)
+##
+##     traffic_per_day.sort()
+##     for traffic in traffic_per_day:
+##         daytraffic = DayTraffic(traffic)
+##         daytraffic.printCSV()
+##
+##     print buildBluffRepr(month_traffic)
 
-    print buildBluffRepr(month_traffic)
