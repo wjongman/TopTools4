@@ -175,9 +175,7 @@ def pivotDays(daystats):
     days = daystats.keys()
     days.sort()
     for day in days:
-        traffic.append(daystats[days][0])
-
-    print traffic
+        traffic.append(daystats[day][0])
 
     print formatBluff('traffic', traffic)
     print formatBluffLabels(days)
@@ -225,6 +223,7 @@ if __name__ == '__main__':
     os.path.walk(folder, processDir, None)
 
     pivotMonths(month_downloads)
+    pivotDays(day_traffic)
 
 ##     for month in month_downloads:
 ##         print month + ':' ,
