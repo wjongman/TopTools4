@@ -102,7 +102,7 @@ def getDayTraffic(html):
             date = convertDate(parts[0] + ' ' + parts[1] + ' ' + parts[2])
             hits = parts[3]
             kbstr = parts[4]
-            daytraffic[date] = [hits, kbstr]
+            daytraffic[date] = [hits, kbstr[1:-3]]
 
     return daytraffic
 
@@ -128,21 +128,6 @@ def dateFromFilename(filename):
     return time.strftime("%Y-%m", ts)
 
 #------------------------------------------------------------------------------
-def printBluffMonth(stats):
-    """
-    Reorder data so it can be used by the Bluff graphing script
-    stats is a dictionary indexed by date
-    """
-##     g.data('Apples', [1, 2, 3, 4, 4, 3]);
-##     g.data('Oranges', [4, 8, 7, 9, 8, 9]);
-##     g.data('Watermelon', [2, 3, 1, 5, 6, 8]);
-##     g.data('Peaches', [9, 9, 10, 8, 7, 9]);
-##     g.labels = {0: '2003', 2: '2004', 4: '2005'};
-    for date in stats:
-        printstr = "g.data('%s', [%s, %s, %s]);" % (date, stats[date][0], stats[date][1], stats[date][2])
-        print printstr
-
-#------------------------------------------------------------------------------
 def pivotMonths(monthstats):
 
     t243 = []
@@ -156,14 +141,13 @@ def pivotMonths(monthstats):
         t300.append(monthstats[month][1])
         t400.append(monthstats[month][2])
 
-    print t243
-    print t300
-    print t400
-    print months
+##     print t243
+##     print t300
+##     print t400
+##     print months
 
     print formatBluff('243', t243)
     print formatBluff('300', t300)
-    print formatBluff('400', t400)
     print formatBluff('400', t400)
     print formatBluffLabels(months)
 
@@ -175,7 +159,7 @@ def pivotDays(daystats):
     days = daystats.keys()
     days.sort()
     for day in days:
-        traffic.append(daystats[day][0])
+        traffic.append(daystats[day][1])
 
     print formatBluff('traffic', traffic)
     print formatBluffLabels(days)
@@ -222,7 +206,7 @@ if __name__ == '__main__':
     folder = os.curdir + '/test'
     os.path.walk(folder, processDir, None)
 
-    pivotMonths(month_downloads)
+##     pivotMonths(month_downloads)
     pivotDays(day_traffic)
 
 ##     for month in month_downloads:
@@ -233,4 +217,3 @@ if __name__ == '__main__':
 ##         print day + ':' ,
 ##         print day_traffic[day]
 ##
-##     printBluffMonth(month_downloads)
