@@ -48,22 +48,25 @@ def processFile(arg, path, file):
     """
     fullname = os.path.join(path, file)
     html = open(fullname).read()
+    pre_elements = getPreSections(html)
 
+    # first <pre> element contains list of downloads in month
+    lines = str(pre_elements[0]).splitlines()
     month = dateFromFilename(file)
-    month_downloads[month] = getMonthDownloads(html, [])
 
-    day_traffic.update(getDayTraffic(html))
+    month_downloads[month] = getMonthDownloads(lines, [])
+
+    # third <pre> element contains downloads per day (in Kb)
+    lines = str(pre_elements[2]).splitlines()
+
+    day_traffic.update(getDayTraffic(lines))
 
 #------------------------------------------------------------------------------
-def getMonthDownloads(html, filenames):
+def getMonthDownloads(lines, filenames):
     """
     Count number of downloads for some hardcoded
     filenames in month this file is covering
     """
-    # first <pre> element contains list of downloads in month
-    pre = getPreSections(html)[0]
-    lines = str(pre).splitlines()
-
     hits243 = '0'
     hits300 = '0'
     hits400 = '0'
@@ -84,15 +87,11 @@ def getMonthDownloads(html, filenames):
     return [hits243, hits300, hits400]
 
 #------------------------------------------------------------------------------
-def getDayTraffic(html):
+def getDayTraffic(lines):
     """
     Count number of downloads per day
     in month this file is covering
     """
-    # third <pre> element contains downloads per day (in Kb)
-    pre = getPreSections(html)[2]
-    lines = str(pre).splitlines()
-
     daytraffic = {}
 
     for line in lines:
@@ -206,7 +205,7 @@ if __name__ == '__main__':
     folder = os.curdir + '/test'
     os.path.walk(folder, processDir, None)
 
-##     pivotMonths(month_downloads)
+    pivotMonths(month_downloads)
     pivotDays(day_traffic)
 
 ##     for month in month_downloads:
