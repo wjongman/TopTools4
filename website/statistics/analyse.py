@@ -72,15 +72,15 @@ def getMonthDownloads(lines, filenames):
     hits400 = '0'
 
     for line in lines:
-        if line.find('toptools243.exe') > 0:
+        if 'toptools243.exe' in line:
             parts = line.strip().split()
             hits243 = parts[3]
 
-        if line.find('Setup_TopTools30.exe') > 0:
+        if 'Setup_TopTools30.exe' in line:
             parts = line.strip().split()
             hits300 = parts[3]
 
-        if line.find('TopTools4_00_52.zip') > 0:
+        if 'TopTools4_00_52.zip' in line:
             parts = line.strip().split()
             hits400 = parts[3]
 
@@ -101,7 +101,9 @@ def getDayTraffic(lines):
             date = convertDate(parts[0] + ' ' + parts[1] + ' ' + parts[2])
             hits = parts[3]
             kbstr = parts[4]
-            daytraffic[date] = [hits, kbstr[1:-3]]
+            # convert "(5423Kb)" to "5.423"
+            mbstr = float(kbstr[1:-3]) / 1000
+            daytraffic[date] = [hits, mbstr]
 
     return daytraffic
 
@@ -145,9 +147,9 @@ def pivotMonths(monthstats):
 ##     print t400
 ##     print months
 
-    print formatBluff('243', t243)
-    print formatBluff('300', t300)
-    print formatBluff('400', t400)
+    print formatBluffData('v243', t243)
+    print formatBluffData('v300', t300)
+    print formatBluffData('v400', t400)
     print formatBluffLabels(months)
 
 #------------------------------------------------------------------------------
@@ -160,18 +162,16 @@ def pivotDays(daystats):
     for day in days:
         traffic.append(daystats[day][1])
 
-    print formatBluff('traffic', traffic)
+    print formatBluffData('traffic', traffic)
     print formatBluffLabels(days)
 
 #------------------------------------------------------------------------------
-def formatBluff(label, datalist):
+def formatBluffData(label, datalist):
     """
-    Reorder data so it can be used by the Bluff graphing script
-    stats is a dictionary indexed by date
+    Reorder data so it can be used by a Bluff graphing script
+    ex. g.data('Apples', [1, 2, 3, 4, 4, 3]);
+        g.data('Oranges', [4, 8, 7, 9, 8, 9]);
     """
-##     g.data('Apples', [1, 2, 3, 4, 4, 3]);
-##     g.data('Oranges', [4, 8, 7, 9, 8, 9]);
-
     printstr = "g.data('%s', [%s" % (label, datalist[0])
     for data in datalist[1:]:
         printstr += " ,%s" % (data)
@@ -182,13 +182,11 @@ def formatBluff(label, datalist):
 #------------------------------------------------------------------------------
 def formatBluffLabels(labellist):
     """
-    Arrange labels so they can be used by the Bluff graphing script
+    Arrange labels so they can be used by a Bluff graphing script
+    ex. g.labels = {0: '2003', 2: '2004', 4: '2005'};
     """
-##     g.labels = {0: '2003', 2: '2004', 4: '2005'};
-
-    printstr = "g.Labels = {0: '%s'" % (labellist[0])
-
     i = 1
+    printstr = "g.Labels = {0: '%s'" % (labellist[0])
     for label in labellist[1:]:
         printstr += ", %d: '%s'" % (i, label)
         i = i + 1
@@ -202,7 +200,7 @@ day_traffic = {}
 
 #------------------------------------------------------------------------------
 if __name__ == '__main__':
-    folder = os.curdir + '/test'
+    folder = os.curdir  + '/test'
     os.path.walk(folder, processDir, None)
 
     pivotMonths(month_downloads)
