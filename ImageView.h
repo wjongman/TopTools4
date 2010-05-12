@@ -17,7 +17,7 @@ class TImageViewer : public TForm
 {
 __published:  // IDE-managed Components
   TImage *Image;
-    TPrintDialog *PrintDialog1;
+  TPrintDialog *PrintDialog1;
   void __fastcall FormShow(TObject *Sender);
   void __fastcall FormKeyPress(TObject *Sender, char &Key);
   void __fastcall ImageMouseDown(TObject *Sender, TMouseButton Button,
@@ -32,19 +32,11 @@ private:  // User declarations
   void __fastcall PopulateViewerMenu();
   void __fastcall ShowViewerMenu(int X, int Y);
   void __fastcall ViewerMenuClick(TObject *Sender);
-//   void __fastcall CopyToClipboard();
-//   bool __fastcall DisplayIsPaletted();
   void __fastcall SaveToFile();
-//   void __fastcall DoSaveToFile(const String& PathName);
-//   void __fastcall PrintImage(Graphics::TBitmap* pBitmap);
-//   void __fastcall DoPrintImage(TCanvas *PrinterCanvas,int pX,int pY,
-//                                Graphics::TBitmap *pBitmap);
-//   void __fastcall StretchBltBitmap(TCanvas *pCanvas, int iX, int iY,
-//                                    int iWidth, int iHeight,
-//                                    Graphics::TBitmap *pBitmap);
-//   void __fastcall StretchToPrintCanvas(TCanvas *pCanvas, int iX, int iY,
-//                                        int iWidth, int iHeight,
-//                                        Graphics::TBitmap *pBitmap);
+
+  bool m_bStayOnTop;
+  void __fastcall SetTopMost(bool ontop);
+
   RECT m_rcGrab;
 
   int FId;

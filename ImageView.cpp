@@ -15,6 +15,7 @@ TImageViewer *ImageViewer;
 __fastcall TImageViewer::TImageViewer(TComponent* Owner, int id, const TRect& rcGrab)
         : TForm(Owner), FId(id), m_rcGrab(rcGrab)
 {
+    m_bStayOnTop = true;
     m_ViewerMenu = NULL;
     OnShow = FormShow;
     //OnClose = FormClose;
@@ -76,6 +77,12 @@ void __fastcall TImageViewer::ViewerMenuClick(TObject *Sender)
         {
             Close();
         }
+        else if (menuItem->Hint == "OnTop")
+        {
+            m_bStayOnTop = !m_bStayOnTop;
+            SetTopMost(m_bStayOnTop);
+            menuItem->Checked = m_bStayOnTop;
+        }
     }
 }
 
@@ -123,6 +130,13 @@ void __fastcall TImageViewer::PopulateViewerMenu()
 
     NewItem = new TMenuItem(m_ViewerMenu);
     NewItem->OnClick = ViewerMenuClick;
+    NewItem->Caption = "Stay on top";
+    NewItem->Hint = "OnTop";
+    NewItem->Checked = m_bStayOnTop;
+    m_ViewerMenu->Items->Add(NewItem);
+
+    NewItem = new TMenuItem(m_ViewerMenu);
+    NewItem->OnClick = ViewerMenuClick;
     NewItem->Caption = "Close Snapshot";
     NewItem->Hint = "Close";
     m_ViewerMenu->Items->Add(NewItem);
@@ -150,6 +164,21 @@ void __fastcall TImageViewer::FormClose(TObject *Sender,
     FOnClose(this);
 }
 */
+
+
+//---------------------------------------------------------------------------
+void __fastcall TImageViewer::SetTopMost(bool ontop)
+{
+    if (ontop)
+        SetWindowPos(Handle, HWND_TOPMOST, 0, 0, 0, 0,
+                     SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+    else
+        SetWindowPos(Handle, HWND_NOTOPMOST, 0, 0, 0, 0,
+                     SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+
+    m_bStayOnTop = ontop;
+}
+
 //---------------------------------------------------------------------------
 void __fastcall TImageViewer::ImageMouseDown(TObject *Sender,
       TMouseButton Button, TShiftState Shift, int X, int Y)

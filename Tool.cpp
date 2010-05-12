@@ -315,4 +315,16 @@ void __fastcall TToolForm::SetWindowStyle(TToolWindowStyle style)
   ::SetWindowPos(Handle, 0, 0, 0, 0, 0, dwFlags);
 }
 
+//---------------------------------------------------------------------------
+void __fastcall TToolForm::SetTopMost(bool ontop)
+{
+    if (ontop)
+        SetWindowPos(Handle, HWND_TOPMOST, 0, 0, 0, 0,
+                     SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+    else
+        SetWindowPos(Handle, HWND_NOTOPMOST, 0, 0, 0, 0,
+                     SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+
+//     m_bStayOnTop = ontop;
+}
 

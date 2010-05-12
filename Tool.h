@@ -35,7 +35,6 @@ public:   // User declarations
 private:  // User declarations
   void __fastcall CreateParams(TCreateParams &Params);
   void __fastcall ReadState(Classes::TReader* Reader);
-  void __fastcall SetTopMost(bool topmost);
   void __fastcall SetWindowStyle(TToolWindowStyle style);
 
 protected:
@@ -50,6 +49,7 @@ protected:
   bool __fastcall TransparencyIsSupported();
   void __fastcall SetTransparency(bool layered, int percent = 0);
   void __fastcall SetColorKey(bool layered, COLORREF colorkey);
+  void __fastcall SetTopMost(bool topmost);
 
   int __fastcall GetTaskbarRect(LPRECT lprect);
 
