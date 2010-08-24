@@ -67,22 +67,22 @@ def getMonthDownloads(lines, filenames):
     Count number of downloads for some hardcoded
     filenames in month this file is covering
     """
-    hits243 = '0'
-    hits300 = '0'
-    hits400 = '0'
+    hits243 = 0
+    hits300 = 0
+    hits400 = 0
 
     for line in lines:
         if 'toptools243.exe' in line:
             parts = line.strip().split()
-            hits243 = parts[3]
+            hits243 = int(parts[3])
 
         if 'Setup_TopTools30.exe' in line:
             parts = line.strip().split()
-            hits300 = parts[3]
+            hits300 = int(parts[3])
 
         if 'TopTools4_00_52.zip' in line:
             parts = line.strip().split()
-            hits400 = parts[3]
+            hits400 = int(parts[3])
 
     return [hits243, hits300, hits400]
 
@@ -99,11 +99,11 @@ def getDayTraffic(lines):
         parts = line.strip().split()
         if len(parts) > 3:
             date = convertDate(parts[0] + ' ' + parts[1] + ' ' + parts[2])
-            hits = parts[3]
+            number_of_hits = int(parts[3])
             kbstr = parts[4]
             # convert "(5423Kb)" to "5.423"
-            mbstr = float(kbstr[1:-3]) / 1000
-            daytraffic[date] = [hits, mbstr]
+            traffic_in_mb = float(kbstr[1:-3]) / 1000
+            daytraffic[date] = [number_of_hits, traffic_in_mb]
 
     return daytraffic
 
@@ -146,6 +146,8 @@ def pivotMonths(monthstats):
 ##     print t300
 ##     print t400
 ##     print months
+
+    generateBluffScript(t243, t300, t400, months)
 
     print formatBluffData('v243', t243)
     print formatBluffData('v300', t300)
@@ -195,22 +197,75 @@ def formatBluffLabels(labellist):
     return printstr
 
 #------------------------------------------------------------------------------
+def formatBluffLabels2(labellist):
+    """
+    Arrange labels so they can be used by a Bluff graphing script
+    ex. g.labels = {0: '2003', 2: '2004', 4: '2005'};
+    """
+    i = 1
+    printstr = "g.Labels = {0: '%s'" % (labellist[0])
+    for label in labellist[1:]:
+        printstr += ", %d: '%s'" % (i, label)
+        i = i + 1
+    printstr += "};"
+
+    return printstr
+
+#------------------------------------------------------------------------------
+def generateBluffScript(t243, t300, t400, months):
+    template_prefix = """
+    function showDownloads()
+    {
+        var g = new Bluff.StackedBar('downloads', '600x300');
+        g.title = 'Downloads';
+        g.tooltips = true;
+        g.set_theme({
+                    colors: ['#6886B4', '#72AE6E', '#FDD84E', 'D1695E',
+                             '#999999', '#3a5b87', 'black'],
+                    marker_color: '#aea9a9',
+                    font_color: 'white',
+                    background_colors: ['#333333', '#333333']
+                    });
+
+        g.sort = false;
+        g.marker_font_size = 16;
+        g.marker_count = 10;
+        g.x_axis_label = 'month';
+    """
+
+    template_data = formatBluffData('v243', t243) + '\n' + \
+                    formatBluffData('v300', t300) + '\n' + \
+                    formatBluffData('v400', t400) + '\n' + \
+                    formatBluffLabels(months) + '\n'
+
+    template_postfix = """
+        g.draw();
+    }
+    """
+    dumpfile = open('stats.js', 'w')
+    dumpfile.write(template_prefix + template_data + template_postfix)
+    dumpfile.close()
+
+
+#------------------------------------------------------------------------------
 month_downloads = {}
 day_traffic = {}
 
 #------------------------------------------------------------------------------
+def print_dict_sorted(dict):
+    keys = dict.keys()
+    keys.sort()
+    for key in keys:
+        print key,
+        print dict[key]
+
+#------------------------------------------------------------------------------
 if __name__ == '__main__':
-    folder = os.curdir  + '/test'
+    folder = os.curdir  #+ '/test'
     os.path.walk(folder, processDir, None)
 
     pivotMonths(month_downloads)
-    pivotDays(day_traffic)
+##     pivotDays(day_traffic)
 
-##     for month in month_downloads:
-##         print month + ':' ,
-##         print month_downloads[month]
-##
-##     for day in day_traffic:
-##         print day + ':' ,
-##         print day_traffic[day]
-##
+##     print_dict_sorted(month_downloads)
+##     print_dict_sorted(day_traffic)
