@@ -149,10 +149,10 @@ def pivotMonths(monthstats):
 
     generateBluffScript(t243, t300, t400, months)
 
-    print formatBluffData('v243', t243)
-    print formatBluffData('v300', t300)
-    print formatBluffData('v400', t400)
-    print formatBluffLabels(months)
+##     print formatBluffData('v243', t243)
+##     print formatBluffData('v300', t300)
+##     print formatBluffData('v400', t400)
+##     print formatBluffLabels(months)
 
 #------------------------------------------------------------------------------
 def pivotDays(daystats):
@@ -202,10 +202,24 @@ def formatBluffLabels2(labellist):
     Arrange labels so they can be used by a Bluff graphing script
     ex. g.labels = {0: '2003', 2: '2004', 4: '2005'};
     """
+
+    g.labels = {
+        0: '2000',
+        12: '2001',
+        24: '2002',
+        36: '2003',
+        48: '2004',
+        60: '2005',
+        72: '2006',
+        84: '2007',
+        96: '2008',
+        108: '2009',
+        120: '2010'};
+
     i = 1
-    printstr = "g.Labels = {0: '%s'" % (labellist[0])
+    printstr = "g.Labels = {0: '%s'" % (labellist[0][0:4])
     for label in labellist[1:]:
-        printstr += ", %d: '%s'" % (i, label)
+        printstr += ", %d: '%s'" % (i, label[0:4])
         i = i + 1
     printstr += "};"
 
