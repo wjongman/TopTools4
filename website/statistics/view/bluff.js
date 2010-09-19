@@ -864,9 +864,9 @@ Bluff.Base = new JS.Class({
   },
 
   // Creates a mouse hover target rectangle for tooltip displays
-  _draw_tooltip: function(left, top, width, height, name, color, data, x_label) {
+  _draw_tooltip: function(left, top, width, height, name, color, data, data_label) {
     if (!this.tooltips) return;
-    this._d.tooltip(left, top, width, height, name, color, data, x_label);
+    this._d.tooltip(left, top, width, height, name, color, data, data_label);
   },
 
   // Shows an error message because you have no data.
@@ -1229,7 +1229,7 @@ Bluff.Bar = new JS.Class(Bluff.Base, {
                            data_row[this.klass.DATA_LABEL_INDEX],
                            data_row[this.klass.DATA_COLOR_INDEX],
                            raw_data[point_index],
-                           this.Labels[point_index]);
+                           this.data_labels[point_index]);
 
         // Calculate center based on bar_width and current row
         var label_center = this._graph_left +
@@ -1352,7 +1352,7 @@ Bluff.Line = new JS.Class(Bluff.Base, {
                            data_row[this.klass.DATA_LABEL_INDEX],
                            data_row[this.klass.DATA_COLOR_INDEX],
                            raw_data[index],
-                           this.Labels[point_index]);
+                           this.data_labels[point_index]);
 
         prev_x = new_x;
         prev_y = new_y;
@@ -1757,7 +1757,7 @@ Bluff.SideBar = new JS.Class(Bluff.Base, {
                            data_row[this.klass.DATA_LABEL_INDEX],
                            data_row[this.klass.DATA_COLOR_INDEX],
                            raw_data[point_index],
-                           this.Labels[point_index]);
+                           this.data_labels[point_index]);
 
         // Calculate center based on bar_width and current row
         var label_center = this._graph_top + (this._bars_width * point_index + this._bars_width / 2);
@@ -2063,14 +2063,12 @@ Bluff.StackedBar = new JS.Class(Bluff.Base, {
         this._d.fill = data_row[this.klass.DATA_COLOR_INDEX];
         this._d.rectangle(left_x, left_y, right_x, right_y);
 
-        //alert(this.Labels[point_index]);
-
         this._draw_tooltip(left_x, left_y,
                            right_x - left_x, right_y - left_y,
                            data_row[this.klass.DATA_LABEL_INDEX],
                            data_row[this.klass.DATA_COLOR_INDEX],
                            raw_data[point_index],
-                           this.Labels[point_index]);
+                           this.data_labels[point_index]);
       }, this);
     }, this);
   }
@@ -2157,7 +2155,7 @@ Bluff.SideStackedBar = new JS.Class(Bluff.SideBar, {
                            data_row[this.klass.DATA_LABEL_INDEX],
                            data_row[this.klass.DATA_COLOR_INDEX],
                            raw_data[point_index],
-                           this.Labels[point_index]);
+                           this.data_labels[point_index]);
 
         // Calculate center based on bar_width and current row
         var label_center = this._graph_top + (this._bar_width * point_index) + (this._bar_width * this.bar_spacing / 2.0);
@@ -2422,7 +2420,7 @@ Bluff.Renderer = new JS.Class({
     text.style.top = (this._sy * y + this._top_adjustment(text, scaled_height)) + 'px';
   },
 
-  tooltip: function(left, top, width, height, name, color, data, x_label) {
+  tooltip: function(left, top, width, height, name, color, data, data_label) {
     if (width < 0) left += width;
     if (height < 0) top += height;
 
@@ -2438,7 +2436,7 @@ Bluff.Renderer = new JS.Class({
     target.style.overflow = 'hidden';
 
     Bluff.Event.observe(target, 'mouseover', function(node) {
-      Bluff.Tooltip.show(name, color, data, x_label);
+      Bluff.Tooltip.show(name, color, data, data_label);
     });
     Bluff.Event.observe(target, 'mouseout', function(node) {
       Bluff.Tooltip.hide();
@@ -2669,9 +2667,9 @@ Bluff.Tooltip = new JS.Singleton({
     }, this);
   },
 
-  show: function(name, color, data, x_label) {
+  show: function(name, color, data, data_label) {
     data = Number(String(data).substr(0, this.DATA_LENGTH));
-    if (x_label == '')
+    if (data_label == '')
     {
         this._tip.innerHTML = '<span class="color" style="background: ' + color + ';">&nbsp;</span> ' +
                               '<span class="label">' + name + '</span> ' +
@@ -2680,7 +2678,7 @@ Bluff.Tooltip = new JS.Singleton({
     else
     {
         this._tip.innerHTML = '<div class="data"><span class="color" style="background: ' + color + ';">&nbsp;</span>' + data + '</div>' +
-                              '<div class="label">' + x_label + '</div>';
+                              '<div class="label">' + data_label + '</div>';
     }
     this._tip.style.display = '';
   },

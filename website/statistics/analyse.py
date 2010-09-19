@@ -156,7 +156,7 @@ def pivotDays(daystats):
         traffic.append(daystats[day][1])
 
     print formatBluffData('traffic', traffic)
-    print formatBluffLabels(days)
+    print formatBluffGraphLabels(days)
 
 #------------------------------------------------------------------------------
 def formatBluffData(label, datalist):
@@ -173,13 +173,14 @@ def formatBluffData(label, datalist):
     return printstr
 
 #------------------------------------------------------------------------------
-def formatBluffLabels(labellist):
+def formatBluffDataLabels(labellist):
     """
-    Arrange labels so they can be used by a Bluff graphing script
-    ex. g.labels = {0: '2003', 2: '2004', 4: '2005'};
+    Arrange labels so they can be used by a
+    Bluff graphing script to display tooltips
+    ex. g.data_labels = {0: '2003-1', 1: '2003-2', 2: '2003-3'};
     """
     i = 1
-    printstr = "g.Labels = {0: '%s'" % (labellist[0])
+    printstr = "g.data_labels = {0: '%s'" % (labellist[0])
     for label in labellist[1:]:
         printstr += ", %d: '%s'" % (i, label)
         i = i + 1
@@ -188,29 +189,18 @@ def formatBluffLabels(labellist):
     return printstr
 
 #------------------------------------------------------------------------------
-def formatBluffLabels2(labellist):
+def formatBluffGraphLabels(labellist):
     """
-    Arrange labels so they can be used by a Bluff graphing script
+    Arrange labels so they can be used by a
+    Bluff graphing script without overlapping
     ex. g.labels = {0: '2003', 2: '2004', 4: '2005'};
     """
-
-    g.labels = {
-        0: '2000',
-        12: '2001',
-        24: '2002',
-        36: '2003',
-        48: '2004',
-        60: '2005',
-        72: '2006',
-        84: '2007',
-        96: '2008',
-        108: '2009',
-        120: '2010'};
-
+    # Define labels centered around july (month 7)
     i = 1
-    printstr = "g.Labels = {0: '%s'" % (labellist[0][0:4])
+    printstr = "g.labels = {0: '%s'" % (labellist[0][0:4])
     for label in labellist[1:]:
-        printstr += ", %d: '%s'" % (i, label[0:4])
+        if label[5:] == '07':
+            printstr += ", %d: '%s'" % (i, label[0:4])
         i = i + 1
     printstr += "};"
 
@@ -239,13 +229,14 @@ def generateBluffScript(t243, t300, t400, months):
         g.sort = false;
         g.marker_font_size = 16;
         g.marker_count = 10;
-        g.x_axis_label = 'month';
+//         g.x_axis_label = 'month';
     """ % (datetime.datetime.now().strftime("%a %d %b %Y %H:%M"))
 
     template_data = formatBluffData('v243', t243) + '\n' + \
                     formatBluffData('v300', t300) + '\n' + \
                     formatBluffData('v400', t400) + '\n' + \
-                    formatBluffLabels(months) + '\n'
+                    formatBluffDataLabels(months) + '\n' + \
+                    formatBluffGraphLabels(months) + '\n'
 
     template_postfix = """
         g.draw();
