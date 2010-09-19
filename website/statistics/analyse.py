@@ -6,6 +6,7 @@ import os.path
 import fnmatch
 import re
 import time
+import datetime
 
 #------------------------------------------------------------------------------
 def isHtml(file):
@@ -142,17 +143,7 @@ def pivotMonths(monthstats):
         t300.append(monthstats[month][1])
         t400.append(monthstats[month][2])
 
-##     print t243
-##     print t300
-##     print t400
-##     print months
-
     generateBluffScript(t243, t300, t400, months)
-
-##     print formatBluffData('v243', t243)
-##     print formatBluffData('v300', t300)
-##     print formatBluffData('v400', t400)
-##     print formatBluffLabels(months)
 
 #------------------------------------------------------------------------------
 def pivotDays(daystats):
@@ -227,10 +218,14 @@ def formatBluffLabels2(labellist):
 
 #------------------------------------------------------------------------------
 def generateBluffScript(t243, t300, t400, months):
+
     template_prefix = """
     function showDownloads()
     {
-        var g = new Bluff.StackedBar('downloads', '600x300');
+        var lastupdate = document.getElementById('lastupdate');
+        lastupdate.firstChild.nodeValue = 'Last update: %s';
+
+        var g = new Bluff.StackedBar('downloads', '600x400');
         g.title = 'Downloads';
         g.tooltips = true;
         g.set_theme({
@@ -245,7 +240,7 @@ def generateBluffScript(t243, t300, t400, months):
         g.marker_font_size = 16;
         g.marker_count = 10;
         g.x_axis_label = 'month';
-    """
+    """ % (datetime.datetime.now().strftime("%a %d %b %Y %H:%M"))
 
     template_data = formatBluffData('v243', t243) + '\n' + \
                     formatBluffData('v300', t300) + '\n' + \
