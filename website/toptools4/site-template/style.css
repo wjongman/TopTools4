@@ -1,11 +1,6 @@
-body, a, p, h1, h2, h3, table, td, th, ul, ol
+body
 {
     font-family: arial, verdana, helvetica, sans-serif;
-    color: rgb(0, 0, 64);
-}
-
-body, p, td
-{
     color: #000033;
     background-color: #FFFAF6;
 }
@@ -16,9 +11,10 @@ a
     color: #000080;
 }
 
-a img
+a.head
 {
-    border-color: #ff8c00;
+    text-decoration: none;
+    color: #000033;
 }
 
 a:hover , a.head:hover
@@ -26,33 +22,41 @@ a:hover , a.head:hover
     color: #3F5E5E;
 }
 
-a.head
+table.banner
 {
-    text-decoration: none;
-    color: #000033;
-}
-
-td.sel, b.selhead
-{
-    color: #000033;
-}
-
-p.menu
-{
+    width: 600px;
+    text-align: center;
     border-style: solid;
-    border-width: 2px;
+    border-width: 1px;
     border-color: #AAAAAA;
+    margin: 0px 0px 0px 0px;
+}
+
+table.main
+{
+    width: 600px;
     margin: 0px 0px 0px 0px;
 }
 
 table.menu
 {
-    color: #FFFFFF;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #AAAAAA;
+    margin: 0px 0px 0px 0px;
 }
 
-td.menu
+.menuitem
 {
-    color: #fffbe2;
+
+}
+
+.selmenuitem
+{
+}
+
+.submenuitem
+{
 }
 
 

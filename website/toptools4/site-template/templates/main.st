@@ -4,15 +4,16 @@
   <link rel="stylesheet" type="text/css" href="style.css" title="style">
 </head>
   <body>
-  <table border="1" width="600">
+  <table class="banner">
     <tr>
-      <td valign="middle" align="center" width="100%"><h1 align="center">$title$</h1></td>
+      <td><h1>$title$</h1></td>
     </tr>
   </table>
-  <table border="1" width="600">
+<!--   <table border="1" width="600"> -->
+  <table class="main">
     <tr>
       <td valign="top">
-        <table border="0" class="menu">
+        <table class="menu">
           $menuitems:menuitem()$
         </table>
       </td>
