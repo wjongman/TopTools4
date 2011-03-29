@@ -13,30 +13,37 @@ class MenuItemDescriptor(object):
         self.selected = False
 
 ##-----------------------------------------------------------------------------
-def render_page(page_id):
+def render_all_pages():
+
+    config = ConfigParser.ConfigParser()
+    config.read('./content/content.ini')
+    pagenames = config.sections()
+    for pagename in pagenames:
+        page = render_page(config, pagename)
+        f = open(pagename, 'w+')
+        f.write(page)
+        f.close()
+
+##-----------------------------------------------------------------------------
+def render_page(config, pagename):
 
     stgroup = StringTemplateGroup("groupName", "./templates")
     st = stgroup.getInstanceOf("main")
 
-    config = ConfigParser.ConfigParser()
-    config.read('./content/content.ini')
-
-    section = 'section' + str(page_id)
-    st["title"] = config.get(section, 'title')
-    st["content"] = config.get(section, 'text')
-    st["subtitle"] = config.get(section, 'subtitle')
-    st["menuitems"] = get_menuitems(page_id)
+    st["title"] = config.get(pagename, 'title')
+    st["content"] = config.get(pagename, 'text')
+    st["subtitle"] = config.get(pagename, 'subtitle')
+    st["menuitems"] = get_menuitems(config.get(pagename, 'id'))
 
     return str(st)
 
 ##-----------------------------------------------------------------------------
 def get_menuitems(page_id):
+    items = []
+
     config = ConfigParser.ConfigParser()
     config.read('./content/menu.ini')
     sections = config.sections()
-
-    items = []
-
     for section in sections:
         md = MenuItemDescriptor(section)
         md.caption = config.get(section, 'caption')
@@ -49,9 +56,10 @@ def get_menuitems(page_id):
 
 ##-----------------------------------------------------------------------------
 def main():
-    f = open("test.htm", 'w+')
-    f.write(render_page(4))
-    f.close()
+    render_all_pages()
+##     f = open("test.htm", 'w+')
+##     f.write(render_page(4))
+##     f.close()
 
 ##-----------------------------------------------------------------------------
 main()
