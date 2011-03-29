@@ -33,7 +33,6 @@ def render_page(config, pagename):
     st["title"] = config.get(pagename, 'title')
     st["content"] = config.get(pagename, 'text')
     st["subtitle"] = config.get(pagename, 'subtitle')
-##     st["menuitems"] = get_menuitems(config.get(pagename, 'id'))
     st["menuitems"] = get_menuitems(config, pagename)
 
     return str(st)
@@ -42,40 +41,21 @@ def render_page(config, pagename):
 def get_menuitems(config, pagename):
     menuitems = []
 
-    items = config.sections()
-    for item in items:
-        md = MenuItemDescriptor(item)
-        md.pageurl = item
-        md.caption = config.get(item, 'title')
-        md.downloadurl = config.get(item, 'downloadurl')
-        md.selected = (item == pagename)
+    sectionnames = config.sections()
+    for sectionname in sectionnames:
+        md = MenuItemDescriptor(sectionname)
+        md.pageurl = sectionname
+        md.caption = config.get(sectionname, 'title')
+        md.downloadurl = config.get(sectionname, 'downloadurl')
+        md.selected = (sectionname == pagename)
+
         menuitems.append(md)
 
     return menuitems
 
 ##-----------------------------------------------------------------------------
-def get_menuitems1(page_id):
-    items = []
-
-    config = ConfigParser.ConfigParser()
-    config.read('./content/menu.ini')
-    sections = config.sections()
-    for section in sections:
-        md = MenuItemDescriptor(section)
-        md.caption = config.get(section, 'caption')
-        md.pageurl = config.get(section, 'pageurl')
-        md.downloadurl = config.get(section, 'downloadurl')
-        md.selected = (section == str(page_id))
-        items.append(md)
-
-    return items
-
-##-----------------------------------------------------------------------------
 def main():
     render_all_pages()
-##     f = open("test.htm", 'w+')
-##     f.write(render_page(4))
-##     f.close()
 
 ##-----------------------------------------------------------------------------
 main()
