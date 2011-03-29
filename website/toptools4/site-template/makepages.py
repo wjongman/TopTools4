@@ -8,12 +8,12 @@ class MenuItemDescriptor(object):
     def __init__(self, id):
         self.id = id
         self.caption = ''
-        self.href = ''
-        self.subtitle = ''
+        self.pageurl = ''
+        self.downloadurl = ''
         self.selected = False
 
 ##-----------------------------------------------------------------------------
-def render_page():
+def render_page(page_id):
 
     stgroup = StringTemplateGroup("groupName", "./templates")
     st = stgroup.getInstanceOf("main")
@@ -21,28 +21,37 @@ def render_page():
     config = ConfigParser.ConfigParser()
     config.read('./content/content.ini')
 
-    st["title"] = config.get('section1', 'title')
-    st["content"] = config.get('section1', 'text')
-    st["subtitle"] = config.get('section1', 'subtitle')
-
-##     config.read('./content/menu.ini')
-    for i in range(1,4):
-        md = MenuItemDescriptor(i)
-        md.caption = 'titel' + str(i)
-        md.pageurl = 'http://titel' + str(i)
-        md.downloadurl = 'http://titel/download' + str(i)
-        md.selected = (i == 1)
-
-        st["menuitems"] = md
+    section = 'section' + str(page_id)
+    st["title"] = config.get(section, 'title')
+    st["content"] = config.get(section, 'text')
+    st["subtitle"] = config.get(section, 'subtitle')
+    st["menuitems"] = get_menuitems(page_id)
 
     return str(st)
 
 ##-----------------------------------------------------------------------------
+def get_menuitems(page_id):
+    config = ConfigParser.ConfigParser()
+    config.read('./content/menu.ini')
+    sections = config.sections()
+
+    items = []
+
+    for section in sections:
+        md = MenuItemDescriptor(section)
+        md.caption = config.get(section, 'caption')
+        md.pageurl = config.get(section, 'pageurl')
+        md.downloadurl = config.get(section, 'downloadurl')
+        md.selected = (section == str(page_id))
+        items.append(md)
+
+    return items
+
+##-----------------------------------------------------------------------------
 def main():
     f = open("test.htm", 'w+')
-    f.write(render_page())
+    f.write(render_page(4))
     f.close()
-##     print get_content('content.ini', 'section1')
 
 ##-----------------------------------------------------------------------------
 main()
