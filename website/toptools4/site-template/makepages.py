@@ -33,12 +33,28 @@ def render_page(config, pagename):
     st["title"] = config.get(pagename, 'title')
     st["content"] = config.get(pagename, 'text')
     st["subtitle"] = config.get(pagename, 'subtitle')
-    st["menuitems"] = get_menuitems(config.get(pagename, 'id'))
+##     st["menuitems"] = get_menuitems(config.get(pagename, 'id'))
+    st["menuitems"] = get_menuitems(config, pagename)
 
     return str(st)
 
 ##-----------------------------------------------------------------------------
-def get_menuitems(page_id):
+def get_menuitems(config, pagename):
+    menuitems = []
+
+    items = config.sections()
+    for item in items:
+        md = MenuItemDescriptor(item)
+        md.pageurl = item
+        md.caption = config.get(item, 'title')
+        md.downloadurl = config.get(item, 'downloadurl')
+        md.selected = (item == pagename)
+        menuitems.append(md)
+
+    return menuitems
+
+##-----------------------------------------------------------------------------
+def get_menuitems1(page_id):
     items = []
 
     config = ConfigParser.ConfigParser()
