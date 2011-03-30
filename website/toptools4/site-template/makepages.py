@@ -28,7 +28,7 @@ def render_all_pages():
 def render_page(config, pagename):
 
     stgroup = StringTemplateGroup("groupName", "./templates")
-    st = stgroup.getInstanceOf("main")
+    st = stgroup.getInstanceOf("index")
 
     st["title"] = config.get(pagename, 'title')
     st["content"] = config.get(pagename, 'text')

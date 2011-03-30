@@ -18,8 +18,9 @@
         </table>
       </td>
       <td>&nbsp</td>
-      <td valign="top" colspan="2"><h3>$subtitle$</h3>
+      <td valign="top" colspan="2">
         <div class="content">
+          <div class="subtitle">$subtitle$</div>
           $content$
         </div>
       </td>
