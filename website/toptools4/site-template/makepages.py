@@ -14,7 +14,6 @@ class MenuItemDescriptor(object):
 
 ##-----------------------------------------------------------------------------
 def render_all_pages():
-
     config = ConfigParser.ConfigParser()
     config.read('./content/content.ini')
     pagenames = config.sections()
