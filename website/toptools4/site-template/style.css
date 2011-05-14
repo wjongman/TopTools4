@@ -58,17 +58,26 @@ h2 {
     font-weight:300;
     padding:5px;
     padding-top:0px;
+    margin-top:15px;
 }
 
 h3 {
     font-size:15px;
     color:gray;
     font-family:Arial, Verdana, Helvetica, sans-serif;
-    font-weight:300;
+    font-weight:400;
     background-color:#FFFFFF;
 }
 
 h4 {
+    color:#006666;
+    font-size:15px;
+    text-align:left;
+    padding:5px;
+    margin-top:5px;
+}
+
+h5 {
     color:#006666;
     font-size:15px;
     text-align:left;
@@ -79,16 +88,17 @@ h4 {
 
 #left {
     float:left;
-    width:150px;
+    width:140px;
     height: 400px;
     background-color:#FFFFFF;
     color:black;
 }
 
 #main {
-    margin                  : 0px 5px 5px 160px;
-    padding                 : 15px;
-    border-left             : 1px solid silver;
+    margin: 0px 5px 5px 160px;
+    padding: 15px;
+    border-left: 1px solid silver;
+    width: 500px;
 }
 
 img{
@@ -99,7 +109,7 @@ img{
 p {
     color:black;
     background-color:#FFFFFF;
-    line-height:20px;
+//    line-height:20px;
     padding:5px;
 }
 a {
@@ -114,7 +124,8 @@ a:hover {
 }
 
 li {
-    margin: 20px;
+    margin: 5px;
+    margin-left: 25px;
 }
 
 #footer {
