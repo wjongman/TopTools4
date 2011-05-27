@@ -14,6 +14,15 @@ class MenuItemDescriptor(object):
         self.submenu = []
 
 ##-----------------------------------------------------------------------------
+class SubMenuItemDescriptor(object):
+    def __init__(self, id):
+        self.id = id
+        self.caption = ''
+        self.pageurl = ''
+        self.selected = False
+        self.parentmenu = ''
+
+##-----------------------------------------------------------------------------
 def render_all_pages():
     config = ConfigObj('./content/content.ini')
     pagenames = config.sections
@@ -29,13 +38,11 @@ def render_page(config, pagename):
     st = stgroup.getInstanceOf("index")
 
     st["title"] = config[pagename]['title']
-    content = config[pagename]['text']
-    html = markdown.markdown(content)
-    st["content"] = html
-#    st["content"] = config[pagename]['text']
     st["subtitle"] = config[pagename]['subtitle']
+
+    text = config[pagename]['text']
+    st["content"] = markdown.markdown(text)
     st["menuitems"] = get_menuitems(config, pagename)
-#    submenuitems =
     return str(st)
 
 ##-----------------------------------------------------------------------------
@@ -49,6 +56,7 @@ def get_menuitems(config, pagename):
         md.caption = config[sectionname]['title']
         md.selected = (sectionname == pagename)
         md.submenu = get_submenuitems(config, sectionname)
+
         menuitems.append(md)
 
     return menuitems
@@ -57,12 +65,16 @@ def get_menuitems(config, pagename):
 def get_submenuitems(config, sectionname):
     submenuitems = []
 
-    submenus = config[sectionname]['submenu']
-    for submenu in submenus:
-        smd = MenuItemDescriptor(submenu)
-        smd.caption = submenu
-        smd.pageurl = submenus[submenu]
-        submenuitems.append(smd)
+    if config[sectionname].has_key('submenu'):
+        submenus = config[sectionname]['submenu']
+        for submenu in submenus:
+            smd = SubMenuItemDescriptor(submenu)
+            smd.caption = submenu
+            smd.pageurl = submenus[submenu]
+            smd.selected = (sectionname == smd.pageurl)
+#            smd.parentmenu = submenu['parentmenu']
+
+            submenuitems.append(smd)
 
     return submenuitems
 
