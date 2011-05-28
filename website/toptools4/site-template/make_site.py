@@ -21,15 +21,15 @@ def render_all_pages():
     for sectionname in config.sections:
         section = config[sectionname]
         if section.has_key('targetfile'):
-            render_page(config, section)
+            render_page(config, section, sectionname)
 
         for subsectionname in section.sections:
             subsection = section[subsectionname]
             if subsection.has_key('targetfile'):
-                render_page(config, subsection)
+                render_page(config, subsection, sectionname)
 
 ##-----------------------------------------------------------------------------
-def render_page(config, section):
+def render_page(config, section, sectionname):
     stgroup = StringTemplateGroup("groupName", "./templates")
     st = stgroup.getInstanceOf("index")
 
@@ -38,62 +38,28 @@ def render_page(config, section):
     st["title"] = section['title']
     st["subtitle"] = section['subtitle']
     st["content"] = mark_down(section['content'])
-    st["menuitems"] = get_menuitems(config, pagename)
+    st["menuitems"] = get_menuitems(config, pagename, sectionname)
 
     save_page(pagename, str(st))
 
 ##-----------------------------------------------------------------------------
-def save_page(pagename, page):
-    f = open(pagename, 'w+')
-    f.write(page)
-    f.close()
-
-##-----------------------------------------------------------------------------
-def mark_down(filename):
-
-    f = open('./content/' + filename, 'r+')
-    text = f.read()
-    f.close()
-
-    return markdown.markdown(text)
-
-##-----------------------------------------------------------------------------
-def get_menuitems(config, pagename):
+def get_menuitems(config, pagename, parentname):
     menuitems = []
 
     for sectionname in config.sections:
         section = config[sectionname]
         md = MenuItemDescriptor(sectionname)
         md.caption = sectionname
-#        md.pageurl = section.iteritems[0]['targetfile']
         md.pageurl = section['targetfile']
-
-        values = section.itervalues()
-        for value in values:
-            if value == pagename:
-                md.selected= True
-##        md.selected = (pagename in values)
-        md.selected = (pagename == md.pageurl)
-
-##         for subsectionname in section.sections:
-##             subsection = section[subsectionname]
-##
-##             if subsection.has_key('targetfile'):
-##                 md.pageurl = subsection['targetfile']
-##                 md.selected = (subsection['targetfile'] == pagename)
-##             else:
-##                 if subsection.has_key('url'):
-##                     md.pageurl = subsection['url']
-##                     md.selected = False
-
-        md.submenu = get_submenuitems(section, pagename)
+        md.selected = (sectionname == parentname)
+        md.submenu = get_submenuitems(section, pagename, parentname)
 
         menuitems.append(md)
 
     return menuitems
 
 ##-----------------------------------------------------------------------------
-def get_submenuitems(section, pagename):
+def get_submenuitems(section, pagename, parentname):
     submenuitems = []
 
     for subsectionname in section.sections:
@@ -103,7 +69,8 @@ def get_submenuitems(section, pagename):
 
         if subsection.has_key('targetfile'):
             md.pageurl = subsection['targetfile']
-            md.selected = (subsection['targetfile'] == pagename)
+            md.selected = (md.pageurl == pagename and
+                subsection['menu'] == parentname)
         else:
             if subsection.has_key('url'):
                 md.pageurl = subsection['url']
@@ -114,19 +81,18 @@ def get_submenuitems(section, pagename):
     return submenuitems
 
 ##-----------------------------------------------------------------------------
-def find_section(config, pagename):
+def save_page(pagename, page):
+    f = open(pagename, 'w+')
+    f.write(page)
+    f.close()
 
-    for sectionname in config.sections:
-        section = config[sectionname]
-        if section.has_key('targetfile') and section['targetfile'] == pagename:
-            return section
+##-----------------------------------------------------------------------------
+def mark_down(filename):
+    f = open('./content/' + filename, 'r+')
+    text = f.read()
+    f.close()
 
-        for subsectionname in section.sections:
-            subsection = section[subsectionname]
-            if subsection.has_key('targetfile') and subsection['targetfile'] == pagename:
-                return subsection
-
-    return None
+    return markdown.markdown(text)
 
 ##-----------------------------------------------------------------------------
 def main():
