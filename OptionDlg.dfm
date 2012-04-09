@@ -544,4 +544,13 @@ object ToolOptionsDialog: TToolOptionsDialog
       end
     end
   end
+  object bnAbout: TButton
+    Left = 10
+    Top = 230
+    Width = 75
+    Height = 25
+    Caption = 'About...'
+    TabOrder = 12
+    OnClick = bnAboutClick
+  end
 end

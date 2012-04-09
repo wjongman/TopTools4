@@ -77,6 +77,7 @@ __published:  // IDE-managed Components
     TRadioButton *rbRegistry;
     TCheckBox *ckRememberPos;
     TCheckBox *CheckBox4;
+        TButton *bnAbout;
 
     void __fastcall FormShow(TObject *Sender);
     void __fastcall lvOptionSelectorChange(TObject *Sender, TListItem *Item, TItemChange Change);
@@ -84,6 +85,7 @@ __published:  // IDE-managed Components
     void __fastcall bnAutosaveOptionsClick(TObject *Sender);
     void __fastcall ckRememberSettingsClick(TObject *Sender);
     void __fastcall cbTransparentClick(TObject *Sender);
+        void __fastcall bnAboutClick(TObject *Sender);
 
 private:  // User declarations
     void HideAll();

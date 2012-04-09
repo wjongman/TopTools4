@@ -40,7 +40,7 @@ def render_page(config, section, sectionname):
     st["content"] = mark_down(section['content'])
     st["menuitems"] = get_menuitems(config, pagename, sectionname)
 
-    save_page(pagename, str(st))
+    save_page(pagename, str(st).strip())
 
 ##-----------------------------------------------------------------------------
 def get_menuitems(config, pagename, parentname):
@@ -50,7 +50,11 @@ def get_menuitems(config, pagename, parentname):
         section = config[sectionname]
         md = MenuItemDescriptor(sectionname)
         md.caption = sectionname
-        md.pageurl = section['targetfile']
+        if section.has_key('targetfile'):
+            md.pageurl = section['targetfile']
+        else:
+            md.pageurl = section['url']
+
         md.selected = (sectionname == parentname)
         md.submenu = get_submenuitems(section, pagename, parentname)
 
@@ -69,12 +73,12 @@ def get_submenuitems(section, pagename, parentname):
 
         if subsection.has_key('targetfile'):
             md.pageurl = subsection['targetfile']
-            md.selected = (md.pageurl == pagename and
-                subsection['menu'] == parentname)
-        else:
-            if subsection.has_key('url'):
-                md.pageurl = subsection['url']
-                md.selected = False
+            md.selected = (subsection['targetfile'] == pagename and
+                           subsection['menu'] == parentname)
+
+        elif subsection.has_key('url'):
+            md.pageurl = subsection['url']
+            md.selected = False
 
         submenuitems.append(md)
 

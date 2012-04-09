@@ -17,10 +17,10 @@
     <RESDEPEN value="$(RESFILES) About.dfm AutoSaveDlg.dfm BaseConv.dfm Control.dfm Float.dfm 
       ImageView.dfm Info.dfm Loupe.dfm Main.dfm OptionDlg.dfm Ruler.dfm 
       ScreenForm.dfm Tool.dfm"/>
-    <LIBFILES value="gif\gif.lib png\png.lib"/>
+    <LIBFILES value="gif\gif.lib png\png.lib hotkey\TopToolParts.lib"/>
     <LIBRARIES value="TopToolParts.lib VCLX50.lib bcbsmp50.lib vcl50.lib"/>
     <SPARELIBS value="vcl50.lib bcbsmp50.lib VCLX50.lib TopToolParts.lib"/>
-    <PACKAGES value="vcl50.bpi vclx50.bpi vcljpg50.bpi bcbsmp50.bpi"/>
+    <PACKAGES value="vcl50.bpi vclx50.bpi vcljpg50.bpi TopToolParts.bpi"/>
     <PATHCPP value=".;hotkey"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
@@ -28,7 +28,7 @@
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
     <LINKER value="ilink32"/>
-    <USERDEFINES value="NO_WIN32_LEAN_AND_MEAN"/>
+    <USERDEFINES value="NO_WIN32_LEAN_AND_MEAN;_DEBUG"/>
     <SYSDEFINES value="NO_STRICT;_VIS_NOLIB"/>
     <MAINSOURCE value="TopTools4.cpp"/>
     <INCLUDEPATH value="&quot;C:\Program Files\Borland\CBuilder5\Projects\&quot;;png;gif;hotkey;$(BCB)\include;$(BCB)\include\vcl"/>
@@ -40,12 +40,12 @@
   <OPTIONS>
     <IDLCFLAGS value="-I&quot;C:\Program Files\Borland\CBuilder5\Projects\.&quot; -Ipng -Igif -Ihotkey 
       -I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp 
-      -DNO_WIN32_LEAN_AND_MEAN -boa"/>
-    <CFLAG1 value="-O2 -H=obj/pch.csm -Hc -Vx -Ve -X- -a8 -b- -k- -vi -c -tW -tWM"/>
-    <PFLAGS value="-N2obj -N0obj -$Y- -$L- -$D- -v -JPHNE -M"/>
+      -DNO_WIN32_LEAN_AND_MEAN -D_DEBUG -boa"/>
+    <CFLAG1 value="-Od -H=obj/pch.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c -tW -tWM"/>
+    <PFLAGS value="-N2obj -N0obj -$Y+ -$W -$O- -v -JPHNE -M"/>
     <RFLAGS value=""/>
-    <AFLAGS value="/mx /w2 /zn"/>
-    <LFLAGS value="-Iobj -D&quot;&quot; -aa -Tpe -x -w"/>
+    <AFLAGS value="/mx /w2 /zi"/>
+    <LFLAGS value="-Iobj -D&quot;&quot; -aa -Tpe -x -w -v"/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="c0w32.obj sysinit.obj $(OBJFILES)"/>
@@ -59,7 +59,7 @@ AutoIncBuild=1
 MajorVer=4
 MinorVer=0
 Release=0
-Build=52
+Build=58
 Debug=0
 PreRelease=1
 Special=0
@@ -71,9 +71,9 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Willem &amp; Co
 FileDescription=Screen Design Toolbox
-FileVersion=4.0.0.52
+FileVersion=4.0.0.58
 InternalName=TopTools
-LegalCopyright=Copyright © 1998-2009 Willem Jongman
+LegalCopyright=Copyright © 1998-2010 Willem Jongman
 LegalTrademarks=
 OriginalFilename=TopTools4.exe
 ProductName=TopTools
@@ -130,8 +130,8 @@ Item0=$(BCB)\source\vcl
 
 [HistoryLists\hlConditionals]
 Count=4
-Item0=NO_WIN32_LEAN_AND_MEAN
-Item1=NO_WIN32_LEAN_AND_MEAN;_DEBUG
+Item0=NO_WIN32_LEAN_AND_MEAN;_DEBUG
+Item1=NO_WIN32_LEAN_AND_MEAN
 Item2=_DEBUG;NO_WIN32_LEAN_AND_MEAN
 Item3=_DEBUG
 
@@ -165,10 +165,5 @@ LinkCGLIB=0
 AddServerUnit=1
 AddClientUnit=1
 PrecompiledHeaders=1
-
-[Language]
-ActiveLang=
-ProjectLang=
-RootDir=
   </IDEOPTIONS>
 </PROJECT>

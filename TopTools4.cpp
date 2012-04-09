@@ -23,6 +23,7 @@ USEFORM("ScreenForm.cpp", ScreenForm);
 USEFORM("Tool.cpp", ToolForm);
 USELIB("gif\gif.lib");
 USELIB("png\png.lib");
+USELIB("hotkey\TopToolParts.lib");
 USERES("Cursors.res");
 USERES("TopTools4.res");
 USEUNIT("AutoSave.cpp");

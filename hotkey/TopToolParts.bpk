@@ -3,7 +3,7 @@
 <PROJECT>
   <MACROS>
     <VERSION value="BCB.05.03"/>
-    <PROJECT value="TopToolParts.bpl"/>
+    <PROJECT value=".\TopToolParts.bpl"/>
     <OBJFILES value="obj\TopToolParts.obj obj\HotkeyPanel.obj obj\PathEllipsisLabel.obj 
       obj\HotkeyInfo.obj"/>
     <RESFILES value="TopToolParts.res"/>
@@ -25,17 +25,18 @@
     <USERDEFINES value=""/>
     <SYSDEFINES value="NO_STRICT;USEPACKAGES"/>
     <MAINSOURCE value="TopToolParts.cpp"/>
-    <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\PrintScreenEx\RulerPanel;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="..\PrintScreenEx\RulerPanel;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp -boa"/>
+    <IDLCFLAGS value="-I..\PrintScreenEx\RulerPanel -I$(BCB)\include -I$(BCB)\include\vcl 
+      -src_suffix cpp -boa"/>
     <CFLAG1 value="-O2 -H=obj\vcl50.csm -Hc -Vx -Ve -X- -a8 -b- -k- -vi -c -tWM"/>
     <PFLAGS value="-N2obj -N0obj -$Y- -$L- -$D- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zn"/>
-    <LFLAGS value="-Iobj -D&quot;TopTools custom components&quot; -aa -Tpp -x -Gn -Gl -Gi"/>
+    <LFLAGS value="-l. -Iobj -D&quot;TopTools custom components&quot; -aa -Tpp -x -Gn -Gl -Gi"/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="c0pkg32.obj $(PACKAGES) sysinit.obj $(OBJFILES)"/>
@@ -70,18 +71,15 @@ ProductName=
 ProductVersion=1.0.0.0
 Comments=
 
-[Excluded Packages]
-$(BCB)\Bin\proide50.bpl=Borland Core IDE Package
-$(BCB)\Bin\bcbpro50.bpl=C++Builder Professional IDE Package
-$(BCB)\Bin\bcbcxp50.bpl=Borland C++ Builder Code Explorer
-
 [HistoryLists\hlIncludePath]
-Count=1
-Item0=$(BCB)\include;$(BCB)\include\vcl
+Count=2
+Item0=..\PrintScreenEx\RulerPanel;$(BCB)\include;$(BCB)\include\vcl
+Item1=$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
-Count=1
-Item0=$(BCB)\lib\obj;$(BCB)\lib
+Count=2
+Item0=..\PrintScreenEx\RulerPanel;$(BCB)\lib\obj;$(BCB)\lib
+Item1=$(BCB)\lib\obj;$(BCB)\lib
 
 [HistoryLists\hlDebugSourcePath]
 Count=1
@@ -94,6 +92,14 @@ Item0=_DEBUG
 [HistoryLists\hlIntOutputDir]
 Count=1
 Item0=obj
+
+[HistoryLists\hlFinalOutputDir]
+Count=1
+Item0=.
+
+[HistoryLists\hIBPIOutputDir]
+Count=1
+Item0=.
 
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl

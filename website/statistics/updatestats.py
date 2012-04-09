@@ -15,7 +15,7 @@ try:
 ##     print msg
 
 except:
-    print 'Authentication failed.'
+    print 'Could not connect.'
 
 else:
     result = conn.execute('cd ~/WWW/statistics/; ./update')
@@ -26,5 +26,5 @@ else:
 
     conn.close()
 
-raw_input("press any key to exit ...")
+raw_input("Press <Enter> to exit ...")
 

@@ -7,6 +7,7 @@
 #pragma link "HotkeyPanel"
 #pragma resource "*.dfm"
 
+#include "About.h"
 #include "OptionDlg.h"
 #include "AutoSaveDlg.h"
 #include "PersistOptions.h"
@@ -393,6 +394,19 @@ void __fastcall TToolOptionsDialog::cbTransparentClick(TObject *Sender)
     edTransparency->Enabled = cbTransparent->Checked;
     udTransparency->Enabled = cbTransparent->Checked;
     lbPercent->Enabled = cbTransparent->Checked;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TToolOptionsDialog::bnAboutClick(TObject *Sender)
+{
+    TAboutBox *AboutBox = new TAboutBox(this);
+    if (AboutBox)
+    {
+        Hide();
+        AboutBox->ShowModal();
+        Show();
+        delete AboutBox;
+    }
 }
 
 //---------------------------------------------------------------------------
