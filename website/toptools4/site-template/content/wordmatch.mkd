@@ -1,0 +1,13 @@
+Little helper in solving letter-puzzles (cryptograms etc.)
+
+<img src="WordMatch.png" />
+
+The program looks for a file named "wordlist.dat" in it's startup directory.
+You'll have to find/create your own wordlist, any list of words will do,
+provided it contains only 7-bit ASCII characters.
+
+The words you'd like to match might be in another language than Dutch
+The wordlist I use for this program
+
+I am not sure where I got it, if anyone feels I stole their words, please let me know.
+

@@ -1,0 +1,84 @@
+## Version history
+
+#### version 3.0:
+
+##### Loupe
+  * I rewrote the loupe from scratch, attempts to make it sizable made clear this
+was the only sane option.
+  * It is sizable now and I added a tool bar.
+  * On machines running Windows 2000 or Windows XP, the loupe window sits on it's
+own layer, so it doesn't show up in it's own view, it is fully transparent to
+itself ;).
+  * Magnification can now be any discrete value between 1 and 20.
+  * The view can be frozen (detached from mouse movement) so it is possible to
+keep the magnified view of a screen part in focus. The focus point of the view
+can be moved by dragging it with the mouse.
+
+
+
+##### Screen capture
+  * The screen grabber no longer freezes the screen during a capture session.
+
+  * It now supports PNG format in saving snapshots.
+
+
+##### Global hotkey
+  * Version 2.41 added functionality to the info window so that pressing Ctrl-C
+would copy the current color in `#ABCDEF` webcolor format to the clipboard, but
+this only works when one of the TopTools windows has the keyboard focus.
+
+  * The global hotkey works regardless of which window (or even what desktop) is
+active, it acts global for the entire machine.
+
+##### Options dialog
+  * The hotkey needed a way to be configured, so I added this dialog.
+
+  * The way a color is copied to the clipboard can also be configured, a leading
+`'#'` is annoying in Photoshop, it prefers `ABCDEF` (or it gives you `#ABCDE`), but
+when editing HTML it is more convenient to have a `'#'` prefix and have
+surrounding quotes (`"#ABCDEF"`). These format settings apply to both the hotkey
+action and the classic Ctrl-C action (which still works).
+
+##### General
+  * I added an option to start with Windows and a way to adjust the length
+of the ruler.
+
+
+
+  * General
+I spent a lot of time playing with the appearance of the tools.
+
+All tool windows now have a "snap to screen border" feature. You can override
+this behavior by holding down the Ctrl key while moving the window.
+
+#### version 2.43:
+
+  * Fixed two bugs in the Screen-grabber:
+The snapshot was only saved when the selection was made from top-left to
+bottom-right, classic example of sloppy programming...
+
+  * Selecting Cancel in the "Save to File" dialog now cancels the entire capture
+operation.
+
+  * The ruler orientation can now be toggled with the middle mouse button (provided this event is mapped to 'middle button' in the Mouse settings of the Control Panel).
+
+#### version 2.42:
+
+  * Tray icon now gets restored after a restart of Windows Explorer.
+
+#### version 2.41:
+
+  * When using the color-picker, pressing Ctrl-C now copies the current pixel color to the Windows clipboard in `#RRGGBB` webcolor format.
+  * It looks like I finally managed to get the stay-on-top feature stable...
+  * Need to rethink the trayicon double-click and minimize logic, suggestions are welcome!
+
+#### version 2.40:
+
+  * Doubleclicking the tray-icon now restores the main-window.
+  * Loupe can now be zoomed in and out with the '+' and '-' keys on the numeric keypad.
+  * Removed the doubleclick action (toggle orientation) from the ruler, it interfered with the singleclick action (start a drag operation). Orientation can now be toggled with the '/' key on the numeric keypad.
+  * Fixed a bug in the loupe-magnification (this one was introduced with version 2.3).
+  * Removed the grid option from the loupe, it served no practical purpose.
+  * Fixed a bug in the binary field of the baseconverter that made the caret jump to the left with every digit entered.
+  * Revamped the "About..." dialog box, it now shows the actual build number and date. Also added a hyperlink to the TopTools homepage and changed the logo.
+
