@@ -49,7 +49,7 @@ The ruler orientation can be toggled through the popup menu or by pressing
 the numeric '/' key, it can be moved with the arrow-keys or by dragging it
 with the mouse.
 
-![Ruler and Loupe](../ruler_loupe.gif)
+![Ruler and Loupe](../ruler_loupe.png)
 
 ### Loupe
 
