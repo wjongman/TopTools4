@@ -1,5 +1,19 @@
+## Description
+* * *
 
 ![Toolbar Window](../toolbar.png)
+
+TopTools is a set of utilities for web-designers and GUI-developers.
+
+It features a screen-loupe and a screen-ruler seamlessly working together,
+additional are a color-picker, a screen-grabber and a base-converter.
+
+TopTools is "portable", you can run it from a USB-stick and it will not
+make any changes to the computer you plug it into (unless you ask it to).
+
+It comes without installer, it doesn't depend on external libraries or
+frameworks, just [download](test.htm) the zipfile, unpack the exe and run
+it.
 
 ## Introduction
 * * *
@@ -15,21 +29,6 @@ like:
   * How can I print this part of the screen?
   * What was the ASCII value of this character again?
   * What is 10110110 in hexadecimal (or vice versa)?
-
-## Description
-* * *
-
-TopTools is a set of utilities for web-designers and GUI-developers.
-
-It features a screen-loupe and a screen-ruler seamlessly working together,
-additional are a color-picker, a screen-grabber and a base-converter.
-
-TopTools is "portable", you can run it from a USB-stick and it will not
-make any changes to the computer you plug it into (unless you ask it to).
-
-It comes without installer, it doesn't depend on external libraries or
-frameworks, just [download](test.htm) the zipfile, unpack the exe and run
-it.
 
 ## Features
 * * *
@@ -91,12 +90,12 @@ relative coordinates.
 ![Screen Capture](../grabber.png)
 
 The screen grabber captures a portion of the screen, it shows
-a sizable, transparent window that can be accurately positioned by using the
-mouse or the keyboard.
+a sizeable, transparent window that can be accurately positioned by using the
+mouse or the keyboard arrow-keys.
 
 Screen-capture can be activated with a global hotkey.
 
-Grabbed View can be opened in a window, saved to file, copied to clipboard or
+Grabbed View can be opened in a window, saved to file, copied to the clipboard or
 printed.
 
 Autosave features make it easy to capture a sequence of views with a minimum

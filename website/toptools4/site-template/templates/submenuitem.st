@@ -1,5 +1,5 @@
 $if(it.selected)$
-<div class="submenuitem selected">$it.caption$</div>
+<li>$it.caption$</li>
 $else$
-<div class="submenuitem"><a href="$it.pageurl$">$it.caption$</a></div>
+<li><a href="$it.pageurl$">$it.caption$</a></li>
 $endif$

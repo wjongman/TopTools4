@@ -9,34 +9,52 @@
     <meta name="robots" content="index, follow, noarchive" />
 
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" type="text/css" href="screen.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
   </head>
-  <body>
-  <div id="header">
-    <h1>$title$</h1>
-    <h3>$subtitle$</h3>
-  </div>
-  <div class="colmask leftmenu">
-    <div class="colleft">
-      <div class="col1">
-        <!-- Column 1 start -->
-        $content$
-        <!-- Column 1 end -->
-      </div>
-      <div class="col2">
-        <!-- Column 2 start -->
-        $menuitems:menuitem()$
-        <!-- Column 2 end -->
-      </div>
-    </div>
-  </div>
-  <div id="footer">
+
+<body><div id="wrap">
+
+<div id="header">
+  <h1>$title$</h1>
+  <p>Last update: $lastupdate$</p>
+</div>
+
+
+<div id="avmenu">
+<h2 class="hide">Menu:</h2>
+<ul>
+  $menuitems:menuitem()$
+</ul>
+
+<!--
+<div class="announce">
+<p>Last update:</p>
+<p>$lastupdate$</p>
+</div>
+ -->
+
+<div style="text-align:center">
+</div>
+
+</div>
+
+<div id="extras">
+<p><strong>Other utilities:</strong>
+$menuitems:sidebaritem()$
+</div>
+
+<div id="content">
+  $content$
+</div>
+
+<div id="footer">
     <p class="left">Contact:
     <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#105;&#110;&#102;&#111;&#64;&#116;&#111;&#112;&#116;&#111;&#111;&#108;&#115;&#46;&#111;&#114;&#103;">
           &#105;&#110;&#102;&#111;&#64;&#116;&#111;&#112;&#116;&#111;&#111;&#108;&#115;&#46;&#111;&#114;&#103;</a>
     </p>
     <p class="right">&copy; Willem Jongman 2011</p>
-<!--     <p>&nbsp;</p>  -->
-  </div>
-  </body>
-  </html>
+</div>
+
+</div>
+
+</body></html>

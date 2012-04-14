@@ -3,6 +3,7 @@
 from stringtemplate3 import StringTemplateGroup
 from configobj import ConfigObj
 import markdown
+import time
 
 ##-----------------------------------------------------------------------------
 class MenuItemDescriptor(object):
@@ -17,6 +18,7 @@ class MenuItemDescriptor(object):
 def render_all_pages():
 
     config = ConfigObj('./content/index.ini')
+##     config = ConfigObj('./content/toptools_single.ini')
 
     for sectionname in config.sections:
         section = config[sectionname]
@@ -39,7 +41,7 @@ def render_page(config, section, sectionname):
     st["subtitle"] = section['subtitle']
     st["content"] = mark_down(section['content'])
     st["menuitems"] = get_menuitems(config, pagename, sectionname)
-
+    st["lastupdate"] = timestamp()
     save_page(pagename, str(st).strip())
 
 ##-----------------------------------------------------------------------------
@@ -97,6 +99,10 @@ def mark_down(filename):
     f.close()
 
     return markdown.markdown(text)
+
+##-----------------------------------------------------------------------------
+def timestamp():
+    return time.ctime()
 
 ##-----------------------------------------------------------------------------
 def main():
