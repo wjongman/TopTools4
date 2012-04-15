@@ -156,6 +156,7 @@ void __fastcall TPersistImage::DoSaveToFile(const String& PathName)
     {
         TPNGObject* Image = new TPNGObject();
         Image->Assign(m_pBitmap);
+        Image->AddtEXt("Software", "TopTools 4");
         __try
         {
             Image->SaveToFile(sFileName);
