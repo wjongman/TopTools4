@@ -1,6 +1,37 @@
 ## Version history
+***
+#### version 4.0
 
-#### version 3.0:
+##### General
+  * TopTools is now "portable", so you can run it from a USB-stick etc. Contrary to TopTools 3, version 4 saves settings only if you ask it to, either in the registry or in an .ini file.
+  * No installer, Since TopTools doesn't depend on external libraries or frameworks, there is no (and never really was any) reason for it to be "installed", just unzip the exe and run it.
+
+##### Main window
+  * Minimize to system tray is now optional.
+  * Added Options button.
+
+##### Screengrabber
+  * Grabbed view can now be printed.
+  * Completely rewritten for Vista, but won't work on Win95/98 ..
+  * Grab-screen now shows a sizable, transparent window that can be accurately positioned by using the mouse or the keyboard.
+  * Screen-capture can be activated with global hotkey.
+  * Grabbed View can be opened in a window, saved to file, copied to clipboard or printed.
+  * New Autosave features make it easy to capture a sequence of views with a minimum of keystrokes.
+
+##### Info
+  * Left-click and drag from the Info-window to display mouse coordinates relative to the window above which the mouse is hovering (instead of relative to the top-left of the desktop).
+
+##### Loupe
+  * Locked View can now be copied, saved or printed.
+
+##### Ruler
+  * Can now be made transparent (not on Win95/98).
+
+##### Options dialog
+  * Many new options, improved layout.
+
+
+#### version 3.0
 
 ##### Loupe
   * I rewrote the loupe from scratch, attempts to make it sizable made clear this
@@ -43,15 +74,12 @@ action and the classic Ctrl-C action (which still works).
   * I added an option to start with Windows and a way to adjust the length
 of the ruler.
 
+  * I spent a lot of time playing with the appearance of the tools.
 
-
-  * General
-I spent a lot of time playing with the appearance of the tools.
-
-All tool windows now have a "snap to screen border" feature. You can override
+  * All tool windows now have a "snap to screen border" feature. You can override
 this behavior by holding down the Ctrl key while moving the window.
 
-#### version 2.43:
+#### version 2.43
 
   * Fixed two bugs in the Screen-grabber:
 The snapshot was only saved when the selection was made from top-left to
@@ -62,17 +90,17 @@ operation.
 
   * The ruler orientation can now be toggled with the middle mouse button (provided this event is mapped to 'middle button' in the Mouse settings of the Control Panel).
 
-#### version 2.42:
+#### version 2.42
 
   * Tray icon now gets restored after a restart of Windows Explorer.
 
-#### version 2.41:
+#### version 2.41
 
   * When using the color-picker, pressing Ctrl-C now copies the current pixel color to the Windows clipboard in `#RRGGBB` webcolor format.
   * It looks like I finally managed to get the stay-on-top feature stable...
   * Need to rethink the trayicon double-click and minimize logic, suggestions are welcome!
 
-#### version 2.40:
+#### version 2.40
 
   * Doubleclicking the tray-icon now restores the main-window.
   * Loupe can now be zoomed in and out with the '+' and '-' keys on the numeric keypad.

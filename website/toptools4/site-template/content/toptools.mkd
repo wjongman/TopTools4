@@ -153,9 +153,3 @@ Library. Later versions were adapted to and maintained with Borland C++Builder
 
   * Write a little help file.
 
-* * *
-Comments, requests and bug reports:
-
-[ info@toptools.org](mailto:info@toptools.org)
-
-

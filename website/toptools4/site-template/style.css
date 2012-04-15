@@ -22,7 +22,7 @@ body {
 font:76% Verdana,Tahoma,Arial,sans-serif;
 margin:0 auto;
 padding:0;
-background:url(bg.gif) repeat-y top center #f4f4f4;
+//background:url(bg.gif) repeat-y top center #f4f4f4;
 }
 
 #wrap {
@@ -91,7 +91,7 @@ background:#f4f4f4;
 
 #avmenu li a:hover {
 color:#286ea0;
-border-left:4px solid #286ea0;
+//border-left:4px solid #286ea0;
 background:#eaeaea;
 }
 
@@ -136,6 +136,10 @@ display:inline;
 border:4px solid #f0f0f0;
 padding:1px;
 background:#ccc;
+}
+
+hr {
+color:#fcfcfc;
 }
 
 h3 {

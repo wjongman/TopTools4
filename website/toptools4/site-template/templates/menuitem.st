@@ -1,14 +1,5 @@
 $if(it.selected)$
-<!--
-<li>$it.caption$</li>
-<div class="selmenuitem">$it.caption$</div>
--->
 $it.submenu:submenuitem()$
-$else$
- <!--
-<li><a href="$it.pageurl$">$it.caption$</a></li>
-<div class="menuitem"><a href="$it.pageurl$">$it.caption$</a></div>
--->
 $endif$
 
 
