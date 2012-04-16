@@ -1,14 +1,32 @@
 ## Download
 * * *
 
-It comes without installer, it doesn't depend on external libraries or
-frameworks, just [download](test.htm) the zipfile, unpack the exe and run
-it.
+There is no need for TopTools to be installed, it doesn't depend on external
+libraries or frameworks, just download the zipfile, unpack the exe and
+use it.
+
+  * [TopTools 4.0](download/TopTools4_00_52.zip) (560 Kb. Zipped executable)
+
+If you don't want to be bothered with unpacking and such and don't
+need 'portability', there is this installer package:
+
+  * [TopTools 4.0](download/Setup_TopTools40.exe) (1.2 Mb. Installer)
+
+(I have yet to find out why the Installer version is twice the size of the
+actual program, I used [InnoSetup](http://www.jrsoftware.org/isinfo.php)
+to create it).
 
 ## Older Versions
 * * *
 
-  * [TopTools 3.0](download/Setup_TopTools30.exe)
-  * [TopTools 2.43](download/toptools243.exe)
+For people using only the loupe and the ruler there may be no reason to
+upgrade to version 4, the changes are mainly in the screen grabber and
+the main window.
+
+  * [TopTools 3.0](download/Setup_TopTools30.exe) (635 Kb. Installer)
+
+For people still using Win95/98 or for nostalgic reasons:
+
+  * [TopTools 2.43](download/toptools243.exe) (660 Kb. Installer)
 
 

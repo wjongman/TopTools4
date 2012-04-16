@@ -11,10 +11,6 @@ additional are a color-picker, a screen-grabber and a base-converter.
 TopTools is "portable", you can run it from a USB-stick and it will not
 make any changes to the computer you plug it into (unless you ask it to).
 
-It comes without installer, it doesn't depend on external libraries or
-frameworks, just [download](test.htm) the zipfile, unpack the exe and run
-it.
-
 ## Introduction
 * * *
 
@@ -134,12 +130,6 @@ Screen capture was the latest addition to the tools.
 The initial version was developed using Borland C++ 5.0 and the Object Windows
 Library. Later versions were adapted to and maintained with Borland C++Builder
 3, 4 and 5.
-
-## Older Versions
-* * *
-
-  * [TopTools 3.0](download/Setup_TopTools30.exe)
-  * [TopTools 2.43](download/toptools243.exe)
 
 ## Acknowledgements
 * * *
