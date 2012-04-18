@@ -1,0 +1,24 @@
+## TopTools Freeware License
+* * *
+
+This software is provided "as-is," without any express or implied warranty.
+In no event shall the author be held liable for any damages arising from the
+use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+provided that the following conditions are met:
+
+1. The origin of this software must not be misrepresented; you must not
+   claim that you wrote the original software.
+
+2. You are NOT allowed to make a charge for distributing this software
+   (either for profit or merely to recover your media and distribution costs)
+   whether as a stand-alone product, or as part of a compilation or anthology,
+   without explicit prior written permission.
+
+Except where otherwise noted, all of the documentation and software included
+in the TopTools package is copyrighted by Willem Jongman.
+
+Copyright (C) 1998-2012 Willem Jongman. All rights reserved.
+
+

@@ -18,6 +18,13 @@ span.value {
 color:red;
 }
 
+span.keybd {
+font-family: Consolas, Courier, monospace;
+background:#FFFFCC;
+border:1px solid #000;
+padding:1px 3px 1px 3px;
+}
+
 body {
 font:76% Verdana,Tahoma,Arial,sans-serif;
 margin:0 auto;
@@ -82,7 +89,7 @@ margin-bottom:4px;
 font-weight:700;
 height:20px;
 text-decoration:none;
-color:#505050;
+color:#303030;
 display:block;
 border-left:4px solid #ccc;
 padding:6px 0 0 10px;
@@ -90,8 +97,8 @@ background:#f4f4f4;
 }
 
 #avmenu li a:hover {
-color:#286ea0;
-//border-left:4px solid #286ea0;
+color:#0066cc;
+//border-left:4px solid #0066cc;
 background:#eaeaea;
 }
 
@@ -129,6 +136,14 @@ padding:0 10px;
 #content h2 {
 font-size:1.5em;
 margin:0 0 0.5em;
+padding-top: 0.5em;
+border-top:1px solid #c0c0c0;
+
+}
+
+#content h3 {
+font-size:1.2em;
+margin:0.5em 0;
 }
 
 #content img {
@@ -142,19 +157,14 @@ hr {
 color:#fcfcfc;
 }
 
-h3 {
-font-size:1.3em;
-margin:0 0 10px;
-}
-
 a {
 text-decoration:none;
-color:#286ea0;
+color:#0066cc;
 }
 
 a:hover {
 text-decoration:underline;
-color:#286ea0;
+color:#0066cc;
 }
 
 a img {
@@ -215,3 +225,4 @@ display:none;
 dt,.bold {
 font-weight:700;
 }
+

@@ -40,8 +40,8 @@ indicator that follows the mouse pointer. The mouse pointer has a line shape
 that flips when moved across the center of the ruler, in this way both sides
 of the ruler can be used.
 
-The ruler orientation can be toggled through the popup menu or by pressing
-the numeric '/' key, it can be moved with the arrow-keys or by dragging it
+The ruler orientation can be toggled through the popup menu or by clicking
+the middle mouse-button, it can be moved with the arrow-keys or by dragging it
 with the mouse.
 
 ![Ruler and Loupe](../ruler_loupe.png)

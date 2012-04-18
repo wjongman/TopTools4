@@ -98,8 +98,8 @@ def mark_down(filename):
     text = f.read()
     f.close()
 
-    return markdown.markdown(text)
-
+##     return markdown.markdown(text)
+    return markdown.markdown(text, ['tables'])
 ##-----------------------------------------------------------------------------
 def timestamp():
     return time.ctime()
