@@ -1,5 +1,4 @@
 ## Download
-* * *
 
 There is no need for TopTools to be installed, it doesn't depend on external
 libraries or frameworks, just download the zipfile, unpack the exe and
@@ -17,7 +16,6 @@ actual program, I used [InnoSetup](http://www.jrsoftware.org/isinfo.php)
 to create it).
 
 ## Older Versions
-* * *
 
 For people using only the loupe and the ruler there may be no reason to
 upgrade to version 4, the changes are mainly in the screen grabber and

@@ -67,7 +67,7 @@ border:0;
 margin:0 0 10px;
 }
 
-#avmenu {
+#leftmenu {
 clear:left;
 float:left;
 width:150px;
@@ -76,7 +76,7 @@ margin:0 0 10px;
 padding:0;
 }
 
-#avmenu ul {
+#leftmenu ul {
 list-style:none;
 width:150px;
 font-size:1.1em;
@@ -84,7 +84,7 @@ margin:0 0 20px;
 padding:0;
 }
 
-#avmenu li {
+#leftmenu li {
 margin-bottom:4px;
 font-weight:700;
 height:20px;
@@ -96,7 +96,7 @@ padding:6px 0 0 10px;
 background:#f4f4f4;
 }
 
-#avmenu li a:hover {
+#leftmenu li a:hover {
 color:#0066cc;
 //border-left:4px solid #0066cc;
 background:#eaeaea;
@@ -135,9 +135,12 @@ padding:0 10px;
 
 #content h2 {
 font-size:1.5em;
-margin:0 0 0.5em;
+margin:0 0 1.0em;
 padding-top: 0.5em;
+padding-bottom: 0.5em;
 border-top:1px solid #c0c0c0;
+border-bottom:1px solid #c0c0c0;
+//background:#eaeaea;
 
 }
 

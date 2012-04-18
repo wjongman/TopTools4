@@ -20,7 +20,7 @@
 </div>
 
 
-<div id="avmenu">
+<div id="leftmenu">
 <h2 class="hide">Menu:</h2>
 <ul>
   $menuitems:menuitem()$

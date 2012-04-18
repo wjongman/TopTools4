@@ -1,5 +1,4 @@
 ## ColorComposer
-* * *
 
   <img src="ColorComposer.png" />
 

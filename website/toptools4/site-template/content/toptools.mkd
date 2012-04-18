@@ -1,5 +1,4 @@
 ## Description
-* * *
 
 ![Toolbar Window](../toolbar.png)
 
@@ -12,7 +11,6 @@ TopTools is "portable", you can run it from a USB-stick and it will not
 make any changes to the computer you plug it into (unless you ask it to).
 
 ## Introduction
-* * *
 
 I developed TopTools through the years as I was confronted with questions
 like:
@@ -27,7 +25,6 @@ like:
   * What is 10110110 in hexadecimal (or vice versa)?
 
 ## Features
-* * *
 
 ### General
 
@@ -107,7 +104,6 @@ characters.
 
 
 ## History
-* * *
 
 TopTools was born when I was using a screen-magnifier and a screen-ruler at
 the same time and was annoyed by the fact that the two didn't cooperate:
@@ -132,14 +128,12 @@ Library. Later versions were adapted to and maintained with Borland C++Builder
 3, 4 and 5.
 
 ## Acknowledgements
-* * *
 
   * GIF support: [TGifImage](http://melander.dk/delphi/gifimage/) by Anders Melander.
   * PNG support: [TPNGImage](http://pngdelphi.sourceforge.net/) by Gustavo Daud.
   * Installer: [InnoSetup](http://www.jrsoftware.org/isinfo.php) by Jordan Russell.
 
 ## Todo:
-* * *
 
   * Write a little help file.
 
