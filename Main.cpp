@@ -304,15 +304,22 @@ void __fastcall TMainForm::HandleKeyDown(TObject *Sender, WORD &Key,
             m_pLoupe->ToggleLock();
         break;
 
-    case VK_ADD:      // numeric + zooms in
+    case VK_ADD:      // numeric '+' zooms in
         if (m_pLoupe)
             m_pLoupe->ZoomIn();
         break;
 
-    case VK_SUBTRACT: // numeric - zooms out
+    case VK_SUBTRACT: // numeric '-' zooms out
         if (m_pLoupe)
             m_pLoupe->ZoomOut();
         break;
+
+    // TODO: Find a way to toggle ruler orientation around center
+    // instead of around curent mouse position
+    //case VK_DIVIDE:   // numeric '/' toggles ruler orientation
+    //    if (m_pRuler)
+    //       m_pRuler->ToggleOrientation();
+    //    break;
 
     case 'C':         // Control-C copies #webcolor
         if (Shift.Contains(ssCtrl))

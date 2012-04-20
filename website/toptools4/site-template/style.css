@@ -91,7 +91,7 @@ height:20px;
 text-decoration:none;
 color:#303030;
 display:block;
-border-left:4px solid #ccc;
+//border-left:2px solid #ccc;
 padding:6px 0 0 10px;
 background:#f4f4f4;
 }
@@ -140,8 +140,6 @@ padding-top: 0.5em;
 padding-bottom: 0.5em;
 border-top:1px solid #c0c0c0;
 border-bottom:1px solid #c0c0c0;
-//background:#eaeaea;
-
 }
 
 #content h3 {

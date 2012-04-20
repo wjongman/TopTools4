@@ -4,7 +4,7 @@ There is no need for TopTools to be installed, it doesn't depend on external
 libraries or frameworks, just download the zipfile, unpack the exe and
 use it.
 
-  * [TopTools 4.0](download/TopTools4_00_52.zip) (560 Kb. Zipped executable)
+  * [TopTools 4.0](download/TopTools4_00_59.zip) (560 Kb. Zipped executable)
 
 If you don't want to be bothered with unpacking and such and don't
 need 'portability', there is this installer package:
@@ -12,7 +12,7 @@ need 'portability', there is this installer package:
   * [TopTools 4.0](download/Setup_TopTools40.exe) (1.2 Mb. Installer)
 
 (I have yet to find out why the Installer version is twice the size of the
-actual program, I used [InnoSetup](http://www.jrsoftware.org/isinfo.php)
+actual program, I used [InnoSetup 5.4](http://www.jrsoftware.org/isinfo.php)
 to create it).
 
 ## Older Versions

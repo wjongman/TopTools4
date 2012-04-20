@@ -1,15 +1,10 @@
-## Documentation
-
-### Keyboard shortcuts
+## Keyboard shortcuts
 
 <span class="keybd">Arrow</span><span> means any of the</span>
 <span class="keybd">&#x2190;</span>,
 <span class="keybd">&#x2191;</span>,
 <span class="keybd">&#x2193;</span> or
 <span class="keybd">&#x2192;</span><span> keys.</span>
-
-<span class="keybd">Num</span><span> means a key on the numeric-keypad.</span>
-
 
 &nbsp;    |  &nbsp;  |  &nbsp;
 ----------|---------------------:|--------------:
@@ -18,15 +13,15 @@
           | <span class="keybd">Shift</span>+<span class="keybd">Arrow</span>  |  move ruler by 10 pixels
           | <span class="keybd">Ctrl</span>+<span class="keybd">Arrow</span>  |  move cursor by 1 pixel
           | <span class="keybd">Ctrl</span>+<span class="keybd">Shift</span>+<span class="keybd">Arrow</span>  |  move cursor by 10 pixels
-          | <span class="keybd">Middle Mousebutton</span> |  toggle orientation
+          | <span class="keybd">Mouse Middle-button</span> |  toggle orientation
 **loupe** | |
           | <span class="keybd">Ctrl</span>+<span class="keybd">+</span> |  zoom in
           | <span class="keybd">Ctrl</span>+<span class="keybd">-</span> |  zoom out
-          | <span class="keybd">Ctrl</span>+<span class="keybd">H</span>  |  toggle crosshair
-          | <span class="keybd">Ctrl</span>+<span class="keybd">B</span>  |  toggle centerbox
-          | <span class="keybd">Ctrl</span>+<span class="keybd">G</span>  |  toggle grid
+          | <span class="keybd">Ctrl</span>+<span class="keybd">H</span>  |  crosshair on/off
+          | <span class="keybd">Ctrl</span>+<span class="keybd">B</span>  |  centerbox on/off
+          | <span class="keybd">Ctrl</span>+<span class="keybd">G</span>  |  grid on/off
           | <span class="keybd">Spacebar</span> | freeze/unfreeze
-          | <span class="keybd">Mouse Scrollwheel</span> |  zoom in / out
+          | <span class="keybd">Mouse Scroll-wheel</span> |  zoom in/out
 **screen capture** | |
           | <span class="keybd">Arrow</span>  |  move frame by 1 pixel
           | <span class="keybd">Shift</span>+<span class="keybd">Arrow</span>  |  move frame by 10 pixels
@@ -36,6 +31,39 @@
           | <span class="keybd">Ctrl</span>+<span class="keybd">C</span>  |  copy webcolor to clipboard
 
 
-### Commandline options
+## Startup options
+
+TopTools can run in three modes:
+
+* Portable mode:
+No settings are saved.
+
+* Registry mode:
+Settings will be stored in the Windows Registry.
+
+* Ini-file mode:
+Settings will be saved in a file with the '.ini' extension.
+
+When Toptools is started, it tries to figure out which mode it is running
+in, the heuristics used are as follows:
+
+* If there are commandline arguments (see below):
+use indicated mode.
+
+* Else if a file called "TopTools4.ini" is found:
+use Ini-file mode.
+
+* Else if a registry key is found (HKCU\\Software\\TopTools 4):
+use Registry mode.
+
+* Otherwise use Portable mode.
+
+
+
+Commandline    |arguments:    |&nbsp;    |  &nbsp;
+----------|----------|----------|----------
+&nbsp;    | **-p**   |&nbsp;    | use Portable mode
+&nbsp;    | **-r**   |&nbsp;    | use Registry mode
+&nbsp;    | **-i&nbsp;[filepath.ini]** |&nbsp;    | use Ini-file mode, optionally use 'filepath.ini' as ini-file.
 
 

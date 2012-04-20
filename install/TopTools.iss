@@ -1,12 +1,12 @@
 ; todo: check to see if program is currently running and offer to terminate it...
 [Setup]
 AppName=TopTools 4
-AppVerName=TopTools version 4.0.0.49
-AppVersion=4.0.0.49
-AppCopyright=Copyright © 1997-2009 Willem Jongman.
+AppVerName=TopTools version 4.0.0.59
+AppVersion=4.0.0.59
+AppCopyright=Copyright © 1997-2012 Willem Jongman.
 AppId=TopTools_4
 DefaultDirName={pf}\TopTools 4
-OutputBaseFilename=Setup_TopTools_4
+OutputBaseFilename=Setup_TopTools_40
 
 DisableReadyMemo=no
 DisableReadyPage=no
@@ -91,4 +91,8 @@ Name: desktopicon; Description: Create an icon on the &Desktop; Flags: unchecked
 ;Filename: {app}\TopTools4.exe; Description: Start the program; Flags: postinstall nowait skipifsilent
 
 [_ISToolPreCompile]
+Name: prepare_install.bat; Parameters: ..\exe\TopTools4.exe
+
+
+[PreCompile]
 Name: prepare_install.bat; Parameters: ..\exe\TopTools4.exe

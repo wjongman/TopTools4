@@ -133,7 +133,3 @@ Library. Later versions were adapted to and maintained with Borland C++Builder
   * PNG support: [TPNGImage](http://pngdelphi.sourceforge.net/) by Gustavo Daud.
   * Installer: [InnoSetup](http://www.jrsoftware.org/isinfo.php) by Jordan Russell.
 
-## Todo:
-
-  * Write a little help file.
-
