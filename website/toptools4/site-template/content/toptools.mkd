@@ -1,6 +1,6 @@
 ## Description
 
-![Toolbar Window](../toolbar.png)
+![Toolbar Window](toolbar.png)
 
 TopTools is a set of utilities for web-designers and GUI-developers.
 
@@ -41,7 +41,7 @@ The ruler orientation can be toggled through the popup menu or by clicking
 the middle mouse-button, it can be moved with the arrow-keys or by dragging it
 with the mouse.
 
-![Ruler and Loupe](../ruler_loupe.png)
+![Ruler and Loupe](ruler_loupe.png)
 
 ### Loupe
 
@@ -63,7 +63,7 @@ A frozen view can be saved to file, copied to the clipboard or sent to a printer
 
 ### Info Window / Color Picker
 
-![Info Window](../info.png)
+![Info Window](info.png)
 
 The info-window displays the color of the pixel under the mouse hotspot as
 RGB, HSV and #webcolor, it also shows the current mouse position in
@@ -80,7 +80,7 @@ relative coordinates.
 
 ### Screen Grabber
 
-![Screen Capture](../grabber.png)
+![Screen Capture](grabber.png)
 
 The screen grabber captures a portion of the screen, it shows
 a sizeable, transparent window that can be accurately positioned by using the
@@ -96,7 +96,7 @@ of keystrokes.
 
 ### Base Converter
 
-![Base Converter Window](../baseconv.png)
+![Base Converter Window](baseconv.png)
 
 The base converter is a tiny calculator that converts between hexadecimal,
 decimal and binary. It can also be used to find the ASCII value of printable
