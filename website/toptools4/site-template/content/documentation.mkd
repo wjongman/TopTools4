@@ -13,7 +13,8 @@
           | <span class="keybd">Shift</span>+<span class="keybd">Arrow</span>  |  move ruler by 10 pixels
           | <span class="keybd">Ctrl</span>+<span class="keybd">Arrow</span>  |  move cursor by 1 pixel
           | <span class="keybd">Ctrl</span>+<span class="keybd">Shift</span>+<span class="keybd">Arrow</span>  |  move cursor by 10 pixels
-          | <span class="keybd">Mouse Middle-button</span> |  toggle orientation
+          | <span class="keybd">Middle Mousebutton</span> |  toggle horizontal/vertical
+          | <span class="keybd">Right Mousebutton</span> |  show options menu
 **loupe** | |
           | <span class="keybd">Ctrl</span>+<span class="keybd">+</span> |  zoom in
           | <span class="keybd">Ctrl</span>+<span class="keybd">-</span> |  zoom out
@@ -21,15 +22,45 @@
           | <span class="keybd">Ctrl</span>+<span class="keybd">B</span>  |  centerbox on/off
           | <span class="keybd">Ctrl</span>+<span class="keybd">G</span>  |  grid on/off
           | <span class="keybd">Spacebar</span> | freeze/unfreeze
-          | <span class="keybd">Mouse Scroll-wheel</span> |  zoom in/out
+          | <span class="keybd">Mouse Scrollwheel</span> |  zoom in/out
+          | <span class="keybd">Right Mousebutton</span> |  show options menu
 **screen capture** | |
+          | <span class="keybd">Esc</span>  |  cancel screen capture
           | <span class="keybd">Arrow</span>  |  move frame by 1 pixel
           | <span class="keybd">Shift</span>+<span class="keybd">Arrow</span>  |  move frame by 10 pixels
           | <span class="keybd">Ctrl</span>+<span class="keybd">Arrow</span>  |  grow frame by 1 pixel
           | <span class="keybd">Ctrl</span>+<span class="keybd">Shift</span>+<span class="keybd">Arrow</span>  |  grow frame by 10 pixels
+          | <span class="keybd">Right Mousebutton</span> |  show options menu
 **info / colorpicker** | |
           | <span class="keybd">Ctrl</span>+<span class="keybd">C</span>  |  copy webcolor to clipboard
+          | <span class="keybd">Right Mousebutton</span> |  show options menu
 
+
+## Hotkeys
+
+Keyboard shortcuts like those listed above only work when one of the TopTools
+windows has keyboard focus (when TopTools is the active application).
+
+Sometimes it is useful to control a tool while another application has
+focus. You might be viewing a page in the webbrowser and needing a
+close-up view, or you would like to save or print a screenshot.
+
+For these situations you can define a (system-wide) hotkey for certain operations.
+
+Currently hotkeys can be defined for the following operations:
+
+  * Copy color to clipboard (Info)
+  * Zoom In (Loupe)
+  * Zoom Out (Loupe)
+  * Start Screen-capture (Screen-grabber)
+  * Show/hide active toolwindow(s) (Tray Icon)
+
+Hotkeys can be assigned in their respective sections in the Options dialogbox.
+
+Hotkeys can be defined in the Options dialogbox, tools supporting hotkeys
+
+Not all key combinations are valid, some are reserved by Windows and some
+may be already taken by other running applications.
 
 ## Startup options
 

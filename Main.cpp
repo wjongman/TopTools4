@@ -315,7 +315,7 @@ void __fastcall TMainForm::HandleKeyDown(TObject *Sender, WORD &Key,
         break;
 
     // TODO: Find a way to toggle ruler orientation around center
-    // instead of around curent mouse position
+    // instead of around curent mouse position (for this case)
     //case VK_DIVIDE:   // numeric '/' toggles ruler orientation
     //    if (m_pRuler)
     //       m_pRuler->ToggleOrientation();

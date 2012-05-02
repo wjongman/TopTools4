@@ -8,10 +8,13 @@
 #pragma package(smart_init)
 #pragma link "Tool"
 #pragma resource "*.dfm"
+
 //---------------------------------------------------------------------------
 __fastcall TInfoForm::TInfoForm(TComponent* Owner)
 : TToolForm(Owner, "info")
 {
+  Screen->Cursors[crCrosshair] = LoadCursor((void*)HInstance, "CROSSHAIR");
+
   ClientHeight = XYPanel->Height + RGBPanel->Height + WebPanel->Height;
   Width = 160;
   m_bDragging = false;
@@ -134,6 +137,7 @@ void __fastcall TInfoForm::FormMouseDown(TObject *Sender,
   if (Button == mbLeft)
   {
     ::SetCapture(Handle);
+    Screen->Cursor = TCursor(crCrosshair);
     m_bDragging = true;
   }
 }
@@ -167,6 +171,7 @@ void __fastcall TInfoForm::FormMouseUp(TObject *Sender,
   if (m_bDragging && Button == mbLeft)
   {
     m_bDragging = false;
+    Screen->Cursor = TCursor(crDefault);
     ::ReleaseCapture();
   }
 }
