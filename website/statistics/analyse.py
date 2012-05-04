@@ -83,7 +83,15 @@ def getMonthDownloads(lines, filenames):
 
         if 'TopTools4_00_52.zip' in line:
             parts = line.strip().split()
-            hits400 = int(parts[3])
+            hits400 += int(parts[3])
+
+        if 'TopTools4_00_59.zip' in line:
+            parts = line.strip().split()
+            hits400 += int(parts[3])
+
+        if 'Setup_TopTools40.exe' in line:
+            parts = line.strip().split()
+            hits400 += int(parts[3])
 
     return [hits243, hits300, hits400]
 
