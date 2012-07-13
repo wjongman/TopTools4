@@ -34,6 +34,9 @@
 **info / colorpicker** | |
           | <span class="keybd">Ctrl</span>+<span class="keybd">C</span>  |  copy webcolor to clipboard
           | <span class="keybd">Right Mousebutton</span> |  show options menu
+**base converter** | |
+          | <span class="keybd">&#x2191;</span>  |  increment value
+          | <span class="keybd">&#x2193;</span>  |  decrement value
 
 
 ## Hotkeys
@@ -55,12 +58,8 @@ Currently hotkeys can be defined for the following operations:
   * Start Screen-capture (Screen-grabber)
   * Show/hide active toolwindow(s) (Tray Icon)
 
-Hotkeys can be assigned in their respective sections in the Options dialogbox.
-
-Hotkeys can be defined in the Options dialogbox, tools supporting hotkeys
-
-Not all key combinations are valid, some are reserved by Windows and some
-may be already taken by other running applications.
+Hotkeys can be defined in the Options dialogbox, not all key combinations are valid,
+some are reserved by Windows and some may be already taken by other running applications.
 
 ## Startup options
 
