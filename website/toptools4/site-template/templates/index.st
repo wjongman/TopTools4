@@ -33,8 +33,8 @@
 
 <div id="extras">
   <p><strong>Other utilities:</strong>
-  <div class="selmenuitem">More to come..</div>
-<!--     $menuitems:sidebaritem()$ -->
+<!--   <div class="selmenuitem">More to come..</div> -->
+    $menuitems:sidebaritem()$
 </div>
 
 <div id="content">

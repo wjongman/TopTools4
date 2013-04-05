@@ -19,7 +19,7 @@ like:
   * How many pixels should I move this image to align with the rest?
   * What is the height of this image?
   * What is the RGB value of this pixel?
-  * How can I get this part of the screen on the clipboard?
+  * How can I get this part of the screen as image on the clipboard?
   * How can I print this part of the screen?
   * What was the ASCII value of this character again?
   * What is 10110110 in hexadecimal (or vice versa)?
