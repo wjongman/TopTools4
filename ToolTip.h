@@ -62,9 +62,9 @@ public:
         POINT pt = { rc.left, rc.top - tipsize.cy - 1};
 
         // Stay on screen
-        if (rc.left < 0)
+        if (rc.left < Screen->DesktopLeft)
         {
-            pt.x = 0;
+            pt.x = Screen->DesktopLeft;
         }
 
         if (rc.left > Screen->DesktopWidth - tipsize.cx)

@@ -7,6 +7,7 @@
 #include <Filectrl.hpp>
 #include <jpeg.hpp>
 #include <vector>
+#include <Printers.hpp>
 
 #include "gif\gifimage.hpp"
 #include "png\pngimage.hpp"

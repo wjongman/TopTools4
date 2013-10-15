@@ -6,7 +6,6 @@
 #include <registry.hpp>
 #include <map>
 #include "ToolOptions.h"
-#include "QuerySaveDlg.h"
 
 // Suppress W8027:
 // Functions containing ‘[statement]’ are not expanded inline
