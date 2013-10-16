@@ -23,6 +23,7 @@ __fastcall TScreenForm::TScreenForm(TComponent* Owner)
     SetTransparency(true, 50);
 
     DraggableForm = true;
+    SnapScreenEdges = false;
     Cursor = crSizeAll;
     FSticky = false;
 

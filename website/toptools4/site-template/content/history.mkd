@@ -1,5 +1,17 @@
 ## Version history
 
+#### version 4.01
+
+##### Main window
+  * Fixed bug that made main-window ignore saved position.
+
+##### Loupe
+  * Eliminated annoying flicker in Loupe-view
+
+##### Screengrabber
+  * Fixed bug that constrained tooltip of screengrabber to primary monitor
+  * Capture window no longer snaps to screen-edges, this was annoying when positioning it using the keyboard
+
 #### version 4.0
 
 ##### General
