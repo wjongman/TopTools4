@@ -1,6 +1,6 @@
 inherited ControlForm: TControlForm
   Left = 957
-  Top = 866
+  Top = 772
   Caption = 'TopTools 4'
   ClientHeight = 73
   ClientWidth = 302

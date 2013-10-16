@@ -45,9 +45,12 @@ protected:
   virtual void __fastcall OldPaint(void);
 
   MESSAGE void OnNCHitTest(TWMNCHitTest &Message);
+  MESSAGE LRESULT OnEraseBackground(TWMEraseBkgnd &Message);
+
 protected:
 BEGIN_MESSAGE_MAP
   VCL_MESSAGE_HANDLER(WM_NCHITTEST, TWMNCHitTest, OnNCHitTest)
+  VCL_MESSAGE_HANDLER(WM_ERASEBKGND, TWMEraseBkgnd, OnEraseBackground)
 END_MESSAGE_MAP(TCustomPanel)
 
 private:

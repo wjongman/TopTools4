@@ -61,6 +61,14 @@ void TLoupePanel::OnNCHitTest(TWMNCHitTest &Message)
 }
 
 //---------------------------------------------------------------------------
+LRESULT TLoupePanel::OnEraseBackground(TWMEraseBkgnd &Message)
+{
+    // Don't erase, to avoid flicker
+    Message.Result = true;
+    return 0;
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TLoupePanel::Resize()
 {
     int srcLeft;
