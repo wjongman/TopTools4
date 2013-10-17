@@ -38,13 +38,14 @@ public:
     }
 
     //-------------------------------------------------------------------------
-    void Update(const TRect& rc)
-    {
-        Show();
+	void Update(const TRect& rc, const TPoint& ptOrigin = TPoint(0, 0))
+	{
+		Show();
 
-        // Update tooltip text.
-        String sCoords;
-        sCoords.printf("X: %d  Y: %d  W: %d  H: %d", rc.left, rc.top, rc.Width(), rc.Height());
+		// Update tooltip text.
+		String sCoords;
+		sCoords.printf("X: %d  Y: %d  W: %d  H: %d",
+			rc.left - ptOrigin.x, rc.top - ptOrigin.y, rc.Width(), rc.Height());
 
         // Calculate the space required for our tooltip
         SIZE tipsize;
@@ -102,14 +103,14 @@ public:
 private:
 
     //-------------------------------------------------------------------------
-    HWND CreateTrackingToolTip(HWND hwndOwner)
+	HWND CreateTrackingToolTip(HWND hwndOwner)
     {
         // Create a tooltip window.
-        HWND hwndToolTip = CreateWindowEx(WS_EX_TOPMOST, TOOLTIPS_CLASS, NULL,
+		HWND hwndToolTip = CreateWindowEx(WS_EX_TOPMOST, TOOLTIPS_CLASS, NULL,
                                           WS_POPUP | TTS_NOPREFIX | TTS_ALWAYSTIP,
                                           CW_USEDEFAULT, CW_USEDEFAULT,
-                                          CW_USEDEFAULT, CW_USEDEFAULT,
-                                          hwndOwner, NULL, Application->Handle, NULL);
+										  CW_USEDEFAULT, CW_USEDEFAULT,
+										  hwndOwner, NULL, (HINSTANCE)Application->Handle, NULL);
 
         if (!hwndToolTip)
         {
@@ -120,8 +121,8 @@ private:
         // In this case, the "tool" is the entire parent window.
         m_ToolInfo.cbSize = sizeof(TOOLINFO);
         m_ToolInfo.uFlags = TTF_IDISHWND | TTF_TRACK | TTF_ABSOLUTE;
-        m_ToolInfo.hwnd = hwndOwner;
-        m_ToolInfo.hinst = Application->Handle;
+		m_ToolInfo.hwnd = hwndOwner;
+		m_ToolInfo.hinst = (HINSTANCE)Application->Handle;
         m_ToolInfo.lpszText = "pText";
         m_ToolInfo.uId = (UINT_PTR)hwndOwner;
         ::GetClientRect (hwndOwner, &m_ToolInfo.rect);

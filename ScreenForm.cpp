@@ -16,7 +16,10 @@
 
 //---------------------------------------------------------------------------
 __fastcall TScreenForm::TScreenForm(TComponent* Owner)
-: TToolForm(Owner, "capture"), InitCalled(false), m_TrackingMouse(false), m_pToolTip(NULL)//, m_hwndTooltip(NULL)
+  : TToolForm(Owner, "capture"),
+    InitCalled(false),
+    m_TrackingMouse(false),
+    m_pToolTip(NULL)
 {
     BorderStyle = bsNone;
     Color = clWhite;
@@ -213,7 +216,12 @@ void TScreenForm::UpdateToolTip()
     {
         if (m_TrackingMouse)
         {
-            m_pToolTip->Update(TRect(Left, Top, Left + Width,  Top + Height));
+    		TRect rcNew(Left, Top, Left + Width, Top + Height);
+
+            // Map (0,0) to top-left corner of virtual screen
+            TPoint ptOrigin(Screen->DesktopLeft, Screen->DesktopTop);
+
+			m_pToolTip->Update(rcNew, ptOrigin);
         }
         else
         {

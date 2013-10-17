@@ -43,8 +43,8 @@ public:
 private:
     int m_MouseOldX;
     int m_MouseOldY;
-    bool m_TrackingMouse;
 
+    bool m_TrackingMouse;
     bool InitCalled;
     TTimer* m_Timer;
 
