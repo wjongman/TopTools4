@@ -1,3 +1,7 @@
+// Suppress warning concerning the MAKELONG macro
+// W8084 Suggest parentheses to clarify precedence
+#pragma warn -8084
+
 class TToolTip
 {
 
@@ -38,14 +42,14 @@ public:
     }
 
     //-------------------------------------------------------------------------
-	void Update(const TRect& rc, const TPoint& ptOrigin = TPoint(0, 0))
-	{
-		Show();
+    void Update(const TRect& rc, const TPoint& ptOrigin = TPoint(0, 0))
+    {
+        Show();
 
-		// Update tooltip text.
-		String sCoords;
-		sCoords.printf("X: %d  Y: %d  W: %d  H: %d",
-			rc.left - ptOrigin.x, rc.top - ptOrigin.y, rc.Width(), rc.Height());
+        // Update tooltip text.
+        String sCoords;
+        sCoords.printf("X: %d  Y: %d  W: %d  H: %d",
+                       rc.left - ptOrigin.x, rc.top - ptOrigin.y, rc.Width(), rc.Height());
 
         // Calculate the space required for our tooltip
         SIZE tipsize;
@@ -57,12 +61,12 @@ public:
         m_ToolInfo.lpszText = sCoords.c_str();
         ::SendMessage(m_hwndTooltip, TTM_SETTOOLINFO, 0, (LPARAM)&m_ToolInfo);
 
-		// Get workarea of monitor we are on
-		HMONITOR hMonitor = MonitorFromRect(&rc, MONITOR_DEFAULTTONEAREST);
+        // Get workarea of monitor we are on
+        HMONITOR hMonitor = MonitorFromRect(&rc, MONITOR_DEFAULTTONEAREST);
         MONITORINFO mi;
-		mi.cbSize = sizeof(mi);
-		GetMonitorInfo(hMonitor, &mi);
-		TRect rcWork = mi.rcWork;
+        mi.cbSize = sizeof(mi);
+        GetMonitorInfo(hMonitor, &mi);
+        TRect rcWork = mi.rcWork;
 
         // Set the tooltip position.
         // Tooltip shows above left-top of window unless it is
@@ -111,14 +115,14 @@ public:
 private:
 
     //-------------------------------------------------------------------------
-	HWND CreateTrackingToolTip(HWND hwndOwner)
+    HWND CreateTrackingToolTip(HWND hwndOwner)
     {
         // Create a tooltip window.
-		HWND hwndToolTip = CreateWindowEx(WS_EX_TOPMOST, TOOLTIPS_CLASS, NULL,
+        HWND hwndToolTip = CreateWindowEx(WS_EX_TOPMOST, TOOLTIPS_CLASS, NULL,
                                           WS_POPUP | TTS_NOPREFIX | TTS_ALWAYSTIP,
                                           CW_USEDEFAULT, CW_USEDEFAULT,
-										  CW_USEDEFAULT, CW_USEDEFAULT,
-										  hwndOwner, NULL, (HINSTANCE)Application->Handle, NULL);
+                                          CW_USEDEFAULT, CW_USEDEFAULT,
+                                          hwndOwner, NULL, (HINSTANCE)Application->Handle, NULL);
 
         if (!hwndToolTip)
         {
@@ -129,14 +133,14 @@ private:
         // In this case, the "tool" is the entire parent window.
         m_ToolInfo.cbSize = sizeof(TOOLINFO);
         m_ToolInfo.uFlags = TTF_IDISHWND | TTF_TRACK | TTF_ABSOLUTE;
-		m_ToolInfo.hwnd = hwndOwner;
-		m_ToolInfo.hinst = (HINSTANCE)Application->Handle;
+        m_ToolInfo.hwnd = hwndOwner;
+        m_ToolInfo.hinst = (HINSTANCE)Application->Handle;
         m_ToolInfo.lpszText = "pText";
         m_ToolInfo.uId = (UINT_PTR)hwndOwner;
-        ::GetClientRect (hwndOwner, &m_ToolInfo.rect);
+        ::GetClientRect(hwndOwner, &m_ToolInfo.rect);
 
         // Associate the ToolTip with the tool window.
-        ::SendMessage(hwndToolTip, TTM_ADDTOOL, 0, (LPARAM) (LPTOOLINFO) &m_ToolInfo);
+        ::SendMessage(hwndToolTip, TTM_ADDTOOL, 0, (LPARAM)(LPTOOLINFO) &m_ToolInfo);
 
         return hwndToolTip;
     }

@@ -4,7 +4,7 @@
 #pragma hdrstop
 
 #include "ScreenForm.h"
-#include <wingdi.h>
+//#include <wingdi.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "Tool"
@@ -16,10 +16,10 @@
 
 //---------------------------------------------------------------------------
 __fastcall TScreenForm::TScreenForm(TComponent* Owner)
-  : TToolForm(Owner, "capture"),
-    InitCalled(false),
-    m_TrackingMouse(false),
-    m_pToolTip(NULL)
+    : TToolForm(Owner, "capture"),
+      InitCalled(false),
+      m_TrackingMouse(false),
+      m_pToolTip(NULL)
 {
     BorderStyle = bsNone;
     Color = clWhite;
@@ -58,24 +58,9 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
 {
     switch (Message.Msg)
     {
-// //    case WM_NCMOUSELEAVE:
-//     case WM_MOUSELEAVE:
-//         m_TrackingMouse = false;
-//         UpdateToolTip();
-//         break;
-//
-//     case WM_NCMOUSEHOVER:
-// //    case WM_MOUSEHOVER:
-//     {
-//         switch (Message.WParam)
-//         {
-//         case HTTOPLEFT:
-//         }
-//
-//     }
-//         m_TrackingMouse = true;
-//         UpdateToolTip();
-//         break;
+    case WM_MOVE:
+        UpdateToolTip();
+        break;
 
     case WM_KEYDOWN:
 
@@ -95,16 +80,28 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
 
         switch (Message.WParam)
         {
-        case VK_LEFT:  resize ? Width -= delta : Left -= delta; UpdateToolTip(); return;
-        case VK_RIGHT: resize ? Width += delta : Left += delta; UpdateToolTip(); return;
-        case VK_UP:    resize ? Height -= delta : Top -= delta; UpdateToolTip(); return;
-        case VK_DOWN:  resize ? Height += delta : Top += delta; UpdateToolTip(); return;
+        case VK_LEFT:
+            resize ? Width -= delta : Left -= delta;
+            UpdateToolTip();
+            return;
+        case VK_RIGHT:
+            resize ? Width += delta : Left += delta;
+            UpdateToolTip();
+            return;
+        case VK_UP:
+            resize ? Height -= delta : Top -= delta;
+            UpdateToolTip();
+            return;
+        case VK_DOWN:
+            resize ? Height += delta : Top += delta;
+            UpdateToolTip();
+            return;
 
-        case VK_ESCAPE: Close(); return;
+        case VK_ESCAPE:
+            Close();
+            return;
         }
-
     }
-
     // Resume normal processing
     TToolForm::WndProc(Message);
 }
@@ -137,12 +134,11 @@ void __fastcall TScreenForm::FormShow(TObject *Sender)
 
     m_TrackingMouse = true;
     m_Timer->Enabled = true;
-//    m_pToolTip->Show();
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::FormCloseQuery(TObject *Sender,
-                                            bool &CanClose)
+        bool &CanClose)
 {
     m_pToolTip->Hide();
     m_Timer->Enabled = false;
@@ -157,55 +153,10 @@ void __fastcall TScreenForm::MouseDown(TMouseButton Button,
     // Release stickiness
     FSticky = false;
 
-    if (Button == mbLeft)
-    {
-        // Left button down, start a drag-operation.
-        // todo: show a zoomed closeup of the target area
-        m_MouseOldX = X;
-        m_MouseOldY = Y;
-    }
-    else if (Button == mbRight && FOnRightButtonClick)
+    if (Button == mbRight && FOnRightButtonClick)
     {
         // Signal right-button event
         FOnRightButtonClick(this, Button, Shift, X, Y);
-    }
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TScreenForm::MouseMove(TShiftState Shift, int X, int Y)
-{
-    if (Shift.Contains(ssLeft) || FSticky)
-    {
-        // We are dragging, move the form
-        Left += X - m_MouseOldX;
-        Top  += Y - m_MouseOldY;
-
-        UpdateToolTip();
-    }
-
-//     if (!m_TrackingMouse)
-//     {
-//         TRACKMOUSEEVENT tme;
-//         tme.cbSize = sizeof(TRACKMOUSEEVENT);
-//         tme.dwFlags = TME_HOVER | TME_NONCLIENT; // | TME_LEAVE
-//         tme.hwndTrack = Handle;
-//         if (::_TrackMouseEvent(&tme))
-//         {
-//             m_TrackingMouse = true;
-//         }
-//     }
-
-    // Make sure the mouse has actually moved, the
-    // presence of the ToolTip causes Windows to
-    // send the message continuously.
-    static int oldX, oldY;
-
-    if ((X != oldX) || (Y != oldY))
-    {
-        oldX = X;
-        oldY = Y;
-
-        UpdateToolTip();
     }
 }
 
@@ -218,8 +169,8 @@ void TScreenForm::UpdateToolTip()
         {
             // Map (0,0) to top-left corner of virtual screen
             TPoint ptOrigin(Screen->DesktopLeft, Screen->DesktopTop);
-    		TRect rcNew(Left, Top, Left + Width, Top + Height);
-			m_pToolTip->Update(rcNew, ptOrigin);
+            TRect rcNew(Left, Top, Left + Width, Top + Height);
+            m_pToolTip->Update(rcNew, ptOrigin);
         }
         else
         {
@@ -364,6 +315,14 @@ void __fastcall TScreenForm::OnNCHitTest(TWMNCHitTest &Message)
             Message.Result = HTRIGHT;
             return;
         }
+
+        if (::GetAsyncKeyState(MK_LBUTTON) < 0)
+        {
+            // We are being dragged
+            Message.Result = HTCAPTION;
+            return;
+        }
+
     }
 }
 

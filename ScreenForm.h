@@ -19,20 +19,6 @@
 #include "tool.h"
 #include "ToolTip.h"
 
-//
-// If the messages for TrackMouseEvent have not been defined then define them
-// now.
-//
-#ifndef WM_MOUSEHOVER
-#define WM_MOUSEHOVER                   0x02A1
-#define WM_MOUSELEAVE                   0x02A3
-#endif
-
-#if(WINVER >= 0x0500)
-#define WM_NCMOUSEHOVER                 0x02A0
-#define WM_NCMOUSELEAVE                 0x02A2
-#endif /* WINVER >= 0x0500 */
-
 //---------------------------------------------------------------------------
 class TScreenForm : public TToolForm
 {
@@ -52,14 +38,11 @@ private:
     void UpdateToolTip();
 
 protected:
-    // This class overrides these two TForm methods
-    DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
+    virtual void __fastcall WndProc(TMessage &Msg);
+    void __fastcall OnTimerTick(TObject *Sender);
+
     DYNAMIC void __fastcall MouseDown(TMouseButton Button,
                                       Classes::TShiftState Shift, int X, int Y);
-
-    virtual void __fastcall WndProc(TMessage &Msg);
-
-    void __fastcall OnTimerTick(TObject *Sender);
 
 BEGIN_MESSAGE_MAP
    VCL_MESSAGE_HANDLER(WM_NCHITTEST, TWMNCHitTest, OnNCHitTest)
