@@ -216,11 +216,9 @@ void TScreenForm::UpdateToolTip()
     {
         if (m_TrackingMouse)
         {
-    		TRect rcNew(Left, Top, Left + Width, Top + Height);
-
             // Map (0,0) to top-left corner of virtual screen
             TPoint ptOrigin(Screen->DesktopLeft, Screen->DesktopTop);
-
+    		TRect rcNew(Left, Top, Left + Width, Top + Height);
 			m_pToolTip->Update(rcNew, ptOrigin);
         }
         else

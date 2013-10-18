@@ -57,6 +57,13 @@ public:
         m_ToolInfo.lpszText = sCoords.c_str();
         ::SendMessage(m_hwndTooltip, TTM_SETTOOLINFO, 0, (LPARAM)&m_ToolInfo);
 
+		// Get workarea of monitor we are on
+		HMONITOR hMonitor = MonitorFromRect(&rc, MONITOR_DEFAULTTONEAREST);
+        MONITORINFO mi;
+		mi.cbSize = sizeof(mi);
+		GetMonitorInfo(hMonitor, &mi);
+		TRect rcWork = mi.rcWork;
+
         // Set the tooltip position.
         // Tooltip shows above left-top of window unless it is
         // off-screen, in which case we position it at the screen edge
@@ -73,7 +80,8 @@ public:
             pt.x = Screen->DesktopWidth - tipsize.cx;
         }
 
-        if (rc.top < tipsize.cy)
+        // Flip to bottom if top of workarea is reached
+        if (rc.top < rcWork.top + tipsize.cy)
         {
             pt.y = rc.top + rc.Height();
         }
