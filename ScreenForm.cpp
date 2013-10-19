@@ -62,6 +62,55 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
         UpdateToolTip();
         break;
 
+    case WM_MOVING:
+    {
+        // Constrain window to virtual desktop
+        TRect* prcWindow = (TRect*)Message.LParam;
+
+        if (prcWindow->left < Screen->DesktopLeft)
+            OffsetRect(prcWindow, Screen->DesktopLeft - prcWindow->left, 0);
+
+        if (prcWindow->top < Screen->DesktopTop)
+            OffsetRect(prcWindow, 0, Screen->DesktopTop - prcWindow->top);
+
+        if (prcWindow->right > Screen->DesktopWidth - Screen->DesktopLeft)
+            OffsetRect(prcWindow, Screen->DesktopWidth - Screen->DesktopLeft - prcWindow->right, 0);
+
+        if (prcWindow->bottom > Screen->DesktopHeight - Screen->DesktopTop)
+            OffsetRect(prcWindow, 0, Screen->DesktopHeight - Screen->DesktopTop - prcWindow->bottom);
+
+//        if (prcWindow->bottom < Screen->DesktopBottom)
+  //          OffsetRect(prcWindow, 0, Screen->DesktopBottom - prcWindow->bottom);
+
+/*
+     procedure TPopupForm.WMMoving(var Msg: TWMMoving) ;
+ var
+   workArea: TRect;
+ begin
+   workArea := Screen.WorkareaRect;
+
+   with Msg.DragRect^ do
+   begin
+     if Left < workArea.Left then
+       OffsetRect(Msg.DragRect^, workArea.Left - Left, 0) ;
+
+     if Top < workArea.Top then
+       OffsetRect(Msg.DragRect^, 0, workArea.Top - Top) ;
+
+     if Right > workArea.Right then
+       OffsetRect(Msg.DragRect^, workArea.Right - Right, 0) ;
+
+     if Bottom > workArea.Bottom then
+       OffsetRect(Msg.DragRect^, 0, workArea.Bottom - Bottom) ;
+   end;
+
+   inherited;
+ end;
+*/
+
+
+        break;
+    }
     case WM_KEYDOWN:
 
         // Default action is to move the form
@@ -147,8 +196,8 @@ void __fastcall TScreenForm::FormCloseQuery(TObject *Sender,
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TScreenForm::MouseDown(TMouseButton Button,
-                                       TShiftState Shift, int X, int Y)
+void __fastcall TScreenForm::FormMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
 {
     // Release stickiness
     FSticky = false;
@@ -393,5 +442,6 @@ void __fastcall TScreenForm::FormPaint(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
+
 
 

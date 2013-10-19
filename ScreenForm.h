@@ -37,12 +37,11 @@ private:
     TToolTip* m_pToolTip;
     void UpdateToolTip();
 
+    void ConstrainWindow(TRect& rcWindow);
+
 protected:
     virtual void __fastcall WndProc(TMessage &Msg);
     void __fastcall OnTimerTick(TObject *Sender);
-
-    DYNAMIC void __fastcall MouseDown(TMouseButton Button,
-                                      Classes::TShiftState Shift, int X, int Y);
 
 BEGIN_MESSAGE_MAP
    VCL_MESSAGE_HANDLER(WM_NCHITTEST, TWMNCHitTest, OnNCHitTest)
@@ -55,6 +54,8 @@ __published:  // IDE-managed Components
     void __fastcall FormResize(TObject *Sender);
     void __fastcall FormShow(TObject *Sender);
     void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
+    void __fastcall FormMouseDown(TObject *Sender, TMouseButton Button,
+                                  TShiftState Shift, int X, int Y);
 
 __published:
     __property TMouseEvent OnRightButtonClick = { read = FOnRightButtonClick, write = FOnRightButtonClick };
