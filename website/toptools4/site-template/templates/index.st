@@ -4,7 +4,7 @@
     <title>$title$</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="description" content="A set of utilities to examine and measure screen elements at pixel level, helpful for web-designers and GUI-developers." />
-    <meta name="keywords" content="screen loupe ruler base-converter color-picker screen-grabber snapshot clipboard utility" />
+    <meta name="keywords" content="screen-loupe screen-ruler base-converter color-picker screen-grabber snapshot clipboard utility" />
     <meta http-equiv="imagetoolbar" content="no" />
     <meta name="robots" content="index, follow, noarchive" />
 
@@ -15,7 +15,7 @@
 <body><div id="wrap">
 
 <div id="header">
-  <h1>$title$</h1>
+  <h1>$title$</h1><br>
   <p>Last update: $lastupdate$</p>
 </div>
 

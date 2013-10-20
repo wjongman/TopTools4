@@ -79,36 +79,6 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
         if (prcWindow->bottom > Screen->DesktopHeight - Screen->DesktopTop)
             OffsetRect(prcWindow, 0, Screen->DesktopHeight - Screen->DesktopTop - prcWindow->bottom);
 
-//        if (prcWindow->bottom < Screen->DesktopBottom)
-  //          OffsetRect(prcWindow, 0, Screen->DesktopBottom - prcWindow->bottom);
-
-/*
-     procedure TPopupForm.WMMoving(var Msg: TWMMoving) ;
- var
-   workArea: TRect;
- begin
-   workArea := Screen.WorkareaRect;
-
-   with Msg.DragRect^ do
-   begin
-     if Left < workArea.Left then
-       OffsetRect(Msg.DragRect^, workArea.Left - Left, 0) ;
-
-     if Top < workArea.Top then
-       OffsetRect(Msg.DragRect^, 0, workArea.Top - Top) ;
-
-     if Right > workArea.Right then
-       OffsetRect(Msg.DragRect^, workArea.Right - Right, 0) ;
-
-     if Bottom > workArea.Bottom then
-       OffsetRect(Msg.DragRect^, 0, workArea.Bottom - Bottom) ;
-   end;
-
-   inherited;
- end;
-*/
-
-
         break;
     }
     case WM_KEYDOWN:
@@ -242,6 +212,12 @@ void __fastcall TScreenForm::SetSticky(bool sticky)
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::OnTimerTick(TObject *Sender)
 {
+    if (::GetForegroundWindow() != Handle)
+    {
+        // Only when we have focus
+        return;
+    }
+
     TPoint ptMouse;
     GetCursorPos(&ptMouse);
     TRect rcClient = GetClientRect();

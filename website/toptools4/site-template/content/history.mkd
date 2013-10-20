@@ -6,12 +6,13 @@
   * Fixed bug that made main-window ignore saved position.
 
 ##### Loupe
-  * Eliminated annoying flicker in Loupe-view
+  * Eliminated annoying flicker in Loupe-view.
 
 ##### Screengrabber
-  * Fixed bug that constrained tooltip of screengrabber to primary monitor
-  * Capture window no longer snaps to screen-edges, this was annoying when positioning it using the keyboard
-  * On multiple monitor systems coordinate window now shows screen position in virtual screen coordinates (as opposed to absolute coordinates which depend on monitor setup)
+  * Fixed bug that constrained tooltip of screengrabber to primary monitor.
+  * Capture window no longer snaps to screen-edges, this was annoying when positioning it using the keyboard.
+  * On multiple monitor systems, coordinate window now shows screen position in virtual screen coordinates (as opposed to absolute coordinates which depend on monitor setup).
+  * Capture window is now confined to virtual screen.
 
 #### version 4.0
 

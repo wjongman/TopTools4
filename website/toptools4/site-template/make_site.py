@@ -42,6 +42,7 @@ def render_page(config, section, sectionname):
     st["content"] = mark_down(section['content'])
     st["menuitems"] = get_menuitems(config, pagename, sectionname)
     st["lastupdate"] = timestamp()
+    st["version"] = '4.0.1.67'
     save_page(pagename, str(st).strip())
 
 ##-----------------------------------------------------------------------------
