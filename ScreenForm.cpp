@@ -180,6 +180,13 @@ void __fastcall TScreenForm::FormMouseDown(TObject *Sender,
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TScreenForm::FormMouseMove(TObject *Sender,
+      TShiftState Shift, int X, int Y)
+{
+    UpdateToolTip();
+}
+
+//---------------------------------------------------------------------------
 void TScreenForm::UpdateToolTip()
 {
     if (m_pToolTip)
@@ -212,11 +219,12 @@ void __fastcall TScreenForm::SetSticky(bool sticky)
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::OnTimerTick(TObject *Sender)
 {
-    if (::GetForegroundWindow() != Handle)
-    {
-        // Only when we have focus
-        return;
-    }
+//     if (::GetForegroundWindow() != Handle)
+//     {
+//         // Ignore when we don't have have focus
+//         m_TrackingMouse = false;
+//         return;
+//     }
 
     TPoint ptMouse;
     GetCursorPos(&ptMouse);
@@ -418,6 +426,4 @@ void __fastcall TScreenForm::FormPaint(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-
-
 

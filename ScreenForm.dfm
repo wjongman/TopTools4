@@ -20,6 +20,7 @@ object ScreenForm: TScreenForm
   Position = poScreenCenter
   OnCloseQuery = FormCloseQuery
   OnMouseDown = FormMouseDown
+  OnMouseMove = FormMouseMove
   OnPaint = FormPaint
   OnResize = FormResize
   OnShow = FormShow

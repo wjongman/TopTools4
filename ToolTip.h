@@ -93,25 +93,6 @@ public:
         ::SendMessage(m_hwndTooltip, TTM_TRACKPOSITION, 0, (LPARAM)MAKELONG(pt.x, pt.y));
     }
 
-    //-------------------------------------------------------------------------
-    void Update(const POINT& ptTip, const String& sTipText)
-    {
-        Show();
-
-        // Calculate the space required for our tooltip
-        SIZE tipsize;
-        HDC dcTooltip = ::GetDC(m_hwndTooltip);
-        ::GetTextExtentPoint32(dcTooltip, sTipText.c_str(), sTipText.Length(), &tipsize);
-        ::ReleaseDC(m_hwndTooltip, dcTooltip);
-
-        // Set the tooltip text
-        m_ToolInfo.lpszText = sTipText.c_str();
-        ::SendMessage(m_hwndTooltip, TTM_SETTOOLINFO, 0, (LPARAM)&m_ToolInfo);
-
-        // Set the tooltip position.
-        ::SendMessage(m_hwndTooltip, TTM_TRACKPOSITION, 0, (LPARAM)MAKELONG(ptTip.x, ptTip.y));
-    }
-
 private:
 
     //-------------------------------------------------------------------------
