@@ -675,8 +675,6 @@ TToolForm* TMainForm::GetCaptureForm()
         m_pCapture->OnKeyDown = HandleKeyDown;
     }
 
-    m_pCapture->Sticky = false;
-    //m_pCapture->Sticky = !g_ToolOptions.Get("capture", "rememberpos", false);
     return m_pCapture;
 }
 

@@ -1,12 +1,12 @@
 //---------------------------------------------------------------------------
-
 #include <vcl.h>
 #pragma hdrstop
 
 #include "ScreenForm.h"
-//#include <wingdi.h>
+
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
+#pragma link "Tool"
 #pragma link "Tool"
 #pragma resource "*.dfm"
 
@@ -28,7 +28,6 @@ __fastcall TScreenForm::TScreenForm(TComponent* Owner)
     DraggableForm = true;
     SnapScreenEdges = false;
     Cursor = crSizeAll;
-    FSticky = false;
 
     Left = g_ToolOptions.Get(m_ToolName, "left", Left);
     Top = g_ToolOptions.Get(m_ToolName, "top", Top);
@@ -128,24 +127,6 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::FormShow(TObject *Sender)
 {
-    if (FSticky)
-    {
-        // Show with form center below mouse
-        TPoint ptMouse;
-        GetCursorPos(&ptMouse);
-
-        TRect rcClient = GetClientRect();
-        int CenterX = rcClient.Width() / 2;
-        int CenterY = rcClient.Height() / 2;
-
-        Left = ptMouse.x - CenterX;
-        Top = ptMouse.y - CenterY;
-
-        POINT pt = ScreenToClient(ptMouse);
-        m_MouseOldX = pt.x;
-        m_MouseOldY = pt.y;
-    }
-
     if (!m_pToolTip)
     {
         m_pToolTip = new TToolTip(Handle);
@@ -169,9 +150,6 @@ void __fastcall TScreenForm::FormCloseQuery(TObject *Sender,
 void __fastcall TScreenForm::FormMouseDown(TObject *Sender,
       TMouseButton Button, TShiftState Shift, int X, int Y)
 {
-    // Release stickiness
-    FSticky = false;
-
     if (Button == mbRight && FOnRightButtonClick)
     {
         // Signal right-button event
@@ -206,63 +184,23 @@ void TScreenForm::UpdateToolTip()
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TScreenForm::SetSticky(bool sticky)
-{
-//    bool bUseSticky = true; //false;
-//    if (bUseSticky)
-    {
-        FSticky = sticky;
-//        m_Timer->Enabled = sticky;
-    }
-}
-
-//---------------------------------------------------------------------------
 void __fastcall TScreenForm::OnTimerTick(TObject *Sender)
 {
-//     if (::GetForegroundWindow() != Handle)
-//     {
-//         // Ignore when we don't have have focus
-//         m_TrackingMouse = false;
-//         return;
-//     }
-
     TPoint ptMouse;
     GetCursorPos(&ptMouse);
-    TRect rcClient = GetClientRect();
+    POINT pt = ScreenToClient(ptMouse);
 
-    if (FSticky)
+    // Hide tooltip when mouse is not above the form
+    if (WindowFromPoint(ptMouse) == Handle)
     {
-        int CenterX = rcClient.Width() / 2;
-        int CenterY = rcClient.Height() / 2;
-
-        // Move the form
-        Left = ptMouse.x - CenterX;
-        Top = ptMouse.y - CenterY;
-
-        POINT pt = ScreenToClient(ptMouse);
-        m_MouseOldX = pt.x;
-        m_MouseOldY = pt.y;
+        m_TrackingMouse = true;
     }
-    //else
+    else
     {
-        // Hide tooltip when mouse is not above the form
-        POINT pt = ScreenToClient(ptMouse);
-        if (PtInRect(&rcClient, pt))
-        {
-            m_TrackingMouse = true;
-        }
-        else
-        {
-            m_TrackingMouse = false;
-        }
-
-        UpdateToolTip();
-
-
-
-        // todo: Initially flash borders until mouseclick
-//        m_Timer->Enabled = false;
+        m_TrackingMouse = false;
     }
+
+    UpdateToolTip();
 }
 
 //---------------------------------------------------------------------------

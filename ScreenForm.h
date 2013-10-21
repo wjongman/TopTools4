@@ -7,8 +7,8 @@
 #include <Controls.hpp>
 #include <StdCtrls.hpp>
 #include <Forms.hpp>
-#include "Tool.h"
 #include <ComCtrls.hpp>
+#include "Tool.h"
 
 #ifdef _DEBUG
     #define TRACE(s) OutputDebugString(s)
@@ -27,9 +27,6 @@ public:
     virtual __fastcall ~TScreenForm();
 
 private:
-    int m_MouseOldX;
-    int m_MouseOldY;
-
     bool m_TrackingMouse;
     bool InitCalled;
     TTimer* m_Timer;
@@ -61,13 +58,9 @@ __published:  // IDE-managed Components
 
 __published:
     __property TMouseEvent OnRightButtonClick = { read = FOnRightButtonClick, write = FOnRightButtonClick };
-    __property bool Sticky = { read = FSticky, write = SetSticky };
 
 protected:
     TMouseEvent FOnRightButtonClick;
-
-    bool FSticky;
-    void __fastcall SetSticky(bool sticky);
 
     // Override TToolWindow to show up near mouse pointer
     virtual void __fastcall OnToolShow(TObject *Sender)
