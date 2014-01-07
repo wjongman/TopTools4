@@ -116,7 +116,7 @@ with the ruler out of sight.
 
 The ruler was actually quite good, but it came up
 with annoying shareware nag-boxes and I thought the price was a bit high for
-such a simple utility, so I decided to create my own.
+such a simple program, so I decided to create my own.
 
 Later I added some other little utilities, like the base-converter and the
 color-picker.

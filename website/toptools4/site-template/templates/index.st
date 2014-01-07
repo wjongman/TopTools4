@@ -33,8 +33,8 @@
 
 <div id="extras">
   <p><strong>Other utilities:</strong>
-<!--   <div class="selmenuitem">More to come..</div> -->
-    $menuitems:sidebaritem()$
+  <div class="selmenuitem">More to come..</div>
+<!--     $menuitems:sidebaritem()$ -->
 </div>
 
 <div id="content">
@@ -46,7 +46,7 @@
     <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#105;&#110;&#102;&#111;&#64;&#116;&#111;&#112;&#116;&#111;&#111;&#108;&#115;&#46;&#111;&#114;&#103;">
           &#105;&#110;&#102;&#111;&#64;&#116;&#111;&#112;&#116;&#111;&#111;&#108;&#115;&#46;&#111;&#114;&#103;</a>
     </p>
-    <p class="right">&copy; Willem Jongman 2012</p>
+    <p class="right">&copy; Willem Jongman $year$</p>
 </div>
 
 </div>

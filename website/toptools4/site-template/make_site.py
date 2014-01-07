@@ -2,8 +2,8 @@
 
 from stringtemplate3 import StringTemplateGroup
 from configobj import ConfigObj
+from datetime import datetime
 import markdown
-import time
 
 ##-----------------------------------------------------------------------------
 class MenuItemDescriptor(object):
@@ -41,7 +41,8 @@ def render_page(config, section, sectionname):
     st["subtitle"] = section['subtitle']
     st["content"] = mark_down(section['content'])
     st["menuitems"] = get_menuitems(config, pagename, sectionname)
-    st["lastupdate"] = timestamp()
+    st["lastupdate"] = datetime.now().ctime()
+    st["year"] = datetime.now().year
     st["version"] = '4.0.1.67'
     save_page(pagename, str(st).strip())
 
@@ -101,10 +102,14 @@ def mark_down(filename):
 
 ##     return markdown.markdown(text)
     return markdown.markdown(text, ['tables'])
-##-----------------------------------------------------------------------------
-def timestamp():
-    return time.ctime()
-
+## ##-----------------------------------------------------------------------------
+## def timestamp():
+##     return datetime.now()
+##
+## ##-----------------------------------------------------------------------------
+## def current_year():
+##     return datetime.now().year
+##
 ##-----------------------------------------------------------------------------
 def main():
     render_all_pages()

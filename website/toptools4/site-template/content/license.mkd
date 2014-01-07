@@ -18,6 +18,5 @@ provided that the following conditions are met:
 Except where otherwise noted, all of the documentation and software included
 in the TopTools package is copyrighted by Willem Jongman.
 
-Copyright (C) 1998-2012 Willem Jongman. All rights reserved.
 
 
