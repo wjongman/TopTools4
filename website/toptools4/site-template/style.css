@@ -29,17 +29,13 @@ background:#fff;
 clear:both;
 height:65px;
 margin:20px 0 0;
-//padding:20px;
 }
 
 #header h1 {
 width:12em;
-//float:left;
-//margin:20px 0 10px;
 }
 
 #header h5 {
-//float:left;
 color:#a0a0a0;
 font-size:0.8em;
 line-height:1.2em;
@@ -47,8 +43,6 @@ margin:0 0 10px;
 }
 
 #header p {
-//width:400px;
-//float:right;
 text-align:right;
 color:#a0a0a0;
 font-size:0.8em;
@@ -80,14 +74,12 @@ height:20px;
 text-decoration:none;
 color:#303030;
 display:block;
-//border-left:2px solid #ccc;
 padding:6px 0 0 10px;
 background:#f4f4f4;
 }
 
 #leftmenu li a:hover {
 color:#0066cc;
-//border-left:4px solid #0066cc;
 background:#eaeaea;
 }
 

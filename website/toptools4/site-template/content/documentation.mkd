@@ -98,6 +98,6 @@ Commandline    |arguments:    |&nbsp;    |  &nbsp;
 ----------|----------|----------|----------
 &nbsp;    | **-p**   |&nbsp;    | use Portable mode
 &nbsp;    | **-r**   |&nbsp;    | use Registry mode
-&nbsp;    | **-i&nbsp;[filepath.ini]** |&nbsp;    | use Ini-file mode, optionally use 'filepath.ini' as ini-file.
+&nbsp;    | **-i&nbsp;[filepath.ini]** |&nbsp;    | use Ini-file mode, optionally use settings from 'filepath.ini'.
 
 
