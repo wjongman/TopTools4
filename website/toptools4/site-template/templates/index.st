@@ -14,9 +14,13 @@
 
 <body><div id="wrap">
 
+<div id="lastupdate">
+  <p class="left">Latest version: $version$</p>
+  <p class="right">Last page update: $lastupdate$</p>
+</div>
 <div id="header">
-  <h1>$title$</h1><br>
-  <p>Last update: $lastupdate$</p>
+<!--   <p>Last update: $lastupdate$</p>  -->
+  <h1>$title$</h1>
 </div>
 
 
@@ -46,7 +50,7 @@
     <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#105;&#110;&#102;&#111;&#64;&#116;&#111;&#112;&#116;&#111;&#111;&#108;&#115;&#46;&#111;&#114;&#103;">
           &#105;&#110;&#102;&#111;&#64;&#116;&#111;&#112;&#116;&#111;&#111;&#108;&#115;&#46;&#111;&#114;&#103;</a>
     </p>
-    <p class="right">&copy; Willem Jongman $year$</p>
+    <p class="right">&copy; Willem Jongman 1998-$year$</p>
 </div>
 
 </div>

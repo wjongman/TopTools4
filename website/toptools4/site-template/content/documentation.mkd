@@ -15,6 +15,7 @@
           | <span class="keybd">Ctrl</span>+<span class="keybd">Shift</span>+<span class="keybd">Arrow</span>  |  move cursor by 10 pixels
           | <span class="keybd">Middle Mousebutton</span> |  toggle horizontal/vertical
           | <span class="keybd">Right Mousebutton</span> |  show options menu
+&nbsp;    |  &nbsp;  |  &nbsp;
 **loupe** | |
           | <span class="keybd">Ctrl</span>+<span class="keybd">+</span> |  zoom in
           | <span class="keybd">Ctrl</span>+<span class="keybd">-</span> |  zoom out
@@ -24,6 +25,7 @@
           | <span class="keybd">Spacebar</span> | freeze/unfreeze
           | <span class="keybd">Mouse Scrollwheel</span> |  zoom in/out
           | <span class="keybd">Right Mousebutton</span> |  show options menu
+&nbsp;    |  &nbsp;  |  &nbsp;
 **screen capture** | |
           | <span class="keybd">Esc</span>  |  cancel screen capture
           | <span class="keybd">Arrow</span>  |  move frame by 1 pixel
@@ -31,9 +33,11 @@
           | <span class="keybd">Ctrl</span>+<span class="keybd">Arrow</span>  |  grow frame by 1 pixel
           | <span class="keybd">Ctrl</span>+<span class="keybd">Shift</span>+<span class="keybd">Arrow</span>  |  grow frame by 10 pixels
           | <span class="keybd">Right Mousebutton</span> |  show options menu
+&nbsp;    |  &nbsp;  |  &nbsp;
 **info / colorpicker** | |
           | <span class="keybd">Ctrl</span>+<span class="keybd">C</span>  |  copy webcolor to clipboard
           | <span class="keybd">Right Mousebutton</span> |  show options menu
+&nbsp;    |  &nbsp;  |  &nbsp;
 **base converter** | |
           | <span class="keybd">&#x2191;</span>  |  increment value
           | <span class="keybd">&#x2193;</span>  |  decrement value
