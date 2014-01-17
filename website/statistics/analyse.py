@@ -71,6 +71,7 @@ def getMonthDownloads(lines, filenames):
     hits243 = 0
     hits300 = 0
     hits400 = 0
+    hits401 = 0
 
     for line in lines:
         if 'toptools243.exe' in line:
@@ -93,7 +94,15 @@ def getMonthDownloads(lines, filenames):
             parts = line.strip().split()
             hits400 += int(parts[3])
 
-    return [hits243, hits300, hits400]
+        if 'TopTools4_01_71.zip' in line:
+            parts = line.strip().split()
+            hits401 += int(parts[3])
+
+        if 'Setup_TopTools_401.exe' in line:
+            parts = line.strip().split()
+            hits401 += int(parts[3])
+
+    return [hits243, hits300, hits400, hits401]
 
 #------------------------------------------------------------------------------
 def getDayTraffic(lines):
@@ -143,6 +152,7 @@ def pivotMonths(monthstats):
     t243 = []
     t300 = []
     t400 = []
+    t401 = []
 
     months = monthstats.keys()
     months.sort()
@@ -150,8 +160,9 @@ def pivotMonths(monthstats):
         t243.append(monthstats[month][0])
         t300.append(monthstats[month][1])
         t400.append(monthstats[month][2])
+        t401.append(monthstats[month][3])
 
-    generateBluffScript(t243, t300, t400, months)
+    generateBluffScript(t243, t300, t400, t401, months)
 
 #------------------------------------------------------------------------------
 def pivotDays(daystats):
@@ -215,7 +226,7 @@ def formatBluffGraphLabels(labellist):
     return printstr
 
 #------------------------------------------------------------------------------
-def generateBluffScript(t243, t300, t400, months):
+def generateBluffScript(t243, t300, t400, t401, months):
 
     template_prefix = """
     function showDownloads()
@@ -227,7 +238,7 @@ def generateBluffScript(t243, t300, t400, months):
         g.title = 'Downloads';
         g.tooltips = true;
         g.set_theme({
-                    colors: ['#6886B4', '#72AE6E', '#FDD84E', 'D1695E',
+                    colors: ['#6886B4', '#72AE6E', '#FDD84E', '#D1695E',
                              '#999999', '#3a5b87', 'black'],
                     marker_color: '#aea9a9',
                     font_color: 'white',
@@ -243,6 +254,7 @@ def generateBluffScript(t243, t300, t400, months):
     template_data = formatBluffData('v243', t243) + '\n' + \
                     formatBluffData('v300', t300) + '\n' + \
                     formatBluffData('v400', t400) + '\n' + \
+                    formatBluffData('v401', t401) + '\n' + \
                     formatBluffDataLabels(months) + '\n' + \
                     formatBluffGraphLabels(months) + '\n'
 
