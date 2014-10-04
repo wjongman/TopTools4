@@ -1,6 +1,6 @@
 object ScreenForm: TScreenForm
-  Left = 1318
-  Top = 431
+  Left = 1319
+  Top = 432
   Width = 309
   Height = 172
   Cursor = crSizeAll

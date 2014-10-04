@@ -4,7 +4,7 @@ There is no need for TopTools to be installed, it doesn't depend on external
 libraries or frameworks, just download the zipfile, unpack the exe and
 use it.
 
-  * [TopTools 4.01](download/TopTools4_01_71.zip) (560 Kb. Zipped executable)
+  * [TopTools 4.01](download/TopTools4_01_74.zip) (560 Kb. Zipped executable)
 
 If you don't want to be bothered with unpacking and such and don't
 need 'portability', there is this installer package:

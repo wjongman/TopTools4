@@ -152,6 +152,9 @@ void __fastcall TScreenForm::FormMouseDown(TObject *Sender,
 {
     if (Button == mbRight && FOnRightButtonClick)
     {
+        // We don't want the tooltip to corrupt our snapshot
+        m_pToolTip->Hide();
+
         // Signal right-button event
         FOnRightButtonClick(this, Button, Shift, X, Y);
     }

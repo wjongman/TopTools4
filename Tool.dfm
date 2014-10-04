@@ -1,6 +1,6 @@
 object ToolForm: TToolForm
-  Left = 1044
-  Top = 36
+  Left = 1045
+  Top = 37
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'ToolForm'

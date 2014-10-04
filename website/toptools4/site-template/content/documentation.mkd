@@ -67,16 +67,16 @@ some are reserved by Windows and some may be already taken by other running appl
 
 ## Startup options
 
-TopTools can run in three modes:
+TopTools can be started in three modes:
 
 * Portable mode:
 No settings are saved, this is the default mode.
 
 * Registry mode:
-Settings will be stored in the Windows Registry.
+Settings will be stored in the Windows Registry under the key "HKCU\\Software\\TopTools 4".
 
 * Ini-file mode:
-Settings will be saved in a file with the '.ini' extension.
+Settings will be saved as "TopTools4.ini" in the startup directory.
 
 When Toptools is started, it tries to figure out which mode it is running
 in, the heuristics used are as follows:
@@ -84,7 +84,7 @@ in, the heuristics used are as follows:
 * If there are commandline arguments (see below):
 use indicated mode.
 
-* Else if a file called "TopTools4.ini" is found:
+* Else if a file called "TopTools4.ini" is found in the startup directory:
 use Ini-file mode.
 
 * Else if a registry key is found (HKCU\\Software\\TopTools 4):
@@ -98,6 +98,6 @@ Commandline    |arguments:    |&nbsp;    |  &nbsp;
 ----------|----------|----------|----------
 &nbsp;    | **-p**   |&nbsp;    | use Portable mode
 &nbsp;    | **-r**   |&nbsp;    | use Registry mode
-&nbsp;    | **-i&nbsp;[filepath.ini]** |&nbsp;    | use Ini-file mode, optionally use settings from 'filepath.ini'.
+&nbsp;    | **-i&nbsp;[filepath.ini]** |&nbsp;    | use Ini-file mode, optionally read settings from 'filepath.ini'.
 
 

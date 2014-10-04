@@ -57,6 +57,8 @@ def processFile(arg, path, file):
 
     month_downloads[month] = getMonthDownloads(lines, [])
 
+    updateBinaryDownloads(lines)
+
     # third <pre> element contains downloads per day (in Kb)
     lines = str(pre_elements[2]).splitlines()
 
@@ -103,6 +105,34 @@ def getMonthDownloads(lines, filenames):
             hits401 += int(parts[3])
 
     return [hits243, hits300, hits400, hits401]
+
+#------------------------------------------------------------------------------
+def updateBinaryDownloads(lines):
+    """
+    Retrieve all downloads.
+    Maintain count in a dict indexed by filename.
+    """
+    for line in lines:
+        if 'download' in line:
+            filename, count = extractFilename(line)
+            if bin_downloads.has_key(filename):
+                bin_downloads[filename] += int(count)
+            else:
+                bin_downloads[filename] = 1
+
+#------------------------------------------------------------------------------
+def extractFilename(line):
+    """
+    Extract filename out of a line like this:
+    24. <A HREF="http://www.xs4all.nl/~wij/toptools/download/AsciiTab_0.11.zip">http://www.xs4all.nl/~wij/toptools/download/AsciiTab_0.11.zip</A>     2 (186Kb)
+    """
+    parts = line.strip().split()
+    pieces = parts[2].split('download')
+    piece = pieces[2][1:-4]
+
+    count = parts[3]
+    print count
+    return piece, int(count)
 
 #------------------------------------------------------------------------------
 def getDayTraffic(lines):
@@ -248,7 +278,6 @@ def generateBluffScript(t243, t300, t400, t401, months):
         g.sort = false;
         g.marker_font_size = 16;
         g.marker_count = 10;
-//         g.x_axis_label = 'month';
     """ % (datetime.datetime.now().strftime("%a %d %b %Y %H:%M"))
 
     template_data = formatBluffData('v243', t243) + '\n' + \
@@ -270,6 +299,7 @@ def generateBluffScript(t243, t300, t400, t401, months):
 #------------------------------------------------------------------------------
 month_downloads = {}
 day_traffic = {}
+bin_downloads = {}
 
 #------------------------------------------------------------------------------
 def print_dict_sorted(dict):
@@ -285,6 +315,9 @@ if __name__ == '__main__':
     os.path.walk(folder, processDir, None)
 
     pivotMonths(month_downloads)
+
+    print_dict_sorted(bin_downloads)
+
 ##     pivotDays(day_traffic)
 
 ##     print_dict_sorted(month_downloads)

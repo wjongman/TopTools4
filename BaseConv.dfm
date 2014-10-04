@@ -1,6 +1,6 @@
 inherited BaseConvForm: TBaseConvForm
-  Left = 457
-  Top = 308
+  Left = 459
+  Top = 309
   Caption = 'Base Converter'
   ClientHeight = 54
   ClientWidth = 237
