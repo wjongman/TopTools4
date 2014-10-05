@@ -35,6 +35,10 @@ private:  // User declarations
   void __fastcall SaveToFile();
 
   bool m_bStayOnTop;
+  bool m_bAnnotate;
+
+  Graphics::TBitmap* m_pOriginalBitmap;
+
   void __fastcall SetTopMost(bool ontop);
 
   RECT m_rcGrab;

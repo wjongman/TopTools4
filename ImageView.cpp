@@ -16,7 +16,9 @@ __fastcall TImageViewer::TImageViewer(TComponent* Owner, int id, const TRect& rc
         : TForm(Owner), FId(id), m_rcGrab(rcGrab)
 {
     m_bStayOnTop = true;
+    m_bAnnotate = false;
     m_ViewerMenu = NULL;
+    m_pOriginalBitmap = NULL;
     OnShow = FormShow;
     //OnClose = FormClose;
     KeyPreview = true;
@@ -26,6 +28,7 @@ __fastcall TImageViewer::TImageViewer(TComponent* Owner, int id, const TRect& rc
 __fastcall TImageViewer::~TImageViewer()
 {
     delete m_ViewerMenu;
+    delete m_pOriginalBitmap;
 }
 
 //---------------------------------------------------------------------------
@@ -33,6 +36,11 @@ void __fastcall TImageViewer::SetBitmap(Graphics::TBitmap* pBitmap)
 {
     if (pBitmap && pBitmap->Width > 0)
     {
+        if (!m_pOriginalBitmap)
+        {
+            m_pOriginalBitmap = new Graphics::TBitmap();
+        }
+        m_pOriginalBitmap->Assign(pBitmap);
         Image->Picture->Assign(pBitmap);
     }
 }
@@ -58,19 +66,18 @@ void __fastcall TImageViewer::ViewerMenuClick(TObject *Sender)
 
     if (menuItem)
     {
-        TPersistImage image(Image->Picture->Bitmap);
-
         if (menuItem->Hint == "Save")
         {
             SaveToFile();
-
         }
         else if (menuItem->Hint == "Copy")
         {
+            TPersistImage image(Image->Picture->Bitmap);
             image.Copy();
         }
         else if (menuItem->Hint == "Print")
         {
+            TPersistImage image(Image->Picture->Bitmap);
             image.Print();
         }
         else if (menuItem->Hint == "Close")
@@ -82,6 +89,13 @@ void __fastcall TImageViewer::ViewerMenuClick(TObject *Sender)
             m_bStayOnTop = !m_bStayOnTop;
             SetTopMost(m_bStayOnTop);
             menuItem->Checked = m_bStayOnTop;
+        }
+        else if (menuItem->Hint == "Annotate")
+        {
+            m_bAnnotate = !m_bAnnotate;
+            menuItem->Checked = m_bAnnotate;
+            Image->Cursor = m_bAnnotate ? crCross : crSizeAll;
+            Image->Picture->Assign(m_pOriginalBitmap);
         }
     }
 }
@@ -126,6 +140,13 @@ void __fastcall TImageViewer::PopulateViewerMenu()
     // Separator ------------------------
     NewItem = new TMenuItem(m_ViewerMenu);
     NewItem->Caption = "-";
+    m_ViewerMenu->Items->Add(NewItem);
+
+    NewItem = new TMenuItem(m_ViewerMenu);
+    NewItem->OnClick = ViewerMenuClick;
+    NewItem->Caption = "Annotate";
+    NewItem->Hint = "Annotate";
+    NewItem->Checked = m_bAnnotate;
     m_ViewerMenu->Items->Add(NewItem);
 
     NewItem = new TMenuItem(m_ViewerMenu);
@@ -184,7 +205,7 @@ void __fastcall TImageViewer::ImageMouseDown(TObject *Sender,
       TMouseButton Button, TShiftState Shift, int X, int Y)
 {
   if (Button == mbLeft)
-  // Start a drag-operation
+  // Remember start position
   {
     m_MouseOldX = X;
     m_MouseOldY = Y;
@@ -203,16 +224,33 @@ void __fastcall TImageViewer::ImageMouseMove(TObject *Sender,
       TShiftState Shift, int X, int Y)
 {
   if (Shift.Contains(ssLeft))
-  // We are dragging, move the form
   {
-    Left += X - m_MouseOldX;
-    Top  += Y - m_MouseOldY;
+    if (m_bAnnotate)
+    // We are drawing
+    {
+      Image->Picture->Bitmap->Canvas->Pen->Color = clRed;
+      Image->Picture->Bitmap->Canvas->Pen->Width = 2;
+      Image->Picture->Bitmap->Canvas->MoveTo(m_MouseOldX, m_MouseOldY);
+      Image->Picture->Bitmap->Canvas->LineTo(X, Y);
+
+      m_MouseOldX = X;
+      m_MouseOldY = Y;
+    }
+    else
+    // We are dragging, move the form
+    {
+      Left += X - m_MouseOldX;
+      Top  += Y - m_MouseOldY;
+    }
   }
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TImageViewer::FormShow(TObject *Sender)
 {
+    // Choose initial cursor shape
+    Image->Cursor = m_bAnnotate ? crCross : crSizeAll;
+
     Graphics::TBitmap* pBitmap = Image->Picture->Bitmap;
     if (pBitmap && pBitmap->Width > 0)
     {
