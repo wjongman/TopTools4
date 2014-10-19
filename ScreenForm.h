@@ -50,6 +50,7 @@ __published:  // IDE-managed Components
     void __fastcall FormPaint(TObject *Sender);
     void __fastcall FormResize(TObject *Sender);
     void __fastcall FormShow(TObject *Sender);
+    void __fastcall FormHide(TObject *Sender);
     void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
     void __fastcall FormMouseDown(TObject *Sender, TMouseButton Button,
                                   TShiftState Shift, int X, int Y);
@@ -62,11 +63,6 @@ __published:
 protected:
     TMouseEvent FOnRightButtonClick;
 
-    // Override TToolWindow to show up near mouse pointer
-    virtual void __fastcall OnToolShow(TObject *Sender)
-    {
-        FormShow(Sender);
-    }
 };
 
 //---------------------------------------------------------------------------

@@ -21,6 +21,8 @@ __fastcall TScreenForm::TScreenForm(TComponent* Owner)
       m_TrackingMouse(false),
       m_pToolTip(NULL)
 {
+    OnShow = FormShow;
+    OnHide = FormHide;
     BorderStyle = bsNone;
     Color = clWhite;
     SetTransparency(true, 50);
@@ -127,6 +129,8 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::FormShow(TObject *Sender)
 {
+    LoadPosition();
+
     if (!m_pToolTip)
     {
         m_pToolTip = new TToolTip(Handle);
@@ -134,6 +138,15 @@ void __fastcall TScreenForm::FormShow(TObject *Sender)
 
     m_TrackingMouse = true;
     m_Timer->Enabled = true;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TScreenForm::FormHide(TObject *Sender)
+{
+    SavePosition();
+
+    m_pToolTip->Hide();
+    m_Timer->Enabled = false;
 }
 
 //---------------------------------------------------------------------------

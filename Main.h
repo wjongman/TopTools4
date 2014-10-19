@@ -24,12 +24,6 @@
 #include "TopToolBar.h"
 #include "Tool.h"
 
-#define RUNNING_ON_VISTA 0
-
-#if RUNNING_ON_VISTA
-#include "capture.h"
-#endif
-
 //---------------------------------------------------------------------------
 class TMainForm : public TToolForm
 {
@@ -121,12 +115,7 @@ private:  // User declarations
   TInfoForm* m_pInfo;
   TBaseConvForm* m_pBaseConv;
   TControlForm* m_pControlBar;
-#if RUNNING_ON_VISTA
-  TCaptureForm* m_pCapture;
-#else
-  //TScreenForm* m_pCapture;
   TScreenGrabber* m_pCapture;
-#endif
 
   void CopyWebColorToClipboard();
   void ToggleOpenTools();
