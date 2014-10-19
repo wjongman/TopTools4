@@ -31,19 +31,7 @@ m_UIMode(uiNormal)
 {
     Application->OnDeactivate = HandleAppDeactivate;
     Application->OnRestore = HandleAppRestore;
-/*
-     // Now is the time to determine how to persist settings
-     if (!g_ToolOptions.KnowsRunMode())
-     {
-         // Offer a dialog and ask what to do with the settings
-         TQuerySaveDialog* QueryDlg = new TQuerySaveDialog(this);
-         if (QueryDlg->ShowModal() == mrOk)
-         {
-             g_ToolOptions.SetRunMode(QueryDlg->GetRunMode());
-         }
-         delete QueryDlg;
-     }
-*/
+
     LoadSettings();
 
     m_HotkeyManager = new THotkeyManager(Handle);
@@ -94,23 +82,8 @@ void __fastcall TMainForm::WndProc(Messages::TMessage &Message)
         HandleHotkey((THotkeyId)Message.WParam);
         break;
 
-/*
-    case WM_DESTROY:         // About to end program
-        // Now is the time to determine how to persist settings
-        if (!g_ToolOptions.KnowsRunMode())
-        {
-            // Offer a dialog and ask what to do with the settings
-            TQuerySaveDialog* QueryDlg = new TQuerySaveDialog(this);
-            if (QueryDlg->ShowModal() == mrOk)
-            {
-                g_ToolOptions.SetRunMode(QueryDlg->GetRunMode());
-            }
-            delete QueryDlg;
-        }
-        break;
-*/
-    case WM_QUERYENDSESSION: // About to shut down Windows
-        // Persist tool options
+    case WM_QUERYENDSESSION:
+        // About to shut down Windows, persist tool settings
         SaveSettings();
         break;
 
@@ -156,7 +129,6 @@ void __fastcall TMainForm::ShowTrayIcon(bool show)
     {
         if (!m_pTrayIcon)
         {
-//            HICON hTrayIcon = ::LoadImage(HInstance, "APPICON", IMAGE_ICON, 16, 16, NULL);
             HICON hTrayIcon = ::LoadImage(HInstance, "TRAYICON", IMAGE_ICON, 16, 16, NULL);
             m_pTrayIcon = new cTrayIcon(Handle, hTrayIcon, "TopTools 4");
         }
@@ -239,7 +211,6 @@ void __fastcall TMainForm::HandleHotkey(THotkeyId id)
     case hkZoomIn:
         if (m_pLoupe)
             m_pLoupe->ZoomIn();
-//            m_pLoupe->Freeze();
         break;
 
     case hkZoomOut:
@@ -258,7 +229,6 @@ void __fastcall TMainForm::HandleTrayMessage(TMessage &Message)
 {
     switch (Message.LParam)
     {
-    //case WM_LBUTTONUP:
     case WM_RBUTTONUP:
         {
             TPoint ptMouse;
@@ -385,7 +355,6 @@ void __fastcall TMainForm::HandleToolWindowClose(TObject *Sender, TCloseAction &
     }
     else if (Sender == m_pLoupe)
     {
-//    m_pLoupe->UnLock();
         actLoupe->Checked = false;
     }
     else if (Sender == m_pRuler)
@@ -512,12 +481,6 @@ void TMainForm::RestoreToolState(int opentools)
 
     if (opentools & dcoLoupe)
         actCommandExecute(actLoupe);
-
-//    if (opentools & dcoInfo)
-//        actCommandExecute(actInfo);
-
-//    if (opentools & dcoBaseconv)
-//        actCommandExecute(actBaseConv);
 
     if (opentools & dcoGrab)
         actCommandExecute(actCapture);
@@ -694,8 +657,6 @@ TToolForm* TMainForm::GetControlBar()
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::actCommandExecute(TObject *Sender)
 {
-//    SetTopMost(g_ToolOptions.Get("main", "stayontop", true));
-
     // todo: find out why this is needed
     SetTopMost(m_bStayOnTop);
 
@@ -765,26 +726,17 @@ void __fastcall TMainForm::actCaptureExecute(TObject *Sender)
     if (!m_pCapture)
     {
         m_pCapture = new TScreenGrabber(this);
-        //m_pCapture = new TScreenForm(this);
         m_pCapture->OnCaptureNext = HandleCaptureNext;
         m_pCapture->OnCaptureComplete = HandleCaptureComplete;
-        //m_pCapture->OnCancel = HandleCaptureComplete;
-        //m_pCapture->OnCaptureLost = HandleCaptureComplete;
     }
 
-//    m_pCapture->Sticky = true;
     m_pCapture->Show();
-    //HandleCaptureNext(this);
 
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::HandleCaptureNext(TObject *Sender)
 {
-    //m_HotkeyManager->DisableHotkeys();
-
-    //m_pCapture->StartTracking();
-
     if (g_ToolOptions.Get("capture", "showloupe", false))
     {
         TToolForm* pLoupe = GetLoupeForm();
@@ -797,41 +749,7 @@ void __fastcall TMainForm::HandleCaptureComplete(TObject *Sender)
 {
     if (m_pLoupe)
         m_pLoupe->Visible = m_SavedLoupeState;
-
-    //m_HotkeyManager->EnableHotkeys();
 }
-
-// //---------------------------------------------------------------------------
-// void __fastcall TMainForm::HandleToolWindowOptions(TObject *Sender)
-// {
-//     TToolForm *Tool = reinterpret_cast<TToolForm*>(Sender);
-//
-//     if (Tool)
-//     {
-//         if (Sender == this)
-//         {
-//         }
-//         else if (Sender == m_pControlBar)
-//         {
-//         }
-//         else if (Sender == m_pBaseConv)
-//         {
-//         }
-//         else if (Sender == m_pInfo)
-//         {
-//         }
-//         else if (Sender == m_pLoupe)
-//         {
-//            actOptionsExecute(Sender, "Loupe");
-//         }
-//         else if (Sender == m_pRuler)
-//         {
-//         }
-//         else if (Sender == m_pCapture)
-//         {
-//         }
-//     }
-// }
 
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::actOptionsExecute(TObject *Sender)
