@@ -28,12 +28,11 @@ public:
 
 private:
     bool m_TrackingMouse;
-    bool InitCalled;
+
     TTimer* m_Timer;
-
     TToolTip* m_pToolTip;
-    void UpdateToolTip();
 
+    void UpdateToolTip();
     void ConstrainWindow(TRect& rcWindow);
 
 protected:
@@ -49,8 +48,6 @@ END_MESSAGE_MAP(TForm)
 __published:  // IDE-managed Components
     void __fastcall FormPaint(TObject *Sender);
     void __fastcall FormResize(TObject *Sender);
-    void __fastcall FormShow(TObject *Sender);
-    void __fastcall FormHide(TObject *Sender);
     void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
     void __fastcall FormMouseDown(TObject *Sender, TMouseButton Button,
                                   TShiftState Shift, int X, int Y);

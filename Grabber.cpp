@@ -150,10 +150,11 @@ void __fastcall TScreenGrabber::CaptureNext()
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::EndCapture()
 {
-    Close();
     // We are done
-    //if (FOnCaptureComplete)
-    //    FOnCaptureComplete(this);
+//     if (FOnCaptureComplete)
+//         FOnCaptureComplete(this);
+
+    Close();
 }
 
 //---------------------------------------------------------------------------
@@ -400,7 +401,7 @@ bool IsCompositionEnabled()
 void __fastcall TScreenGrabber::GetDesktopArea()
 {
     // todo: Cache result of IsCompositionEnabled() and
-    // implement handling the 
+    // implement handling the
     bool AeroActive = IsCompositionEnabled();
 
     if (AeroActive)

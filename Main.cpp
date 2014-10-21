@@ -452,6 +452,7 @@ bool TMainForm::TimerNeeded()
 {
     // We only enable the timer when there is something to keep track of
     return( (m_pInfo && m_pInfo->Visible) ||
+//            (m_pCapture && m_pCapture->Visible) ||
             (m_pRuler && m_pRuler->Visible) );
 }
 

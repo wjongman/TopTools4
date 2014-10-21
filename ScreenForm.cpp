@@ -17,12 +17,9 @@
 //---------------------------------------------------------------------------
 __fastcall TScreenForm::TScreenForm(TComponent* Owner)
     : TToolForm(Owner, "capture"),
-      InitCalled(false),
       m_TrackingMouse(false),
       m_pToolTip(NULL)
 {
-    OnShow = FormShow;
-    OnHide = FormHide;
     BorderStyle = bsNone;
     Color = clWhite;
     SetTransparency(true, 50);
@@ -35,6 +32,8 @@ __fastcall TScreenForm::TScreenForm(TComponent* Owner)
     Top = g_ToolOptions.Get(m_ToolName, "top", Top);
     Width = g_ToolOptions.Get(m_ToolName, "width", Width);
     Height = g_ToolOptions.Get(m_ToolName, "height", Height);
+
+    m_pToolTip = new TToolTip(Handle);
 
     m_Timer = new TTimer(this);
     m_Timer->Interval = 100; // milliseconds
@@ -59,6 +58,12 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
 {
     switch (Message.Msg)
     {
+    case WM_SHOWWINDOW:
+        // WParam is true when window is being showed
+        m_Timer->Enabled = Message.WParam;
+        m_TrackingMouse = Message.WParam;
+        break;
+
     case WM_MOVE:
         UpdateToolTip();
         break;
@@ -124,29 +129,6 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
     }
     // Resume normal processing
     TToolForm::WndProc(Message);
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TScreenForm::FormShow(TObject *Sender)
-{
-    LoadPosition();
-
-    if (!m_pToolTip)
-    {
-        m_pToolTip = new TToolTip(Handle);
-    }
-
-    m_TrackingMouse = true;
-    m_Timer->Enabled = true;
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TScreenForm::FormHide(TObject *Sender)
-{
-    SavePosition();
-
-    m_pToolTip->Hide();
-    m_Timer->Enabled = false;
 }
 
 //---------------------------------------------------------------------------
