@@ -199,7 +199,20 @@ void __fastcall TToolForm::SavePosition()
 //---------------------------------------------------------------------------
 void __fastcall TToolForm::ConstrainPosition()
 {
-    ClipWindowToMonitor(Handle);
+//    ClipWindowToMonitor(Handle);
+
+    // Constrain window to virtual desktop
+    if (Left < Screen->DesktopLeft)
+        Left = Screen->DesktopLeft;
+
+    if (Top < Screen->DesktopTop)
+        Top = Screen->DesktopTop;
+
+    if (Left + Width > Screen->DesktopWidth)
+        Left = Screen->DesktopWidth - Width;
+
+    if (Top + Height > Screen->DesktopHeight)
+        Top = Screen->DesktopHeight - Height;
 }
 
 //---------------------------------------------------------------------------
