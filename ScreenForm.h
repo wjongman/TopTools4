@@ -48,7 +48,7 @@ END_MESSAGE_MAP(TForm)
 __published:  // IDE-managed Components
     void __fastcall FormPaint(TObject *Sender);
     void __fastcall FormResize(TObject *Sender);
-    void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
+//    void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
     void __fastcall FormMouseDown(TObject *Sender, TMouseButton Button,
                                   TShiftState Shift, int X, int Y);
     void __fastcall FormMouseMove(TObject *Sender, TShiftState Shift,

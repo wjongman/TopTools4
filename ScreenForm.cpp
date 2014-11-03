@@ -7,7 +7,6 @@
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "Tool"
-#pragma link "Tool"
 #pragma resource "*.dfm"
 
 // Suppress warning concerning the MAKELONG macro
@@ -131,15 +130,15 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
     TToolForm::WndProc(Message);
 }
 
-//---------------------------------------------------------------------------
-void __fastcall TScreenForm::FormCloseQuery(TObject *Sender,
-        bool &CanClose)
-{
-    m_pToolTip->Hide();
-    m_Timer->Enabled = false;
-
-    CanClose = true;
-}
+// //---------------------------------------------------------------------------
+// void __fastcall TScreenForm::FormCloseQuery(TObject *Sender,
+//         bool &CanClose)
+// {
+//     m_pToolTip->Hide();
+//     m_Timer->Enabled = false;
+//
+//     CanClose = true;
+// }
 
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::FormMouseDown(TObject *Sender,
