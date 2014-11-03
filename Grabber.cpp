@@ -151,8 +151,8 @@ void __fastcall TScreenGrabber::CaptureNext()
 void __fastcall TScreenGrabber::EndCapture()
 {
     // We are done
-//     if (FOnCaptureComplete)
-//         FOnCaptureComplete(this);
+    if (FOnCaptureComplete)
+        FOnCaptureComplete(this);
 
     Close();
 }
