@@ -69,14 +69,15 @@ void __fastcall TTopToolButton::Paint(void)
 
   if (Down)
   {
+    // Action is Checked -> button is Down, draw with dark color
     Canvas->Pen->Color = clNavy;
     Canvas->Brush->Color = (TColor) RGB(0xD4, 0xD5, 0xD8);
   }
 
   if (MouseInControl && m_Focussed)
   {
+    // Mouse is hovering above us, draw focus rectangle
     Canvas->Pen->Color = clNavy;
-//    Canvas->Brush->Color = (TColor) RGB(0xB6, 0xBD, 0xD2);
   }
 
   // Paint background
@@ -89,7 +90,10 @@ void __fastcall TTopToolButton::Paint(void)
     Png->Assign(FPngImage);
 
     if (!Enabled)
+    {
+      // Draw faded version of image if button is disabled
       MakeImageHalfTransparent(Png);
+    }
 
     int dx = (ClientWidth - Png->Width) / 2;
     int dy = (ClientHeight - Png->Height) / 2;
