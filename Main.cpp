@@ -19,15 +19,15 @@ TPersistOptions g_ToolOptions;
 
 //---------------------------------------------------------------------------
 __fastcall TMainForm::TMainForm(TComponent* Owner)
-: TToolForm(Owner, "main"),
-m_pRuler(NULL),
-m_pLoupe(NULL),
-m_pBaseConv(NULL),
-m_pInfo(NULL),
-m_pControlBar(NULL),
-m_pCapture(NULL),
-m_pTrayIcon(NULL),
-m_UIMode(uiNormal)
+  : TToolForm(Owner, "main"),
+    m_pRuler(NULL),
+    m_pLoupe(NULL),
+    m_pBaseConv(NULL),
+    m_pInfo(NULL),
+    m_pControlBar(NULL),
+    m_pCapture(NULL),
+    m_pTrayIcon(NULL),
+    m_UIMode(uiNormal)
 {
     Application->OnDeactivate = HandleAppDeactivate;
     Application->OnRestore = HandleAppRestore;
@@ -452,7 +452,6 @@ bool TMainForm::TimerNeeded()
 {
     // We only enable the timer when there is something to keep track of
     return( (m_pInfo && m_pInfo->Visible) ||
-//            (m_pCapture && m_pCapture->Visible) ||
             (m_pRuler && m_pRuler->Visible) );
 }
 
