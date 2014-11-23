@@ -14,7 +14,6 @@ object ImageViewer: TImageViewer
   Font.Style = []
   OldCreateOrder = False
   Position = poDefault
-  ShowHint = False
   OnKeyPress = FormKeyPress
   PixelsPerInch = 96
   TextHeight = 13

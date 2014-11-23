@@ -142,12 +142,12 @@ void __fastcall TImageViewer::PopulateViewerMenu()
     NewItem->Caption = "-";
     m_ViewerMenu->Items->Add(NewItem);
 
-//     NewItem = new TMenuItem(m_ViewerMenu);
-//     NewItem->OnClick = ViewerMenuClick;
-//     NewItem->Caption = "Annotate";
-//     NewItem->Hint = "Annotate";
-//     NewItem->Checked = m_bAnnotate;
-//     m_ViewerMenu->Items->Add(NewItem);
+    NewItem = new TMenuItem(m_ViewerMenu);
+    NewItem->OnClick = ViewerMenuClick;
+    NewItem->Caption = "Annotate";
+    NewItem->Hint = "Annotate";
+    NewItem->Checked = m_bAnnotate;
+    m_ViewerMenu->Items->Add(NewItem);
 
     NewItem = new TMenuItem(m_ViewerMenu);
     NewItem->OnClick = ViewerMenuClick;
