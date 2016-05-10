@@ -20,7 +20,8 @@ font-size:0.9em;
 
 #wrap {
 color:#303030;
-width:760px;
+max-width:760px;
+min-width:480px;
 margin:0 auto;
 background:#fff;
 }

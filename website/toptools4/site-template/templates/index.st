@@ -7,7 +7,7 @@
     <meta name="keywords" content="screen-loupe screen-ruler base-converter color-picker screen-grabber snapshot clipboard utility" />
     <meta http-equiv="imagetoolbar" content="no" />
     <meta name="robots" content="index, follow, noarchive" />
-
+    <meta name=viewport content="width=device-width, initial-scale=1" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
   </head>

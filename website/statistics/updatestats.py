@@ -6,7 +6,7 @@ import getpass
 password = getpass.getpass()
 
 try:
-    conn = ssh.Connection('xs4all.nl', 'wij', password = password)
+    conn = ssh.Connection('shell.xs4all.nl', 'wij', password = password)
 
 ## except paramiko.AuthenticationException, msg:
 ##     print msg

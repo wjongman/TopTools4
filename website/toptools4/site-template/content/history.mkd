@@ -37,7 +37,7 @@
 ##### Screengrabber
   * Grabbed view can now be printed.
   * Completely rewritten for Vista, but won't work on Win95/98 ..
-  * Grab-screen now shows a sizable, transparent window that can be accurately positioned by using the mouse or the keyboard.
+  * Grab-screen now shows a sizeable, transparent window that can be accurately positioned by using the mouse or the keyboard.
   * Screen-capture can be activated with global hotkey.
   * Grabbed View can be opened in a window, saved to file, copied to clipboard or printed.
   * New Autosave features make it easy to capture a sequence of views with a minimum of keystrokes.
@@ -58,9 +58,9 @@
 #### version 3.0
 
 ##### Loupe
-  * I rewrote the loupe from scratch, attempts to make it sizable made clear this
+  * I rewrote the loupe from scratch, attempts to make it sizeable made clear this
 was the only sane option.
-  * It is sizable now and I added a tool bar.
+  * It is sizeable now and I added a tool bar.
   * On machines running Windows 2000 or Windows XP, the loupe window sits on it's
 own layer, so it doesn't show up in it's own view, it is fully transparent to
 itself ;).
