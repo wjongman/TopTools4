@@ -11,3 +11,4 @@ The wordlist I use for this program
 
 I am not sure where I got it, if anyone feels I stole their words, please let me know.
 
+Wordlists can be obtained from spell checkers like aspell, ispell and such.
