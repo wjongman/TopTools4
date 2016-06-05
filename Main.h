@@ -117,7 +117,9 @@ private:  // User declarations
   TControlForm* m_pControlBar;
   TScreenGrabber* m_pCapture;
 
+  void CopyToClipboard();
   void CopyWebColorToClipboard();
+  void CopyInfoToClipboard();
   void ToggleOpenTools();
   void RestoreToolState(int toolstate);
   void HideAll();

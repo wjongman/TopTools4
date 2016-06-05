@@ -253,6 +253,24 @@ public:
         SetOption(ToolName, OptionName, Option);
     }
 
+    //-------------------------------------------------------------------------
+    bool SettingExists(const String& ToolName, const String& OptionName)
+    {
+        bool result = false;
+
+        option_map_iterator map_iter = m_OptionMaps.find(ToolName);
+        if (map_iter != m_OptionMaps.end())
+        {
+            option_iterator option_iter = (map_iter->second).find(OptionName);
+            if (option_iter != (map_iter->second).end())
+            {
+                // Found
+                result = true;
+            }
+        }
+        return result;
+    }
+
 private:
     //-------------------------------------------------------------------------
     TOption GetOrCreateOption(const String& ToolName, const String& OptionName, const TOption& Default)

@@ -7,6 +7,7 @@
 #include "Main.h"
 #include "About.h"
 #include "OptionDlg.h"
+#include "MaskFormatter.h"
 
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -200,7 +201,7 @@ void __fastcall TMainForm::HandleHotkey(THotkeyId id)
         break;
 
     case hkColorCopy:
-        CopyWebColorToClipboard();
+        CopyToClipboard();
         break;
 
     case hkRulerToggle:
@@ -293,7 +294,7 @@ void __fastcall TMainForm::HandleKeyDown(TObject *Sender, WORD &Key,
 
     case 'C':         // Control-C copies #webcolor
         if (Shift.Contains(ssCtrl))
-            CopyWebColorToClipboard();
+            CopyToClipboard();
         break;
     }
     if (m_pLoupe)
@@ -538,6 +539,61 @@ void TMainForm::HideAll()
 }
 
 //---------------------------------------------------------------------------
+void TMainForm::CopyToClipboard()
+{
+    if (g_ToolOptions.SettingExists("info", "mask"))
+    {
+        CopyInfoToClipboard();
+    }
+    else
+    {
+        CopyWebColorToClipboard();
+    }
+}
+
+//---------------------------------------------------------------------------
+void TMainForm::CopyInfoToClipboard()
+{
+    // Probe the color under the mouse
+    TPoint ptMouse;
+    GetCursorPos(&ptMouse);
+
+    HDC DesktopDC = GetDC(NULL);
+    COLORREF Color = ::GetPixel(DesktopDC, ptMouse.x, ptMouse.y);
+    ReleaseDC(NULL, DesktopDC);
+
+    // Format the info string
+    String Mask = g_ToolOptions.Get("info", "mask", "[R][G][B]");
+    MaskFormatter mf(Mask.c_str());
+    String Formatted = mf.GetFormattedString(ptMouse.x, ptMouse.y,
+        GetRValue(Color), GetGValue(Color), GetBValue(Color)).c_str();
+
+    // Copy info string to clipboard
+    Clipboard()->SetTextBuf(Formatted.c_str());
+}
+
+//---------------------------------------------------------------------------
+void TMainForm::CopyWebColorToClipboard()
+{
+    // Probe the color under the mouse
+    TPoint ptMouse;
+    GetCursorPos(&ptMouse);
+
+    HDC DesktopDC = GetDC(NULL);
+    COLORREF Color = ::GetPixel(DesktopDC, ptMouse.x, ptMouse.y);
+    ReleaseDC(NULL, DesktopDC);
+
+    // Format the color string
+    String Format = GetColorFormatString();
+    char szRGBtext[20] = "";
+    wsprintf(szRGBtext, Format.c_str(),
+             GetRValue(Color), GetGValue(Color), GetBValue(Color));
+
+    // Copy color string to clipboard
+    Clipboard()->SetTextBuf(szRGBtext);
+}
+
+//---------------------------------------------------------------------------
 String TMainForm::GetColorFormatString()
 {
     String Format = "";
@@ -556,28 +612,6 @@ String TMainForm::GetColorFormatString()
         Format += "\"";
 
     return Format;
-}
-
-//---------------------------------------------------------------------------
-void TMainForm::CopyWebColorToClipboard()
-{
-    String Format = GetColorFormatString();
-
-    // Probe the color under the mouse
-    TPoint ptMouse;
-    GetCursorPos(&ptMouse);
-
-    HDC DesktopDC = GetDC(NULL);
-    COLORREF Color = ::GetPixel(DesktopDC, ptMouse.x, ptMouse.y);
-    ReleaseDC(NULL, DesktopDC);
-
-    // Format the color string
-    char szRGBtext[20] = "";
-    wsprintf(szRGBtext, Format.c_str(),
-             GetRValue(Color), GetGValue(Color), GetBValue(Color));
-
-    // Copy color string to clipboard
-    Clipboard()->SetTextBuf(szRGBtext);
 }
 
 //---------------------------------------------------------------------------
