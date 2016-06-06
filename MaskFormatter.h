@@ -11,11 +11,44 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// example usage:
+// Mask syntax:
+//
+// Everything not enclosed in square brackets is interpreted
+// as literal text.
+//
+//  possible placeholders:
+//
+//  [x]
+//  [y] - decimal value of position
+//
+//  [r]
+//  [g]
+//  [b] - decimal value of color
+//
+//  [R]
+//  [G]
+//  [B] - hexadecimal value of color, 2 positions
+//
+//  [[] - literal [
+//  []] - literal ]
+//
+//  [w] - lower-case webcolor (without #)
+//  [W] - upper-case webcolor, same as [R][G][B]
+//
+//  Other placeholders are ignored
+//
+//  examples:
+//
+//  mask:    ([x], [y]) -> [[]#[R][G][B][]] ([r], [g], [b])
+//  output:  (640, 480) -> [#ABCDEF] (171, 205, 239)
+//
+//
+// example usage of this class:
 //
 // MaskFormatter mf("#[R][G][B]");
 // std::string formatted = mf.GetFormattedString(x, y, r, g, b);
 //
+///////////////////////////////////////////////////////////////////////////////
 class MaskFormatter
 {
     std::vector<std::string> argstack;
