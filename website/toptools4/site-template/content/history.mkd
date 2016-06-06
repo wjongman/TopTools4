@@ -1,5 +1,10 @@
 ## Version history
 
+#### version 4.0.2.11 (2016-06-06)
+
+##### Info
+  * Added option to copy info to clipboard in a customizable format.
+
 #### version 4.0.1.77 (2014-11-03)
 
 ##### Screengrabber
