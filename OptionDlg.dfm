@@ -1,9 +1,9 @@
 object ToolOptionsDialog: TToolOptionsDialog
-  Left = 601
-  Top = 129
+  Left = 318
+  Top = 130
   BorderStyle = bsDialog
   Caption = 'TopTools Options'
-  ClientHeight = 806
+  ClientHeight = 585
   ClientWidth = 1013
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
