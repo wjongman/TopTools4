@@ -4,7 +4,7 @@
 #pragma hdrstop
 
 #include "ToolOptions.h"
-#include "HotkeyDialog.h"
+//#include "HotkeyDialog.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -107,6 +107,7 @@ void __fastcall TTopToolsOptions::lvSelectOptionChange(TObject *Sender,
 
 void __fastcall TTopToolsOptions::bnHotkeyClick(TObject *Sender)
 {
+/*
   TButton* PressedButton = reinterpret_cast<TButton*>(Sender);
   if (PressedButton)
   {
@@ -118,6 +119,7 @@ void __fastcall TTopToolsOptions::bnHotkeyClick(TObject *Sender)
     HkDialog->ShowModal();
     delete HkDialog;
   }
+*/  
 }
 //---------------------------------------------------------------------------
 

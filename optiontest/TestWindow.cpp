@@ -4,8 +4,8 @@
 #pragma hdrstop
 
 #include "TestWindow.h"
-#include "OptionDlg.h"
-#include "AutoSaveDlg.h"
+//#include "OptionDlg.h"
+//#include "AutoSaveDlg.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -28,7 +28,7 @@ __fastcall TForm1::~TForm1()
 //---------------------------------------------------------------------------
 void __fastcall TForm1::bnAutosaveClick(TObject *Sender)
 {
-  AutoSaveDialog->ShowModal();
+//  AutoSaveDialog->ShowModal();
 }
 
 //---------------------------------------------------------------------------
