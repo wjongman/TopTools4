@@ -8,25 +8,25 @@ File_5=SourceModule,'C:\BCB5\CBUILDER5\INCLUDE\VCL\windows.hpp',0,1,49,1,69,0,0
 File_6=SourceModule,'C:\BCB5\CBUILDER5\INCLUDE\VCL\inifiles.hpp',0,1,1,18,24,0,0
 
 [Modules]
-Module0=C:\Develop\TopTools4\ImageView.cpp
-Module1=C:\Develop\TopTools4\ScreenForm.cpp
+Module0=C:\Develop\TopTools4\ScreenForm.cpp
+Module1=C:\Develop\TopTools4\ImageView.cpp
 Count=2
 EditWindowCount=1
 PackageWindowCount=1
+
+[C:\Develop\TopTools4\ScreenForm.cpp]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
 
 [C:\Develop\TopTools4\ImageView.cpp]
 ModuleType=SourceModule
 FormState=0
 FormOnTop=0
 
-[C:\Develop\TopTools4\ScreenForm.cpp]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
 [C:\Develop\TopTools4\hotkey\TopToolParts.bpk]
 FormState=0
-FormOnTop=0
+FormOnTop=1
 
 [C:\Develop\TopTools4\TopTools.bpg]
 FormState=0
@@ -50,7 +50,7 @@ FormOnTop=0
 
 [EditWindow0]
 ViewCount=2
-CurrentView=1
+CurrentView=0
 View0=0
 View1=1
 CodeExplorer=CodeExplorer@EditWindow0
@@ -66,14 +66,14 @@ Height=677
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=1297
-ClientHeight=650
+ClientHeight=649
 LeftPanelSize=0
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=00000400010000000C000000436F64654578706C6F7265720000000000000000000000000000000000FFFFFFFF
 RightPanelSize=0
-BottomPanelSize=52
+BottomPanelSize=0
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=000004000000000000000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
+BottomPanelData=00000400010000000B0000004D657373616765566965770000000000000000000000000000000000FFFFFFFF
 
 [View0]
 Module=C:\Develop\TopTools4\ScreenForm.cpp
@@ -91,7 +91,7 @@ LeftCol=1
 
 [PackageWindow0]
 Create=1
-Visible=0
+Visible=1
 State=0
 Left=252
 Top=241
@@ -100,7 +100,7 @@ Height=244
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=360
-ClientHeight=220
+ClientHeight=216
 TBDockHeight=244
 LRDockWidth=368
 Dockable=1
@@ -127,7 +127,7 @@ State=0
 Left=0
 Top=0
 Width=1080
-Height=105
+Height=106
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=1072
@@ -140,11 +140,11 @@ State=0
 Left=0
 Top=0
 Width=236
-Height=806
+Height=802
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=236
-ClientHeight=806
+ClientHeight=802
 TBDockHeight=754
 LRDockWidth=254
 Dockable=1
@@ -156,7 +156,7 @@ State=0
 Left=200
 Top=107
 Width=156
-Height=82
+Height=86
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=150
@@ -169,17 +169,17 @@ State=0
 Left=0
 Top=0
 Width=236
-Height=806
+Height=802
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=234
-ClientHeight=804
+ClientHeight=800
 TBDockHeight=767
 LRDockWidth=256
 Dockable=1
 SplitPos=85
 ArrangeBy=Name
-SelectedItem=OnCloseQuery
+SelectedItem=Caption
 ExpandedItems=
 HiddenCategories=Legacy
 ShowStatusBar=1
@@ -195,7 +195,7 @@ Height=190
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=440
-ClientHeight=166
+ClientHeight=162
 TBDockHeight=190
 LRDockWidth=448
 Dockable=1
@@ -211,7 +211,7 @@ Height=284
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=395
-ClientHeight=260
+ClientHeight=256
 TBDockHeight=284
 LRDockWidth=403
 Dockable=1
@@ -238,7 +238,7 @@ ClassViewDisplayMode=0
 
 [MessageView@EditWindow0]
 Create=1
-Visible=1
+Visible=0
 State=0
 Left=12
 Top=0
@@ -267,7 +267,7 @@ Height=859
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=244
-ClientHeight=835
+ClientHeight=831
 TBDockHeight=754
 LRDockWidth=254
 Dockable=1

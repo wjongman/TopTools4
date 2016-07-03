@@ -3,8 +3,8 @@
 <PROJECT>
   <MACROS>
     <VERSION value="BCB.05.03"/>
-    <PROJECT value=".\TopToolParts.bpl"/>
-    <OBJFILES value="obj\TopToolParts.obj obj\HotkeyPanel.obj obj\PathEllipsisLabel.obj 
+    <PROJECT value="TopToolParts.bpl"/>
+    <OBJFILES value="obj\TopToolParts.obj obj\HotkeyPanel.obj obj\PathEllipsisLabel.obj
       obj\HotkeyInfo.obj"/>
     <RESFILES value="TopToolParts.res"/>
     <IDLFILES value=""/>
@@ -25,13 +25,12 @@
     <USERDEFINES value=""/>
     <SYSDEFINES value="NO_STRICT;USEPACKAGES"/>
     <MAINSOURCE value="TopToolParts.cpp"/>
-    <INCLUDEPATH value="..\PrintScreenEx\RulerPanel;$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="..\PrintScreenEx\RulerPanel;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I..\PrintScreenEx\RulerPanel -I$(BCB)\include -I$(BCB)\include\vcl 
-      -src_suffix cpp -boa"/>
+    <IDLCFLAGS value="-I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp -boa"/>
     <CFLAG1 value="-O2 -H=obj\vcl50.csm -Hc -Vx -Ve -X- -a8 -b- -k- -vi -c -tWM"/>
     <PFLAGS value="-N2obj -N0obj -$Y- -$L- -$D- -v -JPHNE -M"/>
     <RFLAGS value=""/>
@@ -73,13 +72,13 @@ Comments=
 
 [HistoryLists\hlIncludePath]
 Count=2
-Item0=..\PrintScreenEx\RulerPanel;$(BCB)\include;$(BCB)\include\vcl
-Item1=$(BCB)\include;$(BCB)\include\vcl
+Item0=$(BCB)\include;$(BCB)\include\vcl
+Item1=..\PrintScreenEx\RulerPanel;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
 Count=2
-Item0=..\PrintScreenEx\RulerPanel;$(BCB)\lib\obj;$(BCB)\lib
-Item1=$(BCB)\lib\obj;$(BCB)\lib
+Item0=$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\PrintScreenEx\RulerPanel;$(BCB)\lib\obj;$(BCB)\lib
 
 [HistoryLists\hlDebugSourcePath]
 Count=1
@@ -94,12 +93,15 @@ Count=1
 Item0=obj
 
 [HistoryLists\hlFinalOutputDir]
-Count=1
-Item0=.
+Count=2
+Item0=.\
+Item1=.
 
 [HistoryLists\hIBPIOutputDir]
-Count=1
+Count=3
 Item0=.
+Item1=C:\Develop\TopTools4\obj\
+Item2=C:\Develop\TopTools4\obj
 
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl
