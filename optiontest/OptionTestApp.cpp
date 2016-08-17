@@ -5,13 +5,15 @@
 USERES("OptionTestApp.res");
 USEFORM("TestWindow.cpp", Form1);
 USEFORM("ToolOptions.cpp", TopToolsOptions);
+USEFORM("PresetDlg.cpp", PresetDialog);
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
   try
   {
      Application->Initialize();
-     Application->CreateForm(__classid(TTopToolsOptions), &TopToolsOptions);
+         Application->CreateForm(__classid(TPresetDialog), &PresetDialog);
+         Application->CreateForm(__classid(TTopToolsOptions), &TopToolsOptions);
          Application->CreateForm(__classid(TForm1), &Form1);
          Application->Run();
   }
