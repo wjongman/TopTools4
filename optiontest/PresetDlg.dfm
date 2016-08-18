@@ -19,7 +19,7 @@ object PresetDialog: TPresetDialog
   TextHeight = 13
   object Panel1: TPanel
     Left = 0
-    Top = 120
+    Top = 121
     Width = 338
     Height = 36
     Align = alBottom
@@ -61,15 +61,13 @@ object PresetDialog: TPresetDialog
     Left = 0
     Top = 0
     Width = 338
-    Height = 120
+    Height = 121
     Align = alClient
     DefaultColWidth = 48
     DefaultRowHeight = 17
     FixedCols = 0
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goEditing, goTabs, goAlwaysShowEditor]
     TabOrder = 0
-    OnSelectCell = GridSelectCell
-    OnSetEditText = GridSetEditText
     ColWidths = (
       118
       48

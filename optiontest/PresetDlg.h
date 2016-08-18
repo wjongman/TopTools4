@@ -20,18 +20,14 @@ __published:	// IDE-managed Components
     TButton *CancelBtn;
     void __fastcall LoadBtnClick(TObject *Sender);
     void __fastcall FormCreate(TObject *Sender);
-    void __fastcall GridSetEditText(TObject *Sender, int ACol,
-          int ARow, const AnsiString Value);
-    void __fastcall GridSelectCell(TObject *Sender, int ACol,
-          int ARow, bool &CanSelect);
     void __fastcall CancelBtnClick(TObject *Sender);
     void __fastcall OKBtnClick(TObject *Sender);
 private:	// User declarations
 
     TStringList* m_presetList;
     int m_currentRowIndex;
-    void __fastcall Load(String const& filename);
-    void __fastcall Save(String const& filename);
+    bool __fastcall LoadFromIniFile(String const& path);
+    bool __fastcall SaveToIniFile(String const& path);
 
 public:		// User declarations
     __fastcall TPresetDialog(TComponent* Owner);
