@@ -2,7 +2,7 @@ object PresetDialog: TPresetDialog
   Left = 1056
   Top = 171
   Width = 346
-  Height = 184
+  Height = 239
   Caption = 'Grabber Presets'
   Color = clBtnFace
   Constraints.MaxWidth = 346
@@ -19,7 +19,7 @@ object PresetDialog: TPresetDialog
   TextHeight = 13
   object Panel1: TPanel
     Left = 0
-    Top = 121
+    Top = 176
     Width = 338
     Height = 36
     Align = alBottom
@@ -61,13 +61,15 @@ object PresetDialog: TPresetDialog
     Left = 0
     Top = 0
     Width = 338
-    Height = 121
+    Height = 176
     Align = alClient
     DefaultColWidth = 48
     DefaultRowHeight = 17
     FixedCols = 0
-    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goEditing, goTabs, goAlwaysShowEditor]
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goEditing, goTabs]
     TabOrder = 0
+    OnSelectCell = GridSelectCell
+    OnSetEditText = GridSetEditText
     ColWidths = (
       118
       48

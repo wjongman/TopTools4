@@ -22,10 +22,17 @@ __published:	// IDE-managed Components
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall CancelBtnClick(TObject *Sender);
     void __fastcall OKBtnClick(TObject *Sender);
+    void __fastcall GridSelectCell(TObject *Sender, int ACol, int ARow,
+          bool &CanSelect);
+    void __fastcall GridSetEditText(TObject *Sender, int ACol, int ARow,
+          const AnsiString Value);
 private:	// User declarations
-
+    int m_test;
     TStringList* m_presetList;
     int m_currentRowIndex;
+    void __fastcall ReadGrid(TStringList* entries);
+    void __fastcall WriteGrid(TStringList* entries);
+
     bool __fastcall LoadFromIniFile(String const& path);
     bool __fastcall SaveToIniFile(String const& path);
 
