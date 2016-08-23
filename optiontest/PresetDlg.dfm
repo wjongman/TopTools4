@@ -1,6 +1,6 @@
 object PresetDialog: TPresetDialog
-  Left = 1056
-  Top = 171
+  Left = 1377
+  Top = 131
   Width = 346
   Height = 239
   Caption = 'Grabber Presets'
@@ -66,8 +66,10 @@ object PresetDialog: TPresetDialog
     DefaultColWidth = 48
     DefaultRowHeight = 17
     FixedCols = 0
-    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goEditing, goTabs]
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goEditing, goTabs, goAlwaysShowEditor, goThumbTracking]
     TabOrder = 0
+    OnGetEditMask = GridGetEditMask
+    OnGetEditText = GridGetEditText
     OnSelectCell = GridSelectCell
     OnSetEditText = GridSetEditText
     ColWidths = (

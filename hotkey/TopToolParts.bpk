@@ -4,7 +4,7 @@
   <MACROS>
     <VERSION value="BCB.05.03"/>
     <PROJECT value="TopToolParts.bpl"/>
-    <OBJFILES value="obj\TopToolParts.obj obj\HotkeyPanel.obj obj\PathEllipsisLabel.obj
+    <OBJFILES value="obj\TopToolParts.obj obj\HotkeyPanel.obj obj\PathEllipsisLabel.obj 
       obj\HotkeyInfo.obj"/>
     <RESFILES value="TopToolParts.res"/>
     <IDLFILES value=""/>
