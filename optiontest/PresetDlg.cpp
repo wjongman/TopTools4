@@ -4,7 +4,6 @@
 #pragma hdrstop
 
 #include <inifiles.hpp>
-
 #include "PresetDlg.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)

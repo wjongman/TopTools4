@@ -19,7 +19,7 @@ object PresetDialog: TPresetDialog
   TextHeight = 13
   object Panel1: TPanel
     Left = 0
-    Top = 176
+    Top = 175
     Width = 338
     Height = 36
     Align = alBottom
@@ -61,7 +61,7 @@ object PresetDialog: TPresetDialog
     Left = 0
     Top = 0
     Width = 338
-    Height = 176
+    Height = 175
     Align = alClient
     DefaultColWidth = 48
     DefaultRowHeight = 17

@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------------
-
 #include <vcl.h>
 #pragma hdrstop
+
 USERES("OptionTestApp.res");
 USEFORM("TestWindow.cpp", Form1);
 USEFORM("ToolOptions.cpp", TopToolsOptions);

@@ -8,9 +8,9 @@
 #include <Grids.hpp>
 #include <StdCtrls.hpp>
 //---------------------------------------------------------------------------
-#include <float.h>
-#include <limits.h>
-#include <stdcomp.h>
+//#include <float.h>
+//#include <limits.h>
+//#include <stdcomp.h>
 //#include <vector>
 
 #include <Classes.hpp>
@@ -100,7 +100,7 @@ __published:  // IDE-managed Components
           AnsiString &Value);
 private:  // User declarations
     int m_test;
-    //std::vector<TPreset> m_presetList;
+//    std::vector<TPreset> m_presetList;
     //TStringList* m_presetList;
     int m_currentRowIndex;
     void __fastcall ReadGrid(TStringList* entries);
