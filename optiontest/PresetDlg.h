@@ -8,17 +8,7 @@
 #include <Grids.hpp>
 #include <StdCtrls.hpp>
 //---------------------------------------------------------------------------
-//#include <float.h>
-//#include <limits.h>
-//#include <stdcomp.h>
-//#include <vector>
-
-#include <Classes.hpp>
-#include <Controls.hpp>
-#include <StdCtrls.hpp>
-#include <Forms.hpp>
-#include <Grids.hpp>
-#include <ExtCtrls.hpp>
+#include <vector>
 
 /////////////////////////////////////////////////////////////////////////////
 struct TPreset
@@ -69,13 +59,15 @@ struct TPreset
     }
 
     //-----------------------------------------------------------------------
-    String GetCommaText()
+    String GetCommaText() const
     {
         String commaText;
         commaText.printf("\"%s\",%d,%d,%d,%d", description, x, y, w, h);
         return commaText;
     }
 };
+
+typedef std::vector<TPreset> PresetList;
 
 /////////////////////////////////////////////////////////////////////////////
 class TPresetDialog : public TForm
@@ -99,15 +91,14 @@ __published:  // IDE-managed Components
     void __fastcall GridGetEditText(TObject *Sender, int ACol, int ARow,
           AnsiString &Value);
 private:  // User declarations
-    int m_test;
-//    std::vector<TPreset> m_presetList;
-    //TStringList* m_presetList;
-    int m_currentRowIndex;
-    void __fastcall ReadGrid(TStringList* entries);
-    void __fastcall WriteGrid(TStringList* entries);
 
-    bool __fastcall LoadFromIniFile(String const& path);
-    bool __fastcall SaveToIniFile(String const& path);
+    int m_test;
+
+    PresetList __fastcall ReadGrid();
+    void __fastcall WriteGrid(PresetList const& entries);
+
+    PresetList __fastcall LoadFromIniFile(String const& path);
+    void __fastcall SaveToIniFile(String const& path, PresetList const& entries);
 
 public:   // User declarations
     __fastcall TPresetDialog(TComponent* Owner);

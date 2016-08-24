@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include <inifiles.hpp>
+
 #include "PresetDlg.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -15,35 +16,33 @@ TPresetDialog *PresetDialog;
 __fastcall TPresetDialog::TPresetDialog(TComponent* Owner)
     : TForm(Owner)
 {
-    //m_presetList = new TStringList();
-    m_currentRowIndex = 0;
 }
 
 //---------------------------------------------------------------------------
 __fastcall TPresetDialog::~TPresetDialog()
 {
-    //delete m_presetList;
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TPresetDialog::FormCreate(TObject *Sender)
 {
-//    Grid->RowCount = 2;
-//    Grid->Rows[0]->CommaText = "Description,  X, Y, W, H";
     Grid->Width = ClientWidth;
-    LoadFromIniFile("..\\presets.ini");
+    PresetList presets = LoadFromIniFile("..\\presets.ini");
+    WriteGrid(presets);
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TPresetDialog::LoadBtnClick(TObject *Sender)
 {
-    LoadFromIniFile("..\\presets.ini");
+    PresetList presets = LoadFromIniFile("..\\presets.ini");
+    WriteGrid(presets);
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TPresetDialog::OKBtnClick(TObject *Sender)
 {
-    SaveToIniFile("..\\presets2.ini");
+    PresetList presets = ReadGrid();
+    SaveToIniFile("..\\presets2.ini", presets);
 //    Close();
 }
 
@@ -54,78 +53,77 @@ void __fastcall TPresetDialog::CancelBtnClick(TObject *Sender)
 }
 
 //-------------------------------------------------------------------------
-void __fastcall TPresetDialog::WriteGrid(TStringList* entries)
+void __fastcall TPresetDialog::WriteGrid(PresetList const& presets)
 {
-    Grid->RowCount = entries->Count + 1;
+    Grid->RowCount = presets.size() + 1;
     Grid->Rows[0]->CommaText = "Description,  X, Y, W, H";
-    for (int i = 0; i < entries->Count; i++)
+    for (size_t i = 0; i < presets.size(); i++)
     {
-        TPreset preset;
-        if (preset.SetCommaText(entries->Strings[i]))
-            Grid->Rows[i+1]->CommaText = preset.GetCommaText();
+        Grid->Rows[i+1]->CommaText = presets[i].GetCommaText();
     }
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TPresetDialog::ReadGrid(TStringList* entries)
+PresetList __fastcall TPresetDialog::ReadGrid()
 {
-    entries->Clear();
+    PresetList presets;
     for (int i = 1; i < Grid->RowCount; i++)
     {
+        TPreset preset;
         String commaText = Grid->Rows[i]->CommaText;
-        // Only add rows with a non-empty description
-        if (!Grid->Cells[0][i].IsEmpty())
-            entries->Add(commaText);
-    }
-}
-
-//-------------------------------------------------------------------------
-bool __fastcall TPresetDialog::LoadFromIniFile(String const& path)
-{
-    // Fill m_presetList with stored values
-    TIniFile *inifile = new TIniFile(path);
-    if (!inifile)
-        return false;
-
-    TStringList* m_presetList = new TStringList();
-//    m_presetList->Clear();
-    String sectionName = "grabber.presets";
-
-    TStringList *sectionList = new TStringList;
-    inifile->ReadSection(sectionName, sectionList);
-    for (int i = 0; i < sectionList->Count; i++)
-    {
-        m_presetList->Add(inifile->ReadString(sectionName, IntToStr(i+1), ""));
-    }
-    delete sectionList;
-    delete inifile;
-
-    WriteGrid(m_presetList);
-    delete m_presetList;
-    return true;
-}
-
-//-------------------------------------------------------------------------
-bool __fastcall TPresetDialog::SaveToIniFile(String const& path)
-{
-    TIniFile *inifile = new TIniFile(path);
-    if (!inifile)
-        return false;
-
-    String sectionName = "grabber.presets";
-    for (int i = 1; i < Grid->RowCount; i++)
-    {
-        String commaText = Grid->Rows[i]->CommaText;
-        // Only add rows with a non-empty description
-        if (!Grid->Cells[0][i].IsEmpty())
+        // Only add valid rows
+        if (preset.SetCommaText(commaText))
         {
-            String optionName = IntToStr(i);
-            inifile->WriteString(sectionName, optionName, commaText);
+            presets.push_back(preset);
         }
     }
+    return presets;
+}
 
-    delete inifile;
-    return true;
+//-------------------------------------------------------------------------
+PresetList __fastcall TPresetDialog::LoadFromIniFile(String const& path)
+{
+    PresetList presets;
+
+    TIniFile *inifile = new TIniFile(path);
+    if (inifile)
+    {
+        String sectionName = "grabber.presets";
+
+        TStringList *sectionList = new TStringList;
+        if (sectionList)
+        {
+            inifile->ReadSection(sectionName, sectionList);
+            for (int i = 0; i < sectionList->Count; i++)
+            {
+                TPreset preset;
+                String commaText = inifile->ReadString(sectionName, IntToStr(i+1), "");
+                if (preset.SetCommaText(commaText))
+                    presets.push_back(preset);
+            }
+            delete sectionList;
+        }
+        delete inifile;
+    }
+    return presets;
+}
+
+//-------------------------------------------------------------------------
+void __fastcall TPresetDialog::SaveToIniFile(String const& path, PresetList const& presets)
+{
+    TIniFile *inifile = new TIniFile(path);
+    if (inifile)
+    {
+        String sectionName = "grabber.presets";
+        for (size_t i = 0; i < presets.size(); i++)
+        {
+            String optionName = IntToStr(i+1);
+            String commaText = presets[i].GetCommaText();
+            inifile->WriteString(sectionName, optionName, commaText);
+        }
+
+        delete inifile;
+    }
 }
 
 //---------------------------------------------------------------------------
