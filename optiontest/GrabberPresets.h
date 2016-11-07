@@ -13,7 +13,14 @@ struct TPreset
     int x, y, w, h;
 
     //-----------------------------------------------------------------------
-    TPreset() : description(""), x(0), y(0), w(0), h(0)
+    TPreset()
+      : description(""), x(0), y(0), w(0), h(0)
+    {
+    }
+
+    //-----------------------------------------------------------------------
+    TPreset(String const& name, int x, int y, int w, int h)
+      : description(name), x(x), y(y), w(w), h(h)
     {
     }
 
@@ -35,12 +42,6 @@ struct TPreset
         }
         tokens.push_back(text.substr(start));
         return tokens;
-    }
-
-    //-----------------------------------------------------------------------
-    bool FromCommaText(String const& commaText)
-    {
-        return true;
     }
 
     //-----------------------------------------------------------------------

@@ -278,7 +278,8 @@ void __fastcall TPresetDialog::bnCancelClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TPresetDialog::bnAddClick(TObject *Sender)
 {
-    TPresetPropsDlg* dlg = new TPresetPropsDlg(this);
+    TPreset preset("test", 1, 2, 3, 4);
+    TPresetPropsDlg* dlg = new TPresetPropsDlg(this, preset);
     dlg->ShowModal();
     Grid->RowCount++;
     delete dlg;

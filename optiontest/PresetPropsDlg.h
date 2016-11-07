@@ -18,27 +18,31 @@ __published:  // IDE-managed Components
     TButton *bnOk;
     TButton *bnCancel;
     TGroupBox *GroupBox1;
-    TEdit *edTitle;
     TGroupBox *GroupBox2;
-    TLabel *Label4;
-    TLabel *Label5;
+    TGroupBox *GroupBox3;
+    TEdit *edTitle;
+    TEdit *edX;
+    TEdit *edY;
     TEdit *edW;
     TEdit *edH;
+    TLabel *lbX;
+    TLabel *lbY;
+    TLabel *lbW;
+    TLabel *lbH;
+    TUpDown *udX;
+    TUpDown *udY;
     TUpDown *udW;
     TUpDown *udH;
-    TGroupBox *GroupBox3;
-    TLabel *Label2;
-    TEdit *edX;
-    TUpDown *udX;
-    TLabel *Label3;
-    TEdit *edY;
-    TUpDown *udY;
+    void __fastcall FormShow(TObject *Sender);
+
 private:  // User declarations
     TPreset m_preset;
+
 public:   // User declarations
     __fastcall TPresetPropsDlg(TComponent* Owner);
     __fastcall TPresetPropsDlg(TComponent* Owner, const TPreset& preset);
 };
+
 //---------------------------------------------------------------------------
 extern PACKAGE TPresetPropsDlg *PresetPropsDlg;
 //---------------------------------------------------------------------------

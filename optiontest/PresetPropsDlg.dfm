@@ -1,6 +1,6 @@
 object PresetPropsDlg: TPresetPropsDlg
-  Left = 297
-  Top = 418
+  Left = 1073
+  Top = 291
   BorderStyle = bsDialog
   Caption = 'Preset Properties'
   ClientHeight = 203
@@ -12,6 +12,7 @@ object PresetPropsDlg: TPresetPropsDlg
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object bnOk: TButton
@@ -39,7 +40,7 @@ object PresetPropsDlg: TPresetPropsDlg
     Top = 8
     Width = 217
     Height = 57
-    Caption = '&Description'
+    Caption = 'Name'
     TabOrder = 0
     object edTitle: TEdit
       Left = 16
@@ -54,9 +55,9 @@ object PresetPropsDlg: TPresetPropsDlg
     Top = 72
     Width = 105
     Height = 89
-    Caption = 'Dimension'
+    Caption = 'Size'
     TabOrder = 2
-    object Label4: TLabel
+    object lbW: TLabel
       Left = 14
       Top = 27
       Width = 14
@@ -64,7 +65,7 @@ object PresetPropsDlg: TPresetPropsDlg
       Caption = '&W:'
       FocusControl = edW
     end
-    object Label5: TLabel
+    object lbH: TLabel
       Left = 16
       Top = 59
       Width = 11
@@ -120,7 +121,7 @@ object PresetPropsDlg: TPresetPropsDlg
     Height = 89
     Caption = 'Position'
     TabOrder = 1
-    object Label2: TLabel
+    object lbX: TLabel
       Left = 16
       Top = 27
       Width = 10
@@ -128,7 +129,7 @@ object PresetPropsDlg: TPresetPropsDlg
       Caption = '&X:'
       FocusControl = edX
     end
-    object Label3: TLabel
+    object lbY: TLabel
       Left = 16
       Top = 59
       Width = 10

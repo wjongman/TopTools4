@@ -26,12 +26,12 @@
     <USERDEFINES value="_DEBUG"/>
     <SYSDEFINES value="_RTLDLL;NO_STRICT;USEPACKAGES"/>
     <MAINSOURCE value="GrabberPreset.cpp"/>
-    <INCLUDEPATH value="C:\Windows\system32;$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="C:\Windows\system32;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="C:\Windows\system32\;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="C:\Windows\system32\;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-IC:\Windows\system32 -I$(BCB)\include -I$(BCB)\include\vcl -src_suffix 
+    <IDLCFLAGS value="-IC:\Windows\system32\. -I$(BCB)\include -I$(BCB)\include\vcl -src_suffix 
       cpp -D_DEBUG -boa"/>
     <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
       -tW -tWM"/>
@@ -74,12 +74,14 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=1
-Item0=$(BCB)\include;$(BCB)\include\vcl
+Count=2
+Item0=C:\Windows\system32;$(BCB)\include;$(BCB)\include\vcl
+Item1=$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
-Count=1
-Item0=$(BCB)\lib\obj;$(BCB)\lib
+Count=2
+Item0=C:\Windows\system32;$(BCB)\lib\obj;$(BCB)\lib
+Item1=$(BCB)\lib\obj;$(BCB)\lib
 
 [HistoryLists\hlDebugSourcePath]
 Count=1
@@ -94,8 +96,9 @@ Count=1
 Item0=obj
 
 [HistoryLists\hlFinalOutputDir]
-Count=1
-Item0=exe
+Count=2
+Item0=exe\
+Item1=exe
 
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl
