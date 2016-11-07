@@ -4,12 +4,12 @@
   <MACROS>
     <VERSION value="BCB.05.03"/>
     <PROJECT value="exe\GrabberPreset.exe"/>
-    <OBJFILES value="obj\GrabberPreset.obj obj\PresetDlg.obj"/>
+    <OBJFILES value="obj\GrabberPreset.obj obj\PresetDlg.obj obj\PresetPropsDlg.obj"/>
     <RESFILES value="GrabberPreset.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
-    <RESDEPEN value="$(RESFILES) PresetDlg.dfm"/>
+    <RESDEPEN value="$(RESFILES) PresetDlg.dfm PresetPropsDlg.dfm"/>
     <LIBFILES value=""/>
     <LIBRARIES value=""/>
     <SPARELIBS value="Vcl50.lib"/>
@@ -26,12 +26,13 @@
     <USERDEFINES value="_DEBUG"/>
     <SYSDEFINES value="_RTLDLL;NO_STRICT;USEPACKAGES"/>
     <MAINSOURCE value="GrabberPreset.cpp"/>
-    <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="C:\Windows\system32;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="C:\Windows\system32;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp -D_DEBUG -boa"/>
+    <IDLCFLAGS value="-IC:\Windows\system32 -I$(BCB)\include -I$(BCB)\include\vcl -src_suffix 
+      cpp -D_DEBUG -boa"/>
     <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
       -tW -tWM"/>
     <PFLAGS value="-N2obj -N0obj -$YD -$W -$O- -v -JPHNE -M"/>

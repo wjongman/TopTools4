@@ -1,8 +1,8 @@
 object PresetDialog: TPresetDialog
-  Left = 1377
-  Top = 131
+  Left = 619
+  Top = 253
   Width = 346
-  Height = 239
+  Height = 268
   Caption = 'Grabber Presets'
   Color = clBtnFace
   Constraints.MaxWidth = 346
@@ -14,27 +14,28 @@ object PresetDialog: TPresetDialog
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  OnContextPopup = FormContextPopup
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object Panel1: TPanel
     Left = 0
-    Top = 176
+    Top = 205
     Width = 338
     Height = 36
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
-    object LoadBtn: TButton
+    object bnLoad: TButton
       Left = 8
       Top = 8
       Width = 75
       Height = 25
-      Caption = 'Load'
+      Caption = 'Load...'
       TabOrder = 0
-      OnClick = LoadBtnClick
+      OnClick = bnLoadClick
     end
-    object OKBtn: TButton
+    object bnOk: TButton
       Left = 135
       Top = 8
       Width = 75
@@ -43,9 +44,9 @@ object PresetDialog: TPresetDialog
       Default = True
       ModalResult = 1
       TabOrder = 1
-      OnClick = OKBtnClick
+      OnClick = bnOkClick
     end
-    object CancelBtn: TButton
+    object bnCancel: TButton
       Left = 255
       Top = 8
       Width = 75
@@ -54,19 +55,24 @@ object PresetDialog: TPresetDialog
       Caption = 'Cancel'
       ModalResult = 2
       TabOrder = 2
-      OnClick = CancelBtnClick
+      OnClick = bnCancelClick
     end
   end
   object Grid: TStringGrid
     Left = 0
     Top = 0
     Width = 338
-    Height = 176
-    Align = alClient
+    Height = 153
+    Align = alTop
+    ColCount = 6
     DefaultColWidth = 48
     DefaultRowHeight = 17
     FixedCols = 0
-    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goEditing, goTabs, goAlwaysShowEditor, goThumbTracking]
+    RowCount = 8
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goEditing, goTabs, goRowSelect, goThumbTracking]
+    ParentShowHint = False
+    ScrollBars = ssVertical
+    ShowHint = True
     TabOrder = 0
     OnGetEditMask = GridGetEditMask
     OnGetEditText = GridGetEditText
@@ -77,6 +83,34 @@ object PresetDialog: TPresetDialog
       48
       48
       48
+      48
       48)
+  end
+  object bnAdd: TButton
+    Left = 8
+    Top = 168
+    Width = 75
+    Height = 25
+    Caption = 'Add'
+    TabOrder = 2
+    OnClick = bnAddClick
+  end
+  object bnRemove: TButton
+    Left = 104
+    Top = 168
+    Width = 75
+    Height = 25
+    Caption = 'Remove'
+    TabOrder = 3
+    OnClick = bnRemoveClick
+  end
+  object bnEdit: TButton
+    Left = 192
+    Top = 168
+    Width = 75
+    Height = 25
+    Caption = 'Edit...'
+    TabOrder = 4
+    OnClick = bnEditClick
   end
 end

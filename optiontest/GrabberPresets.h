@@ -3,6 +3,7 @@
 #define GrabberPresetsH
 
 #include <Classes.hpp>
+#include <Inifiles.hpp>
 #include <vector>
 
 /////////////////////////////////////////////////////////////////////////////
@@ -20,6 +21,26 @@ struct TPreset
     TPreset(String const& commaText)
     {
         SetCommaText(commaText);
+    }
+
+    //-----------------------------------------------------------------------
+    std::vector<std::string> split(const std::string &text, char sep)
+    {
+        std::vector<std::string> tokens;
+        std::size_t start = 0, end = 0;
+        while ((end = text.find(sep, start)) != std::string::npos)
+        {
+            tokens.push_back(text.substr(start, end - start));
+            start = end + 1;
+        }
+        tokens.push_back(text.substr(start));
+        return tokens;
+    }
+
+    //-----------------------------------------------------------------------
+    bool FromCommaText(String const& commaText)
+    {
+        return true;
     }
 
     //-----------------------------------------------------------------------
@@ -63,21 +84,59 @@ struct TPreset
     }
 };
 
+typedef std::vector<TPreset> TPresetList;
+
 /////////////////////////////////////////////////////////////////////////////
-class TPresetList
+class TGrabberPresets
 {
-    TPresetList();
 
-    std::vector<TPreset> m_entries;
-    String m_inifilepath;
+public:
+    //-----------------------------------------------------------------------
+    TPresetList LoadFromIniFile(String const& filepath)
+    {
+        TPresetList presets;
+        TIniFile *inifile = new TIniFile(filepath);
+        if (inifile)
+        {
+            String sectionName = "grabber.presets";
 
-//    PresetList __fastcall LoadFromIniFile(String const& path);
-//    void __fastcall SaveToIniFile(String const& path, PresetList const& entries);
+            TStringList *sectionList = new TStringList;
+            if (sectionList)
+            {
+                inifile->ReadSection(sectionName, sectionList);
+                for (int i = 0; i < sectionList->Count; i++)
+                {
+                    TPreset preset;
+                    String commaText = inifile->ReadString(sectionName, IntToStr(i+1), "");
+                    if (preset.SetCommaText(commaText))
+                        presets.push_back(preset);
+                }
+                delete sectionList;
+            }
+            delete inifile;
+        }
+        return presets;
+    }
 
-
+    //-------------------------------------------------------------------------
+    void SaveToIniFile(String const& filepath, TPresetList presets)
+    {
+        TIniFile *inifile = new TIniFile(filepath);
+        if (inifile)
+        {
+            String sectionName = "grabber.presets";
+            inifile->EraseSection(sectionName);
+            for (size_t i = 0; i < presets.size(); i++)
+            {
+                String optionName = IntToStr(i+1);
+                String commaText = presets[i].GetCommaText();
+                inifile->WriteString(sectionName, optionName, commaText);
+            }
+            delete inifile;
+        }
+    }
 
 };
 
-typedef std::vector<TPreset> PresetList;
 
 #endif
