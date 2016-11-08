@@ -1,10 +1,10 @@
 object PresetPropsDlg: TPresetPropsDlg
-  Left = 1073
-  Top = 291
+  Left = 421
+  Top = 382
   BorderStyle = bsDialog
   Caption = 'Preset Properties'
-  ClientHeight = 203
-  ClientWidth = 232
+  ClientHeight = 235
+  ClientWidth = 208
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,7 +17,7 @@ object PresetPropsDlg: TPresetPropsDlg
   TextHeight = 13
   object bnOk: TButton
     Left = 8
-    Top = 171
+    Top = 203
     Width = 75
     Height = 25
     Caption = 'OK'
@@ -26,8 +26,8 @@ object PresetPropsDlg: TPresetPropsDlg
     TabOrder = 3
   end
   object bnCancel: TButton
-    Left = 150
-    Top = 171
+    Left = 126
+    Top = 203
     Width = 75
     Height = 25
     Cancel = True
@@ -38,23 +38,23 @@ object PresetPropsDlg: TPresetPropsDlg
   object GroupBox1: TGroupBox
     Left = 8
     Top = 8
-    Width = 217
+    Width = 193
     Height = 57
     Caption = 'Name'
     TabOrder = 0
     object edTitle: TEdit
       Left = 16
       Top = 24
-      Width = 185
+      Width = 161
       Height = 21
       TabOrder = 0
     end
   end
   object GroupBox2: TGroupBox
-    Left = 120
-    Top = 72
-    Width = 105
-    Height = 89
+    Left = 8
+    Top = 136
+    Width = 193
+    Height = 57
     Caption = 'Size'
     TabOrder = 2
     object lbW: TLabel
@@ -66,8 +66,8 @@ object PresetPropsDlg: TPresetPropsDlg
       FocusControl = edW
     end
     object lbH: TLabel
-      Left = 16
-      Top = 59
+      Left = 104
+      Top = 27
       Width = 11
       Height = 13
       Caption = '&H:'
@@ -82,8 +82,8 @@ object PresetPropsDlg: TPresetPropsDlg
       Text = '0'
     end
     object edH: TEdit
-      Left = 32
-      Top = 56
+      Left = 120
+      Top = 24
       Width = 41
       Height = 21
       TabOrder = 1
@@ -102,8 +102,8 @@ object PresetPropsDlg: TPresetPropsDlg
       Wrap = False
     end
     object udH: TUpDown
-      Left = 73
-      Top = 56
+      Left = 161
+      Top = 24
       Width = 15
       Height = 21
       Associate = edH
@@ -117,8 +117,8 @@ object PresetPropsDlg: TPresetPropsDlg
   object GroupBox3: TGroupBox
     Left = 8
     Top = 72
-    Width = 105
-    Height = 89
+    Width = 193
+    Height = 57
     Caption = 'Position'
     TabOrder = 1
     object lbX: TLabel
@@ -130,8 +130,8 @@ object PresetPropsDlg: TPresetPropsDlg
       FocusControl = edX
     end
     object lbY: TLabel
-      Left = 16
-      Top = 59
+      Left = 104
+      Top = 27
       Width = 10
       Height = 13
       Caption = '&Y:'
@@ -158,16 +158,16 @@ object PresetPropsDlg: TPresetPropsDlg
       Wrap = False
     end
     object edY: TEdit
-      Left = 32
-      Top = 56
+      Left = 120
+      Top = 24
       Width = 41
       Height = 21
       TabOrder = 2
       Text = '0'
     end
     object udY: TUpDown
-      Left = 73
-      Top = 56
+      Left = 161
+      Top = 24
       Width = 15
       Height = 21
       Associate = edY

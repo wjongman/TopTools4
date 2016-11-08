@@ -102,6 +102,100 @@ String __fastcall TPresetDialog::SelectFile()
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TPresetDialog::CaptureMenuClick(TObject *Sender)
+{
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::PresetMenuClick(TObject *Sender)
+{
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::bnOkClick(TObject *Sender)
+{
+    m_Presets.SaveToIniFile(m_inifile, ReadGrid());
+    Close();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::bnCancelClick(TObject *Sender)
+{
+    Close();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::bnAddClick(TObject *Sender)
+{
+    TPreset preset("test", 1, 2, 3, 4);
+    TPresetPropsDlg* dlg = new TPresetPropsDlg(this, preset);
+    if (dlg->ShowModal() == mrOk)
+    {
+        preset = dlg->GetPreset();
+        Grid->RowCount++;
+        Grid->Rows[Grid->RowCount]->CommaText = preset.GetCommaText();
+    }
+    delete dlg;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::bnRemoveClick(TObject *Sender)
+{
+    //
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::bnEditClick(TObject *Sender)
+{
+    //
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::GridSelectCell(TObject *Sender, int ACol,
+      int ARow, bool &CanSelect)
+{
+    // See what cell we are in
+    m_test = 1;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::GridSetEditText(TObject *Sender, int ACol,
+      int ARow, const AnsiString Value)
+{
+    // If cell being edited is in the last row: add a new row
+    if (ARow > Grid->RowCount)
+    {
+        Grid->RowCount++;
+    }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::GridGetEditMask(TObject *Sender, int ACol,
+      int ARow, AnsiString &Value)
+{
+  // All columns except the first can only contain numbers
+  if (ACol > 1)
+    Value =  "999999";
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::GridGetEditText(TObject *Sender, int ACol,
+      int ARow, AnsiString &Value)
+{
+    m_test = 1;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::FormContextPopup(TObject *Sender,
+      TPoint &MousePos, bool &Handled)
+{
+    PopulateCaptureMenu();
+    TPoint ptAbs = ClientToScreen(MousePos);
+    m_CaptureMenu->Popup(ptAbs.x, ptAbs.y);
+
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TPresetDialog::PopulateCaptureMenu()
 {
     if (!m_CaptureMenu)
@@ -250,98 +344,6 @@ void __fastcall TPresetDialog::PopulateCaptureMenu()
     m_CaptureMenu->Items->Add(NewItem);
 
 #endif
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::CaptureMenuClick(TObject *Sender)
-{
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::PresetMenuClick(TObject *Sender)
-{
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::bnOkClick(TObject *Sender)
-{
-    m_Presets.SaveToIniFile(m_inifile, ReadGrid());
-    Close();
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::bnCancelClick(TObject *Sender)
-{
-    Close();
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::bnAddClick(TObject *Sender)
-{
-    TPreset preset("test", 1, 2, 3, 4);
-    TPresetPropsDlg* dlg = new TPresetPropsDlg(this, preset);
-    dlg->ShowModal();
-    Grid->RowCount++;
-    delete dlg;
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::bnRemoveClick(TObject *Sender)
-{
-    //
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::bnEditClick(TObject *Sender)
-{
-  //
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::GridSelectCell(TObject *Sender, int ACol,
-      int ARow, bool &CanSelect)
-{
-    // See what cell we are in
-    m_test = 1;
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::GridSetEditText(TObject *Sender, int ACol,
-      int ARow, const AnsiString Value)
-{
-    // If cell being edited is in the last row: add a new row
-    if (ARow > Grid->RowCount)
-    {
-        Grid->RowCount++;
-    }
-}
-
-//---------------------------------------------------------------------------
-
-void __fastcall TPresetDialog::GridGetEditMask(TObject *Sender, int ACol,
-      int ARow, AnsiString &Value)
-{
-  // All columns except the first can only contain numbers
-  if (ACol > 1)
-    Value =  "999999";
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TPresetDialog::GridGetEditText(TObject *Sender, int ACol,
-      int ARow, AnsiString &Value)
-{
-    m_test = 1;
-}
-//---------------------------------------------------------------------------
-
-
-void __fastcall TPresetDialog::FormContextPopup(TObject *Sender,
-      TPoint &MousePos, bool &Handled)
-{
-    PopulateCaptureMenu();
-    TPoint ptAbs = ClientToScreen(MousePos);
-    m_CaptureMenu->Popup(ptAbs.x, ptAbs.y);
-
 }
 
 //---------------------------------------------------------------------------

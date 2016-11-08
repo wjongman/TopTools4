@@ -41,6 +41,8 @@ private:  // User declarations
 public:   // User declarations
     __fastcall TPresetPropsDlg(TComponent* Owner);
     __fastcall TPresetPropsDlg(TComponent* Owner, const TPreset& preset);
+
+    TPreset GetPreset();
 };
 
 //---------------------------------------------------------------------------
