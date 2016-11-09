@@ -3,9 +3,6 @@
 #include <vcl.h>
 #pragma hdrstop
 
-#include <inifiles.hpp>
-#include <dialogs.hpp>
-
 #include "PresetDlg.h"
 #include "PresetPropsDlg.h"
 
@@ -17,87 +14,154 @@ TPresetDialog *PresetDialog;
 
 //---------------------------------------------------------------------------
 __fastcall TPresetDialog::TPresetDialog(TComponent* Owner)
-    : TForm(Owner), m_inifile("..\\presets.ini")
+    : TForm(Owner), m_bDragging(false)
 {
 }
 
 //---------------------------------------------------------------------------
 __fastcall TPresetDialog::~TPresetDialog()
 {
+    delete m_CaptureMenu;
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TPresetDialog::FormCreate(TObject *Sender)
 {
-    Grid->Width = ClientWidth;
-    WriteGrid(m_Presets.LoadFromIniFile(m_inifile));
+    ListView->ViewStyle = vsReport;
+    ListView->RowSelect = true;
+    ListView->DragMode = dmAutomatic;
+    ListView->GridLines = true;
+    TListColumn* pColumn;
+    pColumn = ListView->Columns->Add();
+    pColumn->Caption = "Name";
+    pColumn->Width = 100;
+    pColumn = ListView->Columns->Add();
+    pColumn->Caption = "X";
+    pColumn->Width = 45;
+    pColumn = ListView->Columns->Add();
+    pColumn->Caption = "Y";
+    pColumn->Width = 45;
+    pColumn = ListView->Columns->Add();
+    pColumn->Caption = "W";
+    pColumn->Width = 45;
+    pColumn = ListView->Columns->Add();
+    pColumn->Caption = "H";
+    pColumn->Width = 45;
+
+    TGrabberPresets gp;
+    m_PresetList = gp.LoadFromIniFile("..\\presets.ini");
+    UpdateList();
 }
 
 //-------------------------------------------------------------------------
-void __fastcall TPresetDialog::WriteGrid(TPresetList const& presets)
+void __fastcall TPresetDialog::UpdateList()
 {
-    Grid->RowCount = presets.size() + 1;
-    Grid->Rows[0]->CommaText = "Description,  X, Y, W, H";
-    for (size_t i = 0; i < presets.size(); i++)
+    ListBox->Items->Clear();
+    for (size_t i = 0; i < m_PresetList.size(); i++)
     {
-        Grid->Rows[i+1]->CommaText = presets[i].GetCommaText();
+        ListBox->Items->Add(m_PresetList[i].description);
+    }
+    UpdateListView();
+}
+
+//-------------------------------------------------------------------------
+void __fastcall TPresetDialog::UpdateListView()
+{
+    ListView->Items->Clear();
+
+    for (size_t i = 0; i < m_PresetList.size(); i++)
+    {
+        TListItem* li = ListView->Items->Add();
+        li->Caption = m_PresetList[i].description;
+        li->SubItems->Add(m_PresetList[i].x);
+        li->SubItems->Add(m_PresetList[i].y);
+        li->SubItems->Add(m_PresetList[i].w);
+        li->SubItems->Add(m_PresetList[i].h);
     }
 }
 
 //---------------------------------------------------------------------------
-TPresetList __fastcall TPresetDialog::ReadGrid()
+void __fastcall TPresetDialog::bnEditClick(TObject *Sender)
 {
-    TPresetList presets;
-    for (int i = 1; i < Grid->RowCount; i++)
+    int index = ListBox->ItemIndex;
+    if (index >= 0)
     {
-        TPreset preset;
-        String commaText = Grid->Rows[i]->CommaText;
-        // Only add valid rows
-        if (preset.SetCommaText(commaText))
+        TPreset preset = m_PresetList[index];
+        TPresetPropsDlg* dlg = new TPresetPropsDlg(this, preset);
+        if (dlg->ShowModal() == mrOk)
         {
-            presets.push_back(preset);
+            m_PresetList[index] = dlg->GetPreset();
+            UpdateList();
         }
-    }
-    return presets;
-}
-
-//-------------------------------------------------------------------------
-void __fastcall TPresetDialog::ResetGrid()
-{
-    for (int i = 1; i < Grid->RowCount; i++)
-    {
-        Grid->Rows[i]->Clear();
+        delete dlg;
     }
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TPresetDialog::bnLoadClick(TObject *Sender)
+void __fastcall TPresetDialog::bnAddClick(TObject *Sender)
 {
-    String FileName = SelectFile();
+    TPresetPropsDlg* dlg = new TPresetPropsDlg(this);
+    if (dlg->ShowModal() == mrOk)
+    {
+        m_PresetList.push_back(dlg->GetPreset());
+        UpdateList();
+    }
+    delete dlg;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::bnRemoveClick(TObject *Sender)
+{
+    int index = ListBox->ItemIndex;
+    if (index >= 0)
+    {
+        m_PresetList.erase(m_PresetList.begin() + index);
+        UpdateList();
+    }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::bnImportClick(TObject *Sender)
+{
+    String FileName = SelectFileName();
     if (FileName != "")
     {
-        TPresetList presets = m_Presets.LoadFromIniFile(FileName);
-        ResetGrid();
-        WriteGrid(presets);
+        TGrabberPresets gp;
+        m_PresetList = gp.LoadFromIniFile(FileName);
+        UpdateList();
     }
 }
 
 //---------------------------------------------------------------------------
-String __fastcall TPresetDialog::SelectFile()
+void __fastcall TPresetDialog::bnExportClick(TObject *Sender)
+{
+    TSaveDialog* dlg = new TSaveDialog(this);
+    dlg->Title = "Save Preset File";
+    dlg->Filter = "Preset Files (*.ini)|*.ini|All Files (*.*)|*.*";
+    if (dlg->Execute())
+    {
+        String sFile = dlg->Files->Strings[0].LowerCase();
+        TGrabberPresets gp;
+        gp.SaveToIniFile(sFile, m_PresetList);
+    }
+    delete dlg;
+}
+
+//---------------------------------------------------------------------------
+String __fastcall TPresetDialog::SelectFileName()
 {
     String sFile = "";
 
-    TOpenDialog* OpenDialog = new TOpenDialog(this);
-    OpenDialog->Title = "Select Preset File";
-    OpenDialog->Options.Clear();
-    OpenDialog->Options << ofFileMustExist<< ofHideReadOnly << ofEnableSizing ;
-    OpenDialog->Filter = "Preset Files (*.ini)|*.ini|All Files (*.*)|*.*";
-    if (OpenDialog->Execute())
+    TOpenDialog* dlg = new TOpenDialog(this);
+    dlg->Title = "Select Preset File";
+    dlg->Options.Clear();
+    dlg->Options << ofFileMustExist<< ofHideReadOnly << ofEnableSizing ;
+    dlg->Filter = "Preset Files (*.ini)|*.ini|All Files (*.*)|*.*";
+    if (dlg->Execute())
     {
-        sFile = OpenDialog->Files->Strings[0].LowerCase();
+        sFile = dlg->Files->Strings[0].LowerCase();
     }
-    delete OpenDialog;
-
+    delete dlg;
     return sFile;
 }
 
@@ -114,7 +178,6 @@ void __fastcall TPresetDialog::PresetMenuClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TPresetDialog::bnOkClick(TObject *Sender)
 {
-    m_Presets.SaveToIniFile(m_inifile, ReadGrid());
     Close();
 }
 
@@ -125,74 +188,91 @@ void __fastcall TPresetDialog::bnCancelClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TPresetDialog::bnAddClick(TObject *Sender)
-{
-    TPreset preset("test", 1, 2, 3, 4);
-    TPresetPropsDlg* dlg = new TPresetPropsDlg(this, preset);
-    if (dlg->ShowModal() == mrOk)
-    {
-        preset = dlg->GetPreset();
-        Grid->RowCount++;
-        Grid->Rows[Grid->RowCount]->CommaText = preset.GetCommaText();
-    }
-    delete dlg;
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::bnRemoveClick(TObject *Sender)
-{
-    //
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::bnEditClick(TObject *Sender)
-{
-    //
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::GridSelectCell(TObject *Sender, int ACol,
-      int ARow, bool &CanSelect)
-{
-    // See what cell we are in
-    m_test = 1;
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::GridSetEditText(TObject *Sender, int ACol,
-      int ARow, const AnsiString Value)
-{
-    // If cell being edited is in the last row: add a new row
-    if (ARow > Grid->RowCount)
-    {
-        Grid->RowCount++;
-    }
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::GridGetEditMask(TObject *Sender, int ACol,
-      int ARow, AnsiString &Value)
-{
-  // All columns except the first can only contain numbers
-  if (ACol > 1)
-    Value =  "999999";
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::GridGetEditText(TObject *Sender, int ACol,
-      int ARow, AnsiString &Value)
-{
-    m_test = 1;
-}
-
-//---------------------------------------------------------------------------
 void __fastcall TPresetDialog::FormContextPopup(TObject *Sender,
       TPoint &MousePos, bool &Handled)
 {
     PopulateCaptureMenu();
     TPoint ptAbs = ClientToScreen(MousePos);
     m_CaptureMenu->Popup(ptAbs.x, ptAbs.y);
+}
 
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::ListBoxMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+    if (Button != mbLeft)
+        return;
+
+    // Make sure we are on a list item
+    if (ListBox->ItemAtPos(Point(X, Y), true) >= 0 && !m_bDragging)
+    {
+        ListBox->BeginDrag(false, ListBox->ItemHeight);
+        m_bDragging = true;
+    }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::ListBoxMouseMove(TObject *Sender,
+      TShiftState Shift, int X, int Y)
+{
+  //
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::ListBoxMouseUp(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+    m_test = 1;
+  //
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::ListBoxStartDrag(TObject *Sender,
+      TDragObject *&DragObject)
+{
+    m_test = 1;
+//
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::ListBoxEndDrag(TObject *Sender,
+      TObject *Target, int X, int Y)
+{
+    m_bDragging = false;
+    m_test = 1;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::ListBoxDragOver(TObject *Sender,
+      TObject *Source, int X, int Y, TDragState State, bool &Accept)
+{
+    // We only accept drops within the listbox
+    int index = ListBox->ItemAtPos(Point(X, Y), true);
+    Accept = (index >= 0 && Source == ListBox);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::ListBoxDragDrop(TObject *Sender,
+      TObject *Source, int X, int Y)
+{
+    int index = ListBox->ItemAtPos(Point(X, Y), true);
+    if (index >= 0 && index != ListBox->ItemIndex)
+    {
+        // Move item at ItemIndex above item at index
+        MovePresetItem(ListBox->ItemIndex, index);
+        ListBox->Items->Move(ListBox->ItemIndex, index);
+    }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::MovePresetItem(size_t src, size_t dest)
+{
+    if (dest > m_PresetList.size())
+        dest = m_PresetList.size();
+
+    TPreset tmp = m_PresetList[src];
+    m_PresetList.erase(m_PresetList.begin() + src);
+    m_PresetList.insert(m_PresetList.begin() + dest, tmp);
 }
 
 //---------------------------------------------------------------------------
@@ -311,17 +391,19 @@ void __fastcall TPresetDialog::PopulateCaptureMenu()
     NewItem->Hint = "AddPreset";
     PresetMenu->Add(NewItem);
 
-    TPresetList presets = m_Presets.LoadFromIniFile(m_inifile);
-    for (size_t i = 0; i < presets.size(); i++)
+    // Separator ------------------------
+    NewItem = new TMenuItem(PresetMenu);
+    NewItem->Caption = "-";
+    PresetMenu->Add(NewItem);
+
+    for (size_t i = 0; i < m_PresetList.size(); i++)
     {
-        //Grid->Rows[i+1]->CommaText = presets[i].GetCommaText();
         NewItem = new TMenuItem(PresetMenu);
         NewItem->OnClick = PresetMenuClick;
-        NewItem->Caption = presets[i].description;
+        NewItem->Caption = m_PresetList[i].description;
         NewItem->Tag = i;
         PresetMenu->Add(NewItem);
     }
-
 
 
     // Separator ------------------------
@@ -344,6 +426,48 @@ void __fastcall TPresetDialog::PopulateCaptureMenu()
     m_CaptureMenu->Items->Add(NewItem);
 
 #endif
+}
+
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::ListViewDragOver(TObject *Sender,
+      TObject *Source, int X, int Y, TDragState State, bool &Accept)
+{
+    // We only accept drops from within the listview
+    Accept = (Source == ListView) && PtInRect(&(ListView->ClientRect), Point(X, Y));
+}
+
+//---------------------------------------------------------------------------
+
+
+
+void __fastcall TPresetDialog::ListViewDragDrop(TObject *Sender,
+      TObject *Source, int X, int Y)
+{
+    // We only accept drops from within the listview
+    if (Source != ListView)
+        return;
+
+    // Find item we are hovering above
+    TListItem* liTo = ListView->GetItemAt(X, Y);
+    if (!liTo)
+    {
+        return;
+        // We are either on the header or on an empty row
+        //TRect rcHeader = DisplayRect
+        //if (PtInRect(&(
+    }
+    if (liTo == ListView->Selected)
+        // We are above the dragged item itself
+        return;
+
+    // Rearrange underlying PresetList
+    int indexFrom = ListView->Selected->Index;
+    int indexTo = liTo->Index;
+    MovePresetItem(indexFrom, indexTo);
+
+    // Now rebuild the ListView
+    UpdateListView();
 }
 
 //---------------------------------------------------------------------------

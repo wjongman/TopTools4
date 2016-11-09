@@ -28,16 +28,21 @@ void __fastcall TPresetPropsDlg::FormShow(TObject *Sender)
     edY->Text = m_preset.y;
     edW->Text = m_preset.w;
     edH->Text = m_preset.h;
+
+    bnOk->Enabled = !edTitle->Text.IsEmpty();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetPropsDlg::edTitleChange(TObject *Sender)
+{
+    // Only enable OK button when title is non-empty
+    bnOk->Enabled = !edTitle->Text.IsEmpty();
 }
 
 //---------------------------------------------------------------------------
 TPreset TPresetPropsDlg::GetPreset()
 {
     m_preset.description = edTitle->Text;
-//    m_preset.x = edX->Text.ToInt();
-//    m_preset.y = edY->Text.ToInt();
-//    m_preset.w = edW->Text.ToInt();
-//    m_preset.h = edH->Text.ToInt();
     m_preset.x = udX->Position;
     m_preset.y = udY->Position;
     m_preset.w = udW->Position;
@@ -45,3 +50,5 @@ TPreset TPresetPropsDlg::GetPreset()
 
     return m_preset;
 }
+
+

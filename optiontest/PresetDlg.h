@@ -1,64 +1,78 @@
 //---------------------------------------------------------------------------
-
 #ifndef PresetDlgH
 #define PresetDlgH
+
 #include <Classes.hpp>
 #include <Controls.hpp>
 #include <ExtCtrls.hpp>
 #include <Grids.hpp>
 #include <StdCtrls.hpp>
+#include <ComCtrls.hpp>
 
 #include "GrabberPresets.h"
-#include <ComCtrls.hpp>
 
 /////////////////////////////////////////////////////////////////////////////
 class TPresetDialog : public TForm
 {
 __published:  // IDE-managed Components
-    TStringGrid *Grid;
-    TPanel *Panel1;
-    TButton *bnLoad;
-    TButton *bnOk;
-    TButton *bnCancel;
+    TListBox *ListBox;
+    TButton *bnEdit;
     TButton *bnAdd;
     TButton *bnRemove;
-    TButton *bnEdit;
-    void __fastcall bnLoadClick(TObject *Sender);
+    TButton *bnImport;
+    TButton *bnExport;
+    TPanel *Panel1;
+    TButton *bnOk;
+    TButton *bnCancel;
+    TListView *ListView;
+    void __fastcall bnImportClick(TObject *Sender);
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall bnCancelClick(TObject *Sender);
     void __fastcall bnOkClick(TObject *Sender);
-    void __fastcall GridSelectCell(TObject *Sender, int ACol, int ARow,
-          bool &CanSelect);
-    void __fastcall GridSetEditText(TObject *Sender, int ACol, int ARow,
-          const AnsiString Value);
-    void __fastcall GridGetEditMask(TObject *Sender, int ACol, int ARow,
-          AnsiString &Value);
-    void __fastcall GridGetEditText(TObject *Sender, int ACol, int ARow,
-          AnsiString &Value);
     void __fastcall FormContextPopup(TObject *Sender, TPoint &MousePos,
           bool &Handled);
     void __fastcall bnAddClick(TObject *Sender);
     void __fastcall bnRemoveClick(TObject *Sender);
     void __fastcall bnEditClick(TObject *Sender);
+    void __fastcall bnExportClick(TObject *Sender);
+    void __fastcall ListBoxMouseDown(TObject *Sender, TMouseButton Button,
+          TShiftState Shift, int X, int Y);
+    void __fastcall ListBoxDragOver(TObject *Sender, TObject *Source,
+          int X, int Y, TDragState State, bool &Accept);
+    void __fastcall ListBoxDragDrop(TObject *Sender, TObject *Source,
+          int X, int Y);
+    void __fastcall ListBoxMouseMove(TObject *Sender, TShiftState Shift,
+          int X, int Y);
+    void __fastcall ListBoxMouseUp(TObject *Sender, TMouseButton Button,
+          TShiftState Shift, int X, int Y);
+    void __fastcall ListBoxStartDrag(TObject *Sender,
+          TDragObject *&DragObject);
+    void __fastcall ListBoxEndDrag(TObject *Sender, TObject *Target, int X,
+          int Y);
+    void __fastcall ListViewDragOver(TObject *Sender, TObject *Source,
+          int X, int Y, TDragState State, bool &Accept);
+    void __fastcall ListViewDragDrop(TObject *Sender, TObject *Source,
+          int X, int Y);
 private:  // User declarations
 
     int m_test;
-    String m_inifile;
-    TGrabberPresets m_Presets;
-    TPresetList __fastcall ReadGrid();
-    void __fastcall WriteGrid(TPresetList const& entries);
-    void __fastcall ResetGrid();
-    String __fastcall SelectFile();
+    TPresetList m_PresetList;
+    TPopupMenu* m_CaptureMenu;
+    bool m_bDragging;
 
+    void __fastcall UpdateList();
+    void __fastcall UpdateListView();
+    void __fastcall MovePresetItem(size_t src, size_t dest);
+    String __fastcall SelectFileName();
     void __fastcall PopulateCaptureMenu();
     void __fastcall CaptureMenuClick(TObject *Sender);
     void __fastcall PresetMenuClick(TObject *Sender);
-    TPopupMenu* m_CaptureMenu;
 
 public:   // User declarations
     __fastcall TPresetDialog(TComponent* Owner);
     __fastcall ~TPresetDialog();
 };
+
 //---------------------------------------------------------------------------
 extern PACKAGE TPresetDialog *PresetDialog;
 //---------------------------------------------------------------------------

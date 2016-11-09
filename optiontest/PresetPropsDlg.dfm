@@ -48,6 +48,7 @@ object PresetPropsDlg: TPresetPropsDlg
       Width = 161
       Height = 21
       TabOrder = 0
+      OnChange = edTitleChange
     end
   end
   object GroupBox2: TGroupBox

@@ -34,6 +34,7 @@ __published:  // IDE-managed Components
     TUpDown *udW;
     TUpDown *udH;
     void __fastcall FormShow(TObject *Sender);
+    void __fastcall edTitleChange(TObject *Sender);
 
 private:  // User declarations
     TPreset m_preset;
