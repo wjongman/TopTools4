@@ -438,9 +438,6 @@ void __fastcall TPresetDialog::ListViewDragOver(TObject *Sender,
 }
 
 //---------------------------------------------------------------------------
-
-
-
 void __fastcall TPresetDialog::ListViewDragDrop(TObject *Sender,
       TObject *Source, int X, int Y)
 {
@@ -449,21 +446,27 @@ void __fastcall TPresetDialog::ListViewDragDrop(TObject *Sender,
         return;
 
     // Find item we are hovering above
-    TListItem* liTo = ListView->GetItemAt(X, Y);
-    if (!liTo)
+    TListItem* liTarget = ListView->GetItemAt(X, Y);
+    if (!liTarget)
     {
-        return;
         // We are either on the header or on an empty row
-        //TRect rcHeader = DisplayRect
-        //if (PtInRect(&(
+        TListItem* liFirst = ListView->Items->Item[0];
+        TRect rcFirstItem = liFirst->DisplayRect(drBounds);
+        if (Y < rcFirstItem.top)
+            liTarget = liFirst;
+
+        TListItem* liLast = ListView->Items->Item[ListView->Items->Count - 1];
+        TRect rcLastItem = liLast->DisplayRect(drBounds);
+        if (Y > rcFirstItem.bottom)
+            liTarget = liLast;
     }
-    if (liTo == ListView->Selected)
+    if (liTarget == ListView->Selected)
         // We are above the dragged item itself
         return;
 
     // Rearrange underlying PresetList
     int indexFrom = ListView->Selected->Index;
-    int indexTo = liTo->Index;
+    int indexTo = liTarget->Index;
     MovePresetItem(indexFrom, indexTo);
 
     // Now rebuild the ListView
