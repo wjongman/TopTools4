@@ -31,18 +31,23 @@ void __fastcall TPresetDialog::FormCreate(TObject *Sender)
     ListView->RowSelect = true;
     ListView->DragMode = dmAutomatic;
     ListView->GridLines = true;
+
     TListColumn* pColumn;
     pColumn = ListView->Columns->Add();
     pColumn->Caption = "Name";
+
     pColumn = ListView->Columns->Add();
     pColumn->Caption = "X";
     pColumn->Alignment = taRightJustify	;
+
     pColumn = ListView->Columns->Add();
     pColumn->Caption = "Y";
     pColumn->Alignment = taRightJustify	;
+
     pColumn = ListView->Columns->Add();
     pColumn->Caption = "W";
     pColumn->Alignment = taRightJustify	;
+
     pColumn = ListView->Columns->Add();
     pColumn->Caption = "H";
     pColumn->Alignment = taRightJustify	;
@@ -94,7 +99,18 @@ void __fastcall TPresetDialog::ListViewChange(TObject *Sender,
 void __fastcall TPresetDialog::UpdateButtonState()
 {
     bnEdit->Enabled = ListView->Selected;
-    bnRemove->Enabled = ListView->Selected;
+    bnDelete->Enabled = ListView->Selected;
+    bnUp->Enabled = ListView->Selected && ListView->Selected->Index > 0;
+    bnDown->Enabled = ListView->Selected && ListView->Selected->Index < ListView->Items->Count - 1;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::ListViewMenuPopup(TObject *Sender)
+{
+    miEdit->Enabled = ListView->Selected;
+    miDelete->Enabled = ListView->Selected;
+    miUp->Enabled = ListView->Selected && ListView->Selected->Index > 0;
+    miDown->Enabled = ListView->Selected && ListView->Selected->Index < ListView->Items->Count - 1;
 }
 
 //---------------------------------------------------------------------------
@@ -135,7 +151,7 @@ void __fastcall TPresetDialog::bnAddClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TPresetDialog::bnRemoveClick(TObject *Sender)
+void __fastcall TPresetDialog::bnDeleteClick(TObject *Sender)
 {
     if (!ListView->Selected)
         return;
@@ -179,6 +195,19 @@ void __fastcall TPresetDialog::bnExportClick(TObject *Sender)
         gp.SaveToIniFile(filename, m_PresetList);
     }
     delete dlg;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::ListViewDblClick(TObject *Sender)
+{
+    if (ListView->Selected)
+    {
+        bnEditClick(Sender);
+    }
+    else
+    {
+        bnAddClick(Sender);
+    }
 }
 
 //---------------------------------------------------------------------------
@@ -253,15 +282,38 @@ void __fastcall TPresetDialog::ListViewDragDrop(TObject *Sender,
 
     // Now rebuild the ListView
     UpdateListView();
+    ListView->Items->Item[indexTo]->Selected = true;
+    ListView->SetFocus();
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TPresetDialog::FormContextPopup(TObject *Sender,
-      TPoint &MousePos, bool &Handled)
+void __fastcall TPresetDialog::bnUpClick(TObject *Sender)
 {
-//    PopulateCaptureMenu();
-//    TPoint ptAbs = ClientToScreen(MousePos);
-//    m_CaptureMenu->Popup(ptAbs.x, ptAbs.y);
+    // Rearrange underlying PresetList
+    int indexFrom = ListView->Selected->Index;
+    if (indexFrom > 0)
+    {
+        MovePresetItem(indexFrom, indexFrom - 1);
+    }
+    // Now rebuild the ListView
+    UpdateListView();
+    ListView->Items->Item[indexFrom - 1]->Selected = true;
+    ListView->SetFocus();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::bnDownClick(TObject *Sender)
+{
+    // Rearrange underlying PresetList
+    int indexFrom = ListView->Selected->Index;
+    if (indexFrom < ListView->Items->Count - 1)
+    {
+        MovePresetItem(indexFrom, indexFrom + 1);
+    }
+    // Now rebuild the ListView
+    UpdateListView();
+    ListView->Items->Item[indexFrom + 1]->Selected = true;
+    ListView->SetFocus();
 }
 
 //---------------------------------------------------------------------------
@@ -460,5 +512,6 @@ void __fastcall TPresetDialog::ListViewContextPopup(TObject *Sender,
     delete menu;
 }
 */
+
 //---------------------------------------------------------------------------
 

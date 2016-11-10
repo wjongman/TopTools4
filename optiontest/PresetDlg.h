@@ -18,7 +18,7 @@ class TPresetDialog : public TForm
 __published:  // IDE-managed Components
     TButton *bnEdit;
     TButton *bnAdd;
-    TButton *bnRemove;
+    TButton *bnDelete;
     TPanel *Panel1;
     TButton *bnOk;
     TButton *bnCancel;
@@ -26,17 +26,19 @@ __published:  // IDE-managed Components
     TButton *bnImport;
     TButton *bnExport;
     TPopupMenu *ListViewMenu;
-    TMenuItem *Edit1;
-    TMenuItem *Add1;
-    TMenuItem *Remove1;
+    TMenuItem *miEdit;
+    TMenuItem *miAdd;
+    TMenuItem *miDelete;
+    TButton *bnUp;
+    TButton *bnDown;
+    TMenuItem *miUp;
+    TMenuItem *miDown;
     void __fastcall bnImportClick(TObject *Sender);
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall bnCancelClick(TObject *Sender);
     void __fastcall bnOkClick(TObject *Sender);
-    void __fastcall FormContextPopup(TObject *Sender, TPoint &MousePos,
-          bool &Handled);
     void __fastcall bnAddClick(TObject *Sender);
-    void __fastcall bnRemoveClick(TObject *Sender);
+    void __fastcall bnDeleteClick(TObject *Sender);
     void __fastcall bnEditClick(TObject *Sender);
     void __fastcall bnExportClick(TObject *Sender);
     void __fastcall ListViewDragOver(TObject *Sender, TObject *Source,
@@ -47,6 +49,10 @@ __published:  // IDE-managed Components
           bool &AllowEdit);
     void __fastcall ListViewChange(TObject *Sender, TListItem *Item,
           TItemChange Change);
+    void __fastcall bnUpClick(TObject *Sender);
+    void __fastcall bnDownClick(TObject *Sender);
+    void __fastcall ListViewDblClick(TObject *Sender);
+    void __fastcall ListViewMenuPopup(TObject *Sender);
 private:  // User declarations
 
     int m_test;

@@ -12,7 +12,6 @@ object PresetDialog: TPresetDialog
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
-  OnContextPopup = FormContextPopup
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
@@ -74,14 +73,14 @@ object PresetDialog: TPresetDialog
     TabOrder = 1
     OnClick = bnAddClick
   end
-  object bnRemove: TButton
+  object bnDelete: TButton
     Left = 328
     Top = 72
     Width = 75
     Height = 25
-    Caption = '&Remove'
+    Caption = '&Delete'
     TabOrder = 3
-    OnClick = bnRemoveClick
+    OnClick = bnDeleteClick
   end
   object bnEdit: TButton
     Left = 328
@@ -104,25 +103,52 @@ object PresetDialog: TPresetDialog
     TabOrder = 0
     ViewStyle = vsReport
     OnChange = ListViewChange
-    OnDblClick = bnEditClick
+    OnDblClick = ListViewDblClick
     OnEditing = ListViewEditing
     OnDragDrop = ListViewDragDrop
     OnDragOver = ListViewDragOver
   end
+  object bnUp: TButton
+    Left = 328
+    Top = 104
+    Width = 75
+    Height = 25
+    Caption = 'Move &Up'
+    TabOrder = 5
+    OnClick = bnUpClick
+  end
+  object bnDown: TButton
+    Left = 328
+    Top = 136
+    Width = 75
+    Height = 25
+    Caption = 'Move D&own'
+    TabOrder = 6
+    OnClick = bnDownClick
+  end
   object ListViewMenu: TPopupMenu
-    Left = 360
-    Top = 120
-    object Edit1: TMenuItem
+    OnPopup = ListViewMenuPopup
+    Left = 192
+    Top = 176
+    object miEdit: TMenuItem
       Caption = '&Edit...'
       OnClick = bnEditClick
     end
-    object Add1: TMenuItem
+    object miAdd: TMenuItem
       Caption = '&Add...'
       OnClick = bnAddClick
     end
-    object Remove1: TMenuItem
-      Caption = '&Remove'
-      OnClick = bnRemoveClick
+    object miDelete: TMenuItem
+      Caption = '&Delete'
+      OnClick = bnDeleteClick
+    end
+    object miUp: TMenuItem
+      Caption = 'Up'
+      OnClick = bnUpClick
+    end
+    object miDown: TMenuItem
+      Caption = 'Down'
+      OnClick = bnDownClick
     end
   end
 end
