@@ -34,33 +34,17 @@ void __fastcall TPresetDialog::FormCreate(TObject *Sender)
     TListColumn* pColumn;
     pColumn = ListView->Columns->Add();
     pColumn->Caption = "Name";
-    pColumn->Width = 100;
     pColumn = ListView->Columns->Add();
     pColumn->Caption = "X";
-    pColumn->Width = 45;
     pColumn = ListView->Columns->Add();
     pColumn->Caption = "Y";
-    pColumn->Width = 45;
     pColumn = ListView->Columns->Add();
     pColumn->Caption = "W";
-    pColumn->Width = 45;
     pColumn = ListView->Columns->Add();
     pColumn->Caption = "H";
-    pColumn->Width = 45;
 
     TGrabberPresets gp;
     m_PresetList = gp.LoadFromIniFile("..\\presets.ini");
-    UpdateList();
-}
-
-//-------------------------------------------------------------------------
-void __fastcall TPresetDialog::UpdateList()
-{
-    ListBox->Items->Clear();
-    for (size_t i = 0; i < m_PresetList.size(); i++)
-    {
-        ListBox->Items->Add(m_PresetList[i].description);
-    }
     UpdateListView();
 }
 
@@ -78,12 +62,30 @@ void __fastcall TPresetDialog::UpdateListView()
         li->SubItems->Add(m_PresetList[i].w);
         li->SubItems->Add(m_PresetList[i].h);
     }
+    AdjustListViewColumns();
+}
+
+//-------------------------------------------------------------------------
+void __fastcall TPresetDialog::AdjustListViewColumns()
+{
+    int cellwidth = 45;
+    int clientwidth = ListView->ClientRect.Width();
+    ListView->Columns->Items[0]->Width = clientwidth - 4 * cellwidth;
+
+    int count = ListView->Columns->Count;
+    for (int i = 1; i < count; i++)
+    {
+        ListView->Columns->Items[i]->Width = cellwidth;
+    }
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TPresetDialog::bnEditClick(TObject *Sender)
 {
-    int index = ListBox->ItemIndex;
+    if (!ListView->Selected)
+        return;
+
+    int index = ListView->Selected->Index;
     if (index >= 0)
     {
         TPreset preset = m_PresetList[index];
@@ -91,7 +93,7 @@ void __fastcall TPresetDialog::bnEditClick(TObject *Sender)
         if (dlg->ShowModal() == mrOk)
         {
             m_PresetList[index] = dlg->GetPreset();
-            UpdateList();
+            UpdateListView();
         }
         delete dlg;
     }
@@ -104,7 +106,7 @@ void __fastcall TPresetDialog::bnAddClick(TObject *Sender)
     if (dlg->ShowModal() == mrOk)
     {
         m_PresetList.push_back(dlg->GetPreset());
-        UpdateList();
+        UpdateListView();
     }
     delete dlg;
 }
@@ -112,11 +114,14 @@ void __fastcall TPresetDialog::bnAddClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TPresetDialog::bnRemoveClick(TObject *Sender)
 {
-    int index = ListBox->ItemIndex;
+    if (!ListView->Selected)
+        return;
+
+    int index = ListView->Selected->Index;
     if (index >= 0)
     {
         m_PresetList.erase(m_PresetList.begin() + index);
-        UpdateList();
+        UpdateListView();
     }
 }
 
@@ -128,7 +133,7 @@ void __fastcall TPresetDialog::bnImportClick(TObject *Sender)
     {
         TGrabberPresets gp;
         m_PresetList = gp.LoadFromIniFile(FileName);
-        UpdateList();
+        UpdateListView();
     }
 }
 
@@ -194,74 +199,6 @@ void __fastcall TPresetDialog::FormContextPopup(TObject *Sender,
     PopulateCaptureMenu();
     TPoint ptAbs = ClientToScreen(MousePos);
     m_CaptureMenu->Popup(ptAbs.x, ptAbs.y);
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::ListBoxMouseDown(TObject *Sender,
-      TMouseButton Button, TShiftState Shift, int X, int Y)
-{
-    if (Button != mbLeft)
-        return;
-
-    // Make sure we are on a list item
-    if (ListBox->ItemAtPos(Point(X, Y), true) >= 0 && !m_bDragging)
-    {
-        ListBox->BeginDrag(false, ListBox->ItemHeight);
-        m_bDragging = true;
-    }
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::ListBoxMouseMove(TObject *Sender,
-      TShiftState Shift, int X, int Y)
-{
-  //
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::ListBoxMouseUp(TObject *Sender,
-      TMouseButton Button, TShiftState Shift, int X, int Y)
-{
-    m_test = 1;
-  //
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::ListBoxStartDrag(TObject *Sender,
-      TDragObject *&DragObject)
-{
-    m_test = 1;
-//
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::ListBoxEndDrag(TObject *Sender,
-      TObject *Target, int X, int Y)
-{
-    m_bDragging = false;
-    m_test = 1;
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::ListBoxDragOver(TObject *Sender,
-      TObject *Source, int X, int Y, TDragState State, bool &Accept)
-{
-    // We only accept drops within the listbox
-    int index = ListBox->ItemAtPos(Point(X, Y), true);
-    Accept = (index >= 0 && Source == ListBox);
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::ListBoxDragDrop(TObject *Sender,
-      TObject *Source, int X, int Y)
-{
-    int index = ListBox->ItemAtPos(Point(X, Y), true);
-    if (index >= 0 && index != ListBox->ItemIndex)
-    {
-        // Move item at ItemIndex above item at index
-        MovePresetItem(ListBox->ItemIndex, index);
-        ListBox->Items->Move(ListBox->ItemIndex, index);
-    }
 }
 
 //---------------------------------------------------------------------------

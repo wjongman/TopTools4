@@ -15,16 +15,15 @@
 class TPresetDialog : public TForm
 {
 __published:  // IDE-managed Components
-    TListBox *ListBox;
     TButton *bnEdit;
     TButton *bnAdd;
     TButton *bnRemove;
-    TButton *bnImport;
-    TButton *bnExport;
     TPanel *Panel1;
     TButton *bnOk;
     TButton *bnCancel;
     TListView *ListView;
+    TButton *bnImport;
+    TButton *bnExport;
     void __fastcall bnImportClick(TObject *Sender);
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall bnCancelClick(TObject *Sender);
@@ -35,20 +34,6 @@ __published:  // IDE-managed Components
     void __fastcall bnRemoveClick(TObject *Sender);
     void __fastcall bnEditClick(TObject *Sender);
     void __fastcall bnExportClick(TObject *Sender);
-    void __fastcall ListBoxMouseDown(TObject *Sender, TMouseButton Button,
-          TShiftState Shift, int X, int Y);
-    void __fastcall ListBoxDragOver(TObject *Sender, TObject *Source,
-          int X, int Y, TDragState State, bool &Accept);
-    void __fastcall ListBoxDragDrop(TObject *Sender, TObject *Source,
-          int X, int Y);
-    void __fastcall ListBoxMouseMove(TObject *Sender, TShiftState Shift,
-          int X, int Y);
-    void __fastcall ListBoxMouseUp(TObject *Sender, TMouseButton Button,
-          TShiftState Shift, int X, int Y);
-    void __fastcall ListBoxStartDrag(TObject *Sender,
-          TDragObject *&DragObject);
-    void __fastcall ListBoxEndDrag(TObject *Sender, TObject *Target, int X,
-          int Y);
     void __fastcall ListViewDragOver(TObject *Sender, TObject *Source,
           int X, int Y, TDragState State, bool &Accept);
     void __fastcall ListViewDragDrop(TObject *Sender, TObject *Source,
@@ -63,6 +48,7 @@ private:  // User declarations
     void __fastcall UpdateList();
     void __fastcall UpdateListView();
     void __fastcall MovePresetItem(size_t src, size_t dest);
+    void __fastcall AdjustListViewColumns();
     String __fastcall SelectFileName();
     void __fastcall PopulateCaptureMenu();
     void __fastcall CaptureMenuClick(TObject *Sender);
