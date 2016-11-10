@@ -17,31 +17,30 @@ class TPresetPropsDlg : public TForm
 __published:  // IDE-managed Components
     TButton *bnOk;
     TButton *bnCancel;
-    TGroupBox *GroupBox1;
-    TGroupBox *GroupBox2;
-    TGroupBox *GroupBox3;
     TEdit *edTitle;
-    TEdit *edX;
-    TEdit *edY;
-    TEdit *edW;
-    TEdit *edH;
     TLabel *lbX;
-    TLabel *lbY;
-    TLabel *lbW;
-    TLabel *lbH;
+    TEdit *edX;
     TUpDown *udX;
+    TLabel *lbY;
+    TEdit *edY;
     TUpDown *udY;
+    TLabel *lbW;
+    TEdit *edW;
     TUpDown *udW;
+    TLabel *lbH;
+    TEdit *edH;
     TUpDown *udH;
+    TLabel *lbName;
     void __fastcall FormShow(TObject *Sender);
     void __fastcall edTitleChange(TObject *Sender);
 
 private:  // User declarations
     TPreset m_preset;
+    TPoint m_ptLeftTop;
 
 public:   // User declarations
     __fastcall TPresetPropsDlg(TComponent* Owner);
-    __fastcall TPresetPropsDlg(TComponent* Owner, const TPreset& preset);
+    __fastcall TPresetPropsDlg(TComponent* Owner, const TPreset& preset, const TPoint& ptLeftTop);
 
     TPreset GetPreset();
 };

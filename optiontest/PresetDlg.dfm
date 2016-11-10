@@ -23,7 +23,7 @@ object PresetDialog: TPresetDialog
     Height = 39
     Align = alBottom
     BevelOuter = bvNone
-    TabOrder = 3
+    TabOrder = 4
     object bnOk: TButton
       Left = 239
       Top = 6
@@ -32,7 +32,7 @@ object PresetDialog: TPresetDialog
       Caption = 'OK'
       Default = True
       ModalResult = 1
-      TabOrder = 1
+      TabOrder = 2
       OnClick = bnOkClick
     end
     object bnCancel: TButton
@@ -43,7 +43,7 @@ object PresetDialog: TPresetDialog
       Cancel = True
       Caption = 'Cancel'
       ModalResult = 2
-      TabOrder = 0
+      TabOrder = 3
       OnClick = bnCancelClick
     end
     object bnImport: TButton
@@ -52,7 +52,7 @@ object PresetDialog: TPresetDialog
       Width = 75
       Height = 25
       Caption = '&Import...'
-      TabOrder = 2
+      TabOrder = 0
       OnClick = bnImportClick
     end
     object bnExport: TButton
@@ -60,14 +60,14 @@ object PresetDialog: TPresetDialog
       Top = 6
       Width = 75
       Height = 25
-      Caption = '&Export...'
-      TabOrder = 3
+      Caption = 'E&xport...'
+      TabOrder = 1
       OnClick = bnExportClick
     end
   end
   object bnAdd: TButton
     Left = 328
-    Top = 40
+    Top = 8
     Width = 75
     Height = 25
     Caption = '&Add...'
@@ -80,16 +80,16 @@ object PresetDialog: TPresetDialog
     Width = 75
     Height = 25
     Caption = '&Remove'
-    TabOrder = 2
+    TabOrder = 3
     OnClick = bnRemoveClick
   end
   object bnEdit: TButton
     Left = 328
-    Top = 8
+    Top = 40
     Width = 75
     Height = 25
     Caption = '&Edit...'
-    TabOrder = 0
+    TabOrder = 2
     OnClick = bnEditClick
   end
   object ListView: TListView
@@ -100,10 +100,29 @@ object PresetDialog: TPresetDialog
     Columns = <>
     ColumnClick = False
     DragMode = dmAutomatic
-    TabOrder = 4
+    PopupMenu = ListViewMenu
+    TabOrder = 0
     ViewStyle = vsReport
+    OnChange = ListViewChange
     OnDblClick = bnEditClick
+    OnEditing = ListViewEditing
     OnDragDrop = ListViewDragDrop
     OnDragOver = ListViewDragOver
+  end
+  object ListViewMenu: TPopupMenu
+    Left = 360
+    Top = 120
+    object Edit1: TMenuItem
+      Caption = '&Edit...'
+      OnClick = bnEditClick
+    end
+    object Add1: TMenuItem
+      Caption = '&Add...'
+      OnClick = bnAddClick
+    end
+    object Remove1: TMenuItem
+      Caption = '&Remove'
+      OnClick = bnRemoveClick
+    end
   end
 end

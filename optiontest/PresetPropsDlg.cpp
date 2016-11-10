@@ -15,14 +15,17 @@ __fastcall TPresetPropsDlg::TPresetPropsDlg(TComponent* Owner)
 }
 
 //---------------------------------------------------------------------------
-__fastcall TPresetPropsDlg::TPresetPropsDlg(TComponent* Owner, const TPreset& preset)
-    : TForm(Owner), m_preset(preset)
+__fastcall TPresetPropsDlg::TPresetPropsDlg(TComponent* Owner, const TPreset& preset, const TPoint& ptLeftTop)
+    : TForm(Owner), m_preset(preset), m_ptLeftTop(ptLeftTop)
 {
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TPresetPropsDlg::FormShow(TObject *Sender)
 {
+    Left = m_ptLeftTop.x;
+    Top = m_ptLeftTop.y;
+
     edTitle->Text = m_preset.description;
     edX->Text = m_preset.x;
     edY->Text = m_preset.y;

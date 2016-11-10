@@ -10,6 +10,7 @@
 #include <ComCtrls.hpp>
 
 #include "GrabberPresets.h"
+#include <Menus.hpp>
 
 /////////////////////////////////////////////////////////////////////////////
 class TPresetDialog : public TForm
@@ -24,6 +25,10 @@ __published:  // IDE-managed Components
     TListView *ListView;
     TButton *bnImport;
     TButton *bnExport;
+    TPopupMenu *ListViewMenu;
+    TMenuItem *Edit1;
+    TMenuItem *Add1;
+    TMenuItem *Remove1;
     void __fastcall bnImportClick(TObject *Sender);
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall bnCancelClick(TObject *Sender);
@@ -38,6 +43,10 @@ __published:  // IDE-managed Components
           int X, int Y, TDragState State, bool &Accept);
     void __fastcall ListViewDragDrop(TObject *Sender, TObject *Source,
           int X, int Y);
+    void __fastcall ListViewEditing(TObject *Sender, TListItem *Item,
+          bool &AllowEdit);
+    void __fastcall ListViewChange(TObject *Sender, TListItem *Item,
+          TItemChange Change);
 private:  // User declarations
 
     int m_test;
@@ -49,7 +58,7 @@ private:  // User declarations
     void __fastcall UpdateListView();
     void __fastcall MovePresetItem(size_t src, size_t dest);
     void __fastcall AdjustListViewColumns();
-    String __fastcall SelectFileName();
+    void __fastcall UpdateButtonState();
     void __fastcall PopulateCaptureMenu();
     void __fastcall CaptureMenuClick(TObject *Sender);
     void __fastcall PresetMenuClick(TObject *Sender);

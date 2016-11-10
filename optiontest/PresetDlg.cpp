@@ -36,12 +36,16 @@ void __fastcall TPresetDialog::FormCreate(TObject *Sender)
     pColumn->Caption = "Name";
     pColumn = ListView->Columns->Add();
     pColumn->Caption = "X";
+    pColumn->Alignment = taRightJustify	;
     pColumn = ListView->Columns->Add();
     pColumn->Caption = "Y";
+    pColumn->Alignment = taRightJustify	;
     pColumn = ListView->Columns->Add();
     pColumn->Caption = "W";
+    pColumn->Alignment = taRightJustify	;
     pColumn = ListView->Columns->Add();
     pColumn->Caption = "H";
+    pColumn->Alignment = taRightJustify	;
 
     TGrabberPresets gp;
     m_PresetList = gp.LoadFromIniFile("..\\presets.ini");
@@ -80,6 +84,20 @@ void __fastcall TPresetDialog::AdjustListViewColumns()
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TPresetDialog::ListViewChange(TObject *Sender,
+      TListItem *Item, TItemChange Change)
+{
+    UpdateButtonState();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::UpdateButtonState()
+{
+    bnEdit->Enabled = ListView->Selected;
+    bnRemove->Enabled = ListView->Selected;
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TPresetDialog::bnEditClick(TObject *Sender)
 {
     if (!ListView->Selected)
@@ -88,8 +106,10 @@ void __fastcall TPresetDialog::bnEditClick(TObject *Sender)
     int index = ListView->Selected->Index;
     if (index >= 0)
     {
+        int offset = GetSystemMetrics(SM_CYCAPTION);
         TPreset preset = m_PresetList[index];
-        TPresetPropsDlg* dlg = new TPresetPropsDlg(this, preset);
+        TPresetPropsDlg* dlg = new TPresetPropsDlg(this, preset, Point(Left + offset, Top + offset));
+        dlg->Caption = "Edit Preset";
         if (dlg->ShowModal() == mrOk)
         {
             m_PresetList[index] = dlg->GetPreset();
@@ -102,7 +122,10 @@ void __fastcall TPresetDialog::bnEditClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TPresetDialog::bnAddClick(TObject *Sender)
 {
-    TPresetPropsDlg* dlg = new TPresetPropsDlg(this);
+    TPreset preset;
+    int offset = GetSystemMetrics(SM_CYCAPTION);
+    TPresetPropsDlg* dlg = new TPresetPropsDlg(this, preset, Point(Left + offset, Top + offset));
+    dlg->Caption = "Add Preset";
     if (dlg->ShowModal() == mrOk)
     {
         m_PresetList.push_back(dlg->GetPreset());
@@ -128,13 +151,19 @@ void __fastcall TPresetDialog::bnRemoveClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TPresetDialog::bnImportClick(TObject *Sender)
 {
-    String FileName = SelectFileName();
-    if (FileName != "")
+    TOpenDialog* dlg = new TOpenDialog(this);
+    dlg->Title = "Select Preset File";
+    dlg->Options.Clear();
+    dlg->Options << ofFileMustExist<< ofHideReadOnly << ofEnableSizing ;
+    dlg->Filter = "Preset Files (*.ini)|*.ini|All Files (*.*)|*.*";
+    if (dlg->Execute())
     {
+        String filename = dlg->Files->Strings[0];
         TGrabberPresets gp;
-        m_PresetList = gp.LoadFromIniFile(FileName);
+        m_PresetList = gp.LoadFromIniFile(filename);
         UpdateListView();
     }
+    delete dlg;
 }
 
 //---------------------------------------------------------------------------
@@ -145,29 +174,11 @@ void __fastcall TPresetDialog::bnExportClick(TObject *Sender)
     dlg->Filter = "Preset Files (*.ini)|*.ini|All Files (*.*)|*.*";
     if (dlg->Execute())
     {
-        String sFile = dlg->Files->Strings[0].LowerCase();
+        String filename = dlg->Files->Strings[0];
         TGrabberPresets gp;
-        gp.SaveToIniFile(sFile, m_PresetList);
+        gp.SaveToIniFile(filename, m_PresetList);
     }
     delete dlg;
-}
-
-//---------------------------------------------------------------------------
-String __fastcall TPresetDialog::SelectFileName()
-{
-    String sFile = "";
-
-    TOpenDialog* dlg = new TOpenDialog(this);
-    dlg->Title = "Select Preset File";
-    dlg->Options.Clear();
-    dlg->Options << ofFileMustExist<< ofHideReadOnly << ofEnableSizing ;
-    dlg->Filter = "Preset Files (*.ini)|*.ini|All Files (*.*)|*.*";
-    if (dlg->Execute())
-    {
-        sFile = dlg->Files->Strings[0].LowerCase();
-    }
-    delete dlg;
-    return sFile;
 }
 
 //---------------------------------------------------------------------------
@@ -193,12 +204,64 @@ void __fastcall TPresetDialog::bnCancelClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TPresetDialog::ListViewEditing(TObject *Sender,
+      TListItem *Item, bool &AllowEdit)
+{
+    // Read only
+    AllowEdit = false;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::ListViewDragOver(TObject *Sender,
+      TObject *Source, int X, int Y, TDragState State, bool &Accept)
+{
+    // We only accept drops from within the listview
+    Accept = (Source == ListView) && PtInRect(&(ListView->ClientRect), Point(X, Y));
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetDialog::ListViewDragDrop(TObject *Sender,
+      TObject *Source, int X, int Y)
+{
+    // We only accept drops from within the listview
+    if (Source != ListView)
+        return;
+
+    // Find item we are hovering above
+    TListItem* liTarget = ListView->GetItemAt(X, Y);
+    if (!liTarget)
+    {
+        // We are either on the header or on an empty row
+        TListItem* liFirst = ListView->Items->Item[0];
+        TRect rcFirstItem = liFirst->DisplayRect(drBounds);
+        if (Y < rcFirstItem.top)
+            liTarget = liFirst;
+
+        TListItem* liLast = ListView->Items->Item[ListView->Items->Count - 1];
+        TRect rcLastItem = liLast->DisplayRect(drBounds);
+        if (Y > rcFirstItem.bottom)
+            liTarget = liLast;
+    }
+    if (liTarget == ListView->Selected)
+        // We are above the dragged item itself
+        return;
+
+    // Rearrange underlying PresetList
+    int indexFrom = ListView->Selected->Index;
+    int indexTo = liTarget->Index;
+    MovePresetItem(indexFrom, indexTo);
+
+    // Now rebuild the ListView
+    UpdateListView();
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TPresetDialog::FormContextPopup(TObject *Sender,
       TPoint &MousePos, bool &Handled)
 {
-    PopulateCaptureMenu();
-    TPoint ptAbs = ClientToScreen(MousePos);
-    m_CaptureMenu->Popup(ptAbs.x, ptAbs.y);
+//    PopulateCaptureMenu();
+//    TPoint ptAbs = ClientToScreen(MousePos);
+//    m_CaptureMenu->Popup(ptAbs.x, ptAbs.y);
 }
 
 //---------------------------------------------------------------------------
@@ -367,48 +430,35 @@ void __fastcall TPresetDialog::PopulateCaptureMenu()
 
 
 //---------------------------------------------------------------------------
-void __fastcall TPresetDialog::ListViewDragOver(TObject *Sender,
-      TObject *Source, int X, int Y, TDragState State, bool &Accept)
+/*
+void __fastcall TPresetDialog::ListViewContextPopup(TObject *Sender,
+      TPoint &MousePos, bool &Handled)
 {
-    // We only accept drops from within the listview
-    Accept = (Source == ListView) && PtInRect(&(ListView->ClientRect), Point(X, Y));
+    TPopupMenu* menu = new TPopupMenu(this);
+
+    // Populate the menu
+    TMenuItem *item;
+
+    item = new TMenuItem(menu);
+    item->OnClick = bnEditClick;
+    item->Caption = "Edit...";
+    menu->Items->Add(item);
+
+    item = new TMenuItem(menu);
+    item->OnClick = bnAddClick;
+    item->Caption = "Add...";
+    menu->Items->Add(item);
+
+    item = new TMenuItem(menu);
+    item->OnClick = bnRemoveClick;
+    item->Caption = "Remove";
+    menu->Items->Add(item);
+
+    TPoint ptAbs = ClientToScreen(MousePos);
+    menu->Popup(ptAbs.x, ptAbs.y);
+
+    delete menu;
 }
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetDialog::ListViewDragDrop(TObject *Sender,
-      TObject *Source, int X, int Y)
-{
-    // We only accept drops from within the listview
-    if (Source != ListView)
-        return;
-
-    // Find item we are hovering above
-    TListItem* liTarget = ListView->GetItemAt(X, Y);
-    if (!liTarget)
-    {
-        // We are either on the header or on an empty row
-        TListItem* liFirst = ListView->Items->Item[0];
-        TRect rcFirstItem = liFirst->DisplayRect(drBounds);
-        if (Y < rcFirstItem.top)
-            liTarget = liFirst;
-
-        TListItem* liLast = ListView->Items->Item[ListView->Items->Count - 1];
-        TRect rcLastItem = liLast->DisplayRect(drBounds);
-        if (Y > rcFirstItem.bottom)
-            liTarget = liLast;
-    }
-    if (liTarget == ListView->Selected)
-        // We are above the dragged item itself
-        return;
-
-    // Rearrange underlying PresetList
-    int indexFrom = ListView->Selected->Index;
-    int indexTo = liTarget->Index;
-    MovePresetItem(indexFrom, indexTo);
-
-    // Now rebuild the ListView
-    UpdateListView();
-}
-
+*/
 //---------------------------------------------------------------------------
 
