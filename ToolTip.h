@@ -8,13 +8,11 @@ class TToolTip
 private:
     HWND m_hwndTooltip;
     TOOLINFO m_ToolInfo;
-    bool m_TrackingMouse;
 
 public:
     TToolTip(HWND hwndOwner)
     {
         m_hwndTooltip = CreateTrackingToolTip(hwndOwner);
-        m_TrackingMouse = false;
     }
 
     virtual ~TToolTip()
@@ -24,28 +22,18 @@ public:
     //-------------------------------------------------------------------------
     void Show()
     {
-        if (!m_TrackingMouse)
-        {
-            ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, (WPARAM)true, (LPARAM)&m_ToolInfo);
-            m_TrackingMouse = true;
-        }
+        ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, (WPARAM)true, (LPARAM)&m_ToolInfo);
     }
 
     //-------------------------------------------------------------------------
     void Hide()
     {
-        if (m_TrackingMouse)
-        {
-            SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, (WPARAM)false, (LPARAM)&m_ToolInfo);
-            m_TrackingMouse = false;
-        }
+        SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, (WPARAM)false, (LPARAM)&m_ToolInfo);
     }
 
     //-------------------------------------------------------------------------
     void Update(const TRect& rc, const TPoint& ptOrigin = TPoint(0, 0))
     {
-        Show();
-
         // Update tooltip text.
         String sCoords;
         sCoords.printf("X: %d  Y: %d  W: %d  H: %d",

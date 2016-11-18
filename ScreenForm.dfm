@@ -5,8 +5,8 @@ object ScreenForm: TScreenForm
   Height = 172
   Cursor = crSizeAll
   Hint = 
-    'Click right mouse-button to capture selected area\r\nleft to set' +
-    ' position'
+    'Click right mouse-button for menu.\r\nDrag and resize with left ' +
+    'button.'
   Caption = 'ScreenForm'
   Color = clBtnFace
   Constraints.MinHeight = 16

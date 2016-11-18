@@ -59,8 +59,19 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
     {
     case WM_SHOWWINDOW:
         // WParam is true when window is being showed
-        m_Timer->Enabled = Message.WParam;
         m_TrackingMouse = Message.WParam;
+        m_Timer->Enabled = Message.WParam;
+        UpdateToolTip();
+        break;
+
+    case WM_SETFOCUS:
+        m_BorderColor = clFuchsia;//Navy;
+        Invalidate();
+        break;
+
+    case WM_KILLFOCUS:
+        m_BorderColor = clGray;
+        Invalidate();
         break;
 
     case WM_MOVE:
@@ -126,19 +137,9 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
             return;
         }
     }
-    // Resume normal processing
+    // Let base class handle the rest
     TToolForm::WndProc(Message);
 }
-
-// //---------------------------------------------------------------------------
-// void __fastcall TScreenForm::FormCloseQuery(TObject *Sender,
-//         bool &CanClose)
-// {
-//     m_pToolTip->Hide();
-//     m_Timer->Enabled = false;
-//
-//     CanClose = true;
-// }
 
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::FormMouseDown(TObject *Sender,
@@ -172,6 +173,7 @@ void TScreenForm::UpdateToolTip()
             TPoint ptOrigin(Screen->DesktopLeft, Screen->DesktopTop);
             TRect rcNew(Left, Top, Left + Width, Top + Height);
             m_pToolTip->Update(rcNew, ptOrigin);
+            m_pToolTip->Show();
         }
         else
         {
@@ -188,14 +190,7 @@ void __fastcall TScreenForm::OnTimerTick(TObject *Sender)
     POINT pt = ScreenToClient(ptMouse);
 
     // Hide tooltip when mouse is not above the form
-    if (WindowFromPoint(ptMouse) == Handle)
-    {
-        m_TrackingMouse = true;
-    }
-    else
-    {
-        m_TrackingMouse = false;
-    }
+    m_TrackingMouse = (WindowFromPoint(ptMouse) == Handle);
 
     UpdateToolTip();
 }
@@ -311,8 +306,8 @@ void __fastcall TScreenForm::FormPaint(TObject *Sender)
     TColor OldBrushColor = Canvas->Brush->Color;
     TPenMode OldPenMode = Canvas->Pen->Mode;
 
+    Canvas->Pen->Color = m_BorderColor;
     Canvas->Pen->Mode = pmCopy;
-    Canvas->Pen->Color = clBlack;
     Canvas->Brush->Color = clInfoBk;
 
     // Borders

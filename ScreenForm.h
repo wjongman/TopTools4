@@ -28,7 +28,8 @@ public:
 
 private:
     bool m_TrackingMouse;
-
+    TColor m_BorderColor;
+    
     TTimer* m_Timer;
     TToolTip* m_pToolTip;
 
@@ -48,11 +49,10 @@ END_MESSAGE_MAP(TForm)
 __published:  // IDE-managed Components
     void __fastcall FormPaint(TObject *Sender);
     void __fastcall FormResize(TObject *Sender);
-//    void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
     void __fastcall FormMouseDown(TObject *Sender, TMouseButton Button,
-                                  TShiftState Shift, int X, int Y);
+      TShiftState Shift, int X, int Y);
     void __fastcall FormMouseMove(TObject *Sender, TShiftState Shift,
-          int X, int Y);
+      int X, int Y);
 
 __published:
     __property TMouseEvent OnRightButtonClick = { read = FOnRightButtonClick, write = FOnRightButtonClick };
