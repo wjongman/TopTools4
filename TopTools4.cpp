@@ -37,6 +37,8 @@ USEUNIT("TopToolBar.cpp");
 USEUNIT("TrayIcon.cpp");
 USERES("Graphics.RES");
 USERES("appicon.RES");
+USEFORM("PresetManager.cpp", PresetManager);
+USEFORM("PresetDlg.cpp", PresetDlg);
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {

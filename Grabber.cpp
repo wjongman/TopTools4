@@ -5,6 +5,7 @@
 #include "Grabber.h"
 #include "AutoSaveDlg.h"
 #include "PersistImage.h"
+#include "PresetManager.h"
 
 //---------------------------------------------------------------------------
 __fastcall TScreenGrabber::TScreenGrabber(TComponent* Owner)
@@ -151,7 +152,7 @@ void __fastcall TScreenGrabber::DoPreset(int index)
     {
         // Add current position to presets
     }
-    else if (index <= m_PresetList.size())
+    else if (index <= (int)m_PresetList.size())
     {
         TPreset preset = m_PresetList[index-1];
         SetBounds(preset.x, preset.y, preset.w, preset.h);
@@ -161,7 +162,14 @@ void __fastcall TScreenGrabber::DoPreset(int index)
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::ManagePresets(TObject *Sender)
 {
-
+    Hide();
+    TPresetManager* pm = new TPresetManager(this, m_PresetList);
+    if (pm->ShowModal() == mrOk)
+    {
+        m_PresetList = pm->GetPresetList();
+    }
+    delete pm;
+    Show();
 }
 
 //---------------------------------------------------------------------------

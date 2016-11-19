@@ -9,14 +9,15 @@
       obj\Main.obj obj\OptionDlg.obj obj\Ruler.obj obj\ScreenForm.obj 
       obj\Tool.obj obj\AutoSave.obj obj\Grabber.obj obj\HotkeyInfo.obj 
       obj\HotkeyManager.obj obj\LoupePanel.obj obj\Monitor.obj 
-      obj\PersistImage.obj obj\TopToolBar.obj obj\TrayIcon.obj"/>
+      obj\PersistImage.obj obj\TopToolBar.obj obj\TrayIcon.obj 
+      obj\PresetManager.obj obj\PresetDlg.obj"/>
     <RESFILES value="Cursors.res TopTools4.res Graphics.RES appicon.RES"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) About.dfm AutoSaveDlg.dfm BaseConv.dfm Control.dfm Float.dfm 
       ImageView.dfm Info.dfm Loupe.dfm Main.dfm OptionDlg.dfm Ruler.dfm 
-      ScreenForm.dfm Tool.dfm"/>
+      ScreenForm.dfm Tool.dfm PresetManager.dfm PresetDlg.dfm"/>
     <LIBFILES value="gif\gif.lib png\png.lib hotkey\TopToolParts.lib"/>
     <LIBRARIES value="TopToolParts.lib VCLX50.lib bcbsmp50.lib vcl50.lib"/>
     <SPARELIBS value="vcl50.lib bcbsmp50.lib VCLX50.lib TopToolParts.lib"/>
