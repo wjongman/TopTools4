@@ -126,21 +126,19 @@ public:
         else
         {
             // No commandline arguments, heuristcly determine run-mode
-            if (IniFileExists())
+            if (RegKeyExists())
+            {
+                // If a Registry key exists, we want to load these
+                // per-user settings.
+                // In this case we'll run in rmRegistry mode
+                m_RunMode = rmRegistry;
+            }
+            else if (IniFileExists())
             {
                 // todo: First test if inifile is writable
 
                 // If an Ini file exists we'll run in rmIniFile mode
-                // Ini file overrides registry settings
                 m_RunMode = rmIniFile;
-            }
-            else if (RegKeyExists())
-            {
-                // If a Registry key exists, TopTools was either installed
-                // using the setup program or the user chose to save settings
-                // in the registry at the end of a previous session.
-                // In this case we'll run in rmRegistry mode
-                m_RunMode = rmRegistry;
             }
             else
             {
