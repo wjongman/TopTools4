@@ -300,6 +300,7 @@ void __fastcall TTopToolBar::InitButtons()
   delete pImage;
   m_buttons.push_back(pButton);
 
+/*
   pButton = new TTopToolButton(this);
   pButton->Parent = this;
   pButton->Name = "bnExit";
@@ -312,7 +313,6 @@ void __fastcall TTopToolBar::InitButtons()
   delete pImage;
   m_buttons.push_back(pButton);
 
-/*
   pButton = new TTopToolButton(this);
   pButton->Parent = this;
   pButton->Name = "bn";

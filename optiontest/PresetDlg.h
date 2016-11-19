@@ -11,6 +11,7 @@
 
 #include "GrabberPresets.h"
 #include <Menus.hpp>
+#include <ActnList.hpp>
 
 /////////////////////////////////////////////////////////////////////////////
 class TPresetDialog : public TForm
@@ -33,6 +34,18 @@ __published:  // IDE-managed Components
     TButton *bnDown;
     TMenuItem *miUp;
     TMenuItem *miDown;
+    TActionList *ActionList1;
+    TAction *gaView;
+    TAction *gaCopy;
+    TAction *gaAddPreset;
+    TAction *gaSave;
+    TAction *gaSaveOn;
+    TAction *gaPrint;
+    TAction *gaPrintOn;
+    TAction *gaAutoSave;
+    TAction *gaAutoSaveOn;
+    TAction *gaAutoSaveOptions;
+    TAction *gaCancel;
     void __fastcall bnImportClick(TObject *Sender);
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall bnCancelClick(TObject *Sender);
@@ -53,6 +66,8 @@ __published:  // IDE-managed Components
     void __fastcall bnDownClick(TObject *Sender);
     void __fastcall ListViewDblClick(TObject *Sender);
     void __fastcall ListViewMenuPopup(TObject *Sender);
+    void __fastcall FormContextPopup(TObject *Sender, TPoint &MousePos,
+          bool &Handled);
 private:  // User declarations
 
     int m_test;
@@ -66,6 +81,7 @@ private:  // User declarations
     void __fastcall AdjustListViewColumns();
     void __fastcall UpdateButtonState();
     void __fastcall PopulateCaptureMenu();
+    void __fastcall PopulateCaptureMenu2();
     void __fastcall CaptureMenuClick(TObject *Sender);
     void __fastcall PresetMenuClick(TObject *Sender);
 

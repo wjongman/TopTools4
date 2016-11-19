@@ -84,11 +84,11 @@ in, the heuristics used are as follows:
 * If there are commandline arguments (see below):
 use indicated mode.
 
-* Else if a file called "TopTools4.ini" is found in the startup directory:
-use Ini-file mode.
-
 * Else if a registry key is found (HKCU\\Software\\TopTools 4):
 use Registry mode.
+
+* Else if a file called "TopTools4.ini" is found in the startup directory:
+use Ini-file mode.
 
 * Otherwise use Portable mode.
 

@@ -8,21 +8,17 @@
 
 //---------------------------------------------------------------------------
 __fastcall TScreenGrabber::TScreenGrabber(TComponent* Owner)
-      : TScreenForm(Owner),
-        FOnCaptureNext(NULL),
-        FOnCaptureComplete(NULL),
-        m_CaptureMenu(NULL)
+: TScreenForm(Owner),
+FOnCaptureComplete(NULL),
+m_CaptureMenu(NULL)
 {
     // Have a bitmap to store the grabbed stuff
     m_pBufferBmp = new Graphics::TBitmap;
 
-    // TGrabberMode can be one of:
-    // gmOpenViewer, gmShowMenu, gmBypassMenu, gmCopy, gmContinuous
-    m_GrabberMode = gmShowMenu;
-
     OnRightButtonClick = HandleRightButtonClick;
 
     m_AutoSaver.LoadOptions();
+    m_PresetList = TGrabberPresets::LoadFromIniFile("..\\presets.ini");
 }
 
 //---------------------------------------------------------------------------
@@ -41,38 +37,98 @@ void __fastcall TScreenGrabber::UpdateSettings()
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TScreenGrabber::HandleRightButtonClick(TObject *Sender,
-                        TMouseButton Button, TShiftState Shift, int X, int Y)
+void __fastcall TScreenGrabber::WndProc(Messages::TMessage &Message)
 {
-     GetDesktopArea();
+    switch (Message.Msg)
+    {
+    case WM_SYSKEYDOWN:
+        // For the Alt keys
+        switch (Message.WParam)
+        {
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            // Bit 29 of lParam is state of Alt key
+            if (Message.LParam & 0x20000000)
+            {
+                int index = Message.WParam - 0x30;
+                // Set dimensions according to preset value
+                DoPreset(index);
+            }
+            break;
+        }
 
-     switch (m_GrabberMode)
-     {
-     case gmOpenViewer:
-         ViewImage(m_pBufferBmp);
-         EndCapture();
-         break;
+    case WM_KEYDOWN:
 
-     case gmShowMenu:
-         ShowCaptureMenu(X, Y);
-         break;
+        switch (Message.WParam)
+        {
+        case VK_LEFT:
+        case VK_RIGHT:
+        case VK_UP:
+        case VK_DOWN:
+        case VK_ESCAPE:
+            // These keys are handled by the base class
+            TScreenForm::WndProc(Message);
+            return;
+        }
 
-     case gmBypassMenu:
-         AutoSaveToFile();
-         EndCapture();
-         break;
+        bool shift = ::GetKeyState(VK_SHIFT) & 0x8000;
 
-     case gmContinuous:
-         AutoSaveToFile();
-         CaptureNext();
-         break;
+        switch (Message.WParam)
+        {
+        case VK_RETURN:
+            GetDesktopArea();
+            ViewImage(m_pBufferBmp);
+            EndCapture();
+            break;
 
-     default:
-         EndCapture();
-         break;
-     }
-//     EndCapture();
-// Left Click to drag or resize, Right Click to grab area.
+        case 'C':
+            GetDesktopArea();
+            CopyToClipboard();
+            if (!shift)
+                EndCapture();
+            break;
+
+        case 'S':
+            GetDesktopArea();
+            SaveToFile();
+            if (!shift)
+                EndCapture();
+            break;
+
+        case 'P':
+            GetDesktopArea();
+            Print();
+            if (!shift)
+                EndCapture();
+            break;
+
+        case 'A':
+            GetDesktopArea();
+            AutoSaveToFile();
+            if (!shift)
+                EndCapture();
+            break;
+        }
+
+    }
+    // Base class handles the rest
+    TScreenForm::WndProc(Message);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TScreenGrabber::HandleRightButtonClick(TObject *Sender,
+                                                       TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+    GetDesktopArea();
+    ShowCaptureMenu(X, Y);
 }
 
 //---------------------------------------------------------------------------
@@ -85,26 +141,71 @@ void __fastcall TScreenGrabber::ShowCaptureMenu(int X, int Y)
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TScreenGrabber::PresetMenuClick(TObject *Sender)
+{
+    TMenuItem* menuItem = dynamic_cast<TMenuItem*>(Sender);
+    if (menuItem)
+    {
+        DoPreset(menuItem->Tag);
+    }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TScreenGrabber::DoPreset(int index)
+{
+    if (index < 0)
+    {
+        // Show properties dialog
+    }
+    else if (index == 0)
+    {
+        // Add current position to presets
+    }
+    else if (index <= m_PresetList.size())
+    {
+        TPreset preset = m_PresetList[index-1];
+        SetBounds(preset.x, preset.y, preset.w, preset.h);
+    }
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::CaptureMenuClick(TObject *Sender)
 {
     TMenuItem* menuItem = dynamic_cast<TMenuItem*>(Sender);
 
     if (menuItem)
     {
-        if (menuItem->Hint == "Hide")
+        if (menuItem->Hint == "View")
         {
-            m_pBufferBmp->Assign(NULL);
+            ViewImage(m_pBufferBmp);
             EndCapture();
+        }
+        else if (menuItem->Hint == "Copy")
+        {
+            CopyToClipboard();
+            EndCapture();
+        }
+        else if (menuItem->Hint == "CopyOn")
+        {
+            CopyToClipboard();
         }
         else if (menuItem->Hint == "Save")
         {
-            if (SaveToFile())
-                EndCapture();
+            SaveToFile();
+            EndCapture();
         }
         else if (menuItem->Hint == "SaveOn")
         {
-            if (SaveToFile())
-                CaptureNext();
+            SaveToFile();
+        }
+        else if (menuItem->Hint == "Print")
+        {
+            Print();
+            EndCapture();
+        }
+        else if (menuItem->Hint == "PrintOn")
+        {
+            Print();
         }
         else if (menuItem->Hint == "AutoSave")
         {
@@ -114,37 +215,17 @@ void __fastcall TScreenGrabber::CaptureMenuClick(TObject *Sender)
         else if (menuItem->Hint == "AutoSaveOn")
         {
             AutoSaveToFile();
-            CaptureNext();
-        }
-        else if (menuItem->Hint == "Copy")
-        {
-            CopyToClipboard();
-            EndCapture();
-        }
-        else if (menuItem->Hint == "View")
-        {
-            ViewImage(m_pBufferBmp);
-            EndCapture();
-        }
-        else if (menuItem->Hint == "Print")
-        {
-            Print();
-            EndCapture();
         }
         else if (menuItem->Hint == "AutoSaveOptions")
         {
             AutosaveOptions();
+        }
+        else if (menuItem->Hint == "Hide")
+        {
+            m_pBufferBmp->Assign(NULL);
             EndCapture();
-            //CaptureNext();  // which one makes more sense?
         }
     }
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TScreenGrabber::CaptureNext()
-{
-    if (FOnCaptureNext)
-        FOnCaptureNext(this);
 }
 
 //---------------------------------------------------------------------------
@@ -176,7 +257,54 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
     NewItem->Caption = "Take Snapshot";
     NewItem->Default = true;
     NewItem->Hint = "View";
+    NewItem->ShortCut = ShortCut(Word(0x0D), TShiftState());
     m_CaptureMenu->Items->Add(NewItem);
+
+    // Separator ------------------------
+    NewItem = new TMenuItem(m_CaptureMenu);
+    NewItem->Caption = "-";
+    m_CaptureMenu->Items->Add(NewItem);
+
+    // Presets Submenu ------------------
+    TMenuItem* PresetMenu = new TMenuItem(m_CaptureMenu);
+    PresetMenu->Caption = "Presets";
+    m_CaptureMenu->Items->Add(PresetMenu);
+
+    NewItem = new TMenuItem(PresetMenu);
+    NewItem->Caption = "Add Preset...";
+    NewItem->ShortCut = ShortCut(Word('0'), TShiftState() << ssAlt);
+    NewItem->OnClick = PresetMenuClick;
+    NewItem->Tag = 0;
+    PresetMenu->Add(NewItem);
+
+    // Separator ------------------------
+    NewItem = new TMenuItem(PresetMenu);
+    NewItem->Caption = "-";
+    PresetMenu->Add(NewItem);
+
+    for (size_t i = 0; i < m_PresetList.size(); i++)
+    {
+        NewItem = new TMenuItem(PresetMenu);
+        NewItem->Caption = m_PresetList[i].description;
+        NewItem->OnClick = PresetMenuClick;
+        NewItem->Tag = i + 1;
+        if (i < 9)
+        {
+            NewItem->ShortCut = ShortCut(Word(49 + i), TShiftState() << ssAlt);
+        }
+        PresetMenu->Add(NewItem);
+    }
+
+    // Separator ------------------------
+    NewItem = new TMenuItem(PresetMenu);
+    NewItem->Caption = "-";
+    PresetMenu->Add(NewItem);
+
+    NewItem = new TMenuItem(PresetMenu);
+    NewItem->Caption = "Manage Presets...";
+//        NewItem->OnClick = PresetMenuClick;
+//        NewItem->Tag = -1;
+    PresetMenu->Add(NewItem);
 
     // Separator ------------------------
     NewItem = new TMenuItem(m_CaptureMenu);
@@ -187,7 +315,7 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Copy To Clipboard";
     NewItem->Hint = "Copy";
-//    NewItem->ShortCut = ShortCut(Word('C'), TShiftState() << ssCtrl);
+    NewItem->ShortCut = ShortCut(Word('C'), TShiftState());
     m_CaptureMenu->Items->Add(NewItem);
 
     // Separator ------------------------
@@ -199,14 +327,14 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Save To File...";
     NewItem->Hint = "Save";
-//    NewItem->ShortCut = ShortCut(Word('S'), TShiftState() << ssCtrl);
+    NewItem->ShortCut = ShortCut(Word('S'), TShiftState());
     m_CaptureMenu->Items->Add(NewItem);
 
     NewItem = new TMenuItem(m_CaptureMenu);
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Save && Grab More...";
     NewItem->Hint = "SaveOn";
-//    NewItem->ShortCut = ShortCut(Word('S'), TShiftState() << ssCtrl << ssShift);
+    NewItem->ShortCut = ShortCut(Word('S'), TShiftState() << ssShift);
     m_CaptureMenu->Items->Add(NewItem);
 
     // Separator ------------------------
@@ -218,15 +346,14 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Print...";
     NewItem->Hint = "Print";
-//    NewItem->ShortCut = ShortCut(Word('P'), TShiftState() << ssCtrl);
+    NewItem->ShortCut = ShortCut(Word('P'), TShiftState());
     m_CaptureMenu->Items->Add(NewItem);
 
     NewItem = new TMenuItem(m_CaptureMenu);
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Print && Grab More...";
     NewItem->Hint = "PrintOn";
-//    NewItem->ShortCut = ShortCut(Word('P'), TShiftState() << ssCtrl << ssShift);
-    NewItem->Enabled = false;
+    NewItem->ShortCut = ShortCut(Word('P'), TShiftState() << ssShift);
     m_CaptureMenu->Items->Add(NewItem);
 
     // Separator ------------------------
@@ -238,7 +365,7 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Auto Save";
     NewItem->Hint = "AutoSave";
-//    NewItem->ShortCut = ShortCut(Word('A'), TShiftState() << ssCtrl);
+    NewItem->ShortCut = ShortCut(Word('A'), TShiftState());
     //NewItem->Enabled = m_AutoSaver.Enabled;
     m_CaptureMenu->Items->Add(NewItem);
 
@@ -246,7 +373,7 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Auto Save && Grab More";
     NewItem->Hint = "AutoSaveOn";
-//    NewItem->ShortCut = ShortCut(Word('A'), TShiftState() << ssCtrl << ssShift);
+    NewItem->ShortCut = ShortCut(Word('A'), TShiftState() << ssShift);
     //NewItem->Enabled = m_AutoSaver.Enabled;
     m_CaptureMenu->Items->Add(NewItem);
 
@@ -265,18 +392,10 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
     NewItem = new TMenuItem(m_CaptureMenu);
     NewItem->OnClick = CaptureMenuClick;
     NewItem->Caption = "Cancel";
-    //NewItem->Default = true;
     NewItem->Hint = "Hide";
+    NewItem->ShortCut = ShortCut(Word(0x1B), TShiftState());
     m_CaptureMenu->Items->Add(NewItem);
 
-
-#ifdef _DEBUG
-    // Separator ------------------------
-    NewItem = new TMenuItem(m_CaptureMenu);
-    NewItem->Caption = "-";
-    m_CaptureMenu->Items->Add(NewItem);
-
-#endif
 }
 
 //---------------------------------------------------------------------------

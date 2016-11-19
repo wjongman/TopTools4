@@ -85,7 +85,6 @@ protected:
   void __fastcall HandleTrayMessage(TMessage &Message);
   void __fastcall HandleKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
   void __fastcall HandleToolWindowClose(TObject *Sender, TCloseAction &Action);
-  void __fastcall HandleCaptureNext(TObject *Sender);
   void __fastcall HandleCaptureComplete(TObject *Sender);
   void __fastcall HandleHotkey(THotkeyId id);
   //void __fastcall HandleToolWindowOptions(TObject *Sender);

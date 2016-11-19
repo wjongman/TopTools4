@@ -38,23 +38,24 @@ void __fastcall TPresetDialog::FormCreate(TObject *Sender)
 
     pColumn = ListView->Columns->Add();
     pColumn->Caption = "X";
-    pColumn->Alignment = taRightJustify	;
+    pColumn->Alignment = taRightJustify ;
 
     pColumn = ListView->Columns->Add();
     pColumn->Caption = "Y";
-    pColumn->Alignment = taRightJustify	;
+    pColumn->Alignment = taRightJustify ;
 
     pColumn = ListView->Columns->Add();
     pColumn->Caption = "W";
-    pColumn->Alignment = taRightJustify	;
+    pColumn->Alignment = taRightJustify ;
 
     pColumn = ListView->Columns->Add();
     pColumn->Caption = "H";
-    pColumn->Alignment = taRightJustify	;
+    pColumn->Alignment = taRightJustify ;
 
     TGrabberPresets gp;
     m_PresetList = gp.LoadFromIniFile("..\\presets.ini");
     UpdateListView();
+    UpdateButtonState();
 }
 
 //-------------------------------------------------------------------------
@@ -98,6 +99,8 @@ void __fastcall TPresetDialog::ListViewChange(TObject *Sender,
 //---------------------------------------------------------------------------
 void __fastcall TPresetDialog::UpdateButtonState()
 {
+
+    bnExport->Enabled = ListView->Items->Count > 0;
     bnEdit->Enabled = ListView->Selected;
     bnDelete->Enabled = ListView->Selected;
     bnUp->Enabled = ListView->Selected && ListView->Selected->Index > 0;
@@ -328,6 +331,15 @@ void __fastcall TPresetDialog::MovePresetItem(size_t src, size_t dest)
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TPresetDialog::FormContextPopup(TObject *Sender,
+      TPoint &MousePos, bool &Handled)
+{
+    PopulateCaptureMenu();
+    TPoint ptAbs = ClientToScreen(MousePos);
+    m_CaptureMenu->Popup(ptAbs.x, ptAbs.y);
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TPresetDialog::PopulateCaptureMenu()
 {
     if (!m_CaptureMenu)
@@ -342,89 +354,12 @@ void __fastcall TPresetDialog::PopulateCaptureMenu()
     TMenuItem *NewItem;
 
     NewItem = new TMenuItem(m_CaptureMenu);
-    NewItem->OnClick = CaptureMenuClick;
-    NewItem->Caption = "Take Snapshot";
     NewItem->Default = true;
-    NewItem->Hint = "View";
-    m_CaptureMenu->Items->Add(NewItem);
-
-    // Separator ------------------------
-    NewItem = new TMenuItem(m_CaptureMenu);
-    NewItem->Caption = "-";
+    NewItem->Action = gaView;
     m_CaptureMenu->Items->Add(NewItem);
 
     NewItem = new TMenuItem(m_CaptureMenu);
-    NewItem->OnClick = CaptureMenuClick;
-    NewItem->Caption = "Copy To Clipboard";
-    NewItem->Hint = "Copy";
-//    NewItem->ShortCut = ShortCut(Word('C'), TShiftState() << ssCtrl);
-    m_CaptureMenu->Items->Add(NewItem);
-
-    // Separator ------------------------
-    NewItem = new TMenuItem(m_CaptureMenu);
-    NewItem->Caption = "-";
-    m_CaptureMenu->Items->Add(NewItem);
-
-    NewItem = new TMenuItem(m_CaptureMenu);
-    NewItem->OnClick = CaptureMenuClick;
-    NewItem->Caption = "Save To File...";
-    NewItem->Hint = "Save";
-//    NewItem->ShortCut = ShortCut(Word('S'), TShiftState() << ssCtrl);
-    m_CaptureMenu->Items->Add(NewItem);
-
-    NewItem = new TMenuItem(m_CaptureMenu);
-    NewItem->OnClick = CaptureMenuClick;
-    NewItem->Caption = "Save && Grab More...";
-    NewItem->Hint = "SaveOn";
-//    NewItem->ShortCut = ShortCut(Word('S'), TShiftState() << ssCtrl << ssShift);
-    m_CaptureMenu->Items->Add(NewItem);
-
-    // Separator ------------------------
-    NewItem = new TMenuItem(m_CaptureMenu);
-    NewItem->Caption = "-";
-    m_CaptureMenu->Items->Add(NewItem);
-
-    NewItem = new TMenuItem(m_CaptureMenu);
-    NewItem->OnClick = CaptureMenuClick;
-    NewItem->Caption = "Print...";
-    NewItem->Hint = "Print";
-//    NewItem->ShortCut = ShortCut(Word('P'), TShiftState() << ssCtrl);
-    m_CaptureMenu->Items->Add(NewItem);
-
-    NewItem = new TMenuItem(m_CaptureMenu);
-    NewItem->OnClick = CaptureMenuClick;
-    NewItem->Caption = "Print && Grab More...";
-    NewItem->Hint = "PrintOn";
-//    NewItem->ShortCut = ShortCut(Word('P'), TShiftState() << ssCtrl << ssShift);
-    NewItem->Enabled = false;
-    m_CaptureMenu->Items->Add(NewItem);
-
-    // Separator ------------------------
-    NewItem = new TMenuItem(m_CaptureMenu);
-    NewItem->Caption = "-";
-    m_CaptureMenu->Items->Add(NewItem);
-
-    NewItem = new TMenuItem(m_CaptureMenu);
-    NewItem->OnClick = CaptureMenuClick;
-    NewItem->Caption = "Auto Save";
-    NewItem->Hint = "AutoSave";
-//    NewItem->ShortCut = ShortCut(Word('A'), TShiftState() << ssCtrl);
-    //NewItem->Enabled = m_AutoSaver.Enabled;
-    m_CaptureMenu->Items->Add(NewItem);
-
-    NewItem = new TMenuItem(m_CaptureMenu);
-    NewItem->OnClick = CaptureMenuClick;
-    NewItem->Caption = "Auto Save && Grab More";
-    NewItem->Hint = "AutoSaveOn";
-//    NewItem->ShortCut = ShortCut(Word('A'), TShiftState() << ssCtrl << ssShift);
-    //NewItem->Enabled = m_AutoSaver.Enabled;
-    m_CaptureMenu->Items->Add(NewItem);
-
-    NewItem = new TMenuItem(m_CaptureMenu);
-    NewItem->OnClick = CaptureMenuClick;
-    NewItem->Caption = "Auto Save Options...";
-    NewItem->Hint = "AutoSaveOptions";
-//    NewItem->Enabled = m_CaptureOptions.AutoSave;
+    NewItem->Action = gaCopy;
     m_CaptureMenu->Items->Add(NewItem);
 
     // Separator ------------------------
@@ -438,9 +373,8 @@ void __fastcall TPresetDialog::PopulateCaptureMenu()
     m_CaptureMenu->Items->Add(PresetMenu);
 
     NewItem = new TMenuItem(PresetMenu);
- //   NewItem->OnClick = PresetMenuClick;
     NewItem->Caption = "Add Preset";
-    NewItem->Hint = "AddPreset";
+    NewItem->Action = gaAddPreset;
     PresetMenu->Add(NewItem);
 
     // Separator ------------------------
@@ -453,10 +387,26 @@ void __fastcall TPresetDialog::PopulateCaptureMenu()
         NewItem = new TMenuItem(PresetMenu);
         NewItem->OnClick = PresetMenuClick;
         NewItem->Caption = m_PresetList[i].description;
-        NewItem->Tag = i;
+        NewItem->Tag = i + 1;
+        if (i < 9)
+        {
+            NewItem->ShortCut = ShortCut(Word(49 + i), TShiftState() << ssAlt);
+        }
         PresetMenu->Add(NewItem);
     }
 
+    // Separator ------------------------
+    NewItem = new TMenuItem(m_CaptureMenu);
+    NewItem->Caption = "-";
+    m_CaptureMenu->Items->Add(NewItem);
+
+    NewItem = new TMenuItem(m_CaptureMenu);
+    NewItem->Action = gaSave;
+    m_CaptureMenu->Items->Add(NewItem);
+
+    NewItem = new TMenuItem(m_CaptureMenu);
+    NewItem->Action = gaSaveOn;
+    m_CaptureMenu->Items->Add(NewItem);
 
     // Separator ------------------------
     NewItem = new TMenuItem(m_CaptureMenu);
@@ -464,54 +414,39 @@ void __fastcall TPresetDialog::PopulateCaptureMenu()
     m_CaptureMenu->Items->Add(NewItem);
 
     NewItem = new TMenuItem(m_CaptureMenu);
-    NewItem->OnClick = CaptureMenuClick;
-    NewItem->Caption = "Cancel";
-    //NewItem->Default = true;
-    NewItem->Hint = "Hide";
+    NewItem->Action = gaPrint;
     m_CaptureMenu->Items->Add(NewItem);
 
+    NewItem = new TMenuItem(m_CaptureMenu);
+    NewItem->Action = gaPrintOn;
+    m_CaptureMenu->Items->Add(NewItem);
 
-#ifdef _DEBUG
     // Separator ------------------------
     NewItem = new TMenuItem(m_CaptureMenu);
     NewItem->Caption = "-";
     m_CaptureMenu->Items->Add(NewItem);
 
-#endif
+    NewItem = new TMenuItem(m_CaptureMenu);
+    NewItem->Action = gaAutoSave;
+    m_CaptureMenu->Items->Add(NewItem);
+
+    NewItem = new TMenuItem(m_CaptureMenu);
+    NewItem->Action = gaAutoSaveOn;
+    m_CaptureMenu->Items->Add(NewItem);
+
+    NewItem = new TMenuItem(m_CaptureMenu);
+    NewItem->Action = gaAutoSaveOptions;
+    m_CaptureMenu->Items->Add(NewItem);
+
+    // Separator ------------------------
+    NewItem = new TMenuItem(m_CaptureMenu);
+    NewItem->Caption = "-";
+    m_CaptureMenu->Items->Add(NewItem);
+
+    NewItem = new TMenuItem(m_CaptureMenu);
+    NewItem->Action = gaCancel;
+    m_CaptureMenu->Items->Add(NewItem);
 }
-
-
-//---------------------------------------------------------------------------
-/*
-void __fastcall TPresetDialog::ListViewContextPopup(TObject *Sender,
-      TPoint &MousePos, bool &Handled)
-{
-    TPopupMenu* menu = new TPopupMenu(this);
-
-    // Populate the menu
-    TMenuItem *item;
-
-    item = new TMenuItem(menu);
-    item->OnClick = bnEditClick;
-    item->Caption = "Edit...";
-    menu->Items->Add(item);
-
-    item = new TMenuItem(menu);
-    item->OnClick = bnAddClick;
-    item->Caption = "Add...";
-    menu->Items->Add(item);
-
-    item = new TMenuItem(menu);
-    item->OnClick = bnRemoveClick;
-    item->Caption = "Remove";
-    menu->Items->Add(item);
-
-    TPoint ptAbs = ClientToScreen(MousePos);
-    menu->Popup(ptAbs.x, ptAbs.y);
-
-    delete menu;
-}
-*/
 
 //---------------------------------------------------------------------------
 

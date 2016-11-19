@@ -1,6 +1,6 @@
 object PresetDialog: TPresetDialog
-  Left = 1174
-  Top = 504
+  Left = 1255
+  Top = 289
   BorderStyle = bsDialog
   Caption = 'Grabber Presets'
   ClientHeight = 207
@@ -12,6 +12,7 @@ object PresetDialog: TPresetDialog
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  OnContextPopup = FormContextPopup
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
@@ -128,15 +129,15 @@ object PresetDialog: TPresetDialog
   end
   object ListViewMenu: TPopupMenu
     OnPopup = ListViewMenuPopup
-    Left = 192
+    Left = 176
     Top = 176
-    object miEdit: TMenuItem
-      Caption = '&Edit...'
-      OnClick = bnEditClick
-    end
     object miAdd: TMenuItem
       Caption = '&Add...'
       OnClick = bnAddClick
+    end
+    object miEdit: TMenuItem
+      Caption = '&Edit...'
+      OnClick = bnEditClick
     end
     object miDelete: TMenuItem
       Caption = '&Delete'
@@ -149,6 +150,51 @@ object PresetDialog: TPresetDialog
     object miDown: TMenuItem
       Caption = 'Down'
       OnClick = bnDownClick
+    end
+  end
+  object ActionList1: TActionList
+    Left = 24
+    Top = 128
+    object gaView: TAction
+      Caption = 'Take Snapshot'
+    end
+    object gaCopy: TAction
+      Caption = 'Copy'
+      ShortCut = 16451
+    end
+    object gaAddPreset: TAction
+      Caption = 'Add Preset'
+      ShortCut = 16462
+    end
+    object gaSave: TAction
+      Caption = 'Save To File...'
+      ShortCut = 16467
+    end
+    object gaSaveOn: TAction
+      Caption = 'Save && Grab More...'
+      ShortCut = 24659
+    end
+    object gaPrint: TAction
+      Caption = 'Print...'
+      ShortCut = 16464
+    end
+    object gaPrintOn: TAction
+      Caption = 'Print && Grab More...'
+      ShortCut = 24656
+    end
+    object gaAutoSave: TAction
+      Caption = 'Auto Save'
+      ShortCut = 16449
+    end
+    object gaAutoSaveOn: TAction
+      Caption = 'Auto Save && Grab More'
+      ShortCut = 24641
+    end
+    object gaAutoSaveOptions: TAction
+      Caption = 'Auto Save Options...'
+    end
+    object gaCancel: TAction
+      Caption = 'Cancel'
     end
   end
 end

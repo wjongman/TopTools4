@@ -6,10 +6,9 @@
 #include "ScreenForm.h"
 #include "AutoSaveOptions.h"
 #include "ImageView.h"
-#include <vector>
+#include "GrabberPresets.h"
 
-
-//---------------------------------------------------------------------------
+/////////////////////////////////////////////////////////////////////////////
 class TScreenGrabber : public TScreenForm
 {
 public:
@@ -19,14 +18,11 @@ public:
 
 private:
   RECT m_rcSelect;
-
-  enum TGrabberMode { gmOpenViewer, gmShowMenu, gmBypassMenu, gmContinuous };
-
-  TGrabberMode m_GrabberMode;
   Graphics::TBitmap* m_pBufferBmp;
   TPopupMenu* m_CaptureMenu;
   TAutoSave m_AutoSaver;
   TImageViewerList m_Viewers;
+  TPresetList m_PresetList;
 
   void __fastcall ViewerKeyPress(TObject *Sender, char &Key);
   void __fastcall ViewerClosed(TObject *Sender, TCloseAction &Action);
@@ -37,6 +33,8 @@ private:
   void __fastcall PopulateCaptureMenu();
   void __fastcall ShowCaptureMenu(int X, int Y);
   void __fastcall CaptureMenuClick(TObject *Sender);
+  void __fastcall PresetMenuClick(TObject *Sender);
+  void __fastcall DoPreset(int index);
 
   void __fastcall ViewImage(Graphics::TBitmap* pBufferBmp);
   void __fastcall AutosaveOptions();
@@ -45,17 +43,16 @@ private:
   void __fastcall AutoSaveToFile();
 
   void __fastcall CopyToClipboard();
-  void __fastcall CaptureNext();
   void __fastcall EndCapture();
   void __fastcall HandleRightButtonClick(TObject *Sender, TMouseButton Button,
                                          TShiftState Shift, int X, int Y);
+protected:
+    virtual void __fastcall WndProc(TMessage &Msg);
 
 protected:
-  TNotifyEvent FOnCaptureNext;
   TNotifyEvent FOnCaptureComplete;
 
 __published:
-  __property TNotifyEvent OnCaptureNext = { read = FOnCaptureNext, write = FOnCaptureNext };
   __property TNotifyEvent OnCaptureComplete = { read = FOnCaptureComplete, write = FOnCaptureComplete };
 };
 

@@ -1,9 +1,9 @@
 object PresetPropsDlg: TPresetPropsDlg
-  Left = 1144
-  Top = 301
+  Left = 736
+  Top = 315
   BorderStyle = bsDialog
   Caption = 'Preset Properties'
-  ClientHeight = 138
+  ClientHeight = 140
   ClientWidth = 265
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -56,8 +56,8 @@ object PresetPropsDlg: TPresetPropsDlg
     FocusControl = edTitle
   end
   object bnOk: TButton
-    Left = 88
-    Top = 103
+    Left = 96
+    Top = 107
     Width = 75
     Height = 25
     Caption = 'OK'
@@ -67,7 +67,7 @@ object PresetPropsDlg: TPresetPropsDlg
   end
   object bnCancel: TButton
     Left = 182
-    Top = 103
+    Top = 107
     Width = 75
     Height = 25
     Cancel = True

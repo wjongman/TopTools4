@@ -502,7 +502,7 @@ int TMainForm::GetToolState()
 //---------------------------------------------------------------------------
 bool TMainForm::AnyToolVisible()
 {
-    return(GetToolState() != 0);
+    return (GetToolState() != 0);
 }
 
 //---------------------------------------------------------------------------
@@ -670,6 +670,7 @@ TToolForm* TMainForm::GetCaptureForm()
         m_pCapture = new TScreenGrabber(this);
         m_pCapture->OnClose = HandleToolWindowClose;
         m_pCapture->OnKeyDown = HandleKeyDown;
+        m_pCapture->OnCaptureComplete = HandleCaptureComplete;
     }
 
     return m_pCapture;
@@ -759,23 +760,10 @@ void __fastcall TMainForm::actCaptureExecute(TObject *Sender)
 
     if (!m_pCapture)
     {
-        m_pCapture = new TScreenGrabber(this);
-        m_pCapture->OnCaptureNext = HandleCaptureNext;
-        m_pCapture->OnCaptureComplete = HandleCaptureComplete;
+        GetCaptureForm();
     }
 
     m_pCapture->Show();
-
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TMainForm::HandleCaptureNext(TObject *Sender)
-{
-    if (g_ToolOptions.Get("capture", "showloupe", false))
-    {
-        TToolForm* pLoupe = GetLoupeForm();
-        pLoupe->Show();
-    }
 }
 
 //---------------------------------------------------------------------------
@@ -783,6 +771,10 @@ void __fastcall TMainForm::HandleCaptureComplete(TObject *Sender)
 {
     if (m_pLoupe)
         m_pLoupe->Visible = m_SavedLoupeState;
+
+    m_pCapture->Hide();
+
+    actCapture->Checked = false;
 }
 
 //---------------------------------------------------------------------------
@@ -895,4 +887,3 @@ void __fastcall TMainForm::TrayMenuPopup(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-
