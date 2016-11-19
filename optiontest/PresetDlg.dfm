@@ -25,7 +25,7 @@ object PresetDialog: TPresetDialog
     BevelOuter = bvNone
     TabOrder = 4
     object bnOk: TButton
-      Left = 239
+      Left = 240
       Top = 6
       Width = 75
       Height = 25
@@ -36,7 +36,7 @@ object PresetDialog: TPresetDialog
       OnClick = bnOkClick
     end
     object bnCancel: TButton
-      Left = 327
+      Left = 328
       Top = 6
       Width = 75
       Height = 25

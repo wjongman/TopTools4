@@ -8,9 +8,9 @@
 
 //---------------------------------------------------------------------------
 __fastcall TScreenGrabber::TScreenGrabber(TComponent* Owner)
-: TScreenForm(Owner),
-FOnCaptureComplete(NULL),
-m_CaptureMenu(NULL)
+  : TScreenForm(Owner),
+    FOnCaptureComplete(NULL),
+    m_CaptureMenu(NULL)
 {
     // Have a bitmap to store the grabbed stuff
     m_pBufferBmp = new Graphics::TBitmap;
@@ -41,83 +41,71 @@ void __fastcall TScreenGrabber::WndProc(Messages::TMessage &Message)
 {
     switch (Message.Msg)
     {
-    case WM_SYSKEYDOWN:
-        // For the Alt keys
-        switch (Message.WParam)
-        {
-        case '0':
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9':
-            // Bit 29 of lParam is state of Alt key
-            if (Message.LParam & 0x20000000)
-            {
-                int index = Message.WParam - 0x30;
-                // Set dimensions according to preset value
-                DoPreset(index);
-            }
-            break;
-        }
-
     case WM_KEYDOWN:
-
-        switch (Message.WParam)
         {
-        case VK_LEFT:
-        case VK_RIGHT:
-        case VK_UP:
-        case VK_DOWN:
-        case VK_ESCAPE:
-            // These keys are handled by the base class
-            TScreenForm::WndProc(Message);
-            return;
+            bool shift = ::GetKeyState(VK_SHIFT) & 0x8000;
+            switch (Message.WParam)
+            {
+            case VK_RETURN:
+                GetDesktopArea();
+                ViewImage(m_pBufferBmp);
+                EndCapture();
+                break;
+
+            case 'C':
+                GetDesktopArea();
+                CopyToClipboard();
+                EndCapture();
+                break;
+
+            case 'S':
+                GetDesktopArea();
+                SaveToFile();
+                if (!shift)
+                    EndCapture();
+                break;
+
+            case 'P':
+                GetDesktopArea();
+                Print();
+                if (!shift)
+                    EndCapture();
+                break;
+
+            case 'A':
+                GetDesktopArea();
+                AutoSaveToFile();
+                if (!shift)
+                    EndCapture();
+                break;
+            }
         }
 
-        bool shift = ::GetKeyState(VK_SHIFT) & 0x8000;
-
-        switch (Message.WParam)
+    case WM_SYSKEYDOWN:
         {
-        case VK_RETURN:
-            GetDesktopArea();
-            ViewImage(m_pBufferBmp);
-            EndCapture();
-            break;
-
-        case 'C':
-            GetDesktopArea();
-            CopyToClipboard();
-            if (!shift)
-                EndCapture();
-            break;
-
-        case 'S':
-            GetDesktopArea();
-            SaveToFile();
-            if (!shift)
-                EndCapture();
-            break;
-
-        case 'P':
-            GetDesktopArea();
-            Print();
-            if (!shift)
-                EndCapture();
-            break;
-
-        case 'A':
-            GetDesktopArea();
-            AutoSaveToFile();
-            if (!shift)
-                EndCapture();
-            break;
+            // For the Alt keys
+            switch (Message.WParam)
+            {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+                // Bit 29 of lParam is state of Alt key
+                if (Message.LParam & 0x20000000)
+                {
+                    int index = Message.WParam - '0';
+                    // Set dimensions according to preset value
+                    DoPreset(index);
+                }
+                break;
+            }
         }
-
     }
     // Base class handles the rest
     TScreenForm::WndProc(Message);
@@ -125,7 +113,9 @@ void __fastcall TScreenGrabber::WndProc(Messages::TMessage &Message)
 
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::HandleRightButtonClick(TObject *Sender,
-                                                       TMouseButton Button, TShiftState Shift, int X, int Y)
+                                                       TMouseButton Button,
+                                                       TShiftState Shift,
+                                                       int X, int Y)
 {
     GetDesktopArea();
     ShowCaptureMenu(X, Y);
@@ -169,6 +159,12 @@ void __fastcall TScreenGrabber::DoPreset(int index)
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TScreenGrabber::ManagePresets(TObject *Sender)
+{
+
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::CaptureMenuClick(TObject *Sender)
 {
     TMenuItem* menuItem = dynamic_cast<TMenuItem*>(Sender);
@@ -184,10 +180,6 @@ void __fastcall TScreenGrabber::CaptureMenuClick(TObject *Sender)
         {
             CopyToClipboard();
             EndCapture();
-        }
-        else if (menuItem->Hint == "CopyOn")
-        {
-            CopyToClipboard();
         }
         else if (menuItem->Hint == "Save")
         {
@@ -231,11 +223,10 @@ void __fastcall TScreenGrabber::CaptureMenuClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::EndCapture()
 {
+    Close();
     // We are done
     if (FOnCaptureComplete)
         FOnCaptureComplete(this);
-
-    Close();
 }
 
 //---------------------------------------------------------------------------
@@ -270,41 +261,40 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
     PresetMenu->Caption = "Presets";
     m_CaptureMenu->Items->Add(PresetMenu);
 
-    NewItem = new TMenuItem(PresetMenu);
-    NewItem->Caption = "Add Preset...";
-    NewItem->ShortCut = ShortCut(Word('0'), TShiftState() << ssAlt);
-    NewItem->OnClick = PresetMenuClick;
-    NewItem->Tag = 0;
-    PresetMenu->Add(NewItem);
-
-    // Separator ------------------------
-    NewItem = new TMenuItem(PresetMenu);
-    NewItem->Caption = "-";
-    PresetMenu->Add(NewItem);
-
-    for (size_t i = 0; i < m_PresetList.size(); i++)
-    {
         NewItem = new TMenuItem(PresetMenu);
-        NewItem->Caption = m_PresetList[i].description;
+        NewItem->Caption = "Add Preset...";
+        NewItem->ShortCut = ShortCut(Word('0'), TShiftState() << ssAlt);
         NewItem->OnClick = PresetMenuClick;
-        NewItem->Tag = i + 1;
-        if (i < 9)
-        {
-            NewItem->ShortCut = ShortCut(Word(49 + i), TShiftState() << ssAlt);
-        }
+        NewItem->Tag = 0;
         PresetMenu->Add(NewItem);
-    }
 
-    // Separator ------------------------
-    NewItem = new TMenuItem(PresetMenu);
-    NewItem->Caption = "-";
-    PresetMenu->Add(NewItem);
+        // Separator ------------------------
+        NewItem = new TMenuItem(PresetMenu);
+        NewItem->Caption = "-";
+        PresetMenu->Add(NewItem);
 
-    NewItem = new TMenuItem(PresetMenu);
-    NewItem->Caption = "Manage Presets...";
-//        NewItem->OnClick = PresetMenuClick;
-//        NewItem->Tag = -1;
-    PresetMenu->Add(NewItem);
+        for (size_t i = 0; i < m_PresetList.size(); i++)
+        {
+            NewItem = new TMenuItem(PresetMenu);
+            NewItem->Caption = m_PresetList[i].description;
+            NewItem->OnClick = PresetMenuClick;
+            NewItem->Tag = i + 1;
+            if (i < 9)
+            {
+                NewItem->ShortCut = ShortCut(Word(49 + i), TShiftState() << ssAlt);
+            }
+            PresetMenu->Add(NewItem);
+        }
+
+        // Separator ------------------------
+        NewItem = new TMenuItem(PresetMenu);
+        NewItem->Caption = "-";
+        PresetMenu->Add(NewItem);
+
+        NewItem = new TMenuItem(PresetMenu);
+        NewItem->Caption = "Manage Presets...";
+        NewItem->OnClick = ManagePresets;
+        PresetMenu->Add(NewItem);
 
     // Separator ------------------------
     NewItem = new TMenuItem(m_CaptureMenu);

@@ -34,6 +34,7 @@ private:
   void __fastcall ShowCaptureMenu(int X, int Y);
   void __fastcall CaptureMenuClick(TObject *Sender);
   void __fastcall PresetMenuClick(TObject *Sender);
+  void __fastcall ManagePresets(TObject *Sender);
   void __fastcall DoPreset(int index);
 
   void __fastcall ViewImage(Graphics::TBitmap* pBufferBmp);
