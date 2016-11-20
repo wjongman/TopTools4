@@ -2,8 +2,8 @@ object PresetDlg: TPresetDlg
   Left = 977
   Top = 571
   BorderStyle = bsDialog
-  Caption = 'Preset Properties'
-  ClientHeight = 140
+  Caption = 'Add Preset'
+  ClientHeight = 131
   ClientWidth = 265
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -12,6 +12,7 @@ object PresetDlg: TPresetDlg
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  Position = poOwnerFormCenter
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
@@ -57,7 +58,7 @@ object PresetDlg: TPresetDlg
   end
   object bnOk: TButton
     Left = 96
-    Top = 107
+    Top = 99
     Width = 75
     Height = 25
     Caption = 'OK'
@@ -67,7 +68,7 @@ object PresetDlg: TPresetDlg
   end
   object bnCancel: TButton
     Left = 182
-    Top = 107
+    Top = 99
     Width = 75
     Height = 25
     Cancel = True

@@ -39,7 +39,7 @@ private:  // User declarations
     TPoint m_ptLeftTop;
 
 public:   // User declarations
-    __fastcall TPresetDlg(TComponent* Owner);
+    __fastcall TPresetDlg(TComponent* Owner, const TPreset& preset);
     __fastcall TPresetDlg(TComponent* Owner, const TPreset& preset, const TPoint& ptLeftTop);
 
     TPreset GetPreset();

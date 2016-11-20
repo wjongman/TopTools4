@@ -54,6 +54,8 @@ __published:  // IDE-managed Components
     void __fastcall ListViewDblClick(TObject *Sender);
     void __fastcall ListViewMenuPopup(TObject *Sender);
     void __fastcall FormShow(TObject *Sender);
+    void __fastcall ListViewKeyDown(TObject *Sender, WORD &Key,
+          TShiftState Shift);
 private:  // User declarations
 
     TPresetList m_PresetList;

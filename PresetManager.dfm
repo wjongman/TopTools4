@@ -109,6 +109,7 @@ object PresetManager: TPresetManager
     OnEditing = ListViewEditing
     OnDragDrop = ListViewDragDrop
     OnDragOver = ListViewDragOver
+    OnKeyDown = ListViewKeyDown
   end
   object bnUp: TButton
     Left = 328

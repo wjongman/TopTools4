@@ -6,6 +6,7 @@
 #include "AutoSaveDlg.h"
 #include "PersistImage.h"
 #include "PresetManager.h"
+#include "PresetDlg.h"
 
 //---------------------------------------------------------------------------
 __fastcall TScreenGrabber::TScreenGrabber(TComponent* Owner)
@@ -18,8 +19,7 @@ __fastcall TScreenGrabber::TScreenGrabber(TComponent* Owner)
 
     OnRightButtonClick = HandleRightButtonClick;
 
-    m_AutoSaver.LoadOptions();
-    m_PresetList = TGrabberPresets::LoadFromIniFile("..\\presets.ini");
+    LoadOptions();
 }
 
 //---------------------------------------------------------------------------
@@ -28,13 +28,43 @@ __fastcall TScreenGrabber::~TScreenGrabber()
     delete m_CaptureMenu;
     delete m_pBufferBmp;
 
-    m_AutoSaver.SaveOptions();
+    SaveOptions();
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::UpdateSettings()
 {
+    LoadOptions();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TScreenGrabber::LoadOptions()
+{
     m_AutoSaver.LoadOptions();
+
+    String ToolName = "capture\\presets";
+    for (int i = 1; i < 99; i++)
+    {
+        String commatext = g_ToolOptions.Get(ToolName, IntToStr(i), "");
+        if (commatext.IsEmpty())
+            return;
+
+        m_PresetList.push_back(TPreset(commatext));
+    }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TScreenGrabber::SaveOptions()
+{
+    m_AutoSaver.SaveOptions();
+
+    String ToolName = "capture\\presets";
+
+    g_ToolOptions.ClearOptions(ToolName);
+    for (size_t i = 1; i <= m_PresetList.size(); i++)
+    {
+        g_ToolOptions.Set(ToolName, IntToStr(i), m_PresetList[i-1].GetCommaText());
+    }
 }
 
 //---------------------------------------------------------------------------
@@ -151,12 +181,59 @@ void __fastcall TScreenGrabber::DoPreset(int index)
     else if (index == 0)
     {
         // Add current position to presets
+        AddPreset();
     }
     else if (index <= (int)m_PresetList.size())
     {
         TPreset preset = m_PresetList[index-1];
         SetBounds(preset.x, preset.y, preset.w, preset.h);
     }
+}
+
+//---------------------------------------------------------------------------
+bool __fastcall TScreenGrabber::NameIsInList(const String& name)
+{
+    for (size_t i = 0; i < m_PresetList.size(); i++)
+    {
+        String descr = m_PresetList[i].description;
+        if (name == descr)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+//---------------------------------------------------------------------------
+String  __fastcall TScreenGrabber::GetDefaultName()
+{
+    // Scan preset list to come up with a unique name
+    String result;
+    int suffix = 1;
+    do
+    {
+        result = result.sprintf("Preset%d", suffix);
+        suffix++;
+    }
+    while (NameIsInList(result));
+
+    return result;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TScreenGrabber::AddPreset()
+{
+    Hide();
+    TPreset preset(GetDefaultName(), Left, Top, Width, Height);
+
+    TPresetDlg* dlg = new TPresetDlg(this, preset);
+    dlg->Caption = "Add Preset";
+    if (dlg->ShowModal() == mrOk)
+    {
+        m_PresetList.push_back(dlg->GetPreset());
+    }
+    delete dlg;
+    Show();
 }
 
 //---------------------------------------------------------------------------
@@ -281,6 +358,7 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
         NewItem->Caption = "-";
         PresetMenu->Add(NewItem);
 
+        int count = m_PresetList.size();
         for (size_t i = 0; i < m_PresetList.size(); i++)
         {
             NewItem = new TMenuItem(PresetMenu);

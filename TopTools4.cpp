@@ -39,6 +39,7 @@ USERES("Graphics.RES");
 USERES("appicon.RES");
 USEFORM("PresetManager.cpp", PresetManager);
 USEFORM("PresetDlg.cpp", PresetDlg);
+USE("PersistOptions.h", File);
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {

@@ -26,7 +26,7 @@ __fastcall TPresetManager::~TPresetManager()
 //---------------------------------------------------------------------------
 void __fastcall TPresetManager::FormShow(TObject *Sender)
 {
-//    SetForegroundWindow(Handle);
+    SetForegroundWindow(Handle);
 }
 
 //---------------------------------------------------------------------------
@@ -169,6 +169,13 @@ void __fastcall TPresetManager::bnDeleteClick(TObject *Sender)
     {
         m_PresetList.erase(m_PresetList.begin() + index);
         UpdateListView();
+        // Select next item (if any)
+        int count = ListView->Items->Count;
+        if (count > 0 && index < count)
+        {
+            ListView->Items->Item[index]->Selected = true;
+            ListView->SetFocus();
+        }
     }
 }
 
@@ -183,8 +190,7 @@ void __fastcall TPresetManager::bnImportClick(TObject *Sender)
     if (dlg->Execute())
     {
         String filename = dlg->Files->Strings[0];
-        TGrabberPresets gp;
-        m_PresetList = gp.LoadFromIniFile(filename);
+        m_PresetList = TGrabberPresets::LoadFromIniFile(filename);
         UpdateListView();
     }
     delete dlg;
@@ -199,8 +205,7 @@ void __fastcall TPresetManager::bnExportClick(TObject *Sender)
     if (dlg->Execute())
     {
         String filename = dlg->Files->Strings[0];
-        TGrabberPresets gp;
-        gp.SaveToIniFile(filename, m_PresetList);
+        TGrabberPresets::SaveToIniFile(filename, m_PresetList);
     }
     delete dlg;
 }
@@ -333,6 +338,14 @@ void __fastcall TPresetManager::MovePresetItem(size_t src, size_t dest)
     TPreset tmp = m_PresetList[src];
     m_PresetList.erase(m_PresetList.begin() + src);
     m_PresetList.insert(m_PresetList.begin() + dest, tmp);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetManager::ListViewKeyDown(TObject *Sender, WORD &Key,
+      TShiftState Shift)
+{
+    if (Key == VK_DELETE)
+       bnDeleteClick(Sender);
 }
 
 //---------------------------------------------------------------------------

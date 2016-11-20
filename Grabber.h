@@ -27,6 +27,8 @@ private:
   void __fastcall ViewerKeyPress(TObject *Sender, char &Key);
   void __fastcall ViewerClosed(TObject *Sender, TCloseAction &Action);
 
+  void __fastcall LoadOptions();
+  void __fastcall SaveOptions();
   void __fastcall GetDesktopArea();
   void __fastcall GetDesktopArea(LPRECT lpRect);
 
@@ -36,6 +38,9 @@ private:
   void __fastcall PresetMenuClick(TObject *Sender);
   void __fastcall ManagePresets(TObject *Sender);
   void __fastcall DoPreset(int index);
+  void __fastcall AddPreset();
+  bool __fastcall NameIsInList(const String& name);
+  String  __fastcall GetDefaultName();
 
   void __fastcall ViewImage(Graphics::TBitmap* pBufferBmp);
   void __fastcall AutosaveOptions();

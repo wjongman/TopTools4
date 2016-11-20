@@ -269,6 +269,17 @@ public:
         return result;
     }
 
+    //-------------------------------------------------------------------------
+    void ClearOptions(const String& ToolName)
+    {
+        // Delete all options of given tool
+        option_map_iterator iter = m_OptionMaps.find(ToolName);
+        if (iter != m_OptionMaps.end())
+        {
+            iter->second.clear();
+        }
+    }
+
 private:
     //-------------------------------------------------------------------------
     TOption GetOrCreateOption(const String& ToolName, const String& OptionName, const TOption& Default)
@@ -436,6 +447,9 @@ private:
         {
             String SectionName = map_iter->first;
             TOptionMap OptionMap = map_iter->second;
+
+            // Delete existing section and write a new one
+            Ini->EraseSection(SectionName);
             for (option_iterator option_iter = OptionMap.begin(); option_iter != OptionMap.end(); option_iter++)
             {
                 String OptionName = option_iter->first;
@@ -460,6 +474,8 @@ private:
                 String KeyName = map_iter->first;
                 TOptionMap OptionMap = map_iter->second;
 
+                // Delete existing section and write a new one
+                Reg->DeleteKey(m_RegBaseKey + KeyName);
                 if (Reg->OpenKey(m_RegBaseKey + KeyName, true))
                 {
                     for (option_iterator iter = OptionMap.begin(); iter != OptionMap.end(); iter++)

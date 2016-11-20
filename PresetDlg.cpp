@@ -9,9 +9,10 @@
 #pragma resource "*.dfm"
 
 //---------------------------------------------------------------------------
-__fastcall TPresetDlg::TPresetDlg(TComponent* Owner)
-    : TForm(Owner)
+__fastcall TPresetDlg::TPresetDlg(TComponent* Owner, const TPreset& preset)
+    : TForm(Owner), m_preset(preset)
 {
+    Position = poOwnerFormCenter;
 }
 
 //---------------------------------------------------------------------------
