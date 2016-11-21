@@ -29,12 +29,15 @@ public:
 private:
     bool m_TrackingMouse;
     TColor m_BorderColor;
-    
+
     TTimer* m_Timer;
     TToolTip* m_pToolTip;
 
     void UpdateToolTip();
     void ConstrainWindow(TRect& rcWindow);
+
+    int m_WidthAtStartOfSize;
+    int m_HeightAtStartOfSize;
 
 protected:
     virtual void __fastcall WndProc(TMessage &Msg);
@@ -45,6 +48,8 @@ BEGIN_MESSAGE_MAP
 END_MESSAGE_MAP(TForm)
 
     void __fastcall OnNCHitTest(TWMNCHitTest &Message);
+    void __fastcall OnEnterSizeMove(TMessage &Message);
+    void __fastcall OnSizing(TMessage &Message);
 
 __published:  // IDE-managed Components
     void __fastcall FormPaint(TObject *Sender);

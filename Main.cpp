@@ -772,9 +772,9 @@ void __fastcall TMainForm::HandleCaptureComplete(TObject *Sender)
 //    if (m_pLoupe)
 //        m_pLoupe->Visible = m_SavedLoupeState;
 
+    actCapture->Checked = false;
     m_pCapture->Hide();
 
-    actCapture->Checked = false;
 }
 
 //---------------------------------------------------------------------------
@@ -822,8 +822,9 @@ void __fastcall TMainForm::actOptionsExecute(TObject *Sender)
 
     // Hide grabber window as it might cover our dialog
     if (m_pCapture)
-        m_pCapture->Hide();
-
+    {
+        HandleCaptureComplete(Sender);
+    }
     TToolOptionsDialog *OptionForm = new TToolOptionsDialog(this, sPageToShow);
     if (OptionForm->ShowModal() == mrOk)
     {

@@ -305,6 +305,7 @@ void TToolOptionsDialog::SaveOptions()
         {
             runmode = rmIniFile;
             // Delete all traces from registry
+            //g_ToolOptions.ClearOptions("capture\\presets");
             g_ToolOptions.ClearRegistry();
         }
     }

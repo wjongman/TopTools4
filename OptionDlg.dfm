@@ -417,7 +417,7 @@ object ToolOptionsDialog: TToolOptionsDialog
           Top = 20
           Width = 75
           Height = 25
-          Caption = 'Configure...'
+          Caption = '&Configure...'
           TabOrder = 0
           OnClick = bnAutosaveOptionsClick
         end
@@ -434,7 +434,7 @@ object ToolOptionsDialog: TToolOptionsDialog
           Top = 20
           Width = 75
           Height = 25
-          Caption = 'Manage...'
+          Caption = '&Manage...'
           TabOrder = 0
           OnClick = bnManagePresetsClick
         end

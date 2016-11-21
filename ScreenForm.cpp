@@ -15,9 +15,9 @@
 
 //---------------------------------------------------------------------------
 __fastcall TScreenForm::TScreenForm(TComponent* Owner)
-    : TToolForm(Owner, "capture"),
-      m_TrackingMouse(false),
-      m_pToolTip(NULL)
+: TToolForm(Owner, "capture"),
+m_TrackingMouse(false),
+m_pToolTip(NULL)
 {
     BorderStyle = bsNone;
     Color = clWhite;
@@ -78,25 +78,32 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
         UpdateToolTip();
         break;
 
-    case WM_MOVING:
-    {
-        // Constrain window to virtual desktop
-        TRect* prcWindow = (TRect*)Message.LParam;
-
-        if (prcWindow->left < Screen->DesktopLeft)
-            OffsetRect(prcWindow, Screen->DesktopLeft - prcWindow->left, 0);
-
-        if (prcWindow->top < Screen->DesktopTop)
-            OffsetRect(prcWindow, 0, Screen->DesktopTop - prcWindow->top);
-
-        if (prcWindow->right > Screen->DesktopWidth - Screen->DesktopLeft)
-            OffsetRect(prcWindow, Screen->DesktopWidth - Screen->DesktopLeft - prcWindow->right, 0);
-
-        if (prcWindow->bottom > Screen->DesktopHeight - Screen->DesktopTop)
-            OffsetRect(prcWindow, 0, Screen->DesktopHeight - Screen->DesktopTop - prcWindow->bottom);
-
+    case WM_ENTERSIZEMOVE:
+        OnEnterSizeMove(Message);
         break;
-    }
+    case WM_SIZING:
+        OnSizing(Message);
+        break;
+
+    case WM_MOVING:
+        {
+            // Constrain window to virtual desktop
+            TRect* prcWindow = (TRect*)Message.LParam;
+
+            if (prcWindow->left < Screen->DesktopLeft)
+                OffsetRect(prcWindow, Screen->DesktopLeft - prcWindow->left, 0);
+
+            if (prcWindow->top < Screen->DesktopTop)
+                OffsetRect(prcWindow, 0, Screen->DesktopTop - prcWindow->top);
+
+            if (prcWindow->right > Screen->DesktopWidth - Screen->DesktopLeft)
+                OffsetRect(prcWindow, Screen->DesktopWidth - Screen->DesktopLeft - prcWindow->right, 0);
+
+            if (prcWindow->bottom > Screen->DesktopHeight - Screen->DesktopTop)
+                OffsetRect(prcWindow, 0, Screen->DesktopHeight - Screen->DesktopTop - prcWindow->bottom);
+
+            break;
+        }
     case WM_KEYDOWN:
 
         // Default action is to move the form
@@ -143,7 +150,7 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
 
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::FormMouseDown(TObject *Sender,
-      TMouseButton Button, TShiftState Shift, int X, int Y)
+                                           TMouseButton Button, TShiftState Shift, int X, int Y)
 {
     if (Button == mbRight && FOnRightButtonClick)
     {
@@ -157,7 +164,7 @@ void __fastcall TScreenForm::FormMouseDown(TObject *Sender,
 
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::FormMouseMove(TObject *Sender,
-      TShiftState Shift, int X, int Y)
+                                           TShiftState Shift, int X, int Y)
 {
     UpdateToolTip();
 }
@@ -356,4 +363,80 @@ void __fastcall TScreenForm::FormPaint(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TScreenForm::OnEnterSizeMove(TMessage &Message)
+{
+    m_WidthAtStartOfSize = Width;
+    m_HeightAtStartOfSize = Height;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TScreenForm::OnSizing(TMessage &Message)
+{
+    // Constrain dimensions to square when shift key is down
+    bool shift = ::GetKeyState(VK_SHIFT) & 0x8000;
+    if (shift)
+    {
+        TRect* prcNew = (TRect*)Message.LParam;
+        int FAspectRatio = 1;
+        switch (Message.WParam)
+        {
+        case WMSZ_LEFT:
+        case WMSZ_RIGHT:
+            prcNew->Bottom = prcNew->Top + (prcNew->Width() / FAspectRatio);
+            break;
+        case WMSZ_TOP:
+        case WMSZ_BOTTOM:
+            prcNew->Right = prcNew->Left + (prcNew->Height() * FAspectRatio);
+            break;
+
+        case WMSZ_TOPLEFT:
+        case WMSZ_TOPRIGHT:
+        case WMSZ_BOTTOMLEFT:
+        case WMSZ_BOTTOMRIGHT:
+            {
+                bool SizeBasedOnWidth;
+                if (prcNew->Width() > m_WidthAtStartOfSize)
+                {
+                    SizeBasedOnWidth = prcNew->Height() < MulDiv(m_HeightAtStartOfSize, prcNew->Width(), m_WidthAtStartOfSize);
+                }
+                else
+                {
+                    SizeBasedOnWidth = prcNew->Width() > MulDiv(m_WidthAtStartOfSize, prcNew->Height(), m_HeightAtStartOfSize);
+                }
+                if (SizeBasedOnWidth)
+                {
+                    int NewHeight = prcNew->Width() / FAspectRatio;
+                    switch (Message.WParam)
+                    {
+                    case WMSZ_TOPLEFT:
+                    case WMSZ_TOPRIGHT:
+                        prcNew->Top = prcNew->Bottom - NewHeight;
+                        break;
+                    case WMSZ_BOTTOMLEFT:
+                    case WMSZ_BOTTOMRIGHT:
+                        prcNew->Bottom = prcNew->Top + NewHeight;
+                        break;
+                    }
+                }
+                else
+                {
+                    int NewWidth = prcNew->Height() * FAspectRatio;
+                    switch (Message.WParam)
+                    {
+                    case WMSZ_TOPLEFT:
+                    case WMSZ_BOTTOMLEFT:
+                        prcNew->Left = prcNew->Right - NewWidth;
+                        break;
+                    case WMSZ_TOPRIGHT:
+                    case WMSZ_BOTTOMRIGHT:
+                        prcNew->Right = prcNew->Left + NewWidth;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 
