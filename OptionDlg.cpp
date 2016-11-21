@@ -303,6 +303,8 @@ void TToolOptionsDialog::SaveOptions()
         else if (rbInifile->Checked)
         {
             runmode = rmIniFile;
+            // Delete all traces from registry
+            g_ToolOptions.ClearRegistry();
         }
     }
     g_ToolOptions.SetRunMode(runmode);

@@ -65,6 +65,8 @@ void __fastcall TScreenGrabber::SaveOptions()
     {
         g_ToolOptions.Set(ToolName, IntToStr(i), m_PresetList[i-1].GetCommaText());
     }
+
+    //g_ToolOptions.ClearRegistry();
 }
 
 //---------------------------------------------------------------------------

@@ -550,6 +550,56 @@ public:
     }
 
     //-------------------------------------------------------------------------
+    void __fastcall ClearRegistry()
+    {
+        // Remove all traces from registry
+        TRegistry *Reg = new TRegistry();
+        Reg->RootKey = HKEY_CURRENT_USER;
+        Reg->DeleteKey(m_RegBaseKey);
+//        DeleteRecurseRegKey(HKEY_CURRENT_USER, m_RegBaseKey);
+    }
+
+    //-------------------------------------------------------------------------
+    bool __fastcall DeleteRecurseRegKey(HKEY RootKey, const String& ParentKeyName)
+    {
+        bool bSuccess = false;
+
+        TRegistry *Reg = new TRegistry();
+        Reg->RootKey = RootKey;
+
+        // First, see if we can delete the key without having to recurse.
+        if (Reg->DeleteKey(ParentKeyName))
+            return true;
+
+        try
+        {
+            if (Reg->OpenKey(ParentKeyName, false))
+            {
+                if (Reg->HasSubKeys())
+                {
+                    TStringList *KeyList = new TStringList;
+                    Reg->GetKeyNames(KeyList);
+
+                    for (int key = 0; key < KeyList->Count; key++)
+                    {
+                        String SubKeyName = KeyList->Strings[key];
+                        // Recursively delete subkeys
+                        DeleteRecurseRegKey(RootKey, ParentKeyName + SubKeyName  + "\\");
+                    }
+                    delete KeyList;
+                }
+            }
+            Reg->CloseKey();
+            bSuccess = true;
+        }
+        __finally
+        {
+            delete Reg;
+        }
+        return bSuccess;
+    }
+
+    //-------------------------------------------------------------------------
     bool ProgramDirIsWriteable()
     {
         // See if program directory is accessable (by using the CreateFile API).
