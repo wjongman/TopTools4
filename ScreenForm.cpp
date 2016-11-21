@@ -365,6 +365,7 @@ void __fastcall TScreenForm::FormPaint(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TScreenForm::OnEnterSizeMove(TMessage &Message)
 {
+    // Record windowsize before sizing
     m_WidthAtStartOfSize = Width;
     m_HeightAtStartOfSize = Height;
 }
@@ -376,6 +377,7 @@ void __fastcall TScreenForm::OnSizing(TMessage &Message)
     bool shift = ::GetKeyState(VK_SHIFT) & 0x8000;
     if (shift)
     {
+        // https://stackoverflow.com/questions/20682975/resize-form-and-maintain-aspect-ratio
         TRect* prcNew = (TRect*)Message.LParam;
         int FAspectRatio = 1;
         switch (Message.WParam)

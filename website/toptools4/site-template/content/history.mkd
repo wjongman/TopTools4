@@ -1,9 +1,15 @@
 ## Version history
 
-#### version 4.0.2.11 (2016-06-06)
+#### version 4.1   (2016-11-21)
+
+##### Screengrabber
+  * Added option to maintain a list of preset values for commonly used capture sizes.
+  * Holding the shift key while resizing the grabber constrains the selection to a square.
 
 ##### Info
   * Added option to copy info to clipboard in a customizable format.
+
+#### version 4.0.2.11 (2016-06-06)
 
 #### version 4.0.1.77 (2014-11-03)
 

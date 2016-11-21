@@ -71,7 +71,7 @@ screen coordinates.
 
 By pressing 'Ctrl-C' (or a user definable hotkey) the current color is copied
 to the clipboard in RRGGBB format, optionally prefixed with a '#' and/or
-surrounded by quotes.
+surrounded by quotes. It is also possible to define a custom format.
 
 Often you want to know mouse coordinates relative to the underlying
 window instead of relative to the top-left of the desktop.
@@ -93,6 +93,8 @@ printed.
 
 Autosave features make it easy to capture a sequence of views with a minimum
 of keystrokes.
+
+Commonly used dimensions can be saved in a preset list, to be selected later with a single keystroke.
 
 ### Base Converter
 

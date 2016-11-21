@@ -27,11 +27,18 @@
           | <span class="keybd">Right Mousebutton</span> |  show options menu
 &nbsp;    |  &nbsp;  |  &nbsp;
 **screen capture** | |
-          | <span class="keybd">Esc</span>  |  cancel screen capture
+          | <span class="keybd">Enter</span>  |  view snapshot
+          | <span class="keybd">C</span>  |  copy frame to clipboard
+          | <span class="keybd">P</span>  |  print frame
+          | <span class="keybd">S</span>  |  save frame
+          | <span class="keybd">A</span>  |  autosave frame
           | <span class="keybd">Arrow</span>  |  move frame by 1 pixel
           | <span class="keybd">Shift</span>+<span class="keybd">Arrow</span>  |  move frame by 10 pixels
           | <span class="keybd">Ctrl</span>+<span class="keybd">Arrow</span>  |  grow frame by 1 pixel
           | <span class="keybd">Ctrl</span>+<span class="keybd">Shift</span>+<span class="keybd">Arrow</span>  |  grow frame by 10 pixels
+          |  While sizing: <span class="keybd">Shift</span> |  constrain frame to square
+          | <span class="keybd">Alt</span>+<span class="keybd">0</span>  |  add preset
+          | <span class="keybd">Alt</span>+<span class="keybd">1</span> .. <span class="keybd">9</span>  |  select preset
           | <span class="keybd">Right Mousebutton</span> |  show options menu
 &nbsp;    |  &nbsp;  |  &nbsp;
 **info / colorpicker** | |
