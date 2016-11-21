@@ -756,7 +756,7 @@ void __fastcall TMainForm::actCommandExecute(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::actCaptureExecute(TObject *Sender)
 {
-    m_SavedLoupeState = m_pLoupe && m_pLoupe->Visible;
+//    m_SavedLoupeState = m_pLoupe && m_pLoupe->Visible;
 
     if (!m_pCapture)
     {
@@ -769,8 +769,8 @@ void __fastcall TMainForm::actCaptureExecute(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::HandleCaptureComplete(TObject *Sender)
 {
-    if (m_pLoupe)
-        m_pLoupe->Visible = m_SavedLoupeState;
+//    if (m_pLoupe)
+//        m_pLoupe->Visible = m_SavedLoupeState;
 
     m_pCapture->Hide();
 
@@ -819,6 +819,10 @@ void __fastcall TMainForm::actOptionsExecute(TObject *Sender)
     // We disable the Hotkeys while this modal dialog is showing, we don't
     // want to steal keypresses while recording a new key combination
     m_HotkeyManager->DisableHotkeys();
+
+    // Hide grabber window as it might cover our dialog
+    if (m_pCapture)
+        m_pCapture->Hide();
 
     TToolOptionsDialog *OptionForm = new TToolOptionsDialog(this, sPageToShow);
     if (OptionForm->ShowModal() == mrOk)

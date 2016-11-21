@@ -407,7 +407,7 @@ object ToolOptionsDialog: TToolOptionsDialog
       end
       object gbAutoSave: TGroupBox
         Left = 16
-        Top = 81
+        Top = 85
         Width = 233
         Height = 56
         Caption = 'Autosave to file'
@@ -422,22 +422,22 @@ object ToolOptionsDialog: TToolOptionsDialog
           OnClick = bnAutosaveOptionsClick
         end
       end
-      object ckShowLoupeOnGrab: TCheckBox
+      object gbPreset: TGroupBox
         Left = 16
-        Top = 52
-        Width = 225
-        Height = 17
-        Caption = '&Show Loupe during screen capture'
+        Top = 21
+        Width = 233
+        Height = 56
+        Caption = 'Presets'
         TabOrder = 2
-        Visible = False
-      end
-      object ckRememberPos: TCheckBox
-        Left = 16
-        Top = 24
-        Width = 225
-        Height = 17
-        Caption = '&Remember last position and size'
-        TabOrder = 3
+        object bnManagePresets: TButton
+          Left = 17
+          Top = 20
+          Width = 75
+          Height = 25
+          Caption = 'Manage...'
+          TabOrder = 0
+          OnClick = bnManagePresetsClick
+        end
       end
     end
   end

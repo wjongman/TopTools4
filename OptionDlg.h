@@ -62,7 +62,6 @@ __published:  // IDE-managed Components
     TEdit *edTransparency;
     TUpDown *udTransparency;
     TLabel *lbPercent;
-    TCheckBox *ckShowLoupeOnGrab;
     TCheckBox *ckTrayApp;
     TPanel *plTrayicon;
     TGroupBox *gbTrayicon;
@@ -75,9 +74,10 @@ __published:  // IDE-managed Components
     TCheckBox *ckSingleton;
     TRadioButton *rbInifile;
     TRadioButton *rbRegistry;
-    TCheckBox *ckRememberPos;
     TCheckBox *CheckBox4;
         TButton *bnAbout;
+    TGroupBox *gbPreset;
+    TButton *bnManagePresets;
 
     void __fastcall FormShow(TObject *Sender);
     void __fastcall lvOptionSelectorChange(TObject *Sender, TListItem *Item, TItemChange Change);
@@ -86,6 +86,7 @@ __published:  // IDE-managed Components
     void __fastcall ckRememberSettingsClick(TObject *Sender);
     void __fastcall cbTransparentClick(TObject *Sender);
         void __fastcall bnAboutClick(TObject *Sender);
+    void __fastcall bnManagePresetsClick(TObject *Sender);
 
 private:  // User declarations
     void HideAll();

@@ -10,6 +10,7 @@
 #include "About.h"
 #include "OptionDlg.h"
 #include "AutoSaveDlg.h"
+#include "PresetManager.h"
 #include "PersistOptions.h"
 #include "HotkeyManager.h"
 
@@ -267,8 +268,8 @@ void TToolOptionsDialog::InitOptions()
 
     // Grabber
     //ckAutosave->Checked = g_ToolOptions.Get("capture\\autosave", "enabled", false);
-    ckShowLoupeOnGrab->Checked = g_ToolOptions.Get("capture", "showloupe", false);
-    ckRememberPos->Checked = g_ToolOptions.Get("capture", "rememberpos", false);
+//    ckShowLoupeOnGrab->Checked = g_ToolOptions.Get("capture", "showloupe", false);
+//    ckRememberPos->Checked = g_ToolOptions.Get("capture", "rememberpos", false);
 }
 
 //---------------------------------------------------------------------------
@@ -319,8 +320,8 @@ void TToolOptionsDialog::SaveOptions()
     g_ToolOptions.Set("loupe", "refresh", udRefresh->Position);
 
     //g_ToolOptions.Set("capture\\autosave", "enabled", ckAutosave->Checked);
-    g_ToolOptions.Set("capture", "showloupe", ckShowLoupeOnGrab->Checked);
-    g_ToolOptions.Set("capture", "rememberpos", ckRememberPos->Checked);
+//    g_ToolOptions.Set("capture", "showloupe", ckShowLoupeOnGrab->Checked);
+//    g_ToolOptions.Set("capture", "rememberpos", ckRememberPos->Checked);
 }
 
 //---------------------------------------------------------------------------
@@ -367,6 +368,35 @@ void __fastcall TToolOptionsDialog::bnOkClick(TObject *Sender)
 {
     SaveOptions();
     SaveHotkeyPanels();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TToolOptionsDialog::bnManagePresetsClick(TObject *Sender)
+{
+    TPresetList presets;
+    String ToolName = "capture\\presets";
+    for (int i = 1; i < 99; i++)
+    {
+        String commatext = g_ToolOptions.Get(ToolName, IntToStr(i), "");
+        if (commatext.IsEmpty())
+            break;
+        presets.push_back(TPreset(commatext));
+    }
+
+    Hide();
+    TPresetManager* pm = new TPresetManager(this, presets);
+    if (pm->ShowModal() == mrOk)
+    {
+        // Save presets
+        g_ToolOptions.ClearOptions(ToolName);
+        presets = pm->GetPresetList();
+        for (size_t i = 1; i <= presets.size(); i++)
+        {
+            g_ToolOptions.Set(ToolName, IntToStr(i), presets[i-1].GetCommaText());
+        }
+    }
+    delete pm;
+    Show();
 }
 
 //---------------------------------------------------------------------------

@@ -125,7 +125,7 @@ private:  // User declarations
   int GetToolState();
   bool AnyToolVisible();
 
-  bool m_SavedLoupeState;
+//  bool m_SavedLoupeState;
 
   TToolForm* GetRulerForm();
   TToolForm* GetLoupeForm();
