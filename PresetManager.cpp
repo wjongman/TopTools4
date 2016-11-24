@@ -3,6 +3,7 @@
 #include <vcl.h>
 #pragma hdrstop
 
+#include "PersistOptions.h"
 #include "PresetManager.h"
 #include "PresetDlg.h"
 
@@ -13,8 +14,8 @@
 TPresetManager *PresetManager;
 
 //---------------------------------------------------------------------------
-__fastcall TPresetManager::TPresetManager(TComponent* Owner, TPresetList& PresetList)
-    : TForm(Owner), m_bDragging(false), m_PresetList(PresetList)
+__fastcall TPresetManager::TPresetManager(TComponent* Owner)
+    : TForm(Owner)
 {
 }
 
@@ -26,11 +27,21 @@ __fastcall TPresetManager::~TPresetManager()
 //---------------------------------------------------------------------------
 void __fastcall TPresetManager::FormShow(TObject *Sender)
 {
+//    OutputDebugString("FormShow");
+    LoadPresets();
+    UpdateListView();
+    UpdateButtonState();
     SetForegroundWindow(Handle);
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TPresetManager::FormCreate(TObject *Sender)
+{
+    InitListView();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetManager::InitListView()
 {
     ListView->ViewStyle = vsReport;
     ListView->RowSelect = true;
@@ -56,16 +67,37 @@ void __fastcall TPresetManager::FormCreate(TObject *Sender)
     pColumn = ListView->Columns->Add();
     pColumn->Caption = "H";
     pColumn->Alignment = taRightJustify ;
+}
 
-//    TGrabberPresets gp;
-//    m_PresetList = gp.LoadFromIniFile("..\\presets.ini");
-    UpdateListView();
-    UpdateButtonState();
+//---------------------------------------------------------------------------
+void __fastcall TPresetManager::LoadPresets()
+{
+    String ToolName = "capture\\presets";
+    m_PresetList.clear();
+    for (int i = 1; i < 99; i++) // 99 presets should be enough for everyone :-)
+    {
+        String commatext = g_ToolOptions.Get(ToolName, IntToStr(i), "");
+        if (commatext.IsEmpty())
+            break;  // Only consecutive numbers
+        m_PresetList.push_back(TPreset(commatext));
+    }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetManager::SavePresets()
+{
+    String ToolName = "capture\\presets";
+    g_ToolOptions.ClearOptions(ToolName);
+    for (size_t i = 1; i <= m_PresetList.size(); i++)
+    {
+        g_ToolOptions.Set(ToolName, IntToStr(i), m_PresetList[i-1].GetCommaText());
+    }
 }
 
 //-------------------------------------------------------------------------
 void __fastcall TPresetManager::UpdateListView()
 {
+    OutputDebugString("UpdateListView");
     ListView->Items->Clear();
 
     for (size_t i = 0; i < m_PresetList.size(); i++)
@@ -92,33 +124,8 @@ void __fastcall TPresetManager::AdjustListViewColumns()
     {
         ListView->Columns->Items[i]->Width = cellwidth;
     }
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetManager::ListViewChange(TObject *Sender,
-      TListItem *Item, TItemChange Change)
-{
-    UpdateButtonState();
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetManager::UpdateButtonState()
-{
-
-    bnExport->Enabled = ListView->Items->Count > 0;
-    bnEdit->Enabled = ListView->Selected;
-    bnDelete->Enabled = ListView->Selected;
-    bnUp->Enabled = ListView->Selected && ListView->Selected->Index > 0;
-    bnDown->Enabled = ListView->Selected && ListView->Selected->Index < ListView->Items->Count - 1;
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetManager::ListViewMenuPopup(TObject *Sender)
-{
-    miEdit->Enabled = ListView->Selected;
-    miDelete->Enabled = ListView->Selected;
-    miUp->Enabled = ListView->Selected && ListView->Selected->Index > 0;
-    miDown->Enabled = ListView->Selected && ListView->Selected->Index < ListView->Items->Count - 1;
+    //String sw = String("AdjustListViewColumns: ") + IntToStr(clientwidth);
+    //OutputDebugString(sw.c_str());
 }
 
 //---------------------------------------------------------------------------
@@ -180,6 +187,36 @@ void __fastcall TPresetManager::bnDeleteClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TPresetManager::bnUpClick(TObject *Sender)
+{
+    // Rearrange underlying PresetList
+    int indexFrom = ListView->Selected->Index;
+    if (indexFrom > 0)
+    {
+        MovePresetItem(indexFrom, indexFrom - 1);
+    }
+    // Now rebuild the ListView
+    UpdateListView();
+    ListView->Items->Item[indexFrom - 1]->Selected = true;
+    ListView->SetFocus();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetManager::bnDownClick(TObject *Sender)
+{
+    // Rearrange underlying PresetList
+    int indexFrom = ListView->Selected->Index;
+    if (indexFrom < ListView->Items->Count - 1)
+    {
+        MovePresetItem(indexFrom, indexFrom + 1);
+    }
+    // Now rebuild the ListView
+    UpdateListView();
+    ListView->Items->Item[indexFrom + 1]->Selected = true;
+    ListView->SetFocus();
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TPresetManager::bnImportClick(TObject *Sender)
 {
     TOpenDialog* dlg = new TOpenDialog(this);
@@ -211,6 +248,19 @@ void __fastcall TPresetManager::bnExportClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TPresetManager::bnOkClick(TObject *Sender)
+{
+    SavePresets();
+    ModalResult = mrOk;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetManager::bnCancelClick(TObject *Sender)
+{
+    ModalResult = mrCancel;
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TPresetManager::ListViewDblClick(TObject *Sender)
 {
     if (ListView->Selected)
@@ -221,28 +271,6 @@ void __fastcall TPresetManager::ListViewDblClick(TObject *Sender)
     {
         bnAddClick(Sender);
     }
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetManager::CaptureMenuClick(TObject *Sender)
-{
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetManager::PresetMenuClick(TObject *Sender)
-{
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetManager::bnOkClick(TObject *Sender)
-{
-    ModalResult = mrOk;
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TPresetManager::bnCancelClick(TObject *Sender)
-{
-    ModalResult = mrCancel;
 }
 
 //---------------------------------------------------------------------------
@@ -300,33 +328,39 @@ void __fastcall TPresetManager::ListViewDragDrop(TObject *Sender,
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TPresetManager::bnUpClick(TObject *Sender)
+void __fastcall TPresetManager::ListViewKeyDown(TObject *Sender, WORD &Key,
+      TShiftState Shift)
 {
-    // Rearrange underlying PresetList
-    int indexFrom = ListView->Selected->Index;
-    if (indexFrom > 0)
-    {
-        MovePresetItem(indexFrom, indexFrom - 1);
-    }
-    // Now rebuild the ListView
-    UpdateListView();
-    ListView->Items->Item[indexFrom - 1]->Selected = true;
-    ListView->SetFocus();
+    if (Key == VK_DELETE)
+       bnDeleteClick(Sender);
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TPresetManager::bnDownClick(TObject *Sender)
+void __fastcall TPresetManager::ListViewMenuPopup(TObject *Sender)
 {
-    // Rearrange underlying PresetList
-    int indexFrom = ListView->Selected->Index;
-    if (indexFrom < ListView->Items->Count - 1)
-    {
-        MovePresetItem(indexFrom, indexFrom + 1);
-    }
-    // Now rebuild the ListView
-    UpdateListView();
-    ListView->Items->Item[indexFrom + 1]->Selected = true;
-    ListView->SetFocus();
+    miEdit->Enabled = ListView->Selected;
+    miDelete->Enabled = ListView->Selected;
+    miUp->Enabled = ListView->Selected && ListView->Selected->Index > 0;
+    miDown->Enabled = ListView->Selected && ListView->Selected->Index < ListView->Items->Count - 1;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetManager::ListViewChange(TObject *Sender,
+      TListItem *Item, TItemChange Change)
+{
+    //OutputDebugString("ListViewChange");
+    UpdateButtonState();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TPresetManager::UpdateButtonState()
+{
+
+    bnExport->Enabled = ListView->Items->Count > 0;
+    bnEdit->Enabled = ListView->Selected;
+    bnDelete->Enabled = ListView->Selected;
+    bnUp->Enabled = ListView->Selected && ListView->Selected->Index > 0;
+    bnDown->Enabled = ListView->Selected && ListView->Selected->Index < ListView->Items->Count - 1;
 }
 
 //---------------------------------------------------------------------------
@@ -341,12 +375,6 @@ void __fastcall TPresetManager::MovePresetItem(size_t src, size_t dest)
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TPresetManager::ListViewKeyDown(TObject *Sender, WORD &Key,
-      TShiftState Shift)
-{
-    if (Key == VK_DELETE)
-       bnDeleteClick(Sender);
-}
 
-//---------------------------------------------------------------------------
+
 

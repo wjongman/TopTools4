@@ -21,13 +21,10 @@ __published:  // IDE-managed Components
     TButton *bnOk;
     TCheckBox *ckBinary;
     TCheckBox *ckOnTop;
-    TCheckBox *ckPrefix;
-    TCheckBox *ckQuotes;
     TCheckBox *ckRememberSettings;
     TCheckBox *ckAutoStart;
     TEdit *edLength;
     TEdit *edRefresh;
-    TGroupBox *gbAttributes;
     TGroupBox *gbBaseConv;
     TGroupBox *gbGeneral;
     TGroupBox *gbGrab;
@@ -78,6 +75,11 @@ __published:  // IDE-managed Components
         TButton *bnAbout;
     TGroupBox *gbPreset;
     TButton *bnManagePresets;
+    TRadioButton *rbStandard;
+    TRadioButton *rbCustomCopy;
+    TCheckBox *ckQuotes;
+    TCheckBox *ckPrefix;
+    TEdit *edTemplate;
 
     void __fastcall FormShow(TObject *Sender);
     void __fastcall lvOptionSelectorChange(TObject *Sender, TListItem *Item, TItemChange Change);
@@ -87,6 +89,7 @@ __published:  // IDE-managed Components
     void __fastcall cbTransparentClick(TObject *Sender);
         void __fastcall bnAboutClick(TObject *Sender);
     void __fastcall bnManagePresetsClick(TObject *Sender);
+    void __fastcall rbCustomCopyClick(TObject *Sender);
 
 private:  // User declarations
     void HideAll();

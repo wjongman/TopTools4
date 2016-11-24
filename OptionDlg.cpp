@@ -374,30 +374,14 @@ void __fastcall TToolOptionsDialog::bnOkClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TToolOptionsDialog::bnManagePresetsClick(TObject *Sender)
 {
-    TPresetList presets;
-    String ToolName = "capture\\presets";
-    for (int i = 1; i < 99; i++)
+    TPresetManager* pm = new TPresetManager(this);
+    if (pm)
     {
-        String commatext = g_ToolOptions.Get(ToolName, IntToStr(i), "");
-        if (commatext.IsEmpty())
-            break;
-        presets.push_back(TPreset(commatext));
+        Hide();
+        pm->ShowModal();
+        delete pm;
+        Show();
     }
-
-    Hide();
-    TPresetManager* pm = new TPresetManager(this, presets);
-    if (pm->ShowModal() == mrOk)
-    {
-        // Save presets
-        g_ToolOptions.ClearOptions(ToolName);
-        presets = pm->GetPresetList();
-        for (size_t i = 1; i <= presets.size(); i++)
-        {
-            g_ToolOptions.Set(ToolName, IntToStr(i), presets[i-1].GetCommaText());
-        }
-    }
-    delete pm;
-    Show();
 }
 
 //---------------------------------------------------------------------------
@@ -406,10 +390,10 @@ void __fastcall TToolOptionsDialog::bnAutosaveOptionsClick(TObject *Sender)
     TAutoSaveDialog *AutoSaveDialog = new TAutoSaveDialog(this);
     if (AutoSaveDialog)
     {
-        ::ShowWindow(Handle, SW_HIDE);
+        Hide();
         AutoSaveDialog->ShowModal();
         delete AutoSaveDialog;
-        ::ShowWindow(Handle, SW_SHOW);
+        Show();
     }
 }
 
@@ -442,5 +426,14 @@ void __fastcall TToolOptionsDialog::bnAboutClick(TObject *Sender)
     }
 }
 
+//---------------------------------------------------------------------------
+void __fastcall TToolOptionsDialog::rbCustomCopyClick(TObject *Sender)
+{
+    bool custom = (Sender == rbCustomCopy);
+
+    edTemplate->Enabled = custom;
+    ckPrefix->Enabled = !custom;
+    ckQuotes->Enabled = !custom;
+}
 //---------------------------------------------------------------------------
 

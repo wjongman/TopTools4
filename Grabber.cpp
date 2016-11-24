@@ -19,7 +19,8 @@ __fastcall TScreenGrabber::TScreenGrabber(TComponent* Owner)
 
     OnRightButtonClick = HandleRightButtonClick;
 
-    LoadOptions();
+    LoadPresets();
+    m_AutoSaver.LoadOptions();
 }
 
 //---------------------------------------------------------------------------
@@ -28,21 +29,21 @@ __fastcall TScreenGrabber::~TScreenGrabber()
     delete m_CaptureMenu;
     delete m_pBufferBmp;
 
-    SaveOptions();
+    SavePresets();
+    m_AutoSaver.SaveOptions();
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::UpdateSettings()
 {
-    LoadOptions();
+    LoadPresets();
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TScreenGrabber::LoadOptions()
+void __fastcall TScreenGrabber::LoadPresets()
 {
-    m_AutoSaver.LoadOptions();
-
     String ToolName = "capture\\presets";
+    m_PresetList.clear();
     for (int i = 1; i < 99; i++)
     {
         String commatext = g_ToolOptions.Get(ToolName, IntToStr(i), "");
@@ -54,19 +55,14 @@ void __fastcall TScreenGrabber::LoadOptions()
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TScreenGrabber::SaveOptions()
+void __fastcall TScreenGrabber::SavePresets()
 {
-    m_AutoSaver.SaveOptions();
-
     String ToolName = "capture\\presets";
-
     g_ToolOptions.ClearOptions(ToolName);
     for (size_t i = 1; i <= m_PresetList.size(); i++)
     {
         g_ToolOptions.Set(ToolName, IntToStr(i), m_PresetList[i-1].GetCommaText());
     }
-
-    //g_ToolOptions.ClearRegistry();
 }
 
 //---------------------------------------------------------------------------
@@ -214,7 +210,7 @@ String  __fastcall TScreenGrabber::GetDefaultName()
     int suffix = 1;
     do
     {
-        result = result.sprintf("Preset%d", suffix);
+        result = result.sprintf("Preset %d", suffix);
         suffix++;
     }
     while (NameIsInList(result));
@@ -235,20 +231,23 @@ void __fastcall TScreenGrabber::AddPreset()
         m_PresetList.push_back(dlg->GetPreset());
     }
     delete dlg;
+    SavePresets();
     Show();
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::ManagePresets(TObject *Sender)
 {
-    Hide();
-    TPresetManager* pm = new TPresetManager(this, m_PresetList);
-    if (pm->ShowModal() == mrOk)
+    TPresetManager* pm = new TPresetManager(this);
+    if (pm)
     {
-        m_PresetList = pm->GetPresetList();
+        Hide();
+        SavePresets();
+        pm->ShowModal();
+        delete pm;
+        LoadPresets();
+        Show();
     }
-    delete pm;
-    Show();
 }
 
 //---------------------------------------------------------------------------

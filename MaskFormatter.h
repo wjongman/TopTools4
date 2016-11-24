@@ -48,11 +48,20 @@
 // MaskFormatter mf("#[R][G][B]");
 // std::string formatted = mf.GetFormattedString(x, y, r, g, b);
 //
+
+///////////////////////////////////////////////////////////////////////////////
+struct SampleInfo
+{
+    int x, y;
+    int r, g, b;
+    int h, s, v;
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 class MaskFormatter
 {
-    std::vector<std::string> argstack;
-    std::vector<std::string> literalstack;
+    std::vector<std::string> m_argstack;
+    std::vector<std::string> m_literalstack;
 
 public:
     //-------------------------------------------------------------------------
@@ -68,14 +77,20 @@ public:
     }
 
     //-------------------------------------------------------------------------
+    std::string GetFormattedString(SampleInfo const& si)
+    {
+        GetFormattedString(si.x, si.y, si.r, si.g, si.b);
+    }
+
+    //-------------------------------------------------------------------------
     std::string GetFormattedString(int x, int y, int r, int g, int b)
     {
         std::vector<int> args;
         std::string formatstring;
-        for (int i = 0; i < argstack.size(); ++i)
+        for (int i = 0; i < m_argstack.size(); ++i)
         {
-            formatstring += literalstack[i];
-            std::string arg = argstack[i];
+            formatstring += m_literalstack[i];
+            std::string arg = m_argstack[i];
             switch (arg[1])
             {
             case '[':
@@ -133,14 +148,14 @@ public:
                 break;
             }
         }
-        formatstring += literalstack[literalstack.size() - 1];
+        formatstring += m_literalstack[m_literalstack.size() - 1];
 
         // At this point we have our format string and a vector
         // of values to be inserted.
         // We leverage the fact that printf will ignore unused
         // arguments, we just give it MAXARGS arguments.
         // For now we limit the number of arguments to 10 and
-        // set maximum length of resulting string to 1024 chars.
+        // set maximum length of resulting string to MAXBUF chars.
 
         // TODO: make this more flexible and less prone to buffer overflows
 
@@ -163,8 +178,8 @@ private:
     // The number of literal parts is always the number of arguments + 1
     void Tokenize(std::string& mask)
     {
-        argstack.clear();
-        literalstack.clear();
+        m_argstack.clear();
+        m_literalstack.clear();
 
         // Truncate mask if too long
         if (mask.size() > MAXMASK)
@@ -180,7 +195,7 @@ private:
             {
                 // No more placeholders in mask, save trailing literals and bail out
                 std::string literal = mask.substr(start, mask.size() - start);
-                literalstack.push_back(literal);
+                m_literalstack.push_back(literal);
                 break;
             }
             int close = mask.find(']', open);
@@ -196,17 +211,17 @@ private:
                 msg += mask.substr(start, open - start);
                 msg += "^^ malformed tag: ";
                 msg += mask.substr(open, close - open + 1);
-                literalstack.push_back(msg);
+                m_literalstack.push_back(msg);
                 break;
             }
-            literalstack.push_back(mask.substr(start, open - start));
-            argstack.push_back(mask.substr(open, close - open + 1));
+            m_literalstack.push_back(mask.substr(start, open - start));
+            m_argstack.push_back(mask.substr(open, close - open + 1));
 
             start = close + 1;
-            if (argstack.size() > MAXARGS)
+            if (m_argstack.size() > MAXARGS)
             {
                 // Maximum number of placeholders reached
-                literalstack.push_back("");
+                m_literalstack.push_back("");
                 break;
             }
         }

@@ -302,33 +302,6 @@ object ToolOptionsDialog: TToolOptionsDialog
       Height = 210
       Caption = 'Info'
       TabOrder = 0
-      object gbAttributes: TGroupBox
-        Left = 16
-        Top = 27
-        Width = 233
-        Height = 57
-        Hint = 'Specify attributes to add to the webcolor string.'
-        Caption = 'When copying pixel color:'
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 1
-        object ckPrefix: TCheckBox
-          Left = 16
-          Top = 24
-          Width = 89
-          Height = 17
-          Caption = 'Add # &Prefix'
-          TabOrder = 0
-        end
-        object ckQuotes: TCheckBox
-          Left = 128
-          Top = 24
-          Width = 81
-          Height = 17
-          Caption = 'Add &Quotes'
-          TabOrder = 1
-        end
-      end
       object hkpColorCopy: THotkeyPanel
         Left = 9
         Top = 140
@@ -337,6 +310,52 @@ object ToolOptionsDialog: TToolOptionsDialog
         BevelOuter = bvNone
         TabOrder = 0
         CheckboxText = '&Hotkey copies pixel color'
+      end
+      object rbStandard: TRadioButton
+        Left = 16
+        Top = 26
+        Width = 217
+        Height = 17
+        Caption = 'Copy &Webcolor to Clipboard'
+        Checked = True
+        TabOrder = 1
+        TabStop = True
+        OnClick = rbCustomCopyClick
+      end
+      object rbCustomCopy: TRadioButton
+        Left = 16
+        Top = 82
+        Width = 233
+        Height = 17
+        Caption = 'Copy Custom &Format to Clipboard'
+        TabOrder = 2
+        OnClick = rbCustomCopyClick
+      end
+      object ckQuotes: TCheckBox
+        Left = 152
+        Top = 49
+        Width = 81
+        Height = 17
+        Caption = 'Add &Quotes'
+        TabOrder = 3
+      end
+      object ckPrefix: TCheckBox
+        Left = 40
+        Top = 49
+        Width = 89
+        Height = 17
+        Caption = 'Add # &Prefix'
+        TabOrder = 4
+      end
+      object edTemplate: TEdit
+        Left = 40
+        Top = 106
+        Width = 209
+        Height = 21
+        Hint = '[R][G][B]'
+        Enabled = False
+        TabOrder = 5
+        Text = '[R][G][B]'
       end
     end
   end

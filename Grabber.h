@@ -27,8 +27,8 @@ private:
   void __fastcall ViewerKeyPress(TObject *Sender, char &Key);
   void __fastcall ViewerClosed(TObject *Sender, TCloseAction &Action);
 
-  void __fastcall LoadOptions();
-  void __fastcall SaveOptions();
+  void __fastcall LoadPresets();
+  void __fastcall SavePresets();
   void __fastcall GetDesktopArea();
   void __fastcall GetDesktopArea(LPRECT lpRect);
 
