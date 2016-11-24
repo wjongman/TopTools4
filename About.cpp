@@ -45,6 +45,14 @@ void __fastcall TAboutBox::CloseClick(TObject *Sender)
   Close();
 }
 
+//---------------------------------------------------------------------------
+void __fastcall TAboutBox::FormKeyDown(TObject *Sender, WORD &Key,
+      TShiftState Shift)
+{
+    if (Key == VK_ESCAPE)
+        Close();
+}
+
 //---------------------------------------------------------------------
 void __fastcall TAboutBox::FormShow(TObject *Sender)
 {

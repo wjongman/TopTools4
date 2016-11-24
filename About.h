@@ -25,6 +25,8 @@ __published:
   void __fastcall CloseClick(TObject *Sender);
   void __fastcall FormShow(TObject *Sender);
   void __fastcall FormPaint(TObject *Sender);
+    void __fastcall FormKeyDown(TObject *Sender, WORD &Key,
+          TShiftState Shift);
 
 private:
   String __fastcall GetVersionString(void);

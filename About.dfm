@@ -17,6 +17,7 @@ object AboutBox: TAboutBox
   Scaled = False
   OnClick = CloseClick
   OnDeactivate = CloseClick
+  OnKeyDown = FormKeyDown
   OnPaint = FormPaint
   OnShow = FormShow
   PixelsPerInch = 96
