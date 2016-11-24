@@ -9,7 +9,7 @@
 #include <Forms.hpp>
 #include <ComCtrls.hpp>
 
-#include "GrabberPresets.h"
+#include "Preset.h"
 
 //---------------------------------------------------------------------------
 class TPresetDlg : public TForm

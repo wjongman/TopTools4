@@ -8,9 +8,9 @@
 #include <Grids.hpp>
 #include <StdCtrls.hpp>
 #include <ComCtrls.hpp>
-
-#include "GrabberPresets.h"
 #include <Menus.hpp>
+
+#include "Preset.h"
 
 /////////////////////////////////////////////////////////////////////////////
 class TPresetManager : public TForm
@@ -58,7 +58,8 @@ __published:  // IDE-managed Components
           TShiftState Shift);
 private:  // User declarations
 
-    TPresetList m_PresetList;
+    String m_ToolName;
+    std::vector<TPreset> m_PresetList;
 
     void __fastcall LoadPresets();
     void __fastcall SavePresets();
@@ -68,6 +69,8 @@ private:  // User declarations
     void __fastcall MovePresetItem(size_t src, size_t dest);
     void __fastcall AdjustListViewColumns();
     void __fastcall UpdateButtonState();
+    void __fastcall LoadFromIniFile(String const& filepath);
+    void __fastcall SaveToIniFile(String const& filepath);
 
 public:   // User declarations
     __fastcall TPresetManager(TComponent* Owner);

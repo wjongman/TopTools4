@@ -130,9 +130,7 @@ void __fastcall TToolOptionsDialog::FormShow(TObject *Sender)
     // Set focus to currently visible item
     if (lvOptionSelector->Items->Count > 0)
     {
-
         TListItem *item = lvOptionSelector->FindCaption(0, m_sActivePage, false, true, false);
-
         if (item)
         {
             item->Selected = true;

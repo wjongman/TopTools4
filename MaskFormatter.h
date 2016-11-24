@@ -79,7 +79,7 @@ public:
     //-------------------------------------------------------------------------
     std::string GetFormattedString(SampleInfo const& si)
     {
-        GetFormattedString(si.x, si.y, si.r, si.g, si.b);
+        return GetFormattedString(si.x, si.y, si.r, si.g, si.b);
     }
 
     //-------------------------------------------------------------------------
@@ -87,7 +87,7 @@ public:
     {
         std::vector<int> args;
         std::string formatstring;
-        for (int i = 0; i < m_argstack.size(); ++i)
+        for (size_t i = 0; i < m_argstack.size(); ++i)
         {
             formatstring += m_literalstack[i];
             std::string arg = m_argstack[i];

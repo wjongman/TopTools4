@@ -17,6 +17,7 @@ TPresetManager *PresetManager;
 __fastcall TPresetManager::TPresetManager(TComponent* Owner)
     : TForm(Owner)
 {
+    m_ToolName = "capture\\presets";
 }
 
 //---------------------------------------------------------------------------
@@ -27,10 +28,11 @@ __fastcall TPresetManager::~TPresetManager()
 //---------------------------------------------------------------------------
 void __fastcall TPresetManager::FormShow(TObject *Sender)
 {
-//    OutputDebugString("FormShow");
     LoadPresets();
-    UpdateListView();
     UpdateButtonState();
+    UpdateListView();
+    ListView->Items->Item[0]->Selected = true;
+    ListView->SetFocus();
     SetForegroundWindow(Handle);
 }
 
@@ -72,11 +74,10 @@ void __fastcall TPresetManager::InitListView()
 //---------------------------------------------------------------------------
 void __fastcall TPresetManager::LoadPresets()
 {
-    String ToolName = "capture\\presets";
     m_PresetList.clear();
     for (int i = 1; i < 99; i++) // 99 presets should be enough for everyone :-)
     {
-        String commatext = g_ToolOptions.Get(ToolName, IntToStr(i), "");
+        String commatext = g_ToolOptions.Get(m_ToolName, IntToStr(i), "");
         if (commatext.IsEmpty())
             break;  // Only consecutive numbers
         m_PresetList.push_back(TPreset(commatext));
@@ -86,18 +87,16 @@ void __fastcall TPresetManager::LoadPresets()
 //---------------------------------------------------------------------------
 void __fastcall TPresetManager::SavePresets()
 {
-    String ToolName = "capture\\presets";
-    g_ToolOptions.ClearOptions(ToolName);
+    g_ToolOptions.ClearOptions(m_ToolName);
     for (size_t i = 1; i <= m_PresetList.size(); i++)
     {
-        g_ToolOptions.Set(ToolName, IntToStr(i), m_PresetList[i-1].GetCommaText());
+        g_ToolOptions.Set(m_ToolName, IntToStr(i), m_PresetList[i-1].GetCommaText());
     }
 }
 
 //-------------------------------------------------------------------------
 void __fastcall TPresetManager::UpdateListView()
 {
-    OutputDebugString("UpdateListView");
     ListView->Items->Clear();
 
     for (size_t i = 0; i < m_PresetList.size(); i++)
@@ -124,8 +123,6 @@ void __fastcall TPresetManager::AdjustListViewColumns()
     {
         ListView->Columns->Items[i]->Width = cellwidth;
     }
-    //String sw = String("AdjustListViewColumns: ") + IntToStr(clientwidth);
-    //OutputDebugString(sw.c_str());
 }
 
 //---------------------------------------------------------------------------
@@ -227,7 +224,7 @@ void __fastcall TPresetManager::bnImportClick(TObject *Sender)
     if (dlg->Execute())
     {
         String filename = dlg->Files->Strings[0];
-        m_PresetList = TGrabberPresets::LoadFromIniFile(filename);
+        LoadFromIniFile(filename);
         UpdateListView();
     }
     delete dlg;
@@ -242,7 +239,7 @@ void __fastcall TPresetManager::bnExportClick(TObject *Sender)
     if (dlg->Execute())
     {
         String filename = dlg->Files->Strings[0];
-        TGrabberPresets::SaveToIniFile(filename, m_PresetList);
+        SaveToIniFile(filename);
     }
     delete dlg;
 }
@@ -348,7 +345,7 @@ void __fastcall TPresetManager::ListViewMenuPopup(TObject *Sender)
 void __fastcall TPresetManager::ListViewChange(TObject *Sender,
       TListItem *Item, TItemChange Change)
 {
-    //OutputDebugString("ListViewChange");
+//    AdjustListViewColumns();
     UpdateButtonState();
 }
 
@@ -375,6 +372,46 @@ void __fastcall TPresetManager::MovePresetItem(size_t src, size_t dest)
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TPresetManager::LoadFromIniFile(String const& filepath)
+{
+    TIniFile *inifile = new TIniFile(filepath);
+    if (inifile)
+    {
+        TStringList *sectionList = new TStringList;
+        if (sectionList)
+        {
+            inifile->ReadSection(m_ToolName, sectionList);
+            m_PresetList.clear();
+            for (int i = 0; i < sectionList->Count; i++)
+            {
+                TPreset preset;
+                String commaText = inifile->ReadString(m_ToolName, IntToStr(i+1), "");
+                if (preset.SetCommaText(commaText))
+                    m_PresetList.push_back(preset);
+            }
+            delete sectionList;
+        }
+        delete inifile;
+    }
+}
+
+//-----------------------------------------------------------------------------
+void __fastcall TPresetManager::SaveToIniFile(String const& filepath)
+{
+    TIniFile *inifile = new TIniFile(filepath);
+    if (inifile)
+    {
+        inifile->EraseSection(m_ToolName);
+        for (size_t i = 0; i < m_PresetList.size(); i++)
+        {
+            String optionName = IntToStr(i+1);
+            String commaText = m_PresetList[i].GetCommaText();
+            inifile->WriteString(m_ToolName, optionName, commaText);
+        }
+        delete inifile;
+    }
+}
+
 
 
 

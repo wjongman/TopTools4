@@ -6,7 +6,7 @@
 #include "ScreenForm.h"
 #include "AutoSaveOptions.h"
 #include "ImageView.h"
-#include "GrabberPresets.h"
+#include "Preset.h"
 
 /////////////////////////////////////////////////////////////////////////////
 class TScreenGrabber : public TScreenForm
@@ -22,7 +22,7 @@ private:
   TPopupMenu* m_CaptureMenu;
   TAutoSave m_AutoSaver;
   TImageViewerList m_Viewers;
-  TPresetList m_PresetList;
+  std::vector<TPreset> m_PresetList;
 
   void __fastcall ViewerKeyPress(TObject *Sender, char &Key);
   void __fastcall ViewerClosed(TObject *Sender, TCloseAction &Action);

@@ -359,7 +359,6 @@ void __fastcall TScreenGrabber::PopulateCaptureMenu()
         NewItem->Caption = "-";
         PresetMenu->Add(NewItem);
 
-        int count = m_PresetList.size();
         for (size_t i = 0; i < m_PresetList.size(); i++)
         {
             NewItem = new TMenuItem(PresetMenu);
