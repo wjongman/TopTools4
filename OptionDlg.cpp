@@ -153,38 +153,43 @@ void __fastcall TToolOptionsDialog::lvOptionSelectorChange(TObject *Sender,
 //---------------------------------------------------------------------------
 void TToolOptionsDialog::InitListView()
 {
-    lvOptionSelector->Items->Clear();
+    lvOptionSelector->ViewStyle = vsReport;
+    lvOptionSelector->RowSelect = true;
+    TListColumn* pColumn;
+    pColumn = lvOptionSelector->Columns->Add();
+    pColumn->Width = lvOptionSelector->ClientWidth;
 
+    lvOptionSelector->Items->Clear();
     TListItem *pItem;
 
     pItem = lvOptionSelector->Items->Add();
     pItem->Caption = "General";
-    pItem->Data = 0;
+//    pItem->Data = 0;
 //    pItem->ImageIndex = i;
 
     pItem = lvOptionSelector->Items->Add();
     pItem->Caption = "Ruler";
-    pItem->Data = 0;
+//    pItem->Data = 0;
 
     pItem = lvOptionSelector->Items->Add();
     pItem->Caption = "Loupe";
-    pItem->Data = 0;
+//    pItem->Data = 0;
 
     pItem = lvOptionSelector->Items->Add();
     pItem->Caption = "Info";
-    pItem->Data = 0;
+//    pItem->Data = 0;
 
     pItem = lvOptionSelector->Items->Add();
     pItem->Caption = "Base Converter";
-    pItem->Data = 0;
+//    pItem->Data = 0;
 
     pItem = lvOptionSelector->Items->Add();
     pItem->Caption = "Screen Grabber";
-    pItem->Data = 0;
+//    pItem->Data = 0;
 
     pItem = lvOptionSelector->Items->Add();
     pItem->Caption = "Tray Icon";
-    pItem->Data = 0;
+//    pItem->Data = 0;
 }
 
 //---------------------------------------------------------------------------

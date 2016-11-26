@@ -309,7 +309,7 @@ object ToolOptionsDialog: TToolOptionsDialog
         Height = 67
         BevelOuter = bvNone
         TabOrder = 0
-        CheckboxText = '&Hotkey copies pixel color'
+        CheckboxText = '&Hotkey triggers copy action'
       end
       object rbStandard: TRadioButton
         Left = 16
@@ -324,7 +324,7 @@ object ToolOptionsDialog: TToolOptionsDialog
       end
       object rbCustomCopy: TRadioButton
         Left = 16
-        Top = 82
+        Top = 80
         Width = 233
         Height = 17
         Caption = 'Copy Custom &Format to Clipboard'
@@ -349,7 +349,7 @@ object ToolOptionsDialog: TToolOptionsDialog
       end
       object edTemplate: TEdit
         Left = 40
-        Top = 106
+        Top = 105
         Width = 209
         Height = 21
         Hint = '[R][G][B]'

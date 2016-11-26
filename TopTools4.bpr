@@ -60,7 +60,7 @@ AutoIncBuild=1
 MajorVer=4
 MinorVer=1
 Release=0
-Build=8
+Build=10
 Debug=0
 PreRelease=0
 Special=0
@@ -72,7 +72,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Willem Jongman
 FileDescription=Screen Design Toolbox
-FileVersion=4.1.0.8
+FileVersion=4.1.0.10
 InternalName=TopTools
 LegalCopyright=Copyright © 1998-2016 Willem Jongman
 LegalTrademarks=
