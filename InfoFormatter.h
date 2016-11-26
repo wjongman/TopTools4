@@ -60,11 +60,6 @@ class InfoFormatter
 
 public:
     //-------------------------------------------------------------------------
-    InfoFormatter()
-    {
-    }
-
-    //-------------------------------------------------------------------------
     InfoFormatter(char* mask)
     {
         Tokenize(std::string(mask));
@@ -156,25 +151,6 @@ public:
                 break;
             }
         }
-        return ss.str();
-    }
-
-    //---------------------------------------------------------------------------
-    std::string GetWebColorString(TPixelInfo const& pi, bool quotes, bool prefix)
-    {
-        std::stringstream ss;
-
-        if (quotes)
-            ss << "\"";
-        if (prefix)
-            ss << "#";
-
-        ss << std::setfill('0') << std::setw(2) << std::hex << std::uppercase;
-        ss << pi.r << pi.g << pi.b;
-
-        if (quotes)
-            ss << "\"";
-
         return ss.str();
     }
 

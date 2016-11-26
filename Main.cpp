@@ -561,13 +561,12 @@ void TMainForm::CopyInfoToClipboard()
 
     // Format the info string
     String mask = g_ToolOptions.Get("info", "mask", "");
-    if (mask.IsEmpty()) mask = "[R][G][B]";
+//    if (mask.IsEmpty()) mask = "[R][G][B]";
     InfoFormatter inf(mask.c_str());
     String formatted = inf.GetFormattedString(pi).c_str();
 
     // Copy info string to clipboard
     Clipboard()->SetTextBuf(formatted.c_str());
-    OutputDebugString(formatted.c_str());
 }
 
 //---------------------------------------------------------------------------
@@ -582,10 +581,21 @@ void TMainForm::CopyWebColorToClipboard()
     bool quotes = g_ToolOptions.Get("info", "quotes", false);
     bool prefix = g_ToolOptions.Get("info", "prefix", false);
 
-    // Copy info string to clipboard
-    InfoFormatter inf;
-    String webcolor = inf.GetWebColorString(pi, quotes, prefix).c_str();
-    Clipboard()->SetTextBuf(webcolor.c_str());
+    std::stringstream mask;
+
+    if (quotes)
+        mask << "\"";
+    if (prefix)
+        mask << "#";
+
+    mask << std::setfill('0') << std::setw(2) << std::hex << std::uppercase;
+    mask << pi.r << pi.g << pi.b;
+
+    if (quotes)
+        mask << "\"";
+
+    String formatted = mask.str().c_str();
+    Clipboard()->SetTextBuf(formatted.c_str());
 }
 
 //---------------------------------------------------------------------------

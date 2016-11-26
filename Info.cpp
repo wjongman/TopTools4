@@ -9,171 +9,109 @@
 #pragma link "Tool"
 #pragma resource "*.dfm"
 
+#include "InfoFormatter.h"
+
 //---------------------------------------------------------------------------
 __fastcall TInfoForm::TInfoForm(TComponent* Owner)
 : TToolForm(Owner, "info")
 {
-  Screen->Cursors[crCrosshair] = LoadCursor((void*)HInstance, "CROSSHAIR");
+    Screen->Cursors[crCrosshair] = LoadCursor((void*)HInstance, "CROSSHAIR");
 
-  ClientHeight = XYPanel->Height + RGBPanel->Height + WebPanel->Height;
-  Width = 160;
-  m_bDragging = false;
+    ClientHeight = XYPanel->Height + RGBPanel->Height + WebPanel->Height;
+    Width = 160;
+    m_bDragging = false;
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TInfoForm::TimerEvent(TPoint ptCurMouse)
 {
-  // Update the position info labels
-  if (!m_bDragging)
-  {
-    XValue->Caption = ptCurMouse.x;
-    YValue->Caption = ptCurMouse.y;
-  }
+    // Update the position info labels
+    if (!m_bDragging)
+    {
+        XValue->Caption = ptCurMouse.x;
+        YValue->Caption = ptCurMouse.y;
+    }
 
-  // Probe the color under the mouse
-  HDC DesktopDC = GetDC(NULL);
-  COLORREF Color = ::GetPixel(DesktopDC, ptCurMouse.x, ptCurMouse.y);
-  ReleaseDC(NULL, DesktopDC);
+    // Probe the color under the mouse
+    TPixelInfo pi(ptCurMouse.x, ptCurMouse.y);
 
-  int red = GetRValue(Color);
-  int green = GetGValue(Color);
-  int blue = GetBValue(Color);
+    // Update the color info labels
+    Red->Caption = pi.r;
+    Green->Caption = pi.g;
+    Blue->Caption = pi.b;
 
-  // Update the color info labels
-  Red->Caption = red;
-  Green->Caption = green;
-  Blue->Caption = blue;
+    // Update HSV info
+    Hue->Caption = IntToStr(pi.h) + "°";
+    Sat->Caption = IntToStr(pi.s) + "%";
+    Val->Caption = IntToStr(pi.v) + "%";
 
-  // Update webcolor info label
-  char RGBtext[9];
-  wsprintf(RGBtext, "# %02X %02X %02X", red, green, blue);
-  RGB->Caption = RGBtext;
+    // Update webcolor info label
+    InfoFormatter inf("# [R] [G] [B]");
+    RGB->Caption = inf.GetFormattedString(pi).c_str();
 
-  // Update the webcolor string
-  wsprintf(m_szWebColor, "%02X%02X%02X", red, green, blue);
-
-  // Update HSV info
-  UpdateHsv(red, green, blue);
-
-  // Update the ColorPanel
-  ColorPanel->Color = (TColor) Color;
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TInfoForm::UpdateHsv(int red, int green, int blue)
-// In:   r, g and b in [0,255]
-// Out:  h in [0,360]°, except when s == 0,
-//       then h is undefined (some value not in [0,360])
-//       s in [0,100]%
-//       v in [0,100]%
-{
-  float h, s, v;
-
-  // Map r, g and b to [0,1]
-  float r = (float)red / 255;
-  float g = (float)green / 255;
-  float b = (float)blue / 255;
-  float max = Maximum(r, g, b);
-  float min = Minimum(r, g, b);
-
-  v = max;                    // This settles the value of v
-
-
-  // Calculate saturation
-  if (max == 0)
-    s = 0;                    // Saturation is 0 if r, g and b all are 0
-  else
-    s = (max - min)/max;
-
-  if (s == 0)                 // Achromatic color, we are done
-    h = -1;
-
-  else                        // Cromatic color, calculate hue
-  {
-    float delta = max - min;
-
-    if (r == max)
-      h = (g - b)/delta;      // Resulting color is between yellow and magenta
-
-    else if (g == max)
-      h = 2 + (b - r)/delta;  // Resulting color is between cyan and yellow
-
-    else if (b == max)
-      h = 4 + (r - g)/delta;  // Resulting color is between magenta and cyan
-
-    h *= 60;                  // Convert hue to degrees
-    if (h < 0)
-      h += 360;               // Make sure h is non-negative
-  }
-
-  char temp[5];
-  wsprintf(temp, "%d°", (int)(h + 0.5));
-  Hue->Caption = String(temp);
-  wsprintf(temp, "%d%%", (int)((s * 100) + 0.5));
-  Sat->Caption = String(temp);
-  wsprintf(temp, "%d%%", (int)((v * 100) + 0.5));
-  Val->Caption = String(temp);
+    // Update the ColorPanel
+    ColorPanel->Color = (TColor) pi.color;
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TInfoForm::miHideClick(TObject *Sender)
 {
-  Close();
+    Close();
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TInfoForm::miExitClick(TObject *Sender)
 {
-  Application->Terminate();
+    Application->Terminate();
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TInfoForm::FormMouseDown(TObject *Sender,
-      TMouseButton Button, TShiftState Shift, int X, int Y)
+void __fastcall TInfoForm::FormMouseDown(TObject *Sender, TMouseButton Button,
+                                         TShiftState Shift, int X, int Y)
 {
-  // Left-click and drag from the info-window displays mouse coordinates
-  // relative to the window above which the mouse is hovering (instead of
-  // relative to the top-left of the screen)
-  if (Button == mbLeft)
-  {
-    ::SetCapture(Handle);
-    Screen->Cursor = TCursor(crCrosshair);
-    m_bDragging = true;
-  }
+    // Left-click and drag from the info-window displays mouse coordinates
+    // relative to the window above which the mouse is hovering (instead of
+    // relative to the top-left of the screen)
+    if (Button == mbLeft)
+    {
+        ::SetCapture(Handle);
+        Screen->Cursor = TCursor(crCrosshair);
+        m_bDragging = true;
+    }
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TInfoForm::FormMouseMove(TObject *Sender,
-      TShiftState Shift, int X, int Y)
+void __fastcall TInfoForm::FormMouseMove(TObject *Sender, TShiftState Shift,
+                                         int X, int Y)
 {
-  if (m_bDragging)
-  {
-    // Get cursor-pos in screen coordinates
-    POINT ptAbsMouse = TPoint(X, Y);
-    ::ClientToScreen(Handle, &ptAbsMouse);
+    if (m_bDragging)
+    {
+        // Get cursor-pos in screen coordinates
+        POINT ptAbsMouse = TPoint(X, Y);
+        ::ClientToScreen(Handle, &ptAbsMouse);
 
-    // Get handle of window at that position
-    HWND hTargetWnd = ::WindowFromPoint(ptAbsMouse);
+        // Get handle of window at that position
+        HWND hTargetWnd = ::WindowFromPoint(ptAbsMouse);
 
-    // Translate into target window coordinates
-    POINT ptRelMouse = ptAbsMouse;
-    ::ScreenToClient(hTargetWnd, &ptRelMouse);
+        // Translate into target window coordinates
+        POINT ptRelMouse = ptAbsMouse;
+        ::ScreenToClient(hTargetWnd, &ptRelMouse);
 
-    XValue->Caption = ptRelMouse.x;
-    YValue->Caption = ptRelMouse.y;
-  }
+        XValue->Caption = ptRelMouse.x;
+        YValue->Caption = ptRelMouse.y;
+    }
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TInfoForm::FormMouseUp(TObject *Sender,
-      TMouseButton Button, TShiftState Shift, int X, int Y)
+void __fastcall TInfoForm::FormMouseUp(TObject *Sender, TMouseButton Button,
+                                       TShiftState Shift, int X, int Y)
 {
-  if (m_bDragging && Button == mbLeft)
-  {
-    m_bDragging = false;
-    Screen->Cursor = TCursor(crDefault);
-    ::ReleaseCapture();
-  }
+    if (m_bDragging && Button == mbLeft)
+    {
+        m_bDragging = false;
+        Screen->Cursor = TCursor(crDefault);
+        ::ReleaseCapture();
+    }
 }
 //---------------------------------------------------------------------------
 

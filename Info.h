@@ -51,30 +51,13 @@ __published:	// IDE-managed Components
 
 protected:
   // This tool has no settings to be saved
-  virtual void __fastcall LoadSettings() {};
-  virtual void __fastcall SaveSettings() {};
+//  virtual void __fastcall LoadSettings() {};
+//  virtual void __fastcall SaveSettings() {};
 
 private:
-
-  void __fastcall UpdateHsv(int red, int green, int blue);
-
-  float __fastcall Minimum(float x1, float x2, float x3)
-  {
-    float xmin = x1 < x2 ? x1 : x2;
-    return xmin < x3 ? xmin : x3;
-  }
-
-  float __fastcall Maximum(float x1, float x2, float x3)
-  {
-    float xmax = x1 > x2 ? x1 : x2;
-    return xmax > x3 ? xmax : x3;
-  }
-
-  char m_szWebColor[8];
   bool m_bDragging;
 
 public:
-
   __fastcall TInfoForm(TComponent* Owner);
   void __fastcall TimerEvent(TPoint ptCurMouse);
 
