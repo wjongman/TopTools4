@@ -15,9 +15,8 @@
 class TPresetDlg : public TForm
 {
 __published:  // IDE-managed Components
-    TButton *bnOk;
-    TButton *bnCancel;
-    TEdit *edTitle;
+    TLabel *lbName;
+    TEdit *edName;
     TLabel *lbX;
     TEdit *edX;
     TUpDown *udX;
@@ -30,9 +29,10 @@ __published:  // IDE-managed Components
     TLabel *lbH;
     TEdit *edH;
     TUpDown *udH;
-    TLabel *lbName;
+    TButton *bnOk;
+    TButton *bnCancel;
     void __fastcall FormShow(TObject *Sender);
-    void __fastcall edTitleChange(TObject *Sender);
+    void __fastcall edNameChange(TObject *Sender);
 
 private:  // User declarations
     TPreset m_preset;

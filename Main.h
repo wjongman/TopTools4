@@ -93,7 +93,6 @@ private:  // User declarations
   void __fastcall SetTopMost(bool ontop);
   void __fastcall ShowTrayIcon(bool show);
   void __fastcall ShowTaskbarIcon(bool show);
-  String GetColorFormatString();
 
   bool TimerNeeded();
   bool m_bStayOnTop;

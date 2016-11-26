@@ -1,13 +1,12 @@
-#ifndef MaskFormatterH
-#define MaskFormatterH
+#ifndef InfoFormatterH
+#define InfoFormatterH
 
 #include <vector>
 #include <string>
-#include <stdio.h>
+#include <sstream>
+#include <iomanip>
 
-#define MAXARGS 10
-#define MAXMASK 512
-#define MAXBUF 1024
+#include "PixelInfo.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -23,11 +22,15 @@
 //
 //  [r]
 //  [g]
-//  [b] - decimal value of color
+//  [b] - decimal value of rgb color
 //
 //  [R]
 //  [G]
-//  [B] - hexadecimal value of color, 2 positions
+//  [B] - hexadecimal value of rgb color, 2 positions
+//
+//  [h]
+//  [s]
+//  [v] - decimal value of hsv color
 //
 //  [[] - literal [
 //  []] - literal ]
@@ -50,142 +53,139 @@
 //
 
 ///////////////////////////////////////////////////////////////////////////////
-struct SampleInfo
-{
-    int x, y;
-    int r, g, b;
-    int h, s, v;
-};
-
-///////////////////////////////////////////////////////////////////////////////
-class MaskFormatter
+class InfoFormatter
 {
     std::vector<std::string> m_argstack;
     std::vector<std::string> m_literalstack;
 
 public:
     //-------------------------------------------------------------------------
-    MaskFormatter(char* mask)
+    InfoFormatter()
+    {
+    }
+
+    //-------------------------------------------------------------------------
+    InfoFormatter(char* mask)
     {
         Tokenize(std::string(mask));
     }
 
     //-------------------------------------------------------------------------
-    MaskFormatter(std::string& mask)
+    InfoFormatter(std::string& mask)
     {
         Tokenize(mask);
     }
 
     //-------------------------------------------------------------------------
-    std::string GetFormattedString(SampleInfo const& si)
+    std::string GetFormattedString(TPixelInfo const& pi)
     {
-        return GetFormattedString(si.x, si.y, si.r, si.g, si.b);
-    }
-
-    //-------------------------------------------------------------------------
-    std::string GetFormattedString(int x, int y, int r, int g, int b)
-    {
-        std::vector<int> args;
-        std::string formatstring;
+        std::stringstream ss;
         for (size_t i = 0; i < m_argstack.size(); ++i)
         {
-            formatstring += m_literalstack[i];
+            ss << m_literalstack[i];
             std::string arg = m_argstack[i];
             switch (arg[1])
             {
             case '[':
-                formatstring += "[";
+                ss << "[";
                 break;
             case ']':
-                formatstring += "]";
+                ss << "]";
                 break;
+
             case 'x':
-                args.push_back(x);
-                formatstring += "%d";
+                ss << pi.x;
                 break;
             case 'y':
-                args.push_back(y);
-                formatstring += "%d";
+                ss << pi.y;
+                break;
+
+            case 'h':
+                ss << pi.h;
+                break;
+            case 's':
+                ss << pi.s;
+                break;
+            case 'v':
+                ss << pi.v;
                 break;
 
             case 'r':
-                args.push_back(r);
-                formatstring += "%d";
+                ss << pi.r;
                 break;
             case 'g':
-                args.push_back(g);
-                formatstring += "%d";
+                ss << pi.g;
                 break;
             case 'b':
-                args.push_back(b);
-                formatstring += "%d";
+                ss << pi.b;
                 break;
 
             case 'R':
-                args.push_back(r);
-                formatstring += "%02X";
+                ss << std::setfill('0') << std::setw(2) << std::hex;
+                ss << std::uppercase;
+                ss << pi.r;
+                ss << std::nouppercase;
+                ss << std::setfill(' ') << std::setw(0) << std::dec;
                 break;
             case 'G':
-                args.push_back(g);
-                formatstring += "%02X";
+                ss << std::setfill('0') << std::setw(2) << std::hex;
+                ss << std::uppercase;
+                ss << pi.g;
+                ss << std::nouppercase;
+                ss << std::setfill(' ') << std::setw(0) << std::dec;
                 break;
             case 'B':
-                args.push_back(b);
-                formatstring += "%02X";
+                ss << std::setfill('0') << std::setw(2) << std::hex;
+                ss << std::uppercase;
+                ss << pi.b;
+                ss << std::nouppercase;
+                ss << std::setfill(' ') << std::setw(0) << std::dec;
                 break;
 
             case 'w':
-                args.push_back(r);
-                args.push_back(g);
-                args.push_back(b);
-                formatstring += "%02x%02x%02x";
+                ss << std::setfill('0') << std::setw(2) << std::hex;
+                ss << pi.r << pi.g << pi.b;
+                ss << std::setfill(' ') << std::setw(0) << std::dec;
                 break;
             case 'W':
-                args.push_back(r);
-                args.push_back(g);
-                args.push_back(b);
-                formatstring += "%02X%02X%02X";
+                ss << std::setfill('0') << std::setw(2) << std::hex;
+                ss << std::uppercase;
+                ss << pi.r << pi.g << pi.b;
+                ss << std::nouppercase;
+                ss << std::setfill(' ') << std::setw(0) << std::dec;
                 break;
             }
         }
-        formatstring += m_literalstack[m_literalstack.size() - 1];
+        return ss.str();
+    }
 
-        // At this point we have our format string and a vector
-        // of values to be inserted.
-        // We leverage the fact that printf will ignore unused
-        // arguments, we just give it MAXARGS arguments.
-        // For now we limit the number of arguments to 10 and
-        // set maximum length of resulting string to MAXBUF chars.
+    //---------------------------------------------------------------------------
+    std::string GetWebColorString(TPixelInfo const& pi, bool quotes, bool prefix)
+    {
+        std::stringstream ss;
 
-        // TODO: make this more flexible and less prone to buffer overflows
+        if (quotes)
+            ss << "\"";
+        if (prefix)
+            ss << "#";
 
-        // Make sure our vector has at least MAXARGS elements
-        for (int i = args.size(); i < MAXARGS; ++i)
-        {
-            args.push_back(0);
-        }
-        char buffer[MAXBUF];
-        sprintf(buffer, formatstring.c_str(), args[0], args[1],
-            args[2], args[3], args[4], args[5], args[6], args[7],
-            args[8], args[9]); // extend to match MAXARGS
+        ss << std::setfill('0') << std::setw(2) << std::hex << std::uppercase;
+        ss << pi.r << pi.g << pi.b;
 
-        return std::string(buffer);
+        if (quotes)
+            ss << "\"";
+
+        return ss.str();
     }
 
 private:
     //-------------------------------------------------------------------------
     // Split mask into literal and argument parts
     // The number of literal parts is always the number of arguments + 1
-    void Tokenize(std::string& mask)
+    bool Tokenize(std::string& mask)
     {
         m_argstack.clear();
         m_literalstack.clear();
-
-        // Truncate mask if too long
-        if (mask.size() > MAXMASK)
-        {
-            mask = mask.substr(0, MAXMASK);
-        }
 
         int start = 0;
         while (1)
@@ -196,34 +196,23 @@ private:
                 // No more placeholders in mask, save trailing literals and bail out
                 std::string literal = mask.substr(start, mask.size() - start);
                 m_literalstack.push_back(literal);
-                break;
+                return true;
             }
             int close = mask.find(']', open);
             if (close - open == 1 && mask[close + 1] == ']')
             {
-                // Special case: "[]]" (a literal ']')
+                // Special case: "[]]" is a literal ']'
                 close++;
             }
             else if (close == -1 || close - open > 2)
             {
-                // Malformed tag, save mask as literal and bail out
-                std::string msg;
-                msg += mask.substr(start, open - start);
-                msg += "^^ malformed tag: ";
-                msg += mask.substr(open, close - open + 1);
-                m_literalstack.push_back(msg);
-                break;
+                // Malformed tag, just bail out
+                return false;
             }
             m_literalstack.push_back(mask.substr(start, open - start));
             m_argstack.push_back(mask.substr(open, close - open + 1));
 
             start = close + 1;
-            if (m_argstack.size() > MAXARGS)
-            {
-                // Maximum number of placeholders reached
-                m_literalstack.push_back("");
-                break;
-            }
         }
     }
 

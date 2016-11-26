@@ -40,7 +40,8 @@ USERES("appicon.RES");
 USEFORM("PresetManager.cpp", PresetManager);
 USEFORM("PresetDlg.cpp", PresetDlg);
 USE("PersistOptions.h", File);
-USE("MaskFormatter.h", File);
+USE("InfoFormatter.h", File);
+USE("Preset.h", File);
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {

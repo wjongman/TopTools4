@@ -263,6 +263,8 @@ void TToolOptionsDialog::InitOptions()
     // Info
     ckPrefix->Checked = g_ToolOptions.Get("info", "prefix", false);
     ckQuotes->Checked = g_ToolOptions.Get("info", "quotes", false);
+    edTemplate->Text = g_ToolOptions.Get("info", "mask", "");
+    rbCustomCopy->Checked = g_ToolOptions.Get("info", "custom", false);
 
     // Grabber
     //ckAutosave->Checked = g_ToolOptions.Get("capture\\autosave", "enabled", false);
@@ -303,7 +305,6 @@ void TToolOptionsDialog::SaveOptions()
         {
             runmode = rmIniFile;
             // Delete all traces from registry
-            //g_ToolOptions.ClearOptions("capture\\presets");
             g_ToolOptions.ClearRegistry();
         }
     }
@@ -315,8 +316,11 @@ void TToolOptionsDialog::SaveOptions()
 
     g_ToolOptions.Set("info", "prefix", ckPrefix->Checked);
     g_ToolOptions.Set("info", "quotes", ckQuotes->Checked);
+    g_ToolOptions.Set("info", "custom", rbCustomCopy->Checked);
+    g_ToolOptions.Set("info", "mask", edTemplate->Text);
 
     g_ToolOptions.Set("loupe", "refresh", udRefresh->Position);
+
 
     //g_ToolOptions.Set("capture\\autosave", "enabled", ckAutosave->Checked);
 //    g_ToolOptions.Set("capture", "showloupe", ckShowLoupeOnGrab->Checked);

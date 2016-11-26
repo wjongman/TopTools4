@@ -7,7 +7,7 @@
 #include "Main.h"
 #include "About.h"
 #include "OptionDlg.h"
-#include "MaskFormatter.h"
+#include "InfoFormatter.h"
 
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -541,7 +541,7 @@ void TMainForm::HideAll()
 //---------------------------------------------------------------------------
 void TMainForm::CopyToClipboard()
 {
-    if (g_ToolOptions.SettingExists("info", "mask"))
+    if (g_ToolOptions.Get("info", "custom", false))
     {
         CopyInfoToClipboard();
     }
@@ -554,22 +554,20 @@ void TMainForm::CopyToClipboard()
 //---------------------------------------------------------------------------
 void TMainForm::CopyInfoToClipboard()
 {
-    // Probe the color under the mouse
+    // Probe color under the mouse
     TPoint ptMouse;
     GetCursorPos(&ptMouse);
-
-    HDC DesktopDC = GetDC(NULL);
-    COLORREF Color = ::GetPixel(DesktopDC, ptMouse.x, ptMouse.y);
-    ReleaseDC(NULL, DesktopDC);
+    TPixelInfo pi(ptMouse.x, ptMouse.y);
 
     // Format the info string
-    String Mask = g_ToolOptions.Get("info", "mask", "[R][G][B]");
-    MaskFormatter mf(Mask.c_str());
-    String Formatted = mf.GetFormattedString(ptMouse.x, ptMouse.y,
-        GetRValue(Color), GetGValue(Color), GetBValue(Color)).c_str();
+    String mask = g_ToolOptions.Get("info", "mask", "");
+    if (mask.IsEmpty()) mask = "[R][G][B]";
+    InfoFormatter inf(mask.c_str());
+    String formatted = inf.GetFormattedString(pi).c_str();
 
     // Copy info string to clipboard
-    Clipboard()->SetTextBuf(Formatted.c_str());
+    Clipboard()->SetTextBuf(formatted.c_str());
+    OutputDebugString(formatted.c_str());
 }
 
 //---------------------------------------------------------------------------
@@ -578,40 +576,16 @@ void TMainForm::CopyWebColorToClipboard()
     // Probe the color under the mouse
     TPoint ptMouse;
     GetCursorPos(&ptMouse);
+    TPixelInfo pi(ptMouse.x, ptMouse.y);
 
-    HDC DesktopDC = GetDC(NULL);
-    COLORREF Color = ::GetPixel(DesktopDC, ptMouse.x, ptMouse.y);
-    ReleaseDC(NULL, DesktopDC);
+    // Format the info string
+    bool quotes = g_ToolOptions.Get("info", "quotes", false);
+    bool prefix = g_ToolOptions.Get("info", "prefix", false);
 
-    // Format the color string
-    String Format = GetColorFormatString();
-    char szRGBtext[20] = "";
-    wsprintf(szRGBtext, Format.c_str(),
-             GetRValue(Color), GetGValue(Color), GetBValue(Color));
-
-    // Copy color string to clipboard
-    Clipboard()->SetTextBuf(szRGBtext);
-}
-
-//---------------------------------------------------------------------------
-String TMainForm::GetColorFormatString()
-{
-    String Format = "";
-
-    bool isQuoted = g_ToolOptions.Get("info", "quotes", false);
-
-    if (isQuoted)
-        Format += "\"";
-
-    if (g_ToolOptions.Get("info", "prefix", false))
-        Format += "#";
-
-    Format += "%02X%02X%02X";
-
-    if (isQuoted)
-        Format += "\"";
-
-    return Format;
+    // Copy info string to clipboard
+    InfoFormatter inf;
+    String webcolor = inf.GetWebColorString(pi, quotes, prefix).c_str();
+    Clipboard()->SetTextBuf(webcolor.c_str());
 }
 
 //---------------------------------------------------------------------------

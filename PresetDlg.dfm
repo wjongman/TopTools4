@@ -54,7 +54,7 @@ object PresetDlg: TPresetDlg
     Width = 31
     Height = 13
     Caption = '&Name:'
-    FocusControl = edTitle
+    FocusControl = edName
   end
   object bnOk: TButton
     Left = 96
@@ -76,13 +76,13 @@ object PresetDlg: TPresetDlg
     ModalResult = 2
     TabOrder = 6
   end
-  object edTitle: TEdit
+  object edName: TEdit
     Left = 8
     Top = 20
     Width = 249
     Height = 21
     TabOrder = 0
-    OnChange = edTitleChange
+    OnChange = edNameChange
   end
   object edX: TEdit
     Left = 8
