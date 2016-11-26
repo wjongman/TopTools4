@@ -175,18 +175,10 @@ inherited LoupeForm: TLoupeForm
       Visible = False
       OnClick = miFreezeViewClick
     end
-    object N4: TMenuItem
-      Caption = '-'
-      Visible = False
-    end
     object miMagnifySelf: TMenuItem
       Caption = '&Magnify Self'
       Visible = False
       OnClick = miMagnifySelfClick
-    end
-    object miOptions: TMenuItem
-      Caption = 'Options...'
-      OnClick = miOptionsClick
     end
     object N6: TMenuItem
       Caption = '-'
@@ -214,6 +206,10 @@ inherited LoupeForm: TLoupeForm
         ShortCut = 16464
         OnClick = miSaveViewClick
       end
+    end
+    object miOptions: TMenuItem
+      Caption = 'Options...'
+      OnClick = miOptionsClick
     end
     object N5: TMenuItem
       Caption = '-'

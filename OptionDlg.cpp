@@ -155,8 +155,8 @@ void TToolOptionsDialog::InitListView()
 {
     lvOptionSelector->ViewStyle = vsReport;
     lvOptionSelector->RowSelect = true;
-    TListColumn* pColumn;
-    pColumn = lvOptionSelector->Columns->Add();
+
+    TListColumn* pColumn = lvOptionSelector->Columns->Add();
     pColumn->Width = lvOptionSelector->ClientWidth;
 
     lvOptionSelector->Items->Clear();
@@ -164,32 +164,24 @@ void TToolOptionsDialog::InitListView()
 
     pItem = lvOptionSelector->Items->Add();
     pItem->Caption = "General";
-//    pItem->Data = 0;
-//    pItem->ImageIndex = i;
 
     pItem = lvOptionSelector->Items->Add();
     pItem->Caption = "Ruler";
-//    pItem->Data = 0;
 
     pItem = lvOptionSelector->Items->Add();
     pItem->Caption = "Loupe";
-//    pItem->Data = 0;
 
     pItem = lvOptionSelector->Items->Add();
     pItem->Caption = "Info";
-//    pItem->Data = 0;
 
     pItem = lvOptionSelector->Items->Add();
     pItem->Caption = "Base Converter";
-//    pItem->Data = 0;
 
     pItem = lvOptionSelector->Items->Add();
     pItem->Caption = "Screen Grabber";
-//    pItem->Data = 0;
 
     pItem = lvOptionSelector->Items->Add();
     pItem->Caption = "Tray Icon";
-//    pItem->Data = 0;
 }
 
 //---------------------------------------------------------------------------

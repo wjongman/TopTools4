@@ -491,4 +491,10 @@ void __fastcall TRulerForm::miExitClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TRulerForm::miOptionsClick(TObject *Sender)
+{
+    if (FOnOptions)
+        FOnOptions(this);
+}
+//---------------------------------------------------------------------------
 

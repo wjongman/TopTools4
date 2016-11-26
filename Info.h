@@ -37,9 +37,10 @@ __published:	// IDE-managed Components
   TLabel *HLabel;
   TPopupMenu *InfoPopupMenu;
   TMenuItem *miHide;
-  TMenuItem *miColorDisplayFormat;
+    TMenuItem *miOptions;
   TMenuItem *miExit;
   TMenuItem *N1;
+    TMenuItem *N2;
   void __fastcall miHideClick(TObject *Sender);
   void __fastcall miExitClick(TObject *Sender);
   void __fastcall FormMouseDown(TObject *Sender, TMouseButton Button,
@@ -48,6 +49,7 @@ __published:	// IDE-managed Components
           int Y);
   void __fastcall FormMouseUp(TObject *Sender, TMouseButton Button,
           TShiftState Shift, int X, int Y);
+    void __fastcall miOptionsClick(TObject *Sender);
 
 protected:
   // This tool has no settings to be saved

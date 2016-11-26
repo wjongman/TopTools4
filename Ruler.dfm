@@ -30,17 +30,21 @@ object RulerForm: TRulerForm
     OnPopup = RulerMenuPopup
     Left = 8
     Top = 8
-    object miHide: TMenuItem
-      Caption = 'Hide Ruler'
+    object miOrientation: TMenuItem
+      Caption = 'Vertical'
       Default = True
-      OnClick = miHideClick
+      OnClick = miOrientationClick
     end
     object N2: TMenuItem
       Caption = '-'
     end
-    object miOrientation: TMenuItem
-      Caption = 'Vertical'
-      OnClick = miOrientationClick
+    object miHide: TMenuItem
+      Caption = 'Hide Ruler'
+      OnClick = miHideClick
+    end
+    object miZero: TMenuItem
+      Caption = 'Slide to zero'
+      OnClick = miSlidetoZeroClick
     end
     object miTransparent: TMenuItem
       Caption = 'Transparent'
@@ -49,9 +53,9 @@ object RulerForm: TRulerForm
     object N3: TMenuItem
       Caption = '-'
     end
-    object miZero: TMenuItem
-      Caption = 'Slide to zero'
-      OnClick = miSlidetoZeroClick
+    object miOptions: TMenuItem
+      Caption = 'Options...'
+      OnClick = miOptionsClick
     end
     object N1: TMenuItem
       Caption = '-'

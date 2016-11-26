@@ -448,3 +448,12 @@ void TBaseConvForm::ShowBinaryField(bool show)
   }
 }
 
+//---------------------------------------------------------------------------
+void __fastcall TBaseConvForm::miOptionsClick(TObject *Sender)
+{
+    if (FOnOptions)
+        FOnOptions(this);
+}
+
+//---------------------------------------------------------------------------
+

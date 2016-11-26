@@ -2,7 +2,7 @@
 #include <vcl.h>
 #pragma hdrstop
 
-#include <vcl\Clipbrd.hpp>
+//#include <vcl\Clipbrd.hpp>
 #include "Info.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -113,5 +113,13 @@ void __fastcall TInfoForm::FormMouseUp(TObject *Sender, TMouseButton Button,
         ::ReleaseCapture();
     }
 }
+
+//---------------------------------------------------------------------------
+void __fastcall TInfoForm::miOptionsClick(TObject *Sender)
+{
+    if (FOnOptions)
+        FOnOptions(this);
+}
+
 //---------------------------------------------------------------------------
 

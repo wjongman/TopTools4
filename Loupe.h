@@ -33,7 +33,6 @@ class TLoupeForm : public TToolForm
     TMenuItem *miLockPos;
     TMenuItem *miFreezeView;
     TMenuItem *miMagnifySelf;
-    TMenuItem *N4;
     TMenuItem *miExit;
 
     TToolBar *LoupeToolBar;

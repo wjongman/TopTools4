@@ -33,6 +33,7 @@ __published:  // IDE-managed Components
   TPanel *plBinary;
   TLabel *Label4;
   TEdit *BinEdit;
+    TMenuItem *miOptions;
 
   void __fastcall AscEditKeyPress(TObject *Sender, char &Key);
   void __fastcall HexEditKeyPress(TObject *Sender, char &Key);
@@ -50,6 +51,7 @@ __published:  // IDE-managed Components
   void __fastcall miPasteClick(TObject *Sender);
   void __fastcall miBinaryClick(TObject *Sender);
   void __fastcall miHideClick(TObject *Sender);
+    void __fastcall miOptionsClick(TObject *Sender);
 
 protected:
   virtual void __fastcall LoadSettings();

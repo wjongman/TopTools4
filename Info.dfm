@@ -302,9 +302,12 @@ inherited InfoForm: TInfoForm
       Default = True
       OnClick = miHideClick
     end
-    object miColorDisplayFormat: TMenuItem
-      Caption = 'Color Display Format...'
-      Visible = False
+    object N2: TMenuItem
+      Caption = '-'
+    end
+    object miOptions: TMenuItem
+      Caption = 'Options...'
+      OnClick = miOptionsClick
     end
     object N1: TMenuItem
       Caption = '-'

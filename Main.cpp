@@ -606,6 +606,7 @@ TToolForm* TMainForm::GetRulerForm()
         m_pRuler = new TRulerForm(this);
         m_pRuler->OnClose = HandleToolWindowClose;
         m_pRuler->OnKeyDown = HandleKeyDown;
+        m_pRuler->OnOptions = actOptionsExecute;
     }
     return m_pRuler;
 }
@@ -630,6 +631,7 @@ TToolForm* TMainForm::GetInfoForm()
         m_pInfo = new TInfoForm(this);
         m_pInfo->OnClose = HandleToolWindowClose;
         m_pInfo->OnKeyDown = HandleKeyDown;
+        m_pInfo->OnOptions = actOptionsExecute;
     }
     return m_pInfo;
 }
@@ -642,6 +644,7 @@ TToolForm* TMainForm::GetBaseConvForm()
         m_pBaseConv = new TBaseConvForm(this);
         m_pBaseConv->OnClose = HandleToolWindowClose;
         m_pBaseConv->OnKeyDown = HandleKeyDown;
+        m_pBaseConv->OnOptions = actOptionsExecute;
     }
     return m_pBaseConv;
 }
@@ -655,6 +658,7 @@ TToolForm* TMainForm::GetCaptureForm()
         m_pCapture->OnClose = HandleToolWindowClose;
         m_pCapture->OnKeyDown = HandleKeyDown;
         m_pCapture->OnCaptureComplete = HandleCaptureComplete;
+        m_pCapture->OnOptions = actOptionsExecute;
     }
 
     return m_pCapture;
@@ -780,11 +784,11 @@ void __fastcall TMainForm::actOptionsExecute(TObject *Sender)
         }
         else if (Sender == m_pBaseConv)
         {
-            sPageToShow = "";
+            sPageToShow = "Base Converter";
         }
         else if (Sender == m_pInfo)
         {
-            sPageToShow = "";
+            sPageToShow = "Info";
         }
         else if (Sender == m_pLoupe)
         {
@@ -796,7 +800,7 @@ void __fastcall TMainForm::actOptionsExecute(TObject *Sender)
         }
         else if (Sender == m_pCapture)
         {
-            sPageToShow = "";
+            sPageToShow = "Screen Grabber";
         }
     }
 

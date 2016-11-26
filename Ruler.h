@@ -27,6 +27,7 @@ __published:  // IDE-managed Components
   TMenuItem *miExit;
   TMenuItem *miTransparent;
   TMenuItem *N3;
+    TMenuItem *miOptions;
 
   void __fastcall FormPaint(TObject *Sender);
   void __fastcall FormMouseDown(TObject *Sender, TMouseButton Button,
@@ -39,6 +40,7 @@ __published:  // IDE-managed Components
   void __fastcall miExitClick(TObject *Sender);
   void __fastcall miTransparentClick(TObject *Sender);
   void __fastcall RulerMenuPopup(TObject *Sender);
+    void __fastcall miOptionsClick(TObject *Sender);
 
 protected:
   void __fastcall FloatMouseDown(TObject *Sender, TMouseButton Button,

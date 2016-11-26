@@ -187,6 +187,10 @@ inherited BaseConvForm: TBaseConvForm
       Caption = '&Show binary field'
       OnClick = miBinaryClick
     end
+    object miOptions: TMenuItem
+      Caption = 'Options...'
+      OnClick = miOptionsClick
+    end
     object N2: TMenuItem
       Caption = '-'
       Visible = False
