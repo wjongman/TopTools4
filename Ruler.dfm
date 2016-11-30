@@ -38,10 +38,6 @@ object RulerForm: TRulerForm
     object N2: TMenuItem
       Caption = '-'
     end
-    object miHide: TMenuItem
-      Caption = 'Hide Ruler'
-      OnClick = miHideClick
-    end
     object miZero: TMenuItem
       Caption = 'Slide to zero'
       OnClick = miSlidetoZeroClick
@@ -58,6 +54,13 @@ object RulerForm: TRulerForm
       OnClick = miOptionsClick
     end
     object N1: TMenuItem
+      Caption = '-'
+    end
+    object miHide: TMenuItem
+      Caption = 'Hide Ruler'
+      OnClick = miHideClick
+    end
+    object N4: TMenuItem
       Caption = '-'
     end
     object miExit: TMenuItem

@@ -13,7 +13,8 @@ object ToolOptionsDialog: TToolOptionsDialog
   Font.Style = []
   OldCreateOrder = False
   Position = poScreenCenter
-  OnShow = FormShow
+  OnClose = FormClose
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object lvOptionSelector: TListView
@@ -350,12 +351,21 @@ object ToolOptionsDialog: TToolOptionsDialog
       object edTemplate: TEdit
         Left = 40
         Top = 105
-        Width = 209
+        Width = 187
         Height = 21
         Hint = '[R][G][B]'
         Enabled = False
         TabOrder = 5
         Text = '[R][G][B]'
+      end
+      object bnEditTemplate: TButton
+        Left = 227
+        Top = 105
+        Width = 21
+        Height = 21
+        Caption = '...'
+        TabOrder = 6
+        OnClick = bnEditTemplateClick
       end
     end
   end

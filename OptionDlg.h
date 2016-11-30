@@ -80,8 +80,7 @@ __published:  // IDE-managed Components
     TCheckBox *ckQuotes;
     TCheckBox *ckPrefix;
     TEdit *edTemplate;
-
-    void __fastcall FormShow(TObject *Sender);
+    TButton *bnEditTemplate;
     void __fastcall lvOptionSelectorChange(TObject *Sender, TListItem *Item, TItemChange Change);
     void __fastcall bnOkClick(TObject *Sender);
     void __fastcall bnAutosaveOptionsClick(TObject *Sender);
@@ -90,6 +89,9 @@ __published:  // IDE-managed Components
         void __fastcall bnAboutClick(TObject *Sender);
     void __fastcall bnManagePresetsClick(TObject *Sender);
     void __fastcall rbCustomCopyClick(TObject *Sender);
+    void __fastcall bnEditTemplateClick(TObject *Sender);
+    void __fastcall FormCreate(TObject *Sender);
+    void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 
 private:  // User declarations
     void HideAll();

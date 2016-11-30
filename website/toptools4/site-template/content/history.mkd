@@ -4,10 +4,18 @@
 
 ##### Screengrabber
   * Added option to maintain a list of preset values for commonly used capture sizes.
+  * Improved keyboard shortcuts for grabber actions.
   * Holding the shift key while resizing the grabber constrains the selection to a square.
 
 ##### Info
   * Added option to copy info to clipboard in a customizable format.
+
+##### General
+  * Options menu can now be opened from right-click menu of any tool.
+  * When switching from registry-mode to inifile-mode, registry key is now deleted.
+
+##### Main window
+  * Fixed bug that made toolbutton state to sometimes not reflect tool state.
 
 #### version 4.0.2.11 (2016-06-06)
 

@@ -5,6 +5,7 @@
 
 #include "CustomCopyDlg.h"
 #include "InfoFormatter.h"
+#include "PersistOptions.h"
 
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -19,17 +20,29 @@ __fastcall TCustomCopyDlg::TCustomCopyDlg(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall TCustomCopyDlg::FormShow(TObject *Sender)
 {
-    ClientHeight = ButtonPanel->Height + EditPanel->Height + OkCancelPanel->Height;
+    ckHelp->Checked = g_ToolOptions.Get("info", "showhelp", false);
+
+    ClientHeight = ButtonPanel->Height + EditPanel->Height;
     if (ckHelp->Checked)
     {
         ClientHeight += HelpPanel->Height;
     }
+
+    edMask->Text = g_ToolOptions.Get("info", "mask", "");
     edMask->SetFocus();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TCustomCopyDlg::FormClose(TObject *Sender,
+      TCloseAction &Action)
+{
+    g_ToolOptions.Set("info", "showhelp", ckHelp->Checked);
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TCustomCopyDlg::bnOKClick(TObject *Sender)
 {
+    g_ToolOptions.Set("info", "mask", edMask->Text);
     ModalResult = mrOk;
     Close();
 }
@@ -75,17 +88,21 @@ void __fastcall TCustomCopyDlg::RenderPreview()
     InfoFormatter fmt(mask.c_str());
     TPixelInfo pi(true);
 
-    edPreview->Text = fmt.GetFormattedString(pi).c_str();
+    edPreview->Lines->Clear();
+    edPreview->Lines->Add(fmt.GetFormattedString(pi).c_str());
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TCustomCopyDlg::ckHelpClick(TObject *Sender)
 {
-    ClientHeight = ButtonPanel->Height + EditPanel->Height + OkCancelPanel->Height;
+    ClientHeight = ButtonPanel->Height + EditPanel->Height;
     if (ckHelp->Checked)
     {
         ClientHeight += HelpPanel->Height;
     }
 }
+//---------------------------------------------------------------------------
+
+
 //---------------------------------------------------------------------------
 

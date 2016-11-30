@@ -31,7 +31,8 @@ void __fastcall TPresetManager::FormShow(TObject *Sender)
     LoadPresets();
     UpdateButtonState();
     UpdateListView();
-    ListView->Items->Item[0]->Selected = true;
+    if (ListView->Items->Count > 0)
+        ListView->Items->Item[0]->Selected = true;
     ListView->SetFocus();
     SetForegroundWindow(Handle);
 }

@@ -28,6 +28,7 @@ __published:  // IDE-managed Components
   TMenuItem *miTransparent;
   TMenuItem *N3;
     TMenuItem *miOptions;
+    TMenuItem *N4;
 
   void __fastcall FormPaint(TObject *Sender);
   void __fastcall FormMouseDown(TObject *Sender, TMouseButton Button,

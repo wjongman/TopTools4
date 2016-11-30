@@ -369,7 +369,6 @@ void __fastcall TMainForm::HandleToolWindowClose(TObject *Sender, TCloseAction &
     if (GetControlBar() && m_pControlBar->Visible)
     {
         m_pControlBar->UpdateFocus();
-        m_pControlBar->Invalidate();
     }
 
     // Stop the timer when it isn't needed anymore
@@ -483,6 +482,12 @@ void TMainForm::RestoreToolState(int opentools)
     if (opentools & dcoLoupe)
         actCommandExecute(actLoupe);
 
+    if (opentools & dcoInfo)
+        actCommandExecute(actInfo);
+
+    if (opentools & dcoBaseconv)
+        actCommandExecute(actBaseConv);
+
     if (opentools & dcoGrab)
         actCommandExecute(actCapture);
 }
@@ -494,8 +499,8 @@ int TMainForm::GetToolState()
     return( (GetControlBar()->Visible) * dcoControl +
             (m_pRuler && m_pRuler->Visible) * dcoRuler +
             (m_pLoupe && m_pLoupe->Visible) * dcoLoupe +
-//            (m_pInfo && m_pInfo->Visible) * dcoInfo +
-//            (m_pBaseConv && m_pBaseConv->Visible) * dcoBaseconv );
+            (m_pInfo && m_pInfo->Visible) * dcoInfo +
+            (m_pBaseConv && m_pBaseConv->Visible) * dcoBaseconv +
             (m_pCapture && m_pCapture->Visible) * dcoGrab);
 }
 
@@ -760,8 +765,8 @@ void __fastcall TMainForm::HandleCaptureComplete(TObject *Sender)
 //    if (m_pLoupe)
 //        m_pLoupe->Visible = m_SavedLoupeState;
 
-    actCapture->Checked = false;
-    m_pCapture->Hide();
+//    actCapture->Checked = false;
+//    m_pCapture->Hide();
 
 }
 

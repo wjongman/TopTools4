@@ -69,7 +69,7 @@ public:
   __fastcall TTopToolBar(TComponent* Owner);
   __fastcall ~TTopToolBar();
 
-  void Refresh() { FlattenButtons(); }
+  void __fastcall Refresh();
 
 __published:
   __property bool Focussed = { write = OnFocusChange };

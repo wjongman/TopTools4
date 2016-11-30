@@ -39,9 +39,11 @@ USERES("Graphics.RES");
 USERES("appicon.RES");
 USEFORM("PresetManager.cpp", PresetManager);
 USEFORM("PresetDlg.cpp", PresetDlg);
+USEFORM("CustomCopyDlg.cpp", CustomCopyDlg);
 USE("PersistOptions.h", File);
 USE("InfoFormatter.h", File);
 USE("Preset.h", File);
+USE("PixelInfo.h", File);
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {

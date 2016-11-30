@@ -4,8 +4,8 @@ object CustomCopyDlg: TCustomCopyDlg
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Define Template'
-  ClientHeight = 384
-  ClientWidth = 427
+  ClientHeight = 389
+  ClientWidth = 425
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -14,13 +14,14 @@ object CustomCopyDlg: TCustomCopyDlg
   Font.Style = []
   OldCreateOrder = False
   Position = poScreenCenter
+  OnClose = FormClose
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object ButtonPanel: TPanel
     Left = 0
     Top = 0
-    Width = 427
+    Width = 425
     Height = 25
     Align = alTop
     BevelOuter = bvNone
@@ -40,9 +41,9 @@ object CustomCopyDlg: TCustomCopyDlg
       Caption = '[&x]'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Courier New'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
@@ -58,9 +59,9 @@ object CustomCopyDlg: TCustomCopyDlg
       Caption = '[&y]'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Courier New'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
@@ -76,9 +77,9 @@ object CustomCopyDlg: TCustomCopyDlg
       Caption = '[&r]'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Courier New'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
@@ -94,9 +95,9 @@ object CustomCopyDlg: TCustomCopyDlg
       Caption = '[&g]'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Courier New'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
@@ -112,9 +113,9 @@ object CustomCopyDlg: TCustomCopyDlg
       Caption = '[&b]'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Courier New'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
@@ -130,9 +131,9 @@ object CustomCopyDlg: TCustomCopyDlg
       Caption = '[R]'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Courier New'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
@@ -148,9 +149,9 @@ object CustomCopyDlg: TCustomCopyDlg
       Caption = '[G]'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Courier New'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
@@ -166,9 +167,9 @@ object CustomCopyDlg: TCustomCopyDlg
       Caption = '[B]'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Courier New'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
@@ -184,9 +185,9 @@ object CustomCopyDlg: TCustomCopyDlg
       Caption = '[&h]'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Courier New'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
@@ -202,9 +203,9 @@ object CustomCopyDlg: TCustomCopyDlg
       Caption = '[&s]'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Courier New'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
@@ -220,9 +221,9 @@ object CustomCopyDlg: TCustomCopyDlg
       Caption = '[&v]'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Courier New'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
@@ -238,9 +239,9 @@ object CustomCopyDlg: TCustomCopyDlg
       Caption = '[w]'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Courier New'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
@@ -256,9 +257,9 @@ object CustomCopyDlg: TCustomCopyDlg
       Caption = '[&W]'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Courier New'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
@@ -274,9 +275,9 @@ object CustomCopyDlg: TCustomCopyDlg
       Caption = '[&n]'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Courier New'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
@@ -292,9 +293,9 @@ object CustomCopyDlg: TCustomCopyDlg
       Caption = '[&[]'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Courier New'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
@@ -310,9 +311,9 @@ object CustomCopyDlg: TCustomCopyDlg
       Caption = '[&]]'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -12
       Font.Name = 'Courier New'
-      Font.Style = [fsBold]
+      Font.Style = []
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
@@ -322,18 +323,19 @@ object CustomCopyDlg: TCustomCopyDlg
   end
   object HelpPanel: TPanel
     Left = 0
-    Top = 152
-    Width = 427
-    Height = 232
-    BevelOuter = bvLowered
+    Top = 169
+    Width = 425
+    Height = 220
+    BevelInner = bvLowered
+    Color = clInfoBk
     TabOrder = 1
     object HelpMemo: TMemo
       Left = 16
-      Top = 9
+      Top = 5
       Width = 392
-      Height = 216
+      Height = 213
       BorderStyle = bsNone
-      Color = clBtnFace
+      Color = clInfoBk
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -354,8 +356,7 @@ object CustomCopyDlg: TCustomCopyDlg
         ''
         'Everything not enclosed in square brackets is '
         'interpreted as literal text, unknown placeholders are '
-        'ignored.'
-        '')
+        'ignored.')
       ParentFont = False
       ReadOnly = True
       TabOrder = 0
@@ -364,78 +365,71 @@ object CustomCopyDlg: TCustomCopyDlg
   object EditPanel: TPanel
     Left = 0
     Top = 25
-    Width = 427
-    Height = 88
+    Width = 425
+    Height = 144
     Align = alTop
     TabOrder = 2
     object Label1: TLabel
       Left = 16
-      Top = 19
+      Top = 15
       Width = 47
       Height = 13
       Caption = 'Template:'
     end
     object Label2: TLabel
       Left = 16
-      Top = 51
+      Top = 47
       Width = 41
       Height = 13
       Caption = 'Preview:'
     end
     object edMask: TEdit
       Left = 72
-      Top = 16
+      Top = 12
       Width = 337
       Height = 21
       TabOrder = 0
       OnChange = edMaskChange
     end
-    object edPreview: TEdit
+    object edPreview: TMemo
       Left = 72
-      Top = 48
+      Top = 44
       Width = 337
-      Height = 21
+      Height = 49
       Color = clBtnFace
       ReadOnly = True
       TabOrder = 1
-    end
-  end
-  object OkCancelPanel: TPanel
-    Left = 0
-    Top = 113
-    Width = 427
-    Height = 39
-    Align = alTop
-    TabOrder = 3
-    object bnCancel: TButton
-      Left = 336
-      Top = 8
-      Width = 75
-      Height = 25
-      Caption = 'Cancel'
-      ModalResult = 2
-      TabOrder = 0
-      OnClick = bnCancelClick
+      WordWrap = False
     end
     object bnOK: TButton
       Left = 248
-      Top = 8
+      Top = 106
       Width = 75
       Height = 25
       Caption = 'OK'
       Default = True
       ModalResult = 1
-      TabOrder = 1
+      TabOrder = 2
       OnClick = bnOKClick
     end
     object ckHelp: TCheckBox
       Left = 16
-      Top = 12
+      Top = 110
       Width = 97
       Height = 17
       Caption = '&Show Help'
-      TabOrder = 2
+      TabOrder = 3
       OnClick = ckHelpClick
+    end
+    object bnCancel: TButton
+      Left = 336
+      Top = 106
+      Width = 75
+      Height = 25
+      Caption = 'Cancel'
+      ModalResult = 2
+      TabOrder = 4
+      OnClick = bnCancelClick
     end
   end
 end

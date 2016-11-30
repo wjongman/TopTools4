@@ -10,8 +10,17 @@ struct TPixelInfo
     COLORREF color;
 
     //-----------------------------------------------------------------------
-    TPixelInfo()
+    TPixelInfo(bool test=false)
     {
+        if (test)
+        {
+            x = 123;
+            y = 456;
+            r = 0xAB;
+            g = 0xCD;
+            b = 0xEF;
+            CalculateHsv();
+        }
     }
 
     //-----------------------------------------------------------------------
@@ -39,7 +48,7 @@ struct TPixelInfo
     }
 
 
-    private:
+private:
     //-----------------------------------------------------------------------
     void CalculateHsv()
     // In:   r, g and b in [0,255]

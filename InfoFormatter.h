@@ -35,6 +35,8 @@
 //  [[] - literal [
 //  []] - literal ]
 //
+//  [n] - line break
+//
 //  [w] - lower-case webcolor (without #)
 //  [W] - upper-case webcolor, same as [R][G][B]
 //
@@ -149,8 +151,15 @@ public:
                 ss << std::nouppercase;
                 ss << std::setfill(' ') << std::setw(0) << std::dec;
                 break;
+            case 'n':
+                ss << "\r\n";
+                break;
+
             }
         }
+        // Add remaining literal text
+        ss << m_literalstack[m_literalstack.size() - 1];
+
         return ss.str();
     }
 

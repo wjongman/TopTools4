@@ -36,7 +36,9 @@ protected:
   virtual void __fastcall SaveSettings() {};
 
   // Overridden to show up near the tray area
-  virtual void __fastcall SetDefaultPosition();
+  // TODO: This does not work with extreme font settings,
+  // we bypass it for now..
+//  virtual void __fastcall SetDefaultPosition();
 
 private:  // User declarations
   TTopToolBar* m_toolbar;

@@ -32,20 +32,20 @@ __published:  // IDE-managed Components
     TMemo *HelpMemo;
     TPanel *EditPanel;
     TEdit *edMask;
-    TEdit *edPreview;
     TLabel *Label1;
     TLabel *Label2;
     TButton *Button16;
-    TPanel *OkCancelPanel;
-    TButton *bnCancel;
+    TMemo *edPreview;
     TButton *bnOK;
     TCheckBox *ckHelp;
+    TButton *bnCancel;
     void __fastcall bnOKClick(TObject *Sender);
     void __fastcall bnCancelClick(TObject *Sender);
     void __fastcall AddPlaceholder(TObject *Sender);
     void __fastcall edMaskChange(TObject *Sender);
     void __fastcall FormShow(TObject *Sender);
     void __fastcall ckHelpClick(TObject *Sender);
+    void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 private:  // User declarations
     void __fastcall RenderPreview();
 public:   // User declarations

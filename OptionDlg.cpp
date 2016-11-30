@@ -13,6 +13,7 @@
 #include "PresetManager.h"
 #include "PersistOptions.h"
 #include "HotkeyManager.h"
+#include "CustomCopyDlg.h"
 
 //---------------------------------------------------------------------------
 __fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner)
@@ -55,7 +56,43 @@ __fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner,
 //---------------------------------------------------------------------------
 __fastcall TToolOptionsDialog::~TToolOptionsDialog()
 {
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TToolOptionsDialog::FormClose(TObject *Sender,
+      TCloseAction &Action)
+{
     g_ToolOptions.Set("options", "activepage", m_sActivePage);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TToolOptionsDialog::FormCreate(TObject *Sender)
+{
+    ActivatePage(m_sActivePage);
+
+    InitListView();
+
+    // Set focus to currently visible item
+    if (lvOptionSelector->Items->Count > 0)
+    {
+        TListItem *item = lvOptionSelector->FindCaption(0, m_sActivePage, false, true, false);
+        if (item)
+        {
+            item->Selected = true;
+            item->Focused = true;
+        }
+    }
+
+    InitHotkeyPanels();
+    InitOptions();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TToolOptionsDialog::lvOptionSelectorChange(TObject *Sender,
+                                                           TListItem *Item, TItemChange Change)
+{
+    if (lvOptionSelector->ItemFocused)
+        ActivatePage(lvOptionSelector->ItemFocused->Caption);
 }
 
 //---------------------------------------------------------------------------
@@ -121,43 +158,14 @@ void TToolOptionsDialog::HideAll()
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TToolOptionsDialog::FormShow(TObject *Sender)
-{
-    ActivatePage(m_sActivePage);
-
-    InitListView();
-
-    // Set focus to currently visible item
-    if (lvOptionSelector->Items->Count > 0)
-    {
-        TListItem *item = lvOptionSelector->FindCaption(0, m_sActivePage, false, true, false);
-        if (item)
-        {
-            item->Selected = true;
-            item->Focused = true;
-        }
-    }
-
-    InitHotkeyPanels();
-    InitOptions();
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TToolOptionsDialog::lvOptionSelectorChange(TObject *Sender,
-                                                           TListItem *Item, TItemChange Change)
-{
-    if (lvOptionSelector->ItemFocused)
-        ActivatePage(lvOptionSelector->ItemFocused->Caption);
-}
-
-//---------------------------------------------------------------------------
 void TToolOptionsDialog::InitListView()
 {
+    int w = lvOptionSelector->ClientWidth;
     lvOptionSelector->ViewStyle = vsReport;
     lvOptionSelector->RowSelect = true;
 
     TListColumn* pColumn = lvOptionSelector->Columns->Add();
-    pColumn->Width = lvOptionSelector->ClientWidth;
+    pColumn->Width = w; //lvOptionSelector->ClientWidth;
 
     lvOptionSelector->Items->Clear();
     TListItem *pItem;
@@ -261,7 +269,14 @@ void TToolOptionsDialog::InitOptions()
     ckPrefix->Checked = g_ToolOptions.Get("info", "prefix", false);
     ckQuotes->Checked = g_ToolOptions.Get("info", "quotes", false);
     edTemplate->Text = g_ToolOptions.Get("info", "mask", "");
-    rbCustomCopy->Checked = g_ToolOptions.Get("info", "custom", false);
+
+    bool custom = g_ToolOptions.Get("info", "custom", false);
+    rbCustomCopy->Checked = custom;
+    edTemplate->Enabled = custom;
+    bnEditTemplate->Enabled = custom;
+    rbStandard->Checked = !custom;
+    ckPrefix->Enabled = !custom;
+    ckQuotes->Enabled = !custom;
 
     // Grabber
     //ckAutosave->Checked = g_ToolOptions.Get("capture\\autosave", "enabled", false);
@@ -431,8 +446,27 @@ void __fastcall TToolOptionsDialog::rbCustomCopyClick(TObject *Sender)
     bool custom = (Sender == rbCustomCopy);
 
     edTemplate->Enabled = custom;
+    bnEditTemplate->Enabled = custom;
     ckPrefix->Enabled = !custom;
     ckQuotes->Enabled = !custom;
 }
+
 //---------------------------------------------------------------------------
+void __fastcall TToolOptionsDialog::bnEditTemplateClick(TObject *Sender)
+{
+    g_ToolOptions.Set("info", "mask", edTemplate->Text);
+    TCustomCopyDlg* dlg = new TCustomCopyDlg(this);
+    if (dlg)
+    {
+        Hide();
+        dlg->ShowModal();
+        Show();
+        delete dlg;
+    }
+    edTemplate->Text = g_ToolOptions.Get("info", "mask", "");
+}
+
+//---------------------------------------------------------------------------
+
+
 

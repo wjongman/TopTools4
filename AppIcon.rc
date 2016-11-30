@@ -1,4 +1,5 @@
-//APPICON      ICON   "graphics/loupe_ruler02-16color.ico"
-APPICON     ICON   "graphics/TopTools4-256.ico"
-TRAYICON     ICON   "graphics/trayicon.ico"
+APPICON     ICON   "graphics/mainicon256-32.ico"
+//APPICON     ICON   "graphics/mainicon32.ico"
+//APPICON     ICON   "graphics/TopTools4-256.ico"
+TRAYICON    ICON   "graphics/trayicon32.ico"
 
