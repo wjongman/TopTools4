@@ -10,5 +10,5 @@ PNG_OPTIONS  RCDATA "graphics/options.png"
 PNG_ABOUT    RCDATA "graphics/about.png"
 PNG_EXIT     RCDATA "graphics/exit.png"
 PNG_LOGO     RCDATA "graphics/logo.png"
-
+PNG_EMPTY    RCDATA "graphics/empty.png"
 

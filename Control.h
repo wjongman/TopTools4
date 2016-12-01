@@ -25,8 +25,7 @@ public:   // User declarations
   virtual __fastcall ~TControlForm();
 
   void __fastcall UpdateFocus();
-//  void __fastcall TimerEvent(const TPoint& ptMouse)
-//                  { m_toolbar->FlattenButtons(ptMouse); }
+
 protected:
   virtual void __fastcall OnGetFocus();
   virtual void __fastcall OnLoseFocus();

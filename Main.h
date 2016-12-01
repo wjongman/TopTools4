@@ -20,7 +20,6 @@
 #include "Ruler.h"
 #include "Grabber.h"
 #include "HotkeyManager.h"
-//#include "ToolOptions.h"
 #include "TopToolBar.h"
 #include "Tool.h"
 
@@ -58,7 +57,8 @@ __published:  // IDE-managed Components
   TMenuItem *N1;
   TMenuItem *miExit;
   TTimer *Timer;
-    TImageList *MainIcons;
+  TImageList *MainIcons;
+
   void __fastcall HandleTimerEvent(TObject *Sender);
   void __fastcall actExitExecute(TObject *Sender);
   void __fastcall actCommandExecute(TObject *Sender);
@@ -85,9 +85,7 @@ protected:
   void __fastcall HandleTrayMessage(TMessage &Message);
   void __fastcall HandleKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
   void __fastcall HandleToolWindowClose(TObject *Sender, TCloseAction &Action);
-  void __fastcall HandleCaptureComplete(TObject *Sender);
   void __fastcall HandleHotkey(THotkeyId id);
-  //void __fastcall HandleToolWindowOptions(TObject *Sender);
 
 private:  // User declarations
   void __fastcall SetTopMost(bool ontop);
@@ -123,8 +121,6 @@ private:  // User declarations
   void HideAll();
   int GetToolState();
   bool AnyToolVisible();
-
-//  bool m_SavedLoupeState;
 
   TToolForm* GetRulerForm();
   TToolForm* GetLoupeForm();

@@ -35,14 +35,12 @@ __fastcall TTopToolButton::~TTopToolButton()
 //---------------------------------------------------------------------------
 TPNGObject* __fastcall TTopToolButton::GetPngImage()
 {
-    // Return PNG image
     return FPngImage;
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TTopToolButton::SetPngImage(TPNGObject* Value)
 {
-    // Assign PNG image
     FPngImage->Assign(Value);
 }
 
@@ -109,7 +107,8 @@ void __fastcall TTopToolButton::Paint(void)
 
 //---------------------------------------------------------------------------
 void __fastcall TTopToolButton::HandleMouseUp(TObject *Sender,
-                                              TMouseButton Button, TShiftState Shift, int X, int Y)
+                                              TMouseButton Button,
+                                              TShiftState Shift, int X, int Y)
 {
     Invalidate();
 }
@@ -301,37 +300,49 @@ void __fastcall TTopToolBar::InitButtons()
     pButton->Action = MainForm->actOptions;
     pButton->Align = alLeft;
     pButton->Width = TOOLBUTTONWIDTH;
+    pButton->PopupMenu = MainForm->PopupMenu;
     pImage = new TPNGObject();
     pImage->LoadFromResourceName((int)HInstance, "PNG_OPTIONS");
     pButton->PngImage = pImage;
     delete pImage;
     m_buttons.push_back(pButton);
-
 /*
-  pButton = new TTopToolButton(this);
-  pButton->Parent = this;
-  pButton->Name = "bnExit";
-  pButton->Action = MainForm->actExit;
-  pButton->Align = alLeft;
-  pButton->Width = TOOLBUTTONWIDTH;
-  pImage = new TPNGObject();
-  pImage->LoadFromResourceName((int)HInstance, "PNG_EXIT");
-  pButton->PngImage = pImage;
-  delete pImage;
-  m_buttons.push_back(pButton);
+    pButton = new TTopToolButton(this);
+    pButton->Parent = this;
+    pButton->Name = "bnEmpty";
+    pButton->Align = alLeft;
+    pButton->Width = TOOLBUTTONWIDTH;
+    pButton->PopupMenu = MainForm->PopupMenu;
+    pImage = new TPNGObject();
+    pImage->LoadFromResourceName((int)HInstance, "PNG_EMPTY");
+    pButton->PngImage = pImage;
+    delete pImage;
+    m_buttons.push_back(pButton);
 
-  pButton = new TTopToolButton(this);
-  pButton->Parent = this;
-  pButton->Name = "bn";
-  pButton->OnClick = ButtonClick;
-  pButton->Align = alLeft;
-  pButton->Width = TOOLBUTTONWIDTH;
-  pButton->GroupIndex = ;
-  pImage = new TPNGObject();
-  pImage->LoadFromResourceName((int)HInstance, "PNG_");
-  pButton->PngImage = pImage;
-  delete pImage;
-  m_buttons.push_back(pButton);
+    pButton = new TTopToolButton(this);
+    pButton->Parent = this;
+    pButton->Name = "bnExit";
+    pButton->Action = MainForm->actExit;
+    pButton->Align = alLeft;
+    pButton->Width = TOOLBUTTONWIDTH;
+    pImage = new TPNGObject();
+    pImage->LoadFromResourceName((int)HInstance, "PNG_EXIT");
+    pButton->PngImage = pImage;
+    delete pImage;
+    m_buttons.push_back(pButton);
+
+    pButton = new TTopToolButton(this);
+    pButton->Parent = this;
+    pButton->Name = "bn";
+    pButton->OnClick = ButtonClick;
+    pButton->Align = alLeft;
+    pButton->Width = TOOLBUTTONWIDTH;
+    pButton->GroupIndex = ;
+    pImage = new TPNGObject();
+    pImage->LoadFromResourceName((int)HInstance, "PNG_");
+    pButton->PngImage = pImage;
+    delete pImage;
+    m_buttons.push_back(pButton);
 */
 }
 

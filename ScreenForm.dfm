@@ -17,7 +17,7 @@ object ScreenForm: TScreenForm
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
-  Position = poScreenCenter
+  Position = poDefault
   OnMouseDown = FormMouseDown
   OnMouseMove = FormMouseMove
   OnPaint = FormPaint

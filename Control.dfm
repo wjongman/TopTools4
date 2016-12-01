@@ -4,6 +4,7 @@ inherited ControlForm: TControlForm
   Caption = 'TopTools 4'
   ClientHeight = 73
   ClientWidth = 302
+  Color = clWhite
   OldCreateOrder = True
   WindowState = wsMinimized
   PixelsPerInch = 96

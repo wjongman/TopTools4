@@ -9,14 +9,6 @@
 #include <Forms.hpp>
 #include <ComCtrls.hpp>
 #include "Tool.h"
-
-#ifdef _DEBUG
-    #define TRACE(s) OutputDebugString(s)
-#else
-    #define TRACE(s)
-#endif
-
-#include "tool.h"
 #include "ToolTip.h"
 
 //---------------------------------------------------------------------------

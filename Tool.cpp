@@ -18,7 +18,6 @@ __fastcall TToolForm::TToolForm(TComponent* Owner, const String& toolname)
       m_ToolName(toolname),
       FSnapEdge(true),
       FWindowStyle(twsTool),
-      FDraggableForm(false),
       FOnOptions(NULL),
       FOnMinimize(NULL)
 {
@@ -104,40 +103,7 @@ void __fastcall TToolForm::WndProc(Messages::TMessage &Message)
     case WM_NCACTIVATE:
         OnLoseFocus();
         break;
-        /*
-          case WM_NCHITTEST:
-            if (FDraggableForm == true)
-            {
-              UINT uHitTest;
-              uHitTest = DefWindowProc(Handle, WM_NCHITTEST, Message.WParam, Message.LParam);
-              // See if the mousepointer is above our client area
-              if (uHitTest == HTCLIENT)
-              {
-                Message.Result = HTCAPTION;
-                return;
-              }
-              // See if the mousepointer is above our size grip
-              else if (Message.Result == HTCLIENT)
-              {
-                TRect rc = GetClientRect();
-                rc.Left = rc.Right - GetSystemMetrics(SM_CXHSCROLL);
-                rc.Top  = rc.Bottom - GetSystemMetrics(SM_CYVSCROLL);
 
-                POINT pt = ScreenToClient(Point(Message.WParam, Message.LParam));
-
-                if (PtInRect(&rc, pt))
-                {
-                  Message.Result = HTBOTTOMRIGHT;
-                  return;
-                }
-              }
-              else
-              {
-                Message.Result = uHitTest;
-                return;
-              }
-            }
-        */
     case WM_SYSCOMMAND:
         switch (Message.WParam & 0xFFF0) // Lowest byte is reserved..
         {
@@ -194,7 +160,9 @@ void __fastcall TToolForm::SavePosition()
 {
     g_ToolOptions.Set(m_ToolName, "left", Left);
     g_ToolOptions.Set(m_ToolName, "top", Top);
-}
+
+    //GetWindowPlacement
+    }
 
 //---------------------------------------------------------------------------
 void __fastcall TToolForm::ConstrainPosition()

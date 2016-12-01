@@ -10,7 +10,7 @@
 #pragma link "Tool"
 #pragma resource "*.dfm"
 
-const ButtonCount = 6;
+//const ButtonCount = 6;
 
 //---------------------------------------------------------------------------
 __fastcall TControlForm::TControlForm(TComponent* Owner)
@@ -23,7 +23,8 @@ __fastcall TControlForm::TControlForm(TComponent* Owner)
 
     // Adjust dimensions
     ClientHeight = 30;
-    ClientWidth = ButtonCount * 30;
+    ClientWidth = 30 * m_toolbar->GetButtonCount();
+
 }
 
 //---------------------------------------------------------------------------
@@ -49,37 +50,6 @@ void __fastcall TControlForm::UpdateFocus()
 {
     m_toolbar->Refresh();
 }
-
-// //---------------------------------------------------------------------------
-// void __fastcall TControlForm::SetDefaultPosition()
-// {
-//   // Show up near the tray area
-//   RECT rcTaskbar;
-//   int edge = GetTaskbarRect(&rcTaskbar);
-//
-//   switch (edge)
-//   {
-//     case ABE_LEFT:
-//       Left = rcTaskbar.right;
-//       Top = rcTaskbar.bottom - Height;
-//       break;
-//
-//     case ABE_RIGHT:
-//       Left = rcTaskbar.left - Width;
-//       Top = rcTaskbar.bottom - Height;
-//       break;
-//
-//     case ABE_TOP:
-//       Left = rcTaskbar.right - Width;
-//       Top = rcTaskbar.bottom;
-//       break;
-//
-//     case ABE_BOTTOM:
-//       Left = rcTaskbar.right - Width;
-//       Top = rcTaskbar.top - Height;
-//       break;
-//   }
-// }
 
 //---------------------------------------------------------------------------
 

@@ -70,6 +70,7 @@ public:
   __fastcall ~TTopToolBar();
 
   void __fastcall Refresh();
+  size_t __fastcall GetButtonCount() { return m_buttons.size(); }
 
 __published:
   __property bool Focussed = { write = OnFocusChange };

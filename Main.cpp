@@ -472,7 +472,6 @@ void TMainForm::ToggleOpenTools()
 void TMainForm::RestoreToolState(int opentools)
 {
     // Show toolwindows according to the bits set in opentools
-
     if (opentools & dcoControl)
         actCommandExecute(actControl);
 
@@ -566,7 +565,6 @@ void TMainForm::CopyInfoToClipboard()
 
     // Format the info string
     String mask = g_ToolOptions.Get("info", "mask", "");
-//    if (mask.IsEmpty()) mask = "[R][G][B]";
     InfoFormatter inf(mask.c_str());
     String formatted = inf.GetFormattedString(pi).c_str();
 
@@ -662,7 +660,6 @@ TToolForm* TMainForm::GetCaptureForm()
         m_pCapture = new TScreenGrabber(this);
         m_pCapture->OnClose = HandleToolWindowClose;
         m_pCapture->OnKeyDown = HandleKeyDown;
-        m_pCapture->OnCaptureComplete = HandleCaptureComplete;
         m_pCapture->OnOptions = actOptionsExecute;
     }
 
@@ -740,17 +737,13 @@ void __fastcall TMainForm::actCommandExecute(TObject *Sender)
     }
 
     // Only enable the timer when there is something to keep track of
-
-    // todo: implement a timer that gets triggered only by an OnPaint event
-
+    // TODO: implement a timer that gets triggered only by an OnPaint event
     Timer->Enabled = TimerNeeded();
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::actCaptureExecute(TObject *Sender)
 {
-//    m_SavedLoupeState = m_pLoupe && m_pLoupe->Visible;
-
     if (!m_pCapture)
     {
         GetCaptureForm();
@@ -760,21 +753,10 @@ void __fastcall TMainForm::actCaptureExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TMainForm::HandleCaptureComplete(TObject *Sender)
-{
-//    if (m_pLoupe)
-//        m_pLoupe->Visible = m_SavedLoupeState;
-
-//    actCapture->Checked = false;
-//    m_pCapture->Hide();
-
-}
-
-//---------------------------------------------------------------------------
 void __fastcall TMainForm::actOptionsExecute(TObject *Sender)
 {
     // See what page we need to show
-    String sPageToShow = "General";
+    String sPageToShow = "";
     TToolForm *Tool = reinterpret_cast<TToolForm*>(Sender);
 
     if (Tool)
@@ -813,11 +795,6 @@ void __fastcall TMainForm::actOptionsExecute(TObject *Sender)
     // want to steal keypresses while recording a new key combination
     m_HotkeyManager->DisableHotkeys();
 
-    // Hide grabber window as it might cover our dialog
-    if (m_pCapture)
-    {
-        HandleCaptureComplete(Sender);
-    }
     TToolOptionsDialog *OptionForm = new TToolOptionsDialog(this, sPageToShow);
     if (OptionForm->ShowModal() == mrOk)
     {

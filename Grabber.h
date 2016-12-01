@@ -54,12 +54,6 @@ private:
                                          TShiftState Shift, int X, int Y);
 protected:
     virtual void __fastcall WndProc(TMessage &Msg);
-
-protected:
-  TNotifyEvent FOnCaptureComplete;
-
-__published:
-  __property TNotifyEvent OnCaptureComplete = { read = FOnCaptureComplete, write = FOnCaptureComplete };
 };
 
 /////////////////////////////////////////////////////////////////////////////

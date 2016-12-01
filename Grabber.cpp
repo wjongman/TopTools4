@@ -11,7 +11,6 @@
 //---------------------------------------------------------------------------
 __fastcall TScreenGrabber::TScreenGrabber(TComponent* Owner)
   : TScreenForm(Owner),
-    FOnCaptureComplete(NULL),
     m_CaptureMenu(NULL)
 {
     // Have a bitmap to store the grabbed stuff
@@ -309,10 +308,8 @@ void __fastcall TScreenGrabber::CaptureMenuClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::EndCapture()
 {
-    Close();
     // We are done
-    if (FOnCaptureComplete)
-        FOnCaptureComplete(this);
+    Close();
 }
 
 //---------------------------------------------------------------------------

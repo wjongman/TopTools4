@@ -15,20 +15,19 @@
 
 //---------------------------------------------------------------------------
 __fastcall TScreenForm::TScreenForm(TComponent* Owner)
-: TToolForm(Owner, "capture"),
-m_TrackingMouse(false),
-m_pToolTip(NULL)
+  : TToolForm(Owner, "capture"),
+    m_TrackingMouse(false),
+    m_pToolTip(NULL)
 {
     BorderStyle = bsNone;
     Color = clWhite;
     SetTransparency(true, 50);
 
-    DraggableForm = true;
     SnapScreenEdges = false;
     Cursor = crSizeAll;
 
-    Left = g_ToolOptions.Get(m_ToolName, "left", Left);
-    Top = g_ToolOptions.Get(m_ToolName, "top", Top);
+    //Left = g_ToolOptions.Get(m_ToolName, "left", Left);
+    //Top = g_ToolOptions.Get(m_ToolName, "top", Top);
     Width = g_ToolOptions.Get(m_ToolName, "width", Width);
     Height = g_ToolOptions.Get(m_ToolName, "height", Height);
 
@@ -43,8 +42,8 @@ m_pToolTip(NULL)
 //---------------------------------------------------------------------------
 __fastcall TScreenForm::~TScreenForm()
 {
-    g_ToolOptions.Set(m_ToolName, "left", Left);
-    g_ToolOptions.Set(m_ToolName, "top", Top);
+    //g_ToolOptions.Set(m_ToolName, "left", Left);
+    //g_ToolOptions.Set(m_ToolName, "top", Top);
     g_ToolOptions.Set(m_ToolName, "width", Width);
     g_ToolOptions.Set(m_ToolName, "height", Height);
 

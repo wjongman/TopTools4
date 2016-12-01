@@ -26,8 +26,7 @@ __fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner)
 
     plRef->Visible = false;
 
-    m_sActivePage = "General";
-    m_sActivePage = g_ToolOptions.Get("options", "activepage", m_sActivePage);
+    m_sActivePage = g_ToolOptions.Get("options", "activepage", "General");
 }
 
 //---------------------------------------------------------------------------
@@ -44,7 +43,7 @@ __fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner,
 
     if (sPageName == "")
     {
-        m_sActivePage = g_ToolOptions.Get("options", "activepage", m_sActivePage);
+        m_sActivePage = g_ToolOptions.Get("options", "activepage", "General");
     }
     else
     {
