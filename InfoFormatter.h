@@ -76,6 +76,7 @@ public:
     //-------------------------------------------------------------------------
     std::string GetFormattedString(TPixelInfo const& pi)
     {
+        // Merge literal strings with argument values
         std::stringstream ss;
         for (size_t i = 0; i < m_argstack.size(); ++i)
         {
@@ -165,10 +166,10 @@ public:
 
 private:
     //-------------------------------------------------------------------------
-    // Split mask into literal and argument parts
-    // The number of literal parts is always the number of arguments + 1
     bool Tokenize(std::string& mask)
     {
+        // Split mask into literal and argument parts
+        // The number of literal parts is always the number of arguments + 1
         m_argstack.clear();
         m_literalstack.clear();
 
@@ -191,7 +192,8 @@ private:
             }
             else if (close == -1 || close - open > 2)
             {
-                // Malformed tag, just bail out
+                // Malformed tag
+                m_literalstack.push_back("");
                 return false;
             }
             m_literalstack.push_back(mask.substr(start, open - start));

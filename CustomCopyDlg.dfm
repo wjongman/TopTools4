@@ -1,6 +1,6 @@
 object CustomCopyDlg: TCustomCopyDlg
-  Left = 903
-  Top = 227
+  Left = 594
+  Top = 258
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Define Template'
@@ -331,9 +331,10 @@ object CustomCopyDlg: TCustomCopyDlg
     TabOrder = 1
     object HelpMemo: TMemo
       Left = 16
-      Top = 5
-      Width = 392
-      Height = 213
+      Top = 2
+      Width = 407
+      Height = 216
+      Align = alRight
       BorderStyle = bsNone
       Color = clInfoBk
       Font.Charset = ANSI_CHARSET
@@ -342,23 +343,44 @@ object CustomCopyDlg: TCustomCopyDlg
       Font.Name = 'Courier New'
       Font.Style = []
       Lines.Strings = (
-        'Possible placeholders:'
+        ''
+        'A template consists of literal text with placeholders '
+        'enclosed by square brackets [], possible placeholders:'
         ''
         '     [x], [y] - mouse coordinates'
         '[r], [g], [b] - decimal value of RGB color'
         '[R], [G], [B] - 2 digit hexadecimal value of RGB color'
         '[h], [s], [v] - values of HSV color'
-        '          [[] - literal ['
-        '          []] - literal ]'
-        '          [n] - line break'
         '          [w] - lower-case webcolor (without #)'
         '          [W] - upper-case webcolor, same as [R][G][B]'
+        '          [n] - line break'
+        '          [[] - literal ['
+        '          []] - literal ]'
         ''
         'Everything not enclosed in square brackets is '
         'interpreted as literal text, unknown placeholders are '
-        'ignored.')
+        'ignored.'
+        ''
+        'Examples:'
+        ''
+        'Using x = 123, y = 456 and webcolor = #ABCDEF:'
+        ''
+        '> ([x], [y]) - [r], [g], [b]'
+        '  (123, 456) - 171, 205, 239'
+        ''
+        '> <span color="#[R][G][B]"></span>'
+        '  <span color="#ABCDEF"></span>'
+        ''
+        '> int hue = [h];[n]int sat = [s];[n]int val = [v];'
+        '  int hue = 210;'
+        '  int sat = 28;'
+        '  int val = 94;'
+        ''
+        '> colors[[][x][]][[][y][]] = 0x[W];'
+        '  colors[123][456] = 0xABCDEF;')
       ParentFont = False
       ReadOnly = True
+      ScrollBars = ssVertical
       TabOrder = 0
     end
   end
