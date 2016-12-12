@@ -15,6 +15,7 @@ object ToolOptionsDialog: TToolOptionsDialog
   Position = poScreenCenter
   OnClose = FormClose
   OnCreate = FormCreate
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object lvOptionSelector: TListView
@@ -328,7 +329,10 @@ object ToolOptionsDialog: TToolOptionsDialog
         Top = 80
         Width = 233
         Height = 17
-        Caption = 'Copy Custom &Format to Clipboard'
+        Hint = 'Use a template to define how info is copied to clipboard'
+        Caption = 'Copy &Custom format to Clipboard'
+        ParentShowHint = False
+        ShowHint = True
         TabOrder = 2
         OnClick = rbCustomCopyClick
       end
@@ -353,8 +357,10 @@ object ToolOptionsDialog: TToolOptionsDialog
         Top = 105
         Width = 187
         Height = 21
-        Hint = '[R][G][B]'
+        Hint = 'Enter template'
         Enabled = False
+        ParentShowHint = False
+        ShowHint = True
         TabOrder = 5
         Text = '[R][G][B]'
       end
@@ -363,7 +369,10 @@ object ToolOptionsDialog: TToolOptionsDialog
         Top = 105
         Width = 21
         Height = 21
+        Hint = 'Define a template...'
         Caption = '...'
+        ParentShowHint = False
+        ShowHint = True
         TabOrder = 6
         OnClick = bnEditTemplateClick
       end

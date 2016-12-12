@@ -92,6 +92,7 @@ __published:  // IDE-managed Components
     void __fastcall bnEditTemplateClick(TObject *Sender);
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
+    void __fastcall FormShow(TObject *Sender);
 
 private:  // User declarations
     void HideAll();

@@ -87,6 +87,12 @@ void __fastcall TToolOptionsDialog::FormCreate(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TToolOptionsDialog::FormShow(TObject *Sender)
+{
+    SetForegroundWindow(Handle);
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TToolOptionsDialog::lvOptionSelectorChange(TObject *Sender,
                                                            TListItem *Item, TItemChange Change)
 {
@@ -466,6 +472,4 @@ void __fastcall TToolOptionsDialog::bnEditTemplateClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-
-
 

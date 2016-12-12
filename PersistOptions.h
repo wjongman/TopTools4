@@ -540,7 +540,7 @@ public:
 
     String GetIniFilePath()
     {
-        return ExtractFilePath(ParamStr(0)) + m_IniFilePath;
+        return m_IniFilePath;
     }
 
     //-------------------------------------------------------------------------
