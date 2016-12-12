@@ -10,9 +10,9 @@ struct TPixelInfo
     COLORREF color;
 
     //-----------------------------------------------------------------------
-    TPixelInfo(bool test=false)
+    TPixelInfo(bool example=false)
     {
-        if (test)
+        if (example)
         {
             x = 123;
             y = 456;
@@ -102,14 +102,14 @@ private:
     }
 
     //-----------------------------------------------------------------------
-    float Minimum(float x1, float x2, float x3)
+    inline float Minimum(float x1, float x2, float x3)
     {
         float xmin = x1 < x2 ? x1 : x2;
         return xmin < x3 ? xmin : x3;
     }
 
     //-----------------------------------------------------------------------
-    float Maximum(float x1, float x2, float x3)
+    inline float Maximum(float x1, float x2, float x3)
     {
         float xmax = x1 > x2 ? x1 : x2;
         return xmax > x3 ? xmax : x3;

@@ -77,6 +77,7 @@ public:
     std::string GetFormattedString(TPixelInfo const& pi)
     {
         // Merge literal strings with argument values
+        m_newlines = 0;
         std::stringstream ss;
         for (size_t i = 0; i < m_argstack.size(); ++i)
         {
@@ -154,6 +155,7 @@ public:
                 break;
             case 'n':
                 ss << "\r\n";
+                m_newlines++;
                 break;
 
             }
@@ -164,7 +166,15 @@ public:
         return ss.str();
     }
 
+    //-------------------------------------------------------------------------
+    bool hasNewlines()
+    {
+        return m_newlines > 0;
+    }
+
 private:
+    int m_newlines;
+
     //-------------------------------------------------------------------------
     bool Tokenize(std::string& mask)
     {

@@ -86,10 +86,13 @@ void __fastcall TCustomCopyDlg::RenderPreview()
 {
     String mask = edMask->Text;
     InfoFormatter fmt(mask.c_str());
-    TPixelInfo pi(true);
+
+    bool example = true;
+    TPixelInfo pi(example);
 
     edPreview->Lines->Clear();
     edPreview->Lines->Add(fmt.GetFormattedString(pi).c_str());
+    edPreview->ScrollBars = fmt.hasNewlines() ? ssVertical : ssNone;
 }
 
 //---------------------------------------------------------------------------
@@ -101,8 +104,6 @@ void __fastcall TCustomCopyDlg::ckHelpClick(TObject *Sender)
         ClientHeight += HelpPanel->Height;
     }
 }
-//---------------------------------------------------------------------------
-
 
 //---------------------------------------------------------------------------
 
