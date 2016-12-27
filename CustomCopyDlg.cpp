@@ -20,6 +20,7 @@ __fastcall TCustomCopyDlg::TCustomCopyDlg(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall TCustomCopyDlg::FormShow(TObject *Sender)
 {
+    SetForegroundWindow(Handle);
     ckHelp->Checked = g_ToolOptions.Get("info", "showhelp", false);
 
     ClientHeight = ButtonPanel->Height + EditPanel->Height;

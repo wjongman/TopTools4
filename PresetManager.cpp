@@ -115,6 +115,7 @@ void __fastcall TPresetManager::UpdateListView()
 //-------------------------------------------------------------------------
 void __fastcall TPresetManager::AdjustListViewColumns()
 {
+    // To avoid showing horizontal scrollbar
     int cellwidth = 45;
     int clientwidth = ListView->ClientRect.Width();
     ListView->Columns->Items[0]->Width = clientwidth - 4 * cellwidth;
@@ -135,6 +136,7 @@ void __fastcall TPresetManager::bnEditClick(TObject *Sender)
     int index = ListView->Selected->Index;
     if (index >= 0)
     {
+        // Show edit dialog on top of us
         int offset = GetSystemMetrics(SM_CYCAPTION);
         TPreset preset = m_PresetList[index];
         TPresetDlg* dlg = new TPresetDlg(this, preset, Point(Left + offset, Top + offset));
@@ -195,6 +197,7 @@ void __fastcall TPresetManager::bnUpClick(TObject *Sender)
     }
     // Now rebuild the ListView
     UpdateListView();
+    // Restore selection
     ListView->Items->Item[indexFrom - 1]->Selected = true;
     ListView->SetFocus();
 }
@@ -210,6 +213,7 @@ void __fastcall TPresetManager::bnDownClick(TObject *Sender)
     }
     // Now rebuild the ListView
     UpdateListView();
+    // Restore selection
     ListView->Items->Item[indexFrom + 1]->Selected = true;
     ListView->SetFocus();
 }
@@ -236,6 +240,7 @@ void __fastcall TPresetManager::bnExportClick(TObject *Sender)
 {
     TSaveDialog* dlg = new TSaveDialog(this);
     dlg->Title = "Save Preset File";
+    dlg->DefaultExt = "ini";
     dlg->Filter = "Preset Files (*.ini)|*.ini|All Files (*.*)|*.*";
     if (dlg->Execute())
     {

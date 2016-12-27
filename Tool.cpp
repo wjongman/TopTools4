@@ -149,10 +149,23 @@ void __fastcall TToolForm::LoadPosition()
     SetDefaultPosition();
     int left = g_ToolOptions.Get(m_ToolName, "left", Left);
     int top = g_ToolOptions.Get(m_ToolName, "top", Top);
-    SetBounds(left, top, Width, Height);
+//    SetBounds(left, top, Width, Height);
 
     // Make sure we don't end up outside the desktop area
-    ConstrainPosition();
+//    ConstrainPosition();
+
+    WINDOWPLACEMENT wp;
+    wp.length = sizeof(WINDOWPLACEMENT);
+    wp.flags = 0;
+    wp.showCmd = SW_RESTORE;
+    wp.rcNormalPosition = Rect(left, top, left + Width, top + Height);
+
+    // If the information specified in WINDOWPLACEMENT would result
+    // in a window that is completely off the screen, the system will
+    // automatically adjust the coordinates so that the window is
+    // visible, taking into account changes in screen resolution and
+    // multiple monitor configuration.
+    SetWindowPlacement(Handle, &wp);
 }
 
 //---------------------------------------------------------------------------

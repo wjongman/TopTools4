@@ -10,17 +10,15 @@ struct TPixelInfo
     COLORREF color;
 
     //-----------------------------------------------------------------------
-    TPixelInfo(bool example=false)
+    // Overloaded constructor for example pixel
+    TPixelInfo(bool)
     {
-        if (example)
-        {
-            x = 123;
-            y = 456;
-            r = 0xAB;
-            g = 0xCD;
-            b = 0xEF;
-            CalculateHsv();
-        }
+        x = 123;
+        y = 456;
+        r = 0xAB;
+        g = 0xCD;
+        b = 0xEF;
+        CalculateHsv();
     }
 
     //-----------------------------------------------------------------------
@@ -66,34 +64,34 @@ private:
         float max = Maximum(r, g, b);
         float min = Minimum(r, g, b);
 
-        v = max;                    // This settles the value of v
+        v = max;       // This settles the value of v
 
-        // Calculate saturation
-        if (max == 0)
-            s = 0;                  // Saturation is 0 if r, g and b all are 0
+        if (max == 0)  // Saturation is 0 if r, g and b all are 0
+            s = 0;
         else
             s = (max - min)/max;
 
-        if (s == 0)                 // Achromatic color, we are done
+        if (s == 0)   // Achromatic color, we are done
             h = -1;
 
-        else                        // Cromatic color, calculate hue
+        else          // Cromatic color, calculate hue
         {
             float delta = max - min;
 
-            if (r == max)
-                h = (g - b)/delta;      // Resulting color is between yellow and magenta
+            if (r == max)  // Resulting color is between yellow and magenta
+                h = (g - b)/delta;
 
-            else if (g == max)
-                h = 2 + (b - r)/delta;  // Resulting color is between cyan and yellow
+            else if (g == max)  // Resulting color is between cyan and yellow
+                h = 2 + (b - r)/delta;
 
-            else if (b == max)
-                h = 4 + (r - g)/delta;  // Resulting color is between magenta and cyan
+            else if (b == max)  // Resulting color is between magenta and cyan
+                h = 4 + (r - g)/delta;
 
-            h *= 60;                    // Convert hue to degrees
-            if (h < 0)
-                h += 360;               // Make sure h is non-negative
-        }
+            // Convert hue to degrees
+            h *= 60;
+            if (h < 0)     // Make sure h is non-negative
+
+                h += 360;                       }
 
         // Round to nearest integer
         this->h = (int)(h + 0.5);

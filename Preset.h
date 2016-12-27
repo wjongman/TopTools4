@@ -33,7 +33,7 @@ struct TPreset
     bool SetCommaText(String const& commaText)
     {
         bool success = false;
-        // Use TStringList to perform the comma splitting
+        // Use TStringList to perform the comma splitting and the validation
         TStringList* list = new TStringList();
         try
         {
@@ -62,7 +62,7 @@ struct TPreset
     }
 
     //-----------------------------------------------------------------------
-    String GetCommaText() const
+    String GetCommaText()
     {
         String commatext;
         commatext.printf("\"%s\",%d,%d,%d,%d", description, x, y, w, h);
