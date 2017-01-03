@@ -19,7 +19,6 @@ object ScreenForm: TScreenForm
   OldCreateOrder = False
   Position = poDefault
   OnMouseDown = FormMouseDown
-  OnMouseMove = FormMouseMove
   OnPaint = FormPaint
   OnResize = FormResize
   PixelsPerInch = 96

@@ -6,8 +6,6 @@
 #include "PersistOptions.h"
 
 //---------------------------------------------------------------------------
-USE("doc\ChangeLog.txt", File);
-USE("doc\ToDo.txt", File);
 USEFORM("About.cpp", AboutBox);
 USEFORM("AutoSaveDlg.cpp", AutoSaveDialog);
 USEFORM("BaseConv.cpp", BaseConvForm);
@@ -40,10 +38,7 @@ USERES("appicon.RES");
 USEFORM("PresetManager.cpp", PresetManager);
 USEFORM("PresetDlg.cpp", PresetDlg);
 USEFORM("CustomCopyDlg.cpp", CustomCopyDlg);
-USE("PersistOptions.h", File);
-USE("InfoFormatter.h", File);
-USE("Preset.h", File);
-USE("PixelInfo.h", File);
+
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
@@ -88,16 +83,13 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         Application->Initialize();
         Application->Title = "TopTools 4";
         Application->CreateForm(__classid(TMainForm), &MainForm);
-         Application->ShowMainForm = false;
+        Application->ShowMainForm = false;
         Application->Run();
     }
     catch (Exception &exception)
     {
         Application->ShowException(&exception);
     }
-
-// destructor of MainForm persists tooloptions.        
-//    g_ToolOptions.Save();
 
     return 0;
 }

@@ -19,10 +19,8 @@ public:
     virtual __fastcall ~TScreenForm();
 
 private:
-    bool m_TrackingMouse;
     TColor m_BorderColor;
 
-    TTimer* m_Timer;
     TToolTip* m_pToolTip;
 
     void UpdateToolTip();
@@ -33,7 +31,6 @@ private:
 
 protected:
     virtual void __fastcall WndProc(TMessage &Msg);
-    void __fastcall OnTimerTick(TObject *Sender);
 
 BEGIN_MESSAGE_MAP
    VCL_MESSAGE_HANDLER(WM_NCHITTEST, TWMNCHitTest, OnNCHitTest)
@@ -47,9 +44,7 @@ __published:  // IDE-managed Components
     void __fastcall FormPaint(TObject *Sender);
     void __fastcall FormResize(TObject *Sender);
     void __fastcall FormMouseDown(TObject *Sender, TMouseButton Button,
-      TShiftState Shift, int X, int Y);
-    void __fastcall FormMouseMove(TObject *Sender, TShiftState Shift,
-      int X, int Y);
+                                  TShiftState Shift, int X, int Y);
 
 __published:
     __property TMouseEvent OnRightButtonClick = { read = FOnRightButtonClick, write = FOnRightButtonClick };

@@ -2,21 +2,20 @@
 #include <vcl.h>
 #pragma hdrstop
 
-#include "ScreenForm.h"
+// Suppress warning concerning the MAKELONG macro
+// W8084 Suggest parentheses to clarify precedence
+#pragma warn -8084
 
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "Tool"
 #pragma resource "*.dfm"
 
-// Suppress warning concerning the MAKELONG macro
-// W8084 Suggest parentheses to clarify precedence
-#pragma warn -8084
+#include "ScreenForm.h"
 
 //---------------------------------------------------------------------------
 __fastcall TScreenForm::TScreenForm(TComponent* Owner)
   : TToolForm(Owner, "capture"),
-    m_TrackingMouse(false),
     m_pToolTip(NULL)
 {
     BorderStyle = bsNone;
@@ -26,28 +25,18 @@ __fastcall TScreenForm::TScreenForm(TComponent* Owner)
     SnapScreenEdges = false;
     Cursor = crSizeAll;
 
-    //Left = g_ToolOptions.Get(m_ToolName, "left", Left);
-    //Top = g_ToolOptions.Get(m_ToolName, "top", Top);
     Width = g_ToolOptions.Get(m_ToolName, "width", Width);
     Height = g_ToolOptions.Get(m_ToolName, "height", Height);
 
     m_pToolTip = new TToolTip(Handle);
-
-    m_Timer = new TTimer(this);
-    m_Timer->Interval = 100; // milliseconds
-    m_Timer->OnTimer = OnTimerTick;
-    m_Timer->Enabled = false;
 }
 
 //---------------------------------------------------------------------------
 __fastcall TScreenForm::~TScreenForm()
 {
-    //g_ToolOptions.Set(m_ToolName, "left", Left);
-    //g_ToolOptions.Set(m_ToolName, "top", Top);
     g_ToolOptions.Set(m_ToolName, "width", Width);
     g_ToolOptions.Set(m_ToolName, "height", Height);
 
-    delete m_Timer;
     delete m_pToolTip;
 }
 
@@ -57,19 +46,18 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
     switch (Message.Msg)
     {
     case WM_SHOWWINDOW:
-        // WParam is true when window is being showed
-        m_TrackingMouse = Message.WParam;
-        m_Timer->Enabled = Message.WParam;
         UpdateToolTip();
         break;
 
     case WM_SETFOCUS:
         m_BorderColor = clFuchsia;//Navy;
+        m_pToolTip->Show();
         Invalidate();
         break;
 
     case WM_KILLFOCUS:
         m_BorderColor = clGray;
+        m_pToolTip->Hide();
         Invalidate();
         break;
 
@@ -80,6 +68,7 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
     case WM_ENTERSIZEMOVE:
         OnEnterSizeMove(Message);
         break;
+
     case WM_SIZING:
         OnSizing(Message);
         break;
@@ -148,8 +137,8 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TScreenForm::FormMouseDown(TObject *Sender,
-                                           TMouseButton Button, TShiftState Shift, int X, int Y)
+void __fastcall TScreenForm::FormMouseDown(TObject *Sender, TMouseButton Button,
+                                           TShiftState Shift, int X, int Y)
 {
     if (Button == mbRight && FOnRightButtonClick)
     {
@@ -158,14 +147,9 @@ void __fastcall TScreenForm::FormMouseDown(TObject *Sender,
 
         // Signal right-button event
         FOnRightButtonClick(this, Button, Shift, X, Y);
-    }
-}
 
-//---------------------------------------------------------------------------
-void __fastcall TScreenForm::FormMouseMove(TObject *Sender,
-                                           TShiftState Shift, int X, int Y)
-{
-    UpdateToolTip();
+        m_pToolTip->Show();
+    }
 }
 
 //---------------------------------------------------------------------------
@@ -173,32 +157,11 @@ void TScreenForm::UpdateToolTip()
 {
     if (m_pToolTip)
     {
-        if (m_TrackingMouse)
-        {
-            // Map (0,0) to top-left corner of virtual screen
-            TPoint ptOrigin(Screen->DesktopLeft, Screen->DesktopTop);
-            TRect rcNew(Left, Top, Left + Width, Top + Height);
-            m_pToolTip->Update(rcNew, ptOrigin);
-            m_pToolTip->Show();
-        }
-        else
-        {
-            m_pToolTip->Hide();
-        }
+        // Map (0,0) to top-left corner of virtual screen
+        TPoint ptOrigin(Screen->DesktopLeft, Screen->DesktopTop);
+        TRect rcNew(Left, Top, Left + Width, Top + Height);
+        m_pToolTip->Update(rcNew, ptOrigin);
     }
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TScreenForm::OnTimerTick(TObject *Sender)
-{
-    TPoint ptMouse;
-    GetCursorPos(&ptMouse);
-    POINT pt = ScreenToClient(ptMouse);
-
-    // Hide tooltip when mouse is not above the form
-    m_TrackingMouse = (WindowFromPoint(ptMouse) == Handle);
-
-    UpdateToolTip();
 }
 
 //---------------------------------------------------------------------------
