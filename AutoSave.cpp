@@ -13,27 +13,12 @@
 //---------------------------------------------------------------------------
 TAutoSave::TAutoSave()
 {
-    // Init with default values
-    Directory = GetSpecialFolderPath(CSIDL_DESKTOPDIRECTORY);
-    Prefix = "Snapshot";
-    Digits = 2;
-    NextValue = 1;
-    ImageType = 1;
-    ExistAction = 0;
+    LoadOptions();
 }
 
 //---------------------------------------------------------------------------
-String TAutoSave::GetFirstFilename(int startvalue)
+TAutoSave::~TAutoSave()
 {
-    NextValue = startvalue;
-    return GetFullPathName();
-}
-
-//---------------------------------------------------------------------------
-String TAutoSave::GetNextFilename()
-{
-    NextValue++;
-    return GetFullPathName();
 }
 
 //---------------------------------------------------------------------------
@@ -59,7 +44,7 @@ String TAutoSave::GetExtension(int index)
     if (index < 0 || index > 3)
         return 0;
 
-    char* Extension[] = { ".bmp", ".png", ".gif", ".jpg"};
+    char* Extension[] = { ".bmp", ".png", ".gif", ".jpg" };
     return Extension[index];
 }
 
@@ -68,12 +53,12 @@ void __fastcall TAutoSave::LoadOptions()
 {
     String ToolName = "capture\\autosave";
 
-    Directory = g_ToolOptions.Get(ToolName, "directory", Directory);
-    Prefix = g_ToolOptions.Get(ToolName, "filename", Prefix);
-    Digits = g_ToolOptions.Get(ToolName, "digits", Digits);
-    NextValue = g_ToolOptions.Get(ToolName, "nextvalue", NextValue);
-    ImageType = g_ToolOptions.Get(ToolName, "imagetype", ImageType);
-    ExistAction = g_ToolOptions.Get(ToolName, "existaction", ExistAction);
+    Directory = g_ToolOptions.Get(ToolName, "directory", GetDesktopPath());
+    Prefix = g_ToolOptions.Get(ToolName, "filename", "Snapshot");
+    Digits = g_ToolOptions.Get(ToolName, "digits", 2);
+    NextValue = g_ToolOptions.Get(ToolName, "nextvalue", 1);
+    ImageType = g_ToolOptions.Get(ToolName, "imagetype", 1);
+    ExistAction = g_ToolOptions.Get(ToolName, "existaction", 0);
 }
 
 //---------------------------------------------------------------------------
@@ -87,6 +72,12 @@ void __fastcall TAutoSave::SaveOptions()
     g_ToolOptions.Set(ToolName, "nextvalue", NextValue);
     g_ToolOptions.Set(ToolName, "imagetype", ImageType);
     g_ToolOptions.Set(ToolName, "existaction", ExistAction);
+}
+
+//---------------------------------------------------------------------------
+String TAutoSave::GetDesktopPath()
+{
+    return GetSpecialFolderPath(CSIDL_DESKTOPDIRECTORY);
 }
 
 //---------------------------------------------------------------------------
@@ -132,16 +123,41 @@ void TAutoSave::SaveBitmap(Graphics::TBitmap* pBitmap)
         return;
     }
 
-    // Find first available filename (might be slow on huge directories..)
-    while (FileExists(GetFullPathName()))
+    String SavePath = GetFullPathName();
+    if (FileExists(SavePath))
     {
-        IncrementNextValue();
+        switch (ExistAction)
+        {
+        case 0: // Prompt
+            {
+                String Msg = "Overwrite existing file?";
+                TMsgDlgButtons Buttons = TMsgDlgButtons() << mbOK << mbCancel;
+                int ret = MessageDlg(Msg, mtConfirmation, Buttons, 0);
+                if (ret == mrCancel)
+                {
+                    return;
+                }
+            }
+            break;
+
+        case 1: // Overwrite
+            break;
+
+        case 2: // Auto rename
+            while (FileExists(GetFullPathName()))
+            {
+                // Find first available filename (might be slow on huge directories..)
+                NextValue++;
+            }
+            SavePath = GetFullPathName();
+            break;
+        }
     }
 
     TPersistImage image(pBitmap);
-    image.Save(GetFullPathName());
+    image.Save(SavePath);
 
-    IncrementNextValue();
+    NextValue++;
 }
 
 //---------------------------------------------------------------------------

@@ -20,8 +20,8 @@ private:
   RECT m_rcSelect;
   Graphics::TBitmap* m_pBufferBmp;
   TPopupMenu* m_CaptureMenu;
-  TAutoSave m_AutoSaver;
   TImageViewerList m_Viewers;
+
   std::vector<TPreset> m_PresetList;
 
   void __fastcall ViewerKeyPress(TObject *Sender, char &Key);

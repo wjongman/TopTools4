@@ -6,22 +6,12 @@ class TAutoSave
 {
 public:
     TAutoSave();
+    ~TAutoSave();
 
     void __fastcall LoadOptions();
     void __fastcall SaveOptions();
-
-    String GetFullPathName();
-    String GetFirstFilename(int startvalue);
-    String GetNextFilename();
-    String GetExtension(int index);
-    String GetSequenceString();
     void SaveBitmap(Graphics::TBitmap* pBitmap);
-
-
-    void IncrementNextValue()
-    {
-        NextValue++;
-    }
+    String GetFullPathName();
 
     String Directory;
     String Prefix;
@@ -31,7 +21,10 @@ public:
     int ExistAction;
 
 private:
+    String GetExtension(int index);
+    String GetSequenceString();
     String GetSpecialFolderPath(int FolderSpec);
+    String GetDesktopPath();
 };
 
 //---------------------------------------------------------------------------
