@@ -26,6 +26,11 @@ like:
 
 ## Features
 
+### Windows compatibilty
+
+TopTools4 currently shows incorrect results when running on machines with
+High-DPI screens like Microsoft Surface machines.
+
 ### General
 
 All tool windows show a menu when clicked with the right mouse button.

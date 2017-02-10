@@ -9,8 +9,8 @@
 #include <Forms.hpp>
 #include <Registry.hpp>
 
-//#include "ToolOptions.h"
 #include "PersistOptions.h"
+//#include "DpiScaling.h"
 
 // Identifiers for our custom cursors
 enum { crCrosshair,
@@ -42,6 +42,8 @@ protected:
 
   bool FSnapEdge;
   TToolWindowStyle FWindowStyle;
+
+
   TNotifyEvent FOnMinimize;
   TNotifyEvent FOnOptions;
 
@@ -53,8 +55,8 @@ protected:
   int __fastcall GetTaskbarRect(LPRECT lprect);
 
 
-  virtual void __fastcall OnToolShow(TObject *Sender) { LoadPosition(); }
-  virtual void __fastcall OnToolHide(TObject *Sender) { SavePosition(); }
+  virtual void __fastcall OnToolShow(TObject *Sender);
+  virtual void __fastcall OnToolHide(TObject *Sender);
   virtual void __fastcall LoadPosition();
   virtual void __fastcall SavePosition();
   virtual void __fastcall SetDefaultPosition();

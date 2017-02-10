@@ -30,6 +30,7 @@ String TAutoSave::GetFullPathName()
 //---------------------------------------------------------------------------
 String TAutoSave::GetSequenceString()
 {
+    // Todo: make sure NextValue has no more then Digits digits
     String SeqNum = "";
 
     if (Digits != 0)

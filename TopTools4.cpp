@@ -4,13 +4,13 @@
 #pragma hdrstop
 
 #include "PersistOptions.h"
+#include "DpiScaling.h"
 
 //---------------------------------------------------------------------------
 USEFORM("About.cpp", AboutBox);
 USEFORM("AutoSaveDlg.cpp", AutoSaveDialog);
 USEFORM("BaseConv.cpp", BaseConvForm);
 USEFORM("Control.cpp", ControlForm);
-USEFORM("Float.cpp", FloatForm);
 USEFORM("ImageView.cpp", ImageViewer);
 USEFORM("Info.cpp", InfoForm);
 USEFORM("Loupe.cpp", LoupeForm);
@@ -38,27 +38,6 @@ USERES("appicon.RES");
 USEFORM("PresetManager.cpp", PresetManager);
 USEFORM("PresetDlg.cpp", PresetDlg);
 USEFORM("CustomCopyDlg.cpp", CustomCopyDlg);
-
-#ifndef DPI_ENUMS_DECLARED
-
-typedef enum PROCESS_DPI_AWARENESS
-{
-    PROCESS_DPI_UNAWARE = 0,
-    PROCESS_SYSTEM_DPI_AWARE = 1,
-    PROCESS_PER_MONITOR_DPI_AWARE = 2
-} PROCESS_DPI_AWARENESS;
-
-typedef enum MONITOR_DPI_TYPE
-{
-    MDT_EFFECTIVE_DPI = 0,
-    MDT_ANGULAR_DPI = 1,
-    MDT_RAW_DPI = 2,
-    MDT_DEFAULT = MDT_EFFECTIVE_DPI
-} MONITOR_DPI_TYPE;
-
-#define DPI_ENUMS_DECLARED
-#endif // (DPI_ENUMS_DECLARED)
-
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
@@ -98,38 +77,17 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         }
     }
 
-    HMODULE hUser32 = LoadLibrary(_T("user32.dll"));
-    if (hUser32)
-    {
-        typedef BOOL (*SetProcessDPIAwareFunc)();
-        SetProcessDPIAwareFunc setDPIAware =
-            (SetProcessDPIAwareFunc)GetProcAddress(hUser32, "SetProcessDPIAware");
-
-        if (setDPIAware)
-            setDPIAware();
-
-        FreeLibrary(hUser32);
-    }
-
-    HMODULE hShcore = LoadLibrary(_T("Shcore.dll"));
-    if (hShcore)
-    {
-        typedef HRESULT WINAPI (*SetProcessDPIAwareFunc)(PROCESS_DPI_AWARENESS);
-        SetProcessDPIAwareFunc setDPIAware =
-            (SetProcessDPIAwareFunc)GetProcAddress(hShcore, "SetProcessDpiAwareness");
-
-        if (setDPIAware)
-            setDPIAware(PROCESS_SYSTEM_DPI_AWARE);
-
-        FreeLibrary(hShcore);
-    }
+    // On systems running Vista and up we want the OS to treat us
+    // as aware of DPI scaling so it will not virtually scale our UI. 
+    // PROCESS_DPI_AWARENESS awareness =
+    SetSystemDpiAwareness();
 
     try
     {
         Application->Initialize();
         Application->Title = "TopTools 4";
         Application->CreateForm(__classid(TMainForm), &MainForm);
-        Application->ShowMainForm = false;
+         Application->ShowMainForm = false;
         Application->Run();
     }
     catch (Exception &exception)

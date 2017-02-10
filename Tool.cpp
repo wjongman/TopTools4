@@ -143,6 +143,19 @@ void __fastcall TToolForm::SetColorKey(bool layered, COLORREF colorkey)
     TTransparencyHandler::Instance().SetColorKey(Handle, layered, colorkey);
 }
 
+
+//---------------------------------------------------------------------------
+void __fastcall TToolForm::OnToolShow(TObject *Sender)
+{
+    LoadPosition();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TToolForm::OnToolHide(TObject *Sender)
+{
+    SavePosition();
+}
+
 //---------------------------------------------------------------------------
 void __fastcall TToolForm::LoadPosition()
 {

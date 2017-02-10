@@ -5,17 +5,17 @@
     <VERSION value="BCB.05.03"/>
     <PROJECT value="exe\TopTools4.exe"/>
     <OBJFILES value="obj\TopTools4.obj obj\About.obj obj\AutoSaveDlg.obj obj\BaseConv.obj 
-      obj\Control.obj obj\Float.obj obj\ImageView.obj obj\Info.obj obj\Loupe.obj 
-      obj\Main.obj obj\OptionDlg.obj obj\Ruler.obj obj\ScreenForm.obj 
-      obj\Tool.obj obj\AutoSave.obj obj\Grabber.obj obj\HotkeyInfo.obj 
-      obj\HotkeyManager.obj obj\LoupePanel.obj obj\Monitor.obj 
-      obj\PersistImage.obj obj\TopToolBar.obj obj\TrayIcon.obj 
-      obj\PresetManager.obj obj\PresetDlg.obj obj\CustomCopyDlg.obj"/>
+      obj\Control.obj obj\ImageView.obj obj\Info.obj obj\Loupe.obj obj\Main.obj 
+      obj\OptionDlg.obj obj\Ruler.obj obj\ScreenForm.obj obj\Tool.obj 
+      obj\AutoSave.obj obj\Grabber.obj obj\HotkeyInfo.obj obj\HotkeyManager.obj 
+      obj\LoupePanel.obj obj\Monitor.obj obj\PersistImage.obj obj\TopToolBar.obj 
+      obj\TrayIcon.obj obj\PresetManager.obj obj\PresetDlg.obj 
+      obj\CustomCopyDlg.obj"/>
     <RESFILES value="Cursors.res TopTools4.res Graphics.RES appicon.RES"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
-    <RESDEPEN value="$(RESFILES) About.dfm AutoSaveDlg.dfm BaseConv.dfm Control.dfm Float.dfm 
+    <RESDEPEN value="$(RESFILES) About.dfm AutoSaveDlg.dfm BaseConv.dfm Control.dfm 
       ImageView.dfm Info.dfm Loupe.dfm Main.dfm OptionDlg.dfm Ruler.dfm 
       ScreenForm.dfm Tool.dfm PresetManager.dfm PresetDlg.dfm CustomCopyDlg.dfm"/>
     <LIBFILES value="gif\gif.lib png\png.lib hotkey\TopToolParts.lib"/>

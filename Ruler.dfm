@@ -19,6 +19,7 @@ object RulerForm: TRulerForm
   PopupMenu = RulerMenu
   Position = poDefaultPosOnly
   Scaled = False
+  OnCreate = FormCreate
   OnMouseDown = FormMouseDown
   OnMouseMove = FormMouseMove
   OnPaint = FormPaint

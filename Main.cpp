@@ -805,7 +805,7 @@ void __fastcall TMainForm::actOptionsExecute(TObject *Sender)
 
         if (m_pRuler)
         {
-            m_pRuler->UpdateUI();
+            m_pRuler->UpdateSettings();
         }
         if (m_pLoupe)
         {

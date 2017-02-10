@@ -11,13 +11,13 @@
 #pragma link "Tool"
 #pragma resource "*.dfm"
 
-const RULERWIDTH = 50;
+const int RULERWIDTH = 50;
 
 //---------------------------------------------------------------------------
 __fastcall TRulerForm::TRulerForm(TComponent* Owner)
-: TToolForm(Owner, "ruler"),
-inMenu(false),
-inSizeMove(false)
+  : TToolForm(Owner, "ruler"),
+    m_inMenu(false),
+    m_inSizeMove(false)
 {
     // Load the custom cursors
     Screen->Cursors[crHorUp] = LoadCursor((void*)HInstance, "HORUP");
@@ -28,34 +28,52 @@ inSizeMove(false)
     // Set scaled to false so we look decent also with large fonts
     Scaled = false;
 
-    // Here we determine the color of our ruler
-    m_RulerColor = clWhite; //  m_RulerColor = clInfoBk;
+    m_RulerColor = clWhite;
     Color = m_RulerColor;
-
-    // Initialize the offsetindicator window
-    FloatForm = new TFloatForm(this);
-    FloatForm->OffsetLabel->OnMouseDown = FloatMouseDown;
-    FloatForm->OffsetLabel->OnMouseMove = FloatMouseMove;
-    FloatForm->Color = Color;
 
     m_breadth = RULERWIDTH;
     m_center = RULERWIDTH / 2;
 
     SnapScreenEdges = false;
 
-    UpdateUI();
+    // Set up bitmap for buffered drawing
+    m_pBufferBmp = new Graphics::TBitmap;
+    m_pBufferBmp->Canvas->Font->Name = "Microsoft Sans Serif";
+    m_pBufferBmp->Canvas->Font->Height = -9;
 }
 
 //---------------------------------------------------------------------------
 __fastcall TRulerForm::~TRulerForm()
 {
-    delete FloatForm;
-    delete m_HorRulerBmp;
-    delete m_VertRulerBmp;
+    delete m_pBufferBmp;
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TRulerForm::UpdateUI()
+void __fastcall TRulerForm::WndProc(Messages::TMessage &Message)
+{
+    switch (Message.Msg)
+    {
+    case WM_ERASEBKGND:
+        // Don't erase, to avoid flicker
+        Message.Result = 1;
+        return;
+
+    case WM_SETCURSOR:
+        SetCursorShape();
+        break;
+    }
+    // Let base class handle the rest
+    TToolForm::WndProc(Message);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TRulerForm::FormCreate(TObject *Sender)
+{
+    UpdateSettings();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TRulerForm::UpdateSettings()
 {
     m_length = g_ToolOptions.Get(m_ToolName, "length", 1024);
     m_isTransparent = g_ToolOptions.Get(m_ToolName, "transparent", false);
@@ -68,91 +86,62 @@ void __fastcall TRulerForm::UpdateUI()
     {
         Width = m_length;
         Height = m_breadth;
+        m_pBufferBmp->Width = m_length;
+        m_pBufferBmp->Height = m_breadth;
     }
     else
     {
         Width = m_breadth;
         Height = m_length;
+        m_pBufferBmp->Width = m_breadth;
+        m_pBufferBmp->Height = m_length;
     }
-
-    RenderHorizontalRuler();
-    RenderVerticalRuler();
-
     Invalidate();
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TRulerForm::TimerEvent(TPoint ptMouse)
 {
-    if (inMenu || inSizeMove)
+    if (m_inMenu || m_inSizeMove)
     {
         // We are processing a popupmenu , bail out..
         return;
     }
 
-    // Get mouse position in client coordinates
-    POINT ptRelMouse = ScreenToClient(ptMouse);
-    // Get the clientwindow dimensions
-    RECT rcClient = ClientRect;
-
-    // See if mousepointer is inside our window
-    if (PtInRect(&rcClient, ptRelMouse))
+    if (m_mouseHover)
     {
-        // Bring FloatForm on top of the ruler
-        SetWindowPos(Handle, FloatForm->Handle, 0, 0, 0, 0,
-                     SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+        // Get mouse position in client coordinates
+        POINT ptRelMouse = ScreenToClient(ptMouse);
+        // Get the clientwindow dimensions
+        RECT rcClient = ClientRect;
+        // See if mousepointer is inside our window
+        if (!PtInRect(&rcClient, ptRelMouse))
+        {
+            // Hide the coordinate window
+            m_mouseHover = false;
+            Invalidate();
+        }
     }
-    else // No mouse in our window
-    {
-        // Hide the coordinate window
-        FloatForm->Visible = false;
-    }
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TRulerForm::FloatMouseDown(TObject *Sender,
-                                           TMouseButton Button, TShiftState Shift, int X, int Y)
-{
-    // Transform X and Y to ruler coordinates
-    POINT ptAbs = FloatForm->ClientToScreen(Point(X, Y));
-    POINT ptRel = ScreenToClient(ptAbs);
-    // Let the ruler handle the event
-    FormMouseDown(Sender, Button, Shift, ptRel.x, ptRel.y);
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TRulerForm::FloatMouseMove(TObject *Sender,
-                                           TShiftState Shift, int X, int Y)
-{
-    // This event is triggered when the mouse
-    // moves over the floating indicator window
-    // Transform X and Y to ruler coordinates
-    POINT ptAbs = FloatForm->ClientToScreen(Point(X, Y));
-    POINT ptRel = ScreenToClient(ptAbs);
-    // Let the ruler handle the event
-    FormMouseMove(Sender, Shift, ptRel.x, ptRel.y);
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TRulerForm::FormMouseDown(TObject *Sender, TMouseButton Button,
                                           TShiftState Shift, int X, int Y)
 {
-    FloatForm->Visible = false;
-
     if (Button == mbLeft)
     // Start a drag-operation
     {
-        m_MouseOldX = X;
-        m_MouseOldY = Y;
+        m_ptMouse.x = X;
+        m_ptMouse.y = Y;
     }
 
     else if (Button == mbRight)
     {
         // Popup-menu request
-        inMenu = true;
+        m_inMenu = true;
         POINT ptAbs = ClientToScreen(Point(X, Y));
         RulerMenu->Popup(ptAbs.x, ptAbs.y);
-        inMenu = false;
+        m_inMenu = false;
     }
     else if (Button == mbMiddle)
     {
@@ -164,83 +153,184 @@ void __fastcall TRulerForm::FormMouseDown(TObject *Sender, TMouseButton Button,
 void __fastcall TRulerForm::FormMouseMove(TObject *Sender, TShiftState Shift,
                                           int X, int Y)
 {
-/*
-  // See if mouse is above a resize area
-//    POINT pt = ScreenToClient(Point(Message.XPos, Message.YPos));
-    POINT pt = Point(X, Y);
-    TRect rc = ClientRect;
-    if (m_horizontal)
-    {
-      rc.Left = rc.Right - GetSystemMetrics(SM_CXHSCROLL);
-      if (PtInRect(&rc, pt))
-      {
-        Cursor = TCursor(crSizeWE);
-      }
-    }
-    else
-    {
-      rc.Top  = rc.Bottom - GetSystemMetrics(SM_CYVSCROLL);
-      if (PtInRect(&rc, pt))
-      {
-        Cursor = TCursor(crSizeNS);
-      }
-    }
-*/
     // Bail-out if we are processing the popup-menu
-    if (inMenu || inSizeMove)
+    if (m_inMenu || m_inSizeMove)
+    {
         return;
-
+    }
     if (Shift.Contains(ssLeft))
     // We are dragging, move the ruler and the coordinate window
     {
-        Left += X - m_MouseOldX;
-        Top  += Y - m_MouseOldY;
-        FloatForm->MoveRelative(X - m_MouseOldX, Y - m_MouseOldY);
+        Move(X - m_ptMouse.x, Y - m_ptMouse.y);
     }
     else
     // Normal mouse movement, update coordinates
     {
         // Get mouse position in screen coordinates
-        TPoint ptMouse = ClientToScreen(Point(X, Y));
-
-        SetCursorShape(X, Y);
-
-        // Adjust position of floating offset-window
-        FloatForm->MoveAbsolute(ptMouse, TPoint(Left, Top), m_isHorizontal);
-        // Show offset-window
-        FloatForm->Visible = true;
+        m_ptMouse = TPoint(X, Y);
+        m_mouseHover = true;
+        Invalidate();
     }
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TRulerForm::SetCursorShape(int x, int y)
-// get the proper cursor for both the ruler
-// and the floating offset window
+void __fastcall TRulerForm::FormPaint(TObject *Sender)
+{
+    TCanvas* canvas = m_pBufferBmp->Canvas;
+
+    if (m_isHorizontal)
+        RenderHorizontalRuler(canvas);
+    else
+        RenderVerticalRuler(canvas);
+
+    if (m_mouseHover)
+        RenderIndicator(canvas);
+
+    canvas->CopyMode = cmSrcCopy;
+    Canvas->CopyRect(ClientRect, canvas, ClientRect);
+}
+
+//----------------------------------------------------------------------------
+void __fastcall TRulerForm::RenderHorizontalRuler(TCanvas* canvas)
+{
+    SetTextAlign(canvas->Handle, TA_CENTER);
+    canvas->Pen->Color = clBlack;
+    canvas->Font->Color = clBlack;
+
+    // Draw the background
+    canvas->Brush->Color = m_RulerColor;
+    canvas->FillRect(TRect(0, 0, m_length, m_breadth));
+
+    // Draw the top ruler
+    for (int i = 0; i < m_length; i += 2)
+    {
+        canvas->MoveTo(i, 0);
+        if (i % 20 == 0)
+            canvas->LineTo(i, 15);
+        else if (i % 10 == 0)
+            canvas->LineTo(i, 12);
+        else
+            canvas->LineTo(i, 8);
+    }
+    // Draw the bottom ruler
+    for (int i = 0; i < m_length; i += 2)
+    {
+        canvas->MoveTo(i, m_breadth);
+        if (i % 20 == 0)
+            canvas->LineTo(i, m_breadth - 15);
+        else if (i % 10 == 0)
+            canvas->LineTo(i, m_breadth - 12);
+        else
+            canvas->LineTo(i, m_breadth - 8);
+    }
+    // Set the ruler text
+    char szVal[6];
+    for (int i = 0; i < m_length; i += 20)
+        canvas->TextOut(i+1, (m_breadth - abs(Font->Height)) / 2, itoa(i, szVal, 10));
+}
+
+//----------------------------------------------------------------------------
+void __fastcall TRulerForm::RenderVerticalRuler(TCanvas* canvas)
+{
+    SetTextAlign(canvas->Handle, TA_CENTER);
+    canvas->Pen->Color = clBlack;
+    canvas->Font->Color = clBlack;
+
+    // Draw the background
+    canvas->Brush->Color = m_RulerColor;
+    canvas->FillRect(TRect(0, 0, m_breadth, m_length));
+
+    // draw the left ruler
+    for (int i = 0; i < m_length; i += 2)
+    {
+        canvas->MoveTo(0, i);
+        if (i % 20 == 0)
+            canvas->LineTo(15, i);
+        else if (i % 10 == 0)
+            canvas->LineTo(12, i);
+        else
+            canvas->LineTo(8, i);
+    }
+    // draw the right ruler
+    for (int i = 0; i < m_length; i += 2)
+    {
+        canvas->MoveTo(m_breadth, i);
+        if (i % 20 == 0)
+            canvas->LineTo(m_breadth - 15, i);
+        else if (i % 10 == 0)
+            canvas->LineTo(m_breadth - 12, i);
+        else
+            canvas->LineTo(m_breadth - 8, i);
+    }
+    // set the ruler text
+    char szVal[6];
+    for (int i = 0; i < m_length; i += 20)
+        canvas->TextOut(m_center + 1, i - 6, itoa(i, szVal, 10));
+}
+
+//----------------------------------------------------------------------------
+void __fastcall TRulerForm::RenderIndicator(TCanvas* canvas)
+{
+    canvas->Font->Color = clRed;
+    canvas->Pen->Color = clLtGray;
+    canvas->Brush->Color = m_RulerColor;
+    SetBkMode(canvas->Handle, TRANSPARENT);
+
+    // Size is empirically found optimum (values should be odd)
+    int x = m_ptMouse.x;
+    int y = m_ptMouse.y;
+    int w = 27;
+    int h = 13;
+
+    if (m_isHorizontal)
+    {
+        TRect rcFrame;
+        rcFrame.left = x - w / 2;
+        rcFrame.top = 19;
+        rcFrame.right = rcFrame.left + w;
+        rcFrame.bottom = rcFrame.top + h;
+        canvas->Rectangle(rcFrame);
+
+        char szVal[8];
+        canvas->TextOut(x + 1, (m_breadth - abs(Font->Height)) / 2, itoa(x, szVal, 10));
+    }
+    else
+    {
+        TRect rcFrame;
+        rcFrame.left = 12;
+        rcFrame.top = y - h / 2;
+        rcFrame.right = rcFrame.left + w;
+        rcFrame.bottom = rcFrame.top + h;
+        canvas->Rectangle(rcFrame);
+
+        char szVal[8];
+        canvas->TextOut(m_center + 1, y - 6, itoa(y, szVal, 10));
+   }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TRulerForm::SetCursorShape()
 {
     if (m_isHorizontal)
     {
-        if (y < m_center)
+        if (m_ptMouse.y < m_center)
         {
             Cursor = TCursor(crHorUp);
-            FloatForm->Cursor = TCursor(crHorUp);
         }
         else
         {
             Cursor = TCursor(crHorDown);
-            FloatForm->Cursor = TCursor(crHorDown);
         }
     }
     else // Vertical
     {
-        if (x < m_center)
+        if (m_ptMouse.x < m_center)
         {
             Cursor = TCursor(crVertRight);
-            FloatForm->Cursor = TCursor(crVertRight);
         }
         else
         {
             Cursor = TCursor(crVertLeft);
-            FloatForm->Cursor = TCursor(crVertLeft);
         }
     }
 }
@@ -250,8 +340,6 @@ void __fastcall TRulerForm::Move(int dx, int dy)
 {
     Left += dx;
     Top += dy;
-    FloatForm->Left += dx;
-    FloatForm->Top += dy;
 }
 
 //---------------------------------------------------------------------------
@@ -311,19 +399,21 @@ void __fastcall TRulerForm::ToggleOrientation()
     POINT pt;
     GetCursorPos(&pt);
 
-    FloatForm->Visible = false;
-
     if (m_isHorizontal)
     {
         int newleft = pt.x - m_center;
         int newtop = pt.y - (pt.x - Left);
         SetBounds(newleft, newtop, m_breadth, m_length);
+        m_pBufferBmp->Width = m_breadth;
+        m_pBufferBmp->Height = m_length;
     }
     else
     {
         int newleft = pt.x - (pt.y - Top);
         int newtop = pt.y - m_center;
         SetBounds(newleft, newtop, m_length, m_breadth);
+        m_pBufferBmp->Width = m_length;
+        m_pBufferBmp->Height = m_breadth;
     }
 
     m_isHorizontal = !m_isHorizontal;
@@ -342,112 +432,10 @@ void __fastcall TRulerForm::ToggleTransparency()
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TRulerForm::FormPaint(TObject *Sender)
+void __fastcall TRulerForm::RulerMenuPopup(TObject *Sender)
 {
-    if (m_isHorizontal)
-        Canvas->CopyRect(ClientRect, m_HorRulerBmp->Canvas, ClientRect);
-    else
-        Canvas->CopyRect(ClientRect, m_VertRulerBmp->Canvas, ClientRect);
-}
-
-//----------------------------------------------------------------------------
-void __fastcall TRulerForm::InitCanvasAttribs(TCanvas* canvas)
-{
-    canvas->Pen->Color = clBlack;
-    canvas->Font->Name = "Microsoft Sans Serif";
-    canvas->Font->Height = -9;
-    canvas->Brush->Color = m_RulerColor;
-}
-
-//----------------------------------------------------------------------------
-void __fastcall TRulerForm::RenderVerticalRuler()
-{
-    if (!m_VertRulerBmp)
-    {
-        // Set up the buffer bitmap
-        m_VertRulerBmp = new Graphics::TBitmap;
-        InitCanvasAttribs(m_VertRulerBmp->Canvas);
-    }
-
-    m_VertRulerBmp->Width = m_breadth;
-    m_VertRulerBmp->Height = m_length;
-
-    TCanvas* canvas = m_VertRulerBmp->Canvas;
-    SetTextAlign(canvas->Handle, TA_CENTER);
-
-    // draw the left ruler
-    for (int i = 0; i < m_length; i += 2)
-    {
-        canvas->MoveTo(0, i);
-        if (i % 20 == 0)
-            canvas->LineTo(15, i);
-        else if (i % 10 == 0)
-            canvas->LineTo(12, i);
-        else
-            canvas->LineTo(8, i);
-    }
-    // draw the right ruler
-    for (int i = 0; i < m_length; i += 2)
-    {
-        canvas->MoveTo(m_breadth, i);
-        if (i % 20 == 0)
-            canvas->LineTo(m_breadth - 15, i);
-        else if (i % 10 == 0)
-            canvas->LineTo(m_breadth - 12, i);
-        else
-            canvas->LineTo(m_breadth - 8, i);
-    }
-    // set the ruler text
-    char szVal[6];
-    for (int i = 0; i < m_length; i += 20)
-        canvas->TextOut(m_center + 1, i - 6, itoa(i, szVal, 10));
-}
-
-//----------------------------------------------------------------------------
-void __fastcall TRulerForm::RenderHorizontalRuler()
-{
-    if (!m_HorRulerBmp)
-    {
-        // Set up the buffer bitmap
-        m_HorRulerBmp = new Graphics::TBitmap;
-        InitCanvasAttribs(m_HorRulerBmp->Canvas);
-    }
-
-    m_HorRulerBmp->Height = m_breadth;
-    m_HorRulerBmp->Width = m_length;
-
-    TCanvas* canvas = m_HorRulerBmp->Canvas;
-    SetTextAlign(canvas->Handle, TA_CENTER);
-
-    // Draw the background
-    canvas->FillRect(TRect(0, 0, m_length, m_breadth));
-
-    // Draw the top ruler
-    for (int i = 0; i < m_length; i += 2)
-    {
-        canvas->MoveTo(i, 0);
-        if (i % 20 == 0)
-            canvas->LineTo(i, 15);
-        else if (i % 10 == 0)
-            canvas->LineTo(i, 12);
-        else
-            canvas->LineTo(i, 8);
-    }
-    // Draw the bottom ruler
-    for (int i = 0; i < m_length; i += 2)
-    {
-        canvas->MoveTo(i, m_breadth);
-        if (i % 20 == 0)
-            canvas->LineTo(i, m_breadth - 15);
-        else if (i % 10 == 0)
-            canvas->LineTo(i, m_breadth - 12);
-        else
-            canvas->LineTo(i, m_breadth - 8);
-    }
-    // Set the ruler text
-    char szVal[6];
-    for (int i = 0; i < m_length; i += 20)
-        canvas->TextOut(i+1, (m_breadth - abs(Font->Height)) / 2, itoa(i, szVal, 10));
+    miOrientation->Caption = m_isHorizontal ? "Vertical" : "Horizontal";
+    miTransparent->Checked = m_isTransparent;
 }
 
 //---------------------------------------------------------------------------
@@ -457,13 +445,6 @@ void __fastcall TRulerForm::miSlidetoZeroClick(TObject *Sender)
         Left = 0;
     else
         Top = 0;
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TRulerForm::RulerMenuPopup(TObject *Sender)
-{
-    miOrientation->Caption = m_isHorizontal ? "Vertical" : "Horizontal";
-    miTransparent->Checked = m_isTransparent;
 }
 
 //---------------------------------------------------------------------------
@@ -496,5 +477,6 @@ void __fastcall TRulerForm::miOptionsClick(TObject *Sender)
     if (FOnOptions)
         FOnOptions(this);
 }
+
 //---------------------------------------------------------------------------
 
