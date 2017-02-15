@@ -1,6 +1,6 @@
 ; todo: check to see if program is currently running and offer to terminate it...
 [Setup]
-AppName=TopTools 4
+AppName=TopTools 4.1
 AppVerName=TopTools version 4.1.0.26
 AppVersion=4.1.0.26
 AppCopyright=Copyright © 1997-2017 Willem Jongman.

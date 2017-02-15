@@ -3,7 +3,9 @@
 #### version 4.1.0.26 (2017-02-15)
 
 ##### General
-  * Pixel readings are now DPI-aware.
+  * Pixel readings are now DPI-aware, however on multi-monitor systems
+    running Windows 10, it can show incorrect results when the DPI-settings
+    of attached monitors are not all the same.
   * Options menu can now be opened from right-click menu of any tool.
 
 ##### Info
