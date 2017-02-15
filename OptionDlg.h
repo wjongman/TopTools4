@@ -72,7 +72,7 @@ __published:  // IDE-managed Components
     TRadioButton *rbInifile;
     TRadioButton *rbRegistry;
     TCheckBox *CheckBox4;
-        TButton *bnAbout;
+    TButton *bnAbout;
     TGroupBox *gbPreset;
     TButton *bnManagePresets;
     TRadioButton *rbStandard;
@@ -86,7 +86,7 @@ __published:  // IDE-managed Components
     void __fastcall bnAutosaveOptionsClick(TObject *Sender);
     void __fastcall ckRememberSettingsClick(TObject *Sender);
     void __fastcall cbTransparentClick(TObject *Sender);
-        void __fastcall bnAboutClick(TObject *Sender);
+    void __fastcall bnAboutClick(TObject *Sender);
     void __fastcall bnManagePresetsClick(TObject *Sender);
     void __fastcall rbCustomCopyClick(TObject *Sender);
     void __fastcall bnEditTemplateClick(TObject *Sender);
@@ -95,27 +95,22 @@ __published:  // IDE-managed Components
     void __fastcall FormShow(TObject *Sender);
 
 private:  // User declarations
+    String m_sActivePage;
+
     void HideAll();
     void ActivatePage(const String sActive);
     void ActivatePage(int PageIndex);
 
-    String m_sActivePage;
-
     void InitOptions();
-    void SaveOptions();
-
     void InitListView();
-//   void InitOptions0();
-//   void SaveOptions0();
-
     void InitHotkeyPanels();
+    void SaveOptions();
     void SaveHotkeyPanels();
 
     THotkeyInfo LoadHotkeyInfo(const String& sHotKeyName);
     void SaveHotkeyInfo(const String& sHotKeyName, const THotkeyInfo& HotkeyInfo);
 
 public:   // User declarations
-    __fastcall TToolOptionsDialog(TComponent* Owner);
     __fastcall TToolOptionsDialog(TComponent* Owner, const String& sPageName);
     __fastcall ~TToolOptionsDialog();
 };

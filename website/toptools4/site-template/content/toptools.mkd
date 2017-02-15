@@ -10,6 +10,10 @@ additional are a color-picker, a screen-grabber and a base-converter.
 TopTools is "portable", you can run it from a USB-stick and it will not
 make any changes to the computer you plug it into (unless you ask it to).
 
+TopTools will run on any version of Windows not older than Win98, however on
+multi-monitor systems running Windows 10, it can show incorrect results
+when the DPI-settings of attached monitors are not all the same.
+
 ## Introduction
 
 I developed TopTools through the years as I was confronted with questions
@@ -25,11 +29,6 @@ like:
   * What is 10110110 in hexadecimal (or vice versa)?
 
 ## Features
-
-### Windows compatibilty
-
-TopTools4 currently shows incorrect results when running on machines with
-High-DPI screens like Microsoft Surface machines.
 
 ### General
 
@@ -99,7 +98,7 @@ printed.
 Autosave features make it easy to capture a sequence of views with a minimum
 of keystrokes.
 
-Commonly used dimensions can be saved in a preset list, to be selected later with a single keystroke.
+Commonly used dimensions can be saved in a preset list, to be selected later.
 
 ### Base Converter
 

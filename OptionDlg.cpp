@@ -16,22 +16,8 @@
 #include "CustomCopyDlg.h"
 
 //---------------------------------------------------------------------------
-__fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner)
-: TForm(Owner)
-{
-    // Set Form dimensions relative to plMarker so we scale
-    // properly regardless of display settings (ie. "Large fonts").
-    ClientHeight = plMarker->Top;
-    ClientWidth = plMarker->Left;
-
-    plRef->Visible = false;
-
-    m_sActivePage = g_ToolOptions.Get("options", "activepage", "General");
-}
-
-//---------------------------------------------------------------------------
 __fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner,
-                                                  const String& sPageName)
+                                                  const String& sPageName = "")
 : TForm(Owner)
 {
     // Set Form dimensions relative to plMarker so we scale properly
@@ -39,6 +25,7 @@ __fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner,
     ClientHeight = plMarker->Top;
     ClientWidth = plMarker->Left;
 
+    // Reference panel is only for positioning
     plRef->Visible = false;
 
     if (sPageName == "")
@@ -49,7 +36,6 @@ __fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner,
     {
         m_sActivePage = sPageName;
     }
-
 }
 
 //---------------------------------------------------------------------------

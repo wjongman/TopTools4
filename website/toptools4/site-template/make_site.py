@@ -43,7 +43,7 @@ def render_page(config, section, sectionname):
     st["menuitems"] = get_menuitems(config, pagename, sectionname)
     st["lastupdate"] = datetime.now().strftime("%b %d %Y")
     st["year"] = datetime.now().year
-    st["version"] = '4.0.1.77 (Nov 3 2014)'
+    st["version"] = '4.1.0.26 (Feb 15 2017)'
     save_page(pagename, str(st).strip())
 
 ##-----------------------------------------------------------------------------
