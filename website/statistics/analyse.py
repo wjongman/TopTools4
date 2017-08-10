@@ -131,7 +131,7 @@ def extractFilename(line):
     piece = pieces[2][1:-4]
 
     count = parts[3]
-    print count
+    #print count
     return piece, int(count)
 
 #------------------------------------------------------------------------------
