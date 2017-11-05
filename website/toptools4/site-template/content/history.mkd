@@ -1,8 +1,8 @@
 ## Version history
 
-#### version 4.1.1. (2017-08-15)
+#### version 4.1.0.27 (2017-08-15)
 ##### Screengrabber
-  * Bugfix: Now reliably brings capture window to foreground when using hotkey.
+  * Bugfix: Now brings capture window to foreground when using hotkey.
 
 #### version 4.1.0.26 (2017-02-15)
 
