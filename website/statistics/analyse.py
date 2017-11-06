@@ -74,6 +74,20 @@ def getMonthDownloads(lines, filenames):
     hits300 = 0
     hits400 = 0
     hits401 = 0
+    hits410 = 0
+
+## Setup_TopTools30.exe
+## Setup_TopTools40.exe
+## Setup_TopTools_401.exe
+## Setup_TopTools_410.exe
+## TopTools4_00_52.zip
+## TopTools4_00_59.zip
+## TopTools4_01_71.zip
+## TopTools4_01_74.zip
+## TopTools4_01_77.zip
+## TopTools4_10_26.zip
+## TopTools4_10_27.zip
+## toptools243.exe
 
     for line in lines:
         if 'toptools243.exe' in line:
@@ -100,11 +114,31 @@ def getMonthDownloads(lines, filenames):
             parts = line.strip().split()
             hits401 += int(parts[3])
 
+        if 'TopTools4_01_74.zip' in line:
+            parts = line.strip().split()
+            hits401 += int(parts[3])
+
+        if 'TopTools4_01_77.zip' in line:
+            parts = line.strip().split()
+            hits401 += int(parts[3])
+
         if 'Setup_TopTools_401.exe' in line:
             parts = line.strip().split()
             hits401 += int(parts[3])
 
-    return [hits243, hits300, hits400, hits401]
+        if 'TopTools4_10_26.zip' in line:
+            parts = line.strip().split()
+            hits410 += int(parts[3])
+
+        if 'TopTools4_10_27.zip' in line:
+            parts = line.strip().split()
+            hits410 += int(parts[3])
+
+        if 'Setup_TopTools_410.exe' in line:
+            parts = line.strip().split()
+            hits410 += int(parts[3])
+
+    return [hits243, hits300, hits400, hits401, hits410]
 
 #------------------------------------------------------------------------------
 def updateBinaryDownloads(lines):
@@ -183,6 +217,7 @@ def pivotMonths(monthstats):
     t300 = []
     t400 = []
     t401 = []
+    t410 = []
 
     months = monthstats.keys()
     months.sort()
@@ -191,8 +226,9 @@ def pivotMonths(monthstats):
         t300.append(monthstats[month][1])
         t400.append(monthstats[month][2])
         t401.append(monthstats[month][3])
+        t410.append(monthstats[month][4])
 
-    generateBluffScript(t243, t300, t400, t401, months)
+    generateBluffScript(t243, t300, t400, t401, t410, months)
 
 #------------------------------------------------------------------------------
 def pivotDays(daystats):
@@ -256,7 +292,7 @@ def formatBluffGraphLabels(labellist):
     return printstr
 
 #------------------------------------------------------------------------------
-def generateBluffScript(t243, t300, t400, t401, months):
+def generateBluffScript(t243, t300, t400, t401, t410, months):
 
     template_prefix = """
     function showDownloads()
@@ -269,7 +305,7 @@ def generateBluffScript(t243, t300, t400, t401, months):
         g.tooltips = true;
         g.set_theme({
                     colors: ['#6886B4', '#72AE6E', '#FDD84E', '#D1695E',
-                             '#999999', '#3a5b87', 'black'],
+                             '#FF66CC', '#999999', '#3a5b87', 'black'],
                     marker_color: '#aea9a9',
                     font_color: 'white',
                     background_colors: ['#333333', '#333333']
@@ -284,6 +320,7 @@ def generateBluffScript(t243, t300, t400, t401, months):
                     formatBluffData('v300', t300) + '\n' + \
                     formatBluffData('v400', t400) + '\n' + \
                     formatBluffData('v401', t401) + '\n' + \
+                    formatBluffData('v410', t410) + '\n' + \
                     formatBluffDataLabels(months) + '\n' + \
                     formatBluffGraphLabels(months) + '\n'
 
@@ -316,7 +353,7 @@ if __name__ == '__main__':
 
     pivotMonths(month_downloads)
 
-    print_dict_sorted(bin_downloads)
+##     print_dict_sorted(bin_downloads)
 
 ##     pivotDays(day_traffic)
 
