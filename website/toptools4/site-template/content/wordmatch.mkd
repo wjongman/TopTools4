@@ -2,13 +2,15 @@ Little helper in solving letter-puzzles (cryptograms etc.)
 
 <img src="WordMatch.png" />
 
-The program looks for a file named "wordlist.dat" in it's startup directory.
+The program looks for a file named "wordlist.dat" in it's startup directory [1].
+The supplied wordlist is a Dutch one, I am not sure where I got it, if anyone
+feels I stole their words, please let me know.
+
 You'll have to find/create your own wordlist, any list of words will do,
-provided it contains only 7-bit ASCII characters.
+provided it contains only 7-bit alpha characters (either upper- or lowercase).
 
-The words you'd like to match might be in another language than Dutch
-The wordlist I use for this program
 
-I am not sure where I got it, if anyone feels I stole their words, please let me know.
+Wordlists are plenty on the web, just use your favourite search engine, that is
+how I found an English list on [github](https://github.com/dwyl/english-words).
 
-Wordlists can be obtained from spell checkers like aspell, ispell and such.
+[1]: Alternatively you can pass the filename as a commandline argument.

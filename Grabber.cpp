@@ -66,6 +66,13 @@ void __fastcall TScreenGrabber::WndProc(Messages::TMessage &Message)
 {
     switch (Message.Msg)
     {
+    case WM_SHOWWINDOW:
+        // Remember the window that we steal focus of
+        m_hLastWindow = GetForegroundWindow();
+        SetForegroundWindow(Handle);
+        SetTopMost(true);
+        break;
+
     case WM_KEYDOWN:
         {
             bool shift = ::GetKeyState(VK_SHIFT) & 0x8000;
@@ -306,6 +313,11 @@ void __fastcall TScreenGrabber::CaptureMenuClick(TObject *Sender)
 void __fastcall TScreenGrabber::EndCapture()
 {
     // We are done
+    // Give focus back to the window we stole it from
+    if (m_hLastWindow)
+    {
+        SetForegroundWindow(m_hLastWindow);
+    }
     Close();
 }
 

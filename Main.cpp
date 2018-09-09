@@ -750,7 +750,6 @@ void __fastcall TMainForm::actCaptureExecute(TObject *Sender)
     }
 
     m_pCapture->Show();
-    SetForegroundWindow(m_pCapture->Handle);
 }
 
 //---------------------------------------------------------------------------

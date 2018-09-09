@@ -21,7 +21,7 @@ private:
   Graphics::TBitmap* m_pBufferBmp;
   TPopupMenu* m_CaptureMenu;
   TImageViewerList m_Viewers;
-
+  HWND m_hLastWindow;
   std::vector<TPreset> m_PresetList;
 
   void __fastcall ViewerKeyPress(TObject *Sender, char &Key);
