@@ -17,7 +17,6 @@ class TRulerForm : public TToolForm
     __published:  // IDE-managed Components
     TPopupMenu *RulerMenu;
     TMenuItem *miHide;
-    TMenuItem *N1;
     TMenuItem *miOrientation;
     TMenuItem *miZero;
     TMenuItem *N2;

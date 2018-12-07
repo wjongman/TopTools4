@@ -68,8 +68,8 @@ void __fastcall TScreenGrabber::WndProc(Messages::TMessage &Message)
     {
     case WM_SHOWWINDOW:
         // Remember the window that we steal focus of
-        m_hLastWindow = GetForegroundWindow();
-        SetForegroundWindow(Handle);
+        m_hLastWindow = ::GetForegroundWindow();
+        ::SetForegroundWindow(Handle);
         SetTopMost(true);
         break;
 
@@ -314,10 +314,8 @@ void __fastcall TScreenGrabber::EndCapture()
 {
     // We are done
     // Give focus back to the window we stole it from
-    if (m_hLastWindow)
-    {
-        SetForegroundWindow(m_hLastWindow);
-    }
+    ::SetForegroundWindow(m_hLastWindow);
+
     Close();
 }
 
