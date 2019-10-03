@@ -11,7 +11,8 @@
 //---------------------------------------------------------------------------
 __fastcall TScreenGrabber::TScreenGrabber(TComponent* Owner)
   : TScreenForm(Owner),
-    m_CaptureMenu(NULL)
+    m_CaptureMenu(NULL),
+    m_hwndLastFocus(NULL)
 {
     // Have a bitmap to store the grabbed stuff
     m_pBufferBmp = new Graphics::TBitmap;
@@ -62,13 +63,26 @@ void __fastcall TScreenGrabber::SavePresets()
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TScreenGrabber::RetoreLastFocus()
+{
+    if (m_hwndLastFocus)
+    {
+        // Restore old focus
+        ::SetForegroundWindow(m_hwndLastFocus);
+        ::SetFocus(m_hwndLastFocus);
+        m_hwndLastFocus = NULL;
+    }
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TScreenGrabber::WndProc(Messages::TMessage &Message)
 {
     switch (Message.Msg)
     {
     case WM_SHOWWINDOW:
         // Remember the window that we steal focus of
-        m_hLastWindow = ::GetForegroundWindow();
+        m_hwndLastFocus = ::GetForegroundWindow();
+        // And move to the top
         ::SetForegroundWindow(Handle);
         SetTopMost(true);
         break;
@@ -110,6 +124,10 @@ void __fastcall TScreenGrabber::WndProc(Messages::TMessage &Message)
                 if (!shift)
                     EndCapture();
                 break;
+
+            case VK_ESCAPE:
+                Close();
+                return;
             }
         }
 
@@ -313,9 +331,7 @@ void __fastcall TScreenGrabber::CaptureMenuClick(TObject *Sender)
 void __fastcall TScreenGrabber::EndCapture()
 {
     // We are done
-    // Give focus back to the window we stole it from
-    ::SetForegroundWindow(m_hLastWindow);
-
+    // Let the parent know it can restore focus
     Close();
 }
 

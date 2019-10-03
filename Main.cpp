@@ -103,6 +103,11 @@ void __fastcall TMainForm::WndProc(Messages::TMessage &Message)
     TToolForm::WndProc(Message);
 }
 
+void __fastcall TMainForm::OnGetFocus()
+{
+    int test = 1;
+}
+
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::SetUI(bool isTrayApp)
 {
@@ -182,6 +187,8 @@ void __fastcall TMainForm::HandleAppDeactivate(TObject *Sender)
 {
     // Prevent windows from disappearing
     Application->RestoreTopMosts();
+//    if (m_pCapture)
+//        m_pCapture->RetoreLastFocus();
 }
 
 //---------------------------------------------------------------------------
@@ -370,7 +377,6 @@ void __fastcall TMainForm::HandleToolWindowClose(TObject *Sender, TCloseAction &
     {
         m_pControlBar->UpdateFocus();
     }
-
     // Stop the timer when it isn't needed anymore
     Timer->Enabled = TimerNeeded();
 }

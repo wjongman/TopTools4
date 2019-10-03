@@ -73,6 +73,7 @@ public:   // User declarations
 
 protected:
   virtual void __fastcall WndProc(TMessage &Msg);
+  virtual void __fastcall OnGetFocus();
   void __fastcall LoadSettings();
   void __fastcall UpdateSettings();
   void __fastcall SaveSettings();
@@ -128,6 +129,7 @@ private:  // User declarations
   TToolForm* GetBaseConvForm();
   TToolForm* GetControlBar();
   TToolForm* GetCaptureForm();
+
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TMainForm *MainForm;

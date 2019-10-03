@@ -15,13 +15,14 @@ public:
   __fastcall TScreenGrabber(TComponent* Owner);
   virtual __fastcall ~TScreenGrabber();
   void __fastcall UpdateSettings();
+  void __fastcall RetoreLastFocus();
 
 private:
   RECT m_rcSelect;
   Graphics::TBitmap* m_pBufferBmp;
   TPopupMenu* m_CaptureMenu;
   TImageViewerList m_Viewers;
-  HWND m_hLastWindow;
+  HWND m_hwndLastFocus;
   std::vector<TPreset> m_PresetList;
 
   void __fastcall ViewerKeyPress(TObject *Sender, char &Key);

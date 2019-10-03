@@ -126,10 +126,6 @@ void __fastcall TScreenForm::WndProc(Messages::TMessage &Message)
             resize ? Height += delta : Top += delta;
             UpdateToolTip();
             return;
-
-        case VK_ESCAPE:
-            Close();
-            return;
         }
     }
     // Let base class handle the rest
