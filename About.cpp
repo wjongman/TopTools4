@@ -13,7 +13,7 @@ String g_sBuildDate = String(__DATE__);
 
 //---------------------------------------------------------------------------
 
-const char szHomepageUrl[] = "http://toptools.org";
+const char szHomepageUrl[] = "https://toptools.org";
 
 //---------------------------------------------------------------------
 __fastcall TAboutBox::TAboutBox(TComponent* AOwner)
@@ -86,7 +86,7 @@ String __fastcall TAboutBox::GetVersionString(void)
 String __fastcall TAboutBox::GetCopyrightString(void)
 {
   return VersionInfo("LegalCopyright");
-  //return "© 1998-2009 Willem Jongman";
+  //return "© 1998-2019 Willem Jongman";
 }
 
 //---------------------------------------------------------------------------
