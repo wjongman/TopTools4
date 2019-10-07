@@ -5,6 +5,8 @@
 #include <Classes.hpp>
 #include <vector>
 
+#pragma warn -8027
+#pragma warn -8074
 /////////////////////////////////////////////////////////////////////////////
 struct TPreset
 {

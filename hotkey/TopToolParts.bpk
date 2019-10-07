@@ -31,7 +31,7 @@
   </MACROS>
   <OPTIONS>
     <IDLCFLAGS value="-I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp -boa"/>
-    <CFLAG1 value="-O2 -H=obj\vcl50.csm -Hc -Vx -Ve -X- -a8 -b- -k- -vi -c -tWM"/>
+    <CFLAG1 value="-O2 -Vx -Ve -X- -a8 -b- -k- -vi -c -tWM"/>
     <PFLAGS value="-N2obj -N0obj -$Y- -$L- -$D- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zn"/>

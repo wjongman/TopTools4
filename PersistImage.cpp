@@ -1,6 +1,7 @@
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
+#pragma warn -8004
 
 #include <vcl\Clipbrd.hpp>
 #include <ExtDlgs.hpp>
@@ -253,7 +254,7 @@ void __fastcall TPersistImage::StretchBltBitmap(TCanvas *pCanvas, int iX, int iY
         return;
     }
 
-    BITMAPINFO* pBmi = (BITMAPINFO*) Buffer;
+    BITMAPINFO* pBmi = reinterpret_cast<BITMAPINFO*>(Buffer);
     unsigned char* pImage = (unsigned char*) Buffer + HeaderSize;
     if (GetDIB(pBitmap->Handle, pBitmap->Palette, pBmi, pImage))
     {

@@ -9,6 +9,8 @@
 #include <Forms.hpp>
 #include <ExtCtrls.hpp>
 
+#pragma warn -8027
+
 const MAXZOOM = 20;
 
 //---------------------------------------------------------------------------

@@ -12,6 +12,7 @@
 #include <vector>
 #include <list>
 
+#pragma warn -8027
 //---------------------------------------------------------------------------
 class TImageViewer : public TForm
 {

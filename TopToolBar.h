@@ -10,10 +10,13 @@
 #include <Buttons.hpp>
 #include <Comctrls.hpp>
 
+#pragma warn -8027
+
 #include "png/pngimage.hpp"
 #include <vector>
 
 #define TOOLBUTTONWIDTH 30
+
 
 //class Comctrls::TToolButton;
 //---------------------------------------------------------------------------

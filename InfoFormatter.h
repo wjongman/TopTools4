@@ -1,6 +1,8 @@
 #ifndef InfoFormatterH
 #define InfoFormatterH
 
+#pragma warn -8027
+
 #include <vector>
 #include <string>
 #include <sstream>

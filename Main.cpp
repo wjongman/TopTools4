@@ -9,6 +9,10 @@
 #include "OptionDlg.h"
 #include "InfoFormatter.h"
 
+#pragma warn -8004
+#pragma warn -8027
+#pragma warn -8074
+
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "Tool"
