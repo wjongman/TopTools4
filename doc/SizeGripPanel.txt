@@ -1,8 +1,0 @@
-TSizeGripPanel (for BCB 3.0)
-
-TSizeGripPanel is a TPanel descendant that includes the small triangular windows resizer grip in the lower right corner. The purpose of TSizeGripPanel is if you put the panel on a form and align to alClient you will be able to resize the form using the SizeGrip without needing a statusbar. Yes, you can resize using the windows thickframe anyway but this gives a cool Win98 look to the form. The cursor changes to the appropriate arrow icon when positioned over the SizeGrip. You can if you want put multiple TPanels on the form providing the TSizeGripPanel is positioned so that the sizegrip is on the lower right edge of the form. If it is not, the sizegrip will resize only the TSizeGripPanel at runtime and not the whole form. This is a side effect and i dont know if it has any use.
-
-Use this free, have fun with it. I am publishing it on the good Karmaware marketing scheme.
-If you have any comments, or if you make any useful modifications to the source let me know at Sean_Garratt@msn.com
-
-...

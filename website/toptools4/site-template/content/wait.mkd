@@ -1,4 +1,0 @@
-Set the time when, or the timespan after which, an alarm will be sounded.
-After pressing start, the program will minimize and display remaining time in the title bar
-<img src="Wait.png" />
-
