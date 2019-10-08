@@ -12,6 +12,9 @@
 #include <StdCtrls.hpp>
 #include <Buttons.hpp>
 #include <ExtCtrls.hpp>
+
+// Global string to automaticly update build date
+extern String g_sBuildDate;
 //----------------------------------------------------------------------------
 class TAboutBox : public TForm
 {

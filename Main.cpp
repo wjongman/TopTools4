@@ -16,12 +16,12 @@
 #pragma resource "*.dfm"
 TMainForm *MainForm;
 
-/*
+
 // Global option store
 TPersistOptions g_ToolOptions;
 // Global string to automaticly update build date
 String g_sBuildDate = String(__DATE__);
-*/
+
 //---------------------------------------------------------------------------
 __fastcall TMainForm::TMainForm(TComponent* Owner)
   : TToolForm(Owner, "main"),
