@@ -9,18 +9,17 @@
 #include "OptionDlg.h"
 #include "InfoFormatter.h"
 
-#pragma warn -8004
-#pragma warn -8027
-#pragma warn -8074
-
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
+#pragma link "Tool"
 #pragma link "Tool"
 #pragma resource "*.dfm"
 TMainForm *MainForm;
 
 // Global option store
 TPersistOptions g_ToolOptions;
+// Global string to automaticly update build date
+String g_sBuildDate = String(__DATE__);
 
 //---------------------------------------------------------------------------
 __fastcall TMainForm::TMainForm(TComponent* Owner)

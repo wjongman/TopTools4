@@ -9,7 +9,7 @@
 #pragma resource "*.dfm"
 
 // Global string to automaticly update build date
-String g_sBuildDate = String(__DATE__);
+extern String g_sBuildDate;
 
 //---------------------------------------------------------------------------
 

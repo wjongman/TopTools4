@@ -15,6 +15,9 @@
 #include "HotkeyManager.h"
 #include "CustomCopyDlg.h"
 
+// TODO: Load from resource
+const char* szHomepageUrl = "https://toptools.org";
+
 //---------------------------------------------------------------------------
 __fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner,
                                                   const String& sPageName = "")
@@ -105,6 +108,8 @@ void TToolOptionsDialog::ActivatePage(const String sActive)
         ActivePanel = plGrabber;
     else if (sActive == "Tray Icon")
         ActivePanel = plTrayicon;
+    else if (sActive == "About")
+        ActivePanel = plAbout;
 
     if (ActivePanel)
     {
@@ -146,6 +151,10 @@ void TToolOptionsDialog::HideAll()
     plTrayicon->Visible = false;
     plTrayicon->Left = plRef->Left;
     plTrayicon->Top = plRef->Top;
+
+    plAbout->Visible = false;
+    plAbout->Left = plRef->Left;
+    plAbout->Top = plRef->Top;
 }
 
 //---------------------------------------------------------------------------
@@ -181,6 +190,9 @@ void TToolOptionsDialog::InitListView()
 
     pItem = lvOptionSelector->Items->Add();
     pItem->Caption = "Tray Icon";
+
+    pItem = lvOptionSelector->Items->Add();
+    pItem->Caption = "About";
 }
 
 //---------------------------------------------------------------------------
@@ -269,10 +281,15 @@ void TToolOptionsDialog::InitOptions()
     ckPrefix->Enabled = !custom;
     ckQuotes->Enabled = !custom;
 
-    // Grabber
-    //ckAutosave->Checked = g_ToolOptions.Get("capture\\autosave", "enabled", false);
-//    ckShowLoupeOnGrab->Checked = g_ToolOptions.Get("capture", "showloupe", false);
-//    ckRememberPos->Checked = g_ToolOptions.Get("capture", "rememberpos", false);
+    // About
+    TPNGObject* PngImage = new TPNGObject();
+    PngImage->LoadFromResourceName((int)HInstance, "PNG_MAINICON");
+    Logo->Picture->Assign(PngImage);
+    delete PngImage;
+
+    lbVersion->Caption = "Version: " + GetVersionString() + "  (" + g_sBuildDate + ")";
+    lbCopy->Caption = "© 1998-2019 Willem Jongman";
+    lbUrl->Hint = szHomepageUrl;
 }
 
 //---------------------------------------------------------------------------
@@ -323,11 +340,6 @@ void TToolOptionsDialog::SaveOptions()
     g_ToolOptions.Set("info", "mask", edTemplate->Text);
 
     g_ToolOptions.Set("loupe", "refresh", udRefresh->Position);
-
-
-    //g_ToolOptions.Set("capture\\autosave", "enabled", ckAutosave->Checked);
-//    g_ToolOptions.Set("capture", "showloupe", ckShowLoupeOnGrab->Checked);
-//    g_ToolOptions.Set("capture", "rememberpos", ckRememberPos->Checked);
 }
 
 //---------------------------------------------------------------------------
@@ -458,4 +470,35 @@ void __fastcall TToolOptionsDialog::bnEditTemplateClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TToolOptionsDialog::lbUrlClick(TObject *Sender)
+{
+    ::ShellExecute(0, "open", szHomepageUrl, NULL, NULL, SW_SHOWNORMAL);
+}
+
+//---------------------------------------------------------------------------
+String __fastcall TToolOptionsDialog::GetVersionString(void)
+{
+    String result = "";
+    DWORD handle;
+    DWORD size = ::GetFileVersionInfoSize(Application->ExeName.c_str(), &handle);
+    if (size != 0)
+    {
+        void *buf = malloc(size);
+        if (buf)
+        {
+            ::GetFileVersionInfo(Application->ExeName.c_str(), 0, size, buf);
+            VS_FIXEDFILEINFO *ffip;
+            unsigned ffisize;
+            ::VerQueryValue( buf, "\\", (void**)&ffip, &ffisize);
+            int Ver1 = ffip->dwFileVersionMS >> 16;
+            int Ver2 = ffip->dwFileVersionMS & 0xFFFF;
+            int Ver3 = ffip->dwFileVersionLS >> 16;
+            int Ver4 = ffip->dwFileVersionLS & 0xFFFF;
+            result = String(Ver1) + "." + String(Ver2) + "." + String(Ver3) + "." + String(Ver4);
+            free(buf);
+        }
+    }
+    return result;
+}
+
 

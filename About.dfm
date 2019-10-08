@@ -1,6 +1,6 @@
 object AboutBox: TAboutBox
-  Left = 1136
-  Top = 233
+  Left = 1404
+  Top = 218
   BorderIcons = [biSystemMenu]
   BorderStyle = bsNone
   Caption = 'About TopTools'

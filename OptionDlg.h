@@ -9,9 +9,13 @@
 #include <Forms.hpp>
 #include <ComCtrls.hpp>
 #include <ExtCtrls.hpp>
+#include <PNGImage.hpp>
 
 #include "HotkeyInfo.h"
 #include "HotkeyPanel.h"
+#include <Graphics.hpp>
+
+extern String g_sBuildDate;
 
 /////////////////////////////////////////////////////////////////////////////
 class TToolOptionsDialog : public TForm
@@ -43,6 +47,7 @@ __published:  // IDE-managed Components
     TPanel *plLoupe;
     TPanel *plRef;
     TPanel *plRuler;
+    TPanel *plAbout;
     TUpDown *udLength;
     TUpDown *udRefresh;
     THotkeyPanel *hkpZoomIn;
@@ -81,6 +86,11 @@ __published:  // IDE-managed Components
     TCheckBox *ckPrefix;
     TEdit *edTemplate;
     TButton *bnEditTemplate;
+    TGroupBox *gbAbout;
+    TLabel *lbVersion;
+    TLabel *lbCopy;
+    TLabel *lbUrl;
+    TImage *Logo;
     void __fastcall lvOptionSelectorChange(TObject *Sender, TListItem *Item, TItemChange Change);
     void __fastcall bnOkClick(TObject *Sender);
     void __fastcall bnAutosaveOptionsClick(TObject *Sender);
@@ -93,6 +103,7 @@ __published:  // IDE-managed Components
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
     void __fastcall FormShow(TObject *Sender);
+    void __fastcall lbUrlClick(TObject *Sender);
 
 private:  // User declarations
     String m_sActivePage;
@@ -109,6 +120,7 @@ private:  // User declarations
 
     THotkeyInfo LoadHotkeyInfo(const String& sHotKeyName);
     void SaveHotkeyInfo(const String& sHotKeyName, const THotkeyInfo& HotkeyInfo);
+    String __fastcall GetVersionString(void);
 
 public:   // User declarations
     __fastcall TToolOptionsDialog(TComponent* Owner, const String& sPageName);

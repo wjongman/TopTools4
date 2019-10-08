@@ -410,7 +410,7 @@ object ToolOptionsDialog: TToolOptionsDialog
     Width = 281
     Height = 224
     BevelOuter = bvNone
-    TabOrder = 9
+    TabOrder = 13
     object gbRef: TGroupBox
       Left = 8
       Top = 7
@@ -590,5 +590,85 @@ object ToolOptionsDialog: TToolOptionsDialog
     Caption = 'About...'
     TabOrder = 12
     OnClick = bnAboutClick
+  end
+  object plAbout: TPanel
+    Left = 118
+    Top = 538
+    Width = 281
+    Height = 224
+    BevelOuter = bvNone
+    TabOrder = 9
+    object gbAbout: TGroupBox
+      Left = 8
+      Top = 8
+      Width = 265
+      Height = 210
+      Caption = 'About TopTools'
+      Color = clBtnFace
+      ParentColor = False
+      TabOrder = 0
+      object lbVersion: TLabel
+        Left = 72
+        Top = 29
+        Width = 184
+        Height = 13
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'v.2.4'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        Transparent = True
+      end
+      object lbCopy: TLabel
+        Left = 72
+        Top = 58
+        Width = 184
+        Height = 13
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'copyright string'
+        Color = clBtnFace
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        Transparent = True
+      end
+      object lbUrl: TLabel
+        Left = 33
+        Top = 152
+        Width = 194
+        Height = 13
+        Cursor = crHandPoint
+        Caption = 'Visit the TopTools homepage for updates'
+        Color = clBtnFace
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlue
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = [fsUnderline]
+        ParentColor = False
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = lbUrlClick
+      end
+      object Logo: TImage
+        Left = 16
+        Top = 24
+        Width = 48
+        Height = 48
+        AutoSize = True
+        ParentShowHint = False
+        ShowHint = False
+      end
+    end
   end
 end

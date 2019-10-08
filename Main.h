@@ -11,6 +11,11 @@
 #include <ExtCtrls.hpp>
 #include <ImgList.hpp>
 #include <Menus.hpp>
+#include "Tool.h"
+
+#pragma warn -8004
+#pragma warn -8027
+#pragma warn -8074
 
 #include "TrayIcon.h"
 #include "Control.h"
