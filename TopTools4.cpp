@@ -19,11 +19,12 @@ USEFORM("OptionDlg.cpp", ToolOptionsDialog);
 USEFORM("Ruler.cpp", RulerForm);
 USEFORM("ScreenForm.cpp", ScreenForm);
 USEFORM("Tool.cpp", ToolForm);
+USEFORM("PresetManager.cpp", PresetManager);
+USEFORM("PresetDlg.cpp", PresetDlg);
+USEFORM("CustomCopyDlg.cpp", CustomCopyDlg);
 USELIB("gif\gif.lib");
 USELIB("png\png.lib");
 USELIB("hotkey\TopToolParts.lib");
-USERES("Cursors.res");
-USERES("TopTools4.res");
 USEUNIT("AutoSave.cpp");
 USEUNIT("Grabber.cpp");
 USEUNIT("hotkey\HotkeyInfo.cpp");
@@ -35,9 +36,8 @@ USEUNIT("TopToolBar.cpp");
 USEUNIT("TrayIcon.cpp");
 USERES("Graphics.RES");
 USERES("appicon.RES");
-USEFORM("PresetManager.cpp", PresetManager);
-USEFORM("PresetDlg.cpp", PresetDlg);
-USEFORM("CustomCopyDlg.cpp", CustomCopyDlg);
+USERES("Cursors.res");
+USERES("TopTools4.res");
 
 // Global option store
 TPersistOptions g_ToolOptions;
@@ -93,7 +93,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         Application->Initialize();
         Application->Title = "TopTools 4";
         Application->CreateForm(__classid(TMainForm), &MainForm);
-         Application->ShowMainForm = false;
+        Application->ShowMainForm = false;
         Application->Run();
     }
     catch (Exception &exception)

@@ -286,7 +286,7 @@ void TToolOptionsDialog::InitOptions()
     Logo->Picture->Assign(PngImage);
     delete PngImage;
 
-//    lbVersion->Caption = "Version: " + GetVersionString() + "  (" + g_sBuildDate + ")";
+    lbVersion->Caption = "Version: " + GetVersionString() + "  (" + g_sBuildDate + ")";
     lbCopy->Caption = "© 1998-2019 Willem Jongman";
     lbUrl->Hint = m_sHomePageUrl;
 }

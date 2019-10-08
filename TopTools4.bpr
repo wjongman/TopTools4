@@ -7,11 +7,11 @@
     <OBJFILES value="obj\TopTools4.obj obj\About.obj obj\AutoSaveDlg.obj obj\BaseConv.obj 
       obj\Control.obj obj\ImageView.obj obj\Info.obj obj\Loupe.obj obj\Main.obj 
       obj\OptionDlg.obj obj\Ruler.obj obj\ScreenForm.obj obj\Tool.obj 
+      obj\PresetManager.obj obj\PresetDlg.obj obj\CustomCopyDlg.obj 
       obj\AutoSave.obj obj\Grabber.obj obj\HotkeyInfo.obj obj\HotkeyManager.obj 
       obj\LoupePanel.obj obj\Monitor.obj obj\PersistImage.obj obj\TopToolBar.obj 
-      obj\TrayIcon.obj obj\PresetManager.obj obj\PresetDlg.obj 
-      obj\CustomCopyDlg.obj"/>
-    <RESFILES value="Cursors.res TopTools4.res Graphics.RES appicon.RES"/>
+      obj\TrayIcon.obj"/>
+    <RESFILES value="Graphics.RES appicon.RES Cursors.res TopTools4.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>

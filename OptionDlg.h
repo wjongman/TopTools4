@@ -15,7 +15,7 @@
 #include "HotkeyPanel.h"
 #include <Graphics.hpp>
 
-//extern String g_sBuildDate;
+extern String g_sBuildDate;
 
 /////////////////////////////////////////////////////////////////////////////
 class TToolOptionsDialog : public TForm

@@ -608,9 +608,9 @@ object ToolOptionsDialog: TToolOptionsDialog
       ParentColor = False
       TabOrder = 0
       object lbVersion: TLabel
-        Left = 72
-        Top = 29
-        Width = 184
+        Left = 88
+        Top = 37
+        Width = 168
         Height = 13
         Alignment = taCenter
         AutoSize = False
@@ -624,9 +624,9 @@ object ToolOptionsDialog: TToolOptionsDialog
         Transparent = True
       end
       object lbCopy: TLabel
-        Left = 72
-        Top = 58
-        Width = 184
+        Left = 88
+        Top = 74
+        Width = 168
         Height = 13
         Alignment = taCenter
         AutoSize = False
@@ -661,8 +661,8 @@ object ToolOptionsDialog: TToolOptionsDialog
         OnClick = lbUrlClick
       end
       object Logo: TImage
-        Left = 16
-        Top = 24
+        Left = 32
+        Top = 40
         Width = 48
         Height = 48
         AutoSize = True
