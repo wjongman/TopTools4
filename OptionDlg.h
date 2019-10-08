@@ -15,7 +15,7 @@
 #include "HotkeyPanel.h"
 #include <Graphics.hpp>
 
-extern String g_sBuildDate;
+//extern String g_sBuildDate;
 
 /////////////////////////////////////////////////////////////////////////////
 class TToolOptionsDialog : public TForm
@@ -107,7 +107,7 @@ __published:  // IDE-managed Components
 
 private:  // User declarations
     String m_sActivePage;
-
+    String m_sHomePageUrl;
     void HideAll();
     void ActivatePage(const String sActive);
     void ActivatePage(int PageIndex);

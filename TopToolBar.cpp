@@ -306,44 +306,6 @@ void __fastcall TTopToolBar::InitButtons()
     pButton->PngImage = pImage;
     delete pImage;
     m_buttons.push_back(pButton);
-/*
-    pButton = new TTopToolButton(this);
-    pButton->Parent = this;
-    pButton->Name = "bnEmpty";
-    pButton->Align = alLeft;
-    pButton->Width = TOOLBUTTONWIDTH;
-    pButton->PopupMenu = MainForm->PopupMenu;
-    pImage = new TPNGObject();
-    pImage->LoadFromResourceName((int)HInstance, "PNG_EMPTY");
-    pButton->PngImage = pImage;
-    delete pImage;
-    m_buttons.push_back(pButton);
-
-    pButton = new TTopToolButton(this);
-    pButton->Parent = this;
-    pButton->Name = "bnExit";
-    pButton->Action = MainForm->actExit;
-    pButton->Align = alLeft;
-    pButton->Width = TOOLBUTTONWIDTH;
-    pImage = new TPNGObject();
-    pImage->LoadFromResourceName((int)HInstance, "PNG_EXIT");
-    pButton->PngImage = pImage;
-    delete pImage;
-    m_buttons.push_back(pButton);
-
-    pButton = new TTopToolButton(this);
-    pButton->Parent = this;
-    pButton->Name = "bn";
-    pButton->OnClick = ButtonClick;
-    pButton->Align = alLeft;
-    pButton->Width = TOOLBUTTONWIDTH;
-    pButton->GroupIndex = ;
-    pImage = new TPNGObject();
-    pImage->LoadFromResourceName((int)HInstance, "PNG_");
-    pButton->PngImage = pImage;
-    delete pImage;
-    m_buttons.push_back(pButton);
-*/
 }
 
 //---------------------------------------------------------------------------

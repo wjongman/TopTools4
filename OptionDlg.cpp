@@ -15,9 +15,6 @@
 #include "HotkeyManager.h"
 #include "CustomCopyDlg.h"
 
-// TODO: Load from resource
-const char* szHomepageUrl = "https://toptools.org";
-
 //---------------------------------------------------------------------------
 __fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner,
                                                   const String& sPageName = "")
@@ -39,6 +36,8 @@ __fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner,
     {
         m_sActivePage = sPageName;
     }
+    // TODO: Load from resource
+    m_sHomePageUrl = "https://toptools.org";
 }
 
 //---------------------------------------------------------------------------
@@ -287,9 +286,9 @@ void TToolOptionsDialog::InitOptions()
     Logo->Picture->Assign(PngImage);
     delete PngImage;
 
-    lbVersion->Caption = "Version: " + GetVersionString() + "  (" + g_sBuildDate + ")";
+//    lbVersion->Caption = "Version: " + GetVersionString() + "  (" + g_sBuildDate + ")";
     lbCopy->Caption = "© 1998-2019 Willem Jongman";
-    lbUrl->Hint = szHomepageUrl;
+    lbUrl->Hint = m_sHomePageUrl;
 }
 
 //---------------------------------------------------------------------------
@@ -472,7 +471,7 @@ void __fastcall TToolOptionsDialog::bnEditTemplateClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TToolOptionsDialog::lbUrlClick(TObject *Sender)
 {
-    ::ShellExecute(0, "open", szHomepageUrl, NULL, NULL, SW_SHOWNORMAL);
+    ::ShellExecute(0, "open", m_sHomePageUrl.c_str(), NULL, NULL, SW_SHOWNORMAL);
 }
 
 //---------------------------------------------------------------------------

@@ -9,7 +9,7 @@
 #pragma resource "*.dfm"
 
 // Global string to automaticly update build date
-extern String g_sBuildDate;
+//extern String g_sBuildDate;
 
 //---------------------------------------------------------------------------
 
@@ -56,7 +56,7 @@ void __fastcall TAboutBox::FormKeyDown(TObject *Sender, WORD &Key,
 //---------------------------------------------------------------------
 void __fastcall TAboutBox::FormShow(TObject *Sender)
 {
-   lbVersion->Caption = "Version: " + GetVersionString() + "  (" + g_sBuildDate + ")";
+//   lbVersion->Caption = "Version: " + GetVersionString() + "  (" + g_sBuildDate + ")";
    lbCopy->Caption = GetCopyrightString();
 }
 

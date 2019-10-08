@@ -38,6 +38,12 @@ USERES("appicon.RES");
 USEFORM("PresetManager.cpp", PresetManager);
 USEFORM("PresetDlg.cpp", PresetDlg);
 USEFORM("CustomCopyDlg.cpp", CustomCopyDlg);
+
+// Global option store
+TPersistOptions g_ToolOptions;
+// Global string to automaticly update build date
+String g_sBuildDate = String(__DATE__);
+
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
