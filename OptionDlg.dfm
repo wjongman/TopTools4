@@ -18,6 +18,26 @@ object ToolOptionsDialog: TToolOptionsDialog
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
+  object lbHomepage: TLabel
+    Left = 8
+    Top = 232
+    Width = 109
+    Height = 15
+    Cursor = crHandPoint
+    Hint = 'Visit the TopTools homepage'
+    Alignment = taCenter
+    AutoSize = False
+    Caption = 'https://toptools.org'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlue
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsUnderline]
+    ParentFont = False
+    ParentShowHint = False
+    ShowHint = True
+    OnClick = lbHomepageClick
+  end
   object lvOptionSelector: TListView
     Left = 10
     Top = 12
@@ -189,14 +209,14 @@ object ToolOptionsDialog: TToolOptionsDialog
         Caption = '&Arrow keys nudge ruler (+Ctrl nudges cursor)'
         TabOrder = 2
       end
-      object cbTransparent: TCheckBox
+      object ckTransparent: TCheckBox
         Left = 16
         Top = 112
         Width = 241
         Height = 17
         Caption = '&Transparent (but invisible for the loupe)'
         TabOrder = 3
-        OnClick = cbTransparentClick
+        OnClick = ckTransparentClick
       end
       object edTransparency: TEdit
         Left = 111
@@ -410,7 +430,7 @@ object ToolOptionsDialog: TToolOptionsDialog
     Width = 281
     Height = 224
     BevelOuter = bvNone
-    TabOrder = 13
+    TabOrder = 12
     object gbRef: TGroupBox
       Left = 8
       Top = 7
@@ -523,7 +543,7 @@ object ToolOptionsDialog: TToolOptionsDialog
       Height = 210
       Caption = 'Tray Icon'
       TabOrder = 0
-      object CheckBox4: TCheckBox
+      object ckSingleClick: TCheckBox
         Left = 16
         Top = 27
         Width = 232
@@ -582,15 +602,6 @@ object ToolOptionsDialog: TToolOptionsDialog
       end
     end
   end
-  object bnAbout: TButton
-    Left = 10
-    Top = 230
-    Width = 75
-    Height = 25
-    Caption = 'About...'
-    TabOrder = 12
-    OnClick = bnAboutClick
-  end
   object plAbout: TPanel
     Left = 118
     Top = 538
@@ -608,9 +619,9 @@ object ToolOptionsDialog: TToolOptionsDialog
       ParentColor = False
       TabOrder = 0
       object lbVersion: TLabel
-        Left = 88
-        Top = 37
-        Width = 168
+        Left = 16
+        Top = 109
+        Width = 233
         Height = 13
         Alignment = taCenter
         AutoSize = False
@@ -624,9 +635,9 @@ object ToolOptionsDialog: TToolOptionsDialog
         Transparent = True
       end
       object lbCopy: TLabel
-        Left = 88
-        Top = 74
-        Width = 168
+        Left = 16
+        Top = 130
+        Width = 233
         Height = 13
         Alignment = taCenter
         AutoSize = False
@@ -642,12 +653,14 @@ object ToolOptionsDialog: TToolOptionsDialog
         Transparent = True
       end
       object lbUrl: TLabel
-        Left = 33
+        Left = 16
         Top = 152
-        Width = 194
+        Width = 233
         Height = 13
         Cursor = crHandPoint
-        Caption = 'Visit the TopTools homepage for updates'
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'Comment, or report a bug.'
         Color = clBtnFace
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlue

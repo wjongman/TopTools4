@@ -39,11 +39,6 @@ USERES("appicon.RES");
 USERES("Cursors.res");
 USERES("TopTools4.res");
 
-// Global option store
-TPersistOptions g_ToolOptions;
-// Global string to automaticly update build date
-String g_sBuildDate = String(__DATE__);
-
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {

@@ -30,7 +30,7 @@ __fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner,
 
     if (sPageName == "")
     {
-        m_sActivePage = g_ToolOptions.Get("options", "activepage", "General");
+        m_sActivePage = g_ToolOptions.Get("options", "activepage", "About");
     }
     else
     {
@@ -38,6 +38,8 @@ __fastcall TToolOptionsDialog::TToolOptionsDialog(TComponent* Owner,
     }
     // TODO: Load from resource
     m_sHomePageUrl = "https://toptools.org";
+    m_sMailtoUrl = "mailto:info@toptools.org";
+    lbHomepage->Caption = m_sHomePageUrl;
 }
 
 //---------------------------------------------------------------------------
@@ -254,12 +256,12 @@ void TToolOptionsDialog::InitOptions()
     udLength->Position = (short) g_ToolOptions.Get("ruler", "length", 1024);
     ckNudgeRuler->Checked = g_ToolOptions.Get("ruler", "arrownudge", true);
     udTransparency->Position = (short) g_ToolOptions.Get("ruler", "transparency", 50);
-    cbTransparent->Checked = g_ToolOptions.Get("ruler", "transparent", false);
+    ckTransparent->Checked = g_ToolOptions.Get("ruler", "transparent", false);
 
-    lbTransparency->Enabled = cbTransparent->Checked;
-    edTransparency->Enabled = cbTransparent->Checked;
-    udTransparency->Enabled = cbTransparent->Checked;
-    lbPercent->Enabled = cbTransparent->Checked;
+    lbTransparency->Enabled = ckTransparent->Checked;
+    edTransparency->Enabled = ckTransparent->Checked;
+    udTransparency->Enabled = ckTransparent->Checked;
+    lbPercent->Enabled = ckTransparent->Checked;
 
     // Base converter
     ckBinary->Checked = g_ToolOptions.Get("baseconv", "showbinary", true);
@@ -288,7 +290,7 @@ void TToolOptionsDialog::InitOptions()
 
     lbVersion->Caption = "Version: " + GetVersionString() + "  (" + g_sBuildDate + ")";
     lbCopy->Caption = "© 1998-2019 Willem Jongman";
-    lbUrl->Hint = m_sHomePageUrl;
+    lbUrl->Hint = m_sMailtoUrl;
 }
 
 //---------------------------------------------------------------------------
@@ -297,7 +299,7 @@ void TToolOptionsDialog::SaveOptions()
     g_ToolOptions.Set("ruler", "length", udLength->Position);
     g_ToolOptions.Set("ruler", "arrownudge", ckNudgeRuler->Checked);
     g_ToolOptions.Set("ruler", "transparency", udTransparency->Position);
-    g_ToolOptions.Set("ruler", "transparent", cbTransparent->Checked);
+    g_ToolOptions.Set("ruler", "transparent", ckTransparent->Checked);
 
     int doubleclickopen = ckOpenToolbar->Checked * dcoControl +
                           ckOpenRuler->Checked * dcoRuler +
@@ -421,12 +423,12 @@ void __fastcall TToolOptionsDialog::ckRememberSettingsClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TToolOptionsDialog::cbTransparentClick(TObject *Sender)
+void __fastcall TToolOptionsDialog::ckTransparentClick(TObject *Sender)
 {
-    lbTransparency->Enabled = cbTransparent->Checked;
-    edTransparency->Enabled = cbTransparent->Checked;
-    udTransparency->Enabled = cbTransparent->Checked;
-    lbPercent->Enabled = cbTransparent->Checked;
+    lbTransparency->Enabled = ckTransparent->Checked;
+    edTransparency->Enabled = ckTransparent->Checked;
+    udTransparency->Enabled = ckTransparent->Checked;
+    lbPercent->Enabled = ckTransparent->Checked;
 }
 
 //---------------------------------------------------------------------------
@@ -469,12 +471,6 @@ void __fastcall TToolOptionsDialog::bnEditTemplateClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TToolOptionsDialog::lbUrlClick(TObject *Sender)
-{
-    ::ShellExecute(0, "open", m_sHomePageUrl.c_str(), NULL, NULL, SW_SHOWNORMAL);
-}
-
-//---------------------------------------------------------------------------
 String __fastcall TToolOptionsDialog::GetVersionString(void)
 {
     String result = "";
@@ -500,4 +496,17 @@ String __fastcall TToolOptionsDialog::GetVersionString(void)
     return result;
 }
 
+//---------------------------------------------------------------------------
+void __fastcall TToolOptionsDialog::lbHomepageClick(TObject *Sender)
+{
+    ::ShellExecute(0, "open", m_sHomePageUrl.c_str(), NULL, NULL, SW_SHOWNORMAL);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TToolOptionsDialog::lbUrlClick(TObject *Sender)
+{
+    ::ShellExecute(0, "open", m_sMailtoUrl.c_str(), NULL, NULL, SW_SHOWNORMAL);
+}
+
+//---------------------------------------------------------------------------
 

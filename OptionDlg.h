@@ -59,7 +59,7 @@ __published:  // IDE-managed Components
     TGroupBox *gbAutoSave;
     TButton *bnAutosaveOptions;
     TPanel *plMarker;
-    TCheckBox *cbTransparent;
+    TCheckBox *ckTransparent;
     TLabel *lbTransparency;
     TEdit *edTransparency;
     TUpDown *udTransparency;
@@ -76,8 +76,7 @@ __published:  // IDE-managed Components
     TCheckBox *ckSingleton;
     TRadioButton *rbInifile;
     TRadioButton *rbRegistry;
-    TCheckBox *CheckBox4;
-    TButton *bnAbout;
+    TCheckBox *ckSingleClick;
     TGroupBox *gbPreset;
     TButton *bnManagePresets;
     TRadioButton *rbStandard;
@@ -91,11 +90,12 @@ __published:  // IDE-managed Components
     TLabel *lbCopy;
     TLabel *lbUrl;
     TImage *Logo;
+    TLabel *lbHomepage;
     void __fastcall lvOptionSelectorChange(TObject *Sender, TListItem *Item, TItemChange Change);
     void __fastcall bnOkClick(TObject *Sender);
     void __fastcall bnAutosaveOptionsClick(TObject *Sender);
     void __fastcall ckRememberSettingsClick(TObject *Sender);
-    void __fastcall cbTransparentClick(TObject *Sender);
+    void __fastcall ckTransparentClick(TObject *Sender);
     void __fastcall bnAboutClick(TObject *Sender);
     void __fastcall bnManagePresetsClick(TObject *Sender);
     void __fastcall rbCustomCopyClick(TObject *Sender);
@@ -104,10 +104,13 @@ __published:  // IDE-managed Components
     void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
     void __fastcall FormShow(TObject *Sender);
     void __fastcall lbUrlClick(TObject *Sender);
+    void __fastcall lbHomepageClick(TObject *Sender);
 
 private:  // User declarations
     String m_sActivePage;
     String m_sHomePageUrl;
+    String m_sMailtoUrl;
+    
     void HideAll();
     void ActivatePage(const String sActive);
     void ActivatePage(int PageIndex);

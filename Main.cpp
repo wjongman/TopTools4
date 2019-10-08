@@ -16,7 +16,6 @@
 #pragma resource "*.dfm"
 TMainForm *MainForm;
 
-
 // Global option store
 TPersistOptions g_ToolOptions;
 // Global string to automaticly update build date
