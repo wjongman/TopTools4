@@ -1,6 +1,6 @@
 object MainForm: TMainForm
-  Left = 1095
-  Top = 340
+  Left = 1075
+  Top = 525
   BorderStyle = bsSingle
   Caption = 'TopTools 4'
   ClientHeight = 144

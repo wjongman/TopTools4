@@ -34,8 +34,8 @@ USEUNIT("Monitor.cpp");
 USEUNIT("PersistImage.cpp");
 USEUNIT("TopToolBar.cpp");
 USEUNIT("TrayIcon.cpp");
-USERES("Graphics.RES");
-USERES("appicon.RES");
+USERES("AppIcon.res");
+USERES("Graphics.res");
 USERES("Cursors.res");
 USERES("TopTools4.res");
 
@@ -87,8 +87,16 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     {
         Application->Initialize();
         Application->Title = "TopTools 4";
+
+        HICON hIcon = LoadIcon(HInstance, "APPICON");
+        TIcon * appIcon = new TIcon;
+        appIcon->Handle = hIcon;
+        Application->Icon = appIcon;
+        appIcon->ReleaseHandle();
+
         Application->CreateForm(__classid(TMainForm), &MainForm);
         Application->ShowMainForm = false;
+
         Application->Run();
     }
     catch (Exception &exception)

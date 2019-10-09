@@ -11,7 +11,7 @@
       obj\AutoSave.obj obj\Grabber.obj obj\HotkeyInfo.obj obj\HotkeyManager.obj 
       obj\LoupePanel.obj obj\Monitor.obj obj\PersistImage.obj obj\TopToolBar.obj 
       obj\TrayIcon.obj"/>
-    <RESFILES value="Graphics.RES appicon.RES Cursors.res TopTools4.res"/>
+    <RESFILES value="AppIcon.res Graphics.res Cursors.res TopTools4.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>

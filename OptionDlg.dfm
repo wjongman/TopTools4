@@ -620,7 +620,7 @@ object ToolOptionsDialog: TToolOptionsDialog
       TabOrder = 0
       object lbVersion: TLabel
         Left = 16
-        Top = 109
+        Top = 122
         Width = 233
         Height = 13
         Alignment = taCenter
@@ -636,7 +636,7 @@ object ToolOptionsDialog: TToolOptionsDialog
       end
       object lbCopy: TLabel
         Left = 16
-        Top = 130
+        Top = 143
         Width = 233
         Height = 13
         Alignment = taCenter
@@ -654,7 +654,7 @@ object ToolOptionsDialog: TToolOptionsDialog
       end
       object lbUrl: TLabel
         Left = 16
-        Top = 152
+        Top = 165
         Width = 233
         Height = 13
         Cursor = crHandPoint
@@ -674,8 +674,8 @@ object ToolOptionsDialog: TToolOptionsDialog
         OnClick = lbUrlClick
       end
       object Logo: TImage
-        Left = 32
-        Top = 40
+        Left = 36
+        Top = 38
         Width = 48
         Height = 48
         AutoSize = True
