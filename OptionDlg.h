@@ -96,7 +96,6 @@ __published:  // IDE-managed Components
     void __fastcall bnAutosaveOptionsClick(TObject *Sender);
     void __fastcall ckRememberSettingsClick(TObject *Sender);
     void __fastcall ckTransparentClick(TObject *Sender);
-    void __fastcall bnAboutClick(TObject *Sender);
     void __fastcall bnManagePresetsClick(TObject *Sender);
     void __fastcall rbCustomCopyClick(TObject *Sender);
     void __fastcall bnEditTemplateClick(TObject *Sender);

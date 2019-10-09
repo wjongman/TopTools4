@@ -4,8 +4,8 @@
   <MACROS>
     <VERSION value="BCB.05.03"/>
     <PROJECT value="exe\TopTools4.exe"/>
-    <OBJFILES value="obj\TopTools4.obj obj\About.obj obj\AutoSaveDlg.obj obj\BaseConv.obj 
-      obj\Control.obj obj\ImageView.obj obj\Info.obj obj\Loupe.obj obj\Main.obj 
+    <OBJFILES value="obj\TopTools4.obj obj\AutoSaveDlg.obj obj\BaseConv.obj obj\Control.obj 
+      obj\ImageView.obj obj\Info.obj obj\Loupe.obj obj\Main.obj 
       obj\OptionDlg.obj obj\Ruler.obj obj\ScreenForm.obj obj\Tool.obj 
       obj\PresetManager.obj obj\PresetDlg.obj obj\CustomCopyDlg.obj 
       obj\AutoSave.obj obj\Grabber.obj obj\HotkeyInfo.obj obj\HotkeyManager.obj 
@@ -15,9 +15,9 @@
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
-    <RESDEPEN value="$(RESFILES) About.dfm AutoSaveDlg.dfm BaseConv.dfm Control.dfm 
-      ImageView.dfm Info.dfm Loupe.dfm Main.dfm OptionDlg.dfm Ruler.dfm 
-      ScreenForm.dfm Tool.dfm PresetManager.dfm PresetDlg.dfm CustomCopyDlg.dfm"/>
+    <RESDEPEN value="$(RESFILES) AutoSaveDlg.dfm BaseConv.dfm Control.dfm ImageView.dfm 
+      Info.dfm Loupe.dfm Main.dfm OptionDlg.dfm Ruler.dfm ScreenForm.dfm Tool.dfm 
+      PresetManager.dfm PresetDlg.dfm CustomCopyDlg.dfm"/>
     <LIBFILES value="gif\gif.lib png\png.lib hotkey\TopToolParts.lib"/>
     <LIBRARIES value="TopToolParts.lib VCLX50.lib bcbsmp50.lib vcl50.lib"/>
     <SPARELIBS value="vcl50.lib bcbsmp50.lib VCLX50.lib TopToolParts.lib"/>

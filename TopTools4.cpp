@@ -7,7 +7,6 @@
 #include "DpiScaling.h"
 
 //---------------------------------------------------------------------------
-USEFORM("About.cpp", AboutBox);
 USEFORM("AutoSaveDlg.cpp", AutoSaveDialog);
 USEFORM("BaseConv.cpp", BaseConvForm);
 USEFORM("Control.cpp", ControlForm);
@@ -38,7 +37,6 @@ USERES("AppIcon.res");
 USERES("Graphics.res");
 USERES("Cursors.res");
 USERES("TopTools4.res");
-
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
@@ -95,7 +93,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         appIcon->ReleaseHandle();
 
         Application->CreateForm(__classid(TMainForm), &MainForm);
-        Application->ShowMainForm = false;
+         Application->ShowMainForm = false;
 
         Application->Run();
     }

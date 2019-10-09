@@ -432,19 +432,6 @@ void __fastcall TToolOptionsDialog::ckTransparentClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TToolOptionsDialog::bnAboutClick(TObject *Sender)
-{
-    TAboutBox *AboutBox = new TAboutBox(this);
-    if (AboutBox)
-    {
-        Hide();
-        AboutBox->ShowModal();
-        Show();
-        delete AboutBox;
-    }
-}
-
-//---------------------------------------------------------------------------
 void __fastcall TToolOptionsDialog::rbCustomCopyClick(TObject *Sender)
 {
     bool custom = (Sender == rbCustomCopy);

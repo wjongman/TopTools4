@@ -838,17 +838,6 @@ void __fastcall TMainForm::actOptionsExecute(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TMainForm::actAboutExecute(TObject *Sender)
-{
-    TAboutBox *AboutBox = new TAboutBox(this);
-    if (AboutBox)
-    {
-        AboutBox->ShowModal();
-        delete AboutBox;
-    }
-}
-
-//---------------------------------------------------------------------------
 void __fastcall TMainForm::actExitExecute(TObject *Sender)
 {
     Application->Terminate();
