@@ -1,0 +1,141 @@
+//---------------------------------------------------------------------------
+
+#ifndef MainH
+#define MainH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+#include <ActnList.hpp>
+#include <ExtCtrls.hpp>
+#include <ImgList.hpp>
+#include <Menus.hpp>
+#include "Tool.h"
+
+#pragma warn -8004
+#pragma warn -8027
+#pragma warn -8074
+
+#include "TrayIcon.h"
+#include "Control.h"
+#include "BaseConv.h"
+#include "Info.h"
+#include "Loupe.h"
+#include "Ruler.h"
+#include "Grabber.h"
+#include "HotkeyManager.h"
+#include "TopToolBar.h"
+#include "Tool.h"
+
+//---------------------------------------------------------------------------
+class TMainForm : public TToolForm
+{
+__published:  // IDE-managed Components
+  TActionList *TrayActions;
+  TAction *actCapture;
+  TAction *actRuler;
+  TAction *actLoupe;
+  TAction *actBaseConv;
+  TAction *actInfo;
+  TAction *actAbout;
+  TAction *actExit;
+  TAction *actHelp;
+  TAction *actOnTop;
+  TAction *actTrayIcon;
+  TAction *actOrientation;
+  TAction *actZero;
+  TAction *actOptions;
+  TAction *actControl;
+  TAction *actGrab;
+  TPopupMenu *TrayMenu;
+  TMenuItem *miRuler;
+  TMenuItem *miLoupe;
+  TMenuItem *miInfo;
+  TMenuItem *miBaseConv;
+  TMenuItem *miGrabber;
+  TMenuItem *N2;
+  TMenuItem *miOptions;
+  TMenuItem *miToolBar;
+  TMenuItem *N3;
+  TMenuItem *miAbout;
+  TMenuItem *N1;
+  TMenuItem *miExit;
+  TTimer *Timer;
+  TImageList *MainIcons;
+
+  void __fastcall HandleTimerEvent(TObject *Sender);
+  void __fastcall actExitExecute(TObject *Sender);
+  void __fastcall actCommandExecute(TObject *Sender);
+  void __fastcall actOptionsExecute(TObject *Sender);
+  void __fastcall actCaptureExecute(TObject *Sender);
+  void __fastcall TrayMenuPopup(TObject *Sender);
+
+public:   // User declarations
+  __fastcall TMainForm(TComponent* Owner);
+  __fastcall ~TMainForm();
+
+protected:
+  virtual void __fastcall WndProc(TMessage &Msg);
+  virtual void __fastcall OnGetFocus();
+  void __fastcall LoadSettings();
+  void __fastcall UpdateSettings();
+  void __fastcall SaveSettings();
+
+protected:
+  void __fastcall HandleAppDeactivate(TObject *Sender);
+  void __fastcall HandleAppRestore(TObject *Sender);
+  void __fastcall HandleControlBarMinimize(TObject *Sender);
+  void __fastcall HandleControlBarClose(TObject *Sender, TCloseAction &Action);
+  void __fastcall HandleTrayMessage(TMessage &Message);
+  void __fastcall HandleKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
+  void __fastcall HandleToolWindowClose(TObject *Sender, TCloseAction &Action);
+  void __fastcall HandleHotkey(THotkeyId id);
+
+private:  // User declarations
+  void __fastcall SetTopMost(bool ontop);
+  void __fastcall ShowTrayIcon(bool show);
+  void __fastcall ShowTaskbarIcon(bool show);
+
+  bool TimerNeeded();
+  bool m_bStayOnTop;
+  bool m_bRememberState;
+
+  THotkeyManager* m_HotkeyManager;
+
+  enum UIMode { uiNormal, uiTrayApp };
+  UIMode m_UIMode;
+
+  void __fastcall SetUI(bool isTrayApp);
+  void __fastcall ActAsSingleton(bool singleton);
+  int __fastcall GetTaskbarRect(LPRECT lprect);
+
+  cTrayIcon* m_pTrayIcon;
+  TRulerForm* m_pRuler;
+  TLoupeForm* m_pLoupe;
+  TInfoForm* m_pInfo;
+  TBaseConvForm* m_pBaseConv;
+  TControlForm* m_pControlBar;
+  TScreenGrabber* m_pCapture;
+
+  void CopyToClipboard();
+  void CopyWebColorToClipboard();
+  void CopyInfoToClipboard();
+  void ToggleOpenTools();
+  void RestoreToolState(int toolstate);
+  void HideAll();
+  int GetToolState();
+  bool AnyToolVisible();
+
+  TToolForm* GetRulerForm();
+  TToolForm* GetLoupeForm();
+  TToolForm* GetInfoForm();
+  TToolForm* GetBaseConvForm();
+  TToolForm* GetControlBar();
+  TToolForm* GetCaptureForm();
+
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TMainForm *MainForm;
+//---------------------------------------------------------------------------
+#endif

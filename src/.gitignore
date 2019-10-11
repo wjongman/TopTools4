@@ -1,0 +1,9 @@
+*.obj
+*.il?
+pch.*
+*.tds
+*.txt
+*.dcu
+*.lib
+*.bpi
+*.dsk
